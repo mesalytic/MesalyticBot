@@ -1,4 +1,4 @@
-package org.virep;
+package org.virep.jdabot;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
