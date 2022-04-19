@@ -13,7 +13,8 @@ public class SlashListener extends ListenerAdapter {
         this.slashHandler = slashHandler;
     }
 
-    public void onSlashCommand(@Nonnull SlashCommandInteractionEvent event) {
+    @Override
+    public void onSlashCommandInteraction(@Nonnull SlashCommandInteractionEvent event) {
         String commandName = event.getName();
         Map<String, SlashCommand> commandMap = slashHandler.getSlashCommandMap();
 
