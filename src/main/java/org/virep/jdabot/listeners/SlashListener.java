@@ -1,7 +1,9 @@
-package org.virep.jdabot.slashhandler;
+package org.virep.jdabot.listeners;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.virep.jdabot.slashcommandhandler.SlashCommand;
+import org.virep.jdabot.slashcommandhandler.SlashHandler;
 
 import javax.annotation.Nonnull;
 import java.util.Map;

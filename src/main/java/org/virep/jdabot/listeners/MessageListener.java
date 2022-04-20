@@ -1,4 +1,4 @@
-package org.virep.jdabot;
+package org.virep.jdabot.listeners;
 
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;

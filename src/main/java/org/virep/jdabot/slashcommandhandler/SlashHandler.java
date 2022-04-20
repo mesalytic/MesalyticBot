@@ -1,4 +1,4 @@
-package org.virep.jdabot.slashhandler;
+package org.virep.jdabot.slashcommandhandler;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
