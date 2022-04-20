@@ -13,9 +13,7 @@ import java.util.*;
 
 /*
 TODO: Check if someone wins each round.
-TODO: Handle when refusing the game
 TODO: Check if the user accepting or refusing is the opponent
-TODO: Check if mentionned user is not the interaction member
 TODO: Translate all strings to English
 */
 
@@ -36,6 +34,11 @@ public class TTTCommand extends SlashCommand {
     public void execute(SlashCommandInteractionEvent event) {
         if (event.getOption("opponent") == null) {
             event.reply("Vous devez mentionner quelqu'un! `/tictactoe opponent`").setEphemeral(true).queue();
+            return;
+        }
+
+        if (Objects.requireNonNull(event.getOption("opponent")).getAsUser() == event.getUser()) {
+            event.reply("Vous ne pouvez pas jouer contre vous même!").setEphemeral(true).queue();
             return;
         }
 
