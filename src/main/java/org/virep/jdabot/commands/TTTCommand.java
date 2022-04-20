@@ -12,10 +12,10 @@ import org.virep.jdabot.slashcommandhandler.SlashCommand;
 import java.util.*;
 
 /*
-TODO: Check if its the player's turn when a button is pressed.
-
 TODO: Check if someone wins each round.
-
+TODO: Handle when refusing the game
+TODO:
+TODO: Translate all strings to English
 */
 
 public class TTTCommand extends SlashCommand {

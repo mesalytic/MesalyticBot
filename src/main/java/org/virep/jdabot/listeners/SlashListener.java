@@ -54,6 +54,11 @@ public class SlashListener extends ListenerAdapter {
             int[][] board = TTTCommand.boards.get(event.getChannel().getIdLong());
             long[] playersArray = TTTCommand.players.get(event.getChannel().getIdLong());
 
+            if (TTTCommand.playersTurn.get(event.getChannel().getIdLong()) != event.getMember().getIdLong()) {
+                event.reply("Ce n'est pas a toi de jouer!").setEphemeral(true).queue();
+                return;
+            }
+
             System.out.println("PlayerOneID " + playerOneID);
             System.out.println("PlayerTwoID " + playerTwoID);
 
