@@ -52,23 +52,22 @@ public class SlashListener extends ListenerAdapter {
             }
 
             int[][] board = TTTCommand.boards.get(event.getChannel().getIdLong());
+            long[] playersArray = TTTCommand.players.get(event.getChannel().getIdLong());
 
             System.out.println("PlayerOneID " + playerOneID);
             System.out.println("PlayerTwoID " + playerTwoID);
 
             switch (button.getId()) {
-                case "tictactoeButton1" -> board[0][0] = 1;
-                case "tictactoeButton2" -> board[0][1] = 1;
-                case "tictactoeButton3" -> board[0][2] = 1;
-                case "tictactoeButton4" -> board[1][0] = 1;
-                case "tictactoeButton5" -> board[1][1] = 1;
-                case "tictactoeButton6" -> board[1][2] = 1;
-                case "tictactoeButton7" -> board[2][0] = 1;
-                case "tictactoeButton8" -> board[2][1] = 1;
-                case "tictactoeButton9" -> board[2][2] = 1;
+                case "tictactoeButton1" -> board[0][0] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
+                case "tictactoeButton2" -> board[0][1] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
+                case "tictactoeButton3" -> board[0][2] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
+                case "tictactoeButton4" -> board[1][0] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
+                case "tictactoeButton5" -> board[1][1] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
+                case "tictactoeButton6" -> board[1][2] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
+                case "tictactoeButton7" -> board[2][0] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
+                case "tictactoeButton8" -> board[2][1] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
+                case "tictactoeButton9" -> board[2][2] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
             }
-
-            long[] playersArray = TTTCommand.players.get(event.getChannel().getIdLong());
 
             if (TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0]) {
                 TTTCommand.playersTurn.remove(event.getChannel().getIdLong());

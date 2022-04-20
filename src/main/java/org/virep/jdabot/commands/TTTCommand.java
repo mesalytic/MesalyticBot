@@ -12,8 +12,6 @@ import org.virep.jdabot.slashcommandhandler.SlashCommand;
 import java.util.*;
 
 /*
-TODO: Switch from X to O depending on the player.
-
 TODO: Check if its the player's turn when a button is pressed.
 
 TODO: Check if someone wins each round.
