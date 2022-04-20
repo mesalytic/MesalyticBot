@@ -14,7 +14,8 @@ import java.util.*;
 /*
 TODO: Check if someone wins each round.
 TODO: Handle when refusing the game
-TODO:
+TODO: Check if the user accepting or refusing is the opponent
+TODO: Check if mentionned user is not the interaction member
 TODO: Translate all strings to English
 */
 
@@ -30,7 +31,7 @@ public class TTTCommand extends SlashCommand {
     public static Map<Long, int[][]> boards = new HashMap<>();
     public static Map<Long, long[]> players = new HashMap<>();
     public static Map<Long, Long> playersTurn = new HashMap<>();
-    public static long playerID;
+
     @Override
     public void execute(SlashCommandInteractionEvent event) {
         if (event.getOption("opponent") == null) {

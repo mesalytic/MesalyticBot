@@ -33,13 +33,21 @@ public class SlashListener extends ListenerAdapter {
         Button button = event.getButton();
         System.out.println(event.getInteraction());
 
-        if (Objects.equals(button.getId(), "tictactoeAccept")) {
+        if ("tictactoeAccept".equals(button.getId())) {
             TTTCommand.playersTurn.put(event.getChannel().getIdLong(), TTTCommand.players.get(event.getChannel().getIdLong())[0]);
             TTTCommand.play(event, TTTCommand.playersTurn.get(event.getChannel().getIdLong()));
         }
 
+        if ("tictactoeRefuse".equals(button.getId())) {
+            event.getMessage().delete().queue();
+            event.reply("<@" + TTTCommand.players.get(event.getChannel().getIdLong())[0] + ">, <@" + TTTCommand.players.get(event.getChannel().getIdLong())[1] + "> a refusé la partie!").queue();
 
+            TTTCommand.boards.remove(event.getChannel().getIdLong());
+            TTTCommand.players.remove(event.getChannel().getIdLong());
+            TTTCommand.playersTurn.remove(event.getChannel().getIdLong());
 
+            return;
+        }
 
         if (Objects.requireNonNull(button.getId()).startsWith("tictactoeButton")) {
 
