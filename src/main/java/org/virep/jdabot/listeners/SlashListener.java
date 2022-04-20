@@ -34,11 +34,20 @@ public class SlashListener extends ListenerAdapter {
         System.out.println(event.getInteraction());
 
         if ("tictactoeAccept".equals(button.getId())) {
+            /*if (Objects.requireNonNull(event.getMember()).getIdLong() != TTTCommand.players.get(event.getChannel().getIdLong())[1]) {
+                event.reply("Ce n'est pas a toi d'accepter ou refuser cette partie!").setEphemeral(true).queue();
+                return;
+            }*/
+
             TTTCommand.playersTurn.put(event.getChannel().getIdLong(), TTTCommand.players.get(event.getChannel().getIdLong())[0]);
             TTTCommand.play(event, TTTCommand.playersTurn.get(event.getChannel().getIdLong()));
         }
 
         if ("tictactoeRefuse".equals(button.getId())) {
+            /*if (Objects.requireNonNull(event.getMember()).getIdLong() != TTTCommand.players.get(event.getChannel().getIdLong())[1]) {
+                event.reply("Ce n'est pas a toi d'accepter ou refuser cette partie!").setEphemeral(true).queue();
+                return;
+            }*/
             event.getMessage().delete().queue();
             event.reply("<@" + TTTCommand.players.get(event.getChannel().getIdLong())[0] + ">, <@" + TTTCommand.players.get(event.getChannel().getIdLong())[1] + "> a refusé la partie!").queue();
 
