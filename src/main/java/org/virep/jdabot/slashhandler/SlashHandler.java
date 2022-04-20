@@ -18,6 +18,10 @@ public class SlashHandler {
         this.jda = jda;
     }
 
+    // IntelliJ thinks CommandListUpdateAction#addCommands() result is ignored
+    // though it is queued line 38
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void addCommands(@Nonnull SlashCommand... commands) {
         Guild guild = jda.getGuildById("418433461817180180");
         assert guild != null;
@@ -25,10 +29,9 @@ public class SlashHandler {
         CommandListUpdateAction update = guild.updateCommands();
 
         Arrays.stream(commands).forEach(cmd -> {
-            // result is not forwarded in specific line, which triggers a warning
-            // even though it IS forwarded later outside the for each loop, so its ignored
-            //noinspection ResultOfMethodCallIgnored
-            update.addCommands(Commands.slash(cmd.getName(), cmd.getDescription()));
+            if (cmd.hasOptions(cmd.options)) update.addCommands(Commands.slash(cmd.getName(), cmd.getDescription()).addOptions(cmd.getOptions()));
+            else update.addCommands(Commands.slash(cmd.getName(), cmd.getDescription()));
+
             slashCommandMap.put(cmd.getName(), cmd);
         });
 

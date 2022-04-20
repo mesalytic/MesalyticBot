@@ -1,19 +1,25 @@
 package org.virep.jdabot.slashhandler;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 public abstract class SlashCommand {
     public String name;
     public String description;
+    public OptionData options;
 
     public SlashCommand(String name, String description) {
         this.name = name;
         this.description = description;
     }
+    public SlashCommand(String name, String description, OptionData options) {
+        this.name = name;
+        this.description = description;
+        this.options = options;
+    }
 
     public abstract void execute(SlashCommandInteractionEvent event);
-
 
     public String getName() {
         return name;
@@ -21,5 +27,12 @@ public abstract class SlashCommand {
 
     public String getDescription() {
         return description;
+    }
+
+    public OptionData getOptions() {
+        return options;
+    }
+    public boolean hasOptions(OptionData options) {
+        return options != null;
     }
 }
