@@ -87,7 +87,7 @@ public class TTTCommand extends SlashCommand {
 
         StringBuilder replyContent = new StringBuilder();
 
-        replyContent.append("<@").append(playerID).append(">, a toi de jouer!");
+        replyContent.append("<@").append(playerID).append(">, a toi de jouer!").append("\n\n");
 
         for (int i = 0; i < 3; i++) {
             if (i > 0) replyContent.append("\n");
