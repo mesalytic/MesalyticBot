@@ -77,15 +77,69 @@ public class SlashListener extends ListenerAdapter {
             }
 
             switch (button.getId()) {
-                case "tictactoeButton1" -> board[0][0] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
-                case "tictactoeButton2" -> board[0][1] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
-                case "tictactoeButton3" -> board[0][2] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
-                case "tictactoeButton4" -> board[1][0] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
-                case "tictactoeButton5" -> board[1][1] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
-                case "tictactoeButton6" -> board[1][2] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
-                case "tictactoeButton7" -> board[2][0] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
-                case "tictactoeButton8" -> board[2][1] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
-                case "tictactoeButton9" -> board[2][2] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
+                case "tictactoeButton1" -> {
+                    if (board[0][0] != 0) {
+                        event.reply("That spot has already been played!").setEphemeral(true).queue();
+                        return;
+                    }
+                    board[0][0] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
+                }
+                case "tictactoeButton2" -> {
+                    if (board[0][1] != 0) {
+                        event.reply("That spot has already been played!").setEphemeral(true).queue();
+                        return;
+                    }
+                    board[0][1] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
+                }
+                case "tictactoeButton3" -> {
+                    if (board[0][2] != 0) {
+                        event.reply("That spot has already been played!").setEphemeral(true).queue();
+                        return;
+                    }
+                    board[0][2] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
+                }
+                case "tictactoeButton4" -> {
+                    if (board[1][0] != 0) {
+                        event.reply("That spot has already been played!").setEphemeral(true).queue();
+                        return;
+                    }
+                    board[1][0] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
+                }
+                case "tictactoeButton5" -> {
+                    if (board[1][1] != 0) {
+                        event.reply("That spot has already been played!").setEphemeral(true).queue();
+                        return;
+                    }
+                    board[1][1] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
+                }
+                case "tictactoeButton6" -> {
+                    if (board[1][2] != 0) {
+                        event.reply("That spot has already been played!").setEphemeral(true).queue();
+                        return;
+                    }
+                    board[1][2] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
+                }
+                case "tictactoeButton7" -> {
+                    if (board[2][0] != 0) {
+                        event.reply("That spot has already been played!").setEphemeral(true).queue();
+                        return;
+                    }
+                    board[2][0] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
+                }
+                case "tictactoeButton8" -> {
+                    if (board[2][1] != 0) {
+                        event.reply("That spot has already been played!").setEphemeral(true).queue();
+                        return;
+                    }
+                    board[2][1] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
+                }
+                case "tictactoeButton9" -> {
+                    if (board[2][2] != 0) {
+                        event.reply("That spot has already been played!").setEphemeral(true).queue();
+                        return;
+                    }
+                    board[2][2] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
+                }
             }
 
             int checkWin = TTTCommand.verifyWin(board);
