@@ -19,7 +19,7 @@ public class TTTCommand extends SlashCommand {
 
     public TTTCommand() {
         super("tictactoe",
-                "le tictactoe",
+                "Play TicTacToe with your friends!",
                 new OptionData(OptionType.USER, "opponent", "Ping the opponent"));
     }
 
@@ -31,30 +31,30 @@ public class TTTCommand extends SlashCommand {
     @Override
     public void execute(SlashCommandInteractionEvent event) {
         if (event.getOption("opponent") == null) {
-            event.reply("Vous devez mentionner quelqu'un! `/tictactoe opponent`").setEphemeral(true).queue();
+            event.reply("You must ping someone! `/tictactoe opponent`").setEphemeral(true).queue();
             return;
         }
 
         if (Objects.requireNonNull(event.getOption("opponent")).getAsUser() == event.getUser()) {
-            event.reply("Vous ne pouvez pas jouer contre vous même!").setEphemeral(true).queue();
+            event.reply("You cannot play against yourself!").setEphemeral(true).queue();
             return;
         }
 
         if (Objects.requireNonNull(event.getOption("opponent")).getAsUser().isBot()) {
-            event.reply("Vous ne pouvez pas jouer contre un bot.").setEphemeral(true).queue();
+            event.reply("You cannot play against a bot!").setEphemeral(true).queue();
             return;
         }
 
-        if (boards.containsKey(event.getChannel().getIdLong())) event.reply("Une partie est deja en cours!").setEphemeral(true).queue();
+        if (boards.containsKey(event.getChannel().getIdLong())) event.reply("A game is already currently running.").setEphemeral(true).queue();
         else {
             players.put(event.getChannel().getIdLong(), new long[]{Objects.requireNonNull(event.getMember()).getIdLong(), Objects.requireNonNull(event.getOption("opponent")).getAsUser().getIdLong() });
 
             User opponent = Objects.requireNonNull(event.getOption("opponent")).getAsUser();
 
-            event.reply(opponent.getAsMention() + ", souhaitez vous jouer au morpion contre " + Objects.requireNonNull(event.getMember()).getAsMention() + " ?")
+            event.reply(opponent.getAsMention() + ", would you like to play tictactoe against " + Objects.requireNonNull(event.getMember()).getAsMention() + " ?")
                     .addActionRow(
-                            Button.primary("tictactoeAccept", "Accepter"),
-                            Button.danger("tictactoeRefuse", "Refuser")
+                            Button.primary("tictactoeAccept", "Accept"),
+                            Button.danger("tictactoeRefuse", "Refuse")
                     )
                     .queue();
         }
@@ -62,8 +62,6 @@ public class TTTCommand extends SlashCommand {
 
     public static void play(ButtonInteractionEvent event, long playerID) {
         boards.put(event.getChannel().getIdLong(), board);
-
-        long[] playersArray = players.get(event.getChannel().getIdLong());
 
         event.reply(replyBoard(board, playerID))
                 .addActionRow(
@@ -88,18 +86,15 @@ public class TTTCommand extends SlashCommand {
 
         int checkWin = verifyWin(boardArray);
 
-        System.out.println(Arrays.deepToString(boardArray));
-
         StringBuilder replyContent = new StringBuilder();
 
-        if (checkWin == 0) replyContent.append("<@").append(playerID).append(">, a toi de jouer!").append("\n\n");
-        if (checkWin == 1 || checkWin == 2) replyContent.append("<@").append(playerID).append("> a gagné!").append("\n\n");
-        if (checkWin == 3) replyContent.append("Personne a gagné.").append("\n\n");
+        if (checkWin == 0) replyContent.append("<@").append(playerID).append(">, it's your turn!").append("\n\n");
+        if (checkWin == 1 || checkWin == 2) replyContent.append("<@").append(playerID).append("> won!").append("\n\n");
+        if (checkWin == 3) replyContent.append("Tie.").append("\n\n");
 
         for (int i = 0; i < 3; i++) {
             if (i > 0) replyContent.append("\n");
             for (int j = 0; j < 3; j++) {
-                System.out.println(i + " " + j);
                 switch (boardArray[i][j]) {
                     case 0 -> replyContent.append("\u2B1B");
                     case 1 -> replyContent.append("\u274C");

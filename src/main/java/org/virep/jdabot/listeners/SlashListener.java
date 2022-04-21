@@ -31,11 +31,10 @@ public class SlashListener extends ListenerAdapter {
     @Override
     public void onButtonInteraction(@Nonnull ButtonInteractionEvent event) {
         Button button = event.getButton();
-        System.out.println(event.getInteraction());
 
         if ("tictactoeAccept".equals(button.getId())) {
             if (Objects.requireNonNull(event.getMember()).getIdLong() != TTTCommand.players.get(event.getChannel().getIdLong())[1]) {
-                event.reply("Ce n'est pas a toi d'accepter ou refuser cette partie!").setEphemeral(true).queue();
+                event.reply("You are not part of the game, you can't interact!").setEphemeral(true).queue();
                 return;
             }
 
@@ -45,12 +44,12 @@ public class SlashListener extends ListenerAdapter {
 
         if ("tictactoeRefuse".equals(button.getId())) {
             if (Objects.requireNonNull(event.getMember()).getIdLong() != TTTCommand.players.get(event.getChannel().getIdLong())[1]) {
-                event.reply("Ce n'est pas a toi d'accepter ou refuser cette partie!").setEphemeral(true).queue();
+                event.reply("You are not part of the game, you can't interact!").setEphemeral(true).queue();
                 return;
             }
 
             event.getMessage().delete().queue();
-            event.reply("<@" + TTTCommand.players.get(event.getChannel().getIdLong())[0] + ">, <@" + TTTCommand.players.get(event.getChannel().getIdLong())[1] + "> a refusé la partie!").queue();
+            event.reply("<@" + TTTCommand.players.get(event.getChannel().getIdLong())[0] + ">, <@" + TTTCommand.players.get(event.getChannel().getIdLong())[1] + "> refused to play!").queue();
 
             TTTCommand.boards.remove(event.getChannel().getIdLong());
             TTTCommand.players.remove(event.getChannel().getIdLong());
@@ -64,8 +63,8 @@ public class SlashListener extends ListenerAdapter {
             long playerOneID = TTTCommand.players.get(event.getChannel().getIdLong())[0];
             long playerTwoID = TTTCommand.players.get(event.getChannel().getIdLong())[1];
 
-            if (Objects.requireNonNull(event.getMember()).getIdLong() != playerOneID || event.getMember().getIdLong() != playerOneID) {
-                event.reply("Tu n'es pas de cette partie!").setEphemeral(true).queue();
+            if (Objects.requireNonNull(event.getMember()).getIdLong() != playerOneID || event.getMember().getIdLong() != playerTwoID) {
+                event.reply("You are not part of the game!").setEphemeral(true).queue();
                 return;
             }
 
@@ -73,12 +72,9 @@ public class SlashListener extends ListenerAdapter {
             long[] playersArray = TTTCommand.players.get(event.getChannel().getIdLong());
 
             if (TTTCommand.playersTurn.get(event.getChannel().getIdLong()) != event.getMember().getIdLong()) {
-                event.reply("Ce n'est pas a toi de jouer!").setEphemeral(true).queue();
+                event.reply("It's not your turn!").setEphemeral(true).queue();
                 return;
             }
-
-            System.out.println("PlayerOneID " + playerOneID);
-            System.out.println("PlayerTwoID " + playerTwoID);
 
             switch (button.getId()) {
                 case "tictactoeButton1" -> board[0][0] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
@@ -108,8 +104,6 @@ public class SlashListener extends ListenerAdapter {
                 String replyBoard = TTTCommand.replyBoard(board, TTTCommand.playersTurn.get(event.getChannel().getIdLong()));
                 event.editMessage(replyBoard).setActionRows().queue();
             }
-
-
         }
     }
 }
