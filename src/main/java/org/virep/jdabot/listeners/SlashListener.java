@@ -63,7 +63,7 @@ public class SlashListener extends ListenerAdapter {
             long playerOneID = TTTCommand.players.get(event.getChannel().getIdLong())[0];
             long playerTwoID = TTTCommand.players.get(event.getChannel().getIdLong())[1];
 
-            if (Objects.requireNonNull(event.getMember()).getIdLong() != playerOneID || event.getMember().getIdLong() != playerTwoID) {
+            if (Objects.requireNonNull(event.getMember()).getIdLong() != playerOneID && event.getMember().getIdLong() != playerTwoID) {
                 event.reply("You are not part of the game!").setEphemeral(true).queue();
                 return;
             }
