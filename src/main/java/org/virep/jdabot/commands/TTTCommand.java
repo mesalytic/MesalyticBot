@@ -12,8 +12,6 @@ import org.virep.jdabot.slashcommandhandler.SlashCommand;
 import java.util.*;
 
 /*
-TODO: Check if someone wins each round.
-TODO: Check if the user accepting or refusing is the opponent
 TODO: Translate all strings to English
 */
 
@@ -42,10 +40,10 @@ public class TTTCommand extends SlashCommand {
             return;
         }
 
-        /*if (event.getOption("opponent").getAsUser().isBot()) {
+        if (Objects.requireNonNull(event.getOption("opponent")).getAsUser().isBot()) {
             event.reply("Vous ne pouvez pas jouer contre un bot.").setEphemeral(true).queue();
             return;
-        }*/
+        }
 
         if (boards.containsKey(event.getChannel().getIdLong())) event.reply("Une partie est deja en cours!").setEphemeral(true).queue();
         else {
@@ -87,11 +85,16 @@ public class TTTCommand extends SlashCommand {
     }
 
     public static String replyBoard(int[][] boardArray, long playerID) {
+
+        int checkWin = verifyWin(boardArray);
+
         System.out.println(Arrays.deepToString(boardArray));
 
         StringBuilder replyContent = new StringBuilder();
 
-        replyContent.append("<@").append(playerID).append(">, a toi de jouer!").append("\n\n");
+        if (checkWin == 0) replyContent.append("<@").append(playerID).append(">, a toi de jouer!").append("\n\n");
+        if (checkWin == 1 || checkWin == 2) replyContent.append("<@").append(playerID).append("> a gagné!").append("\n\n");
+        if (checkWin == 3) replyContent.append("Personne a gagné.").append("\n\n");
 
         for (int i = 0; i < 3; i++) {
             if (i > 0) replyContent.append("\n");
@@ -105,5 +108,26 @@ public class TTTCommand extends SlashCommand {
             }
         }
         return replyContent.toString();
+    }
+
+    public static int verifyWin(int[][] board) {
+        for (int i = 0; i < board.length; i++) {
+            if (board[i][0] != 0 && board[i][0] == board[i][1] && board[i][0] == board[i][2]) return board[i][0];
+            if (board[0][i] != 0 && board[0][i] == board[1][i] && board[0][i] == board[2][i]) return board[0][i];
+        }
+
+        if (board[0][0] != 0 && board[0][0] == board[1][1] && board[0][0] == board[2][2]) return board[0][0];
+        if (board[0][2] != 0 && board[0][2] == board[1][1] && board[0][2] == board[2][0]) return board[0][2];
+
+        int occ = 0;
+        for (int[] ints : board) {
+            for (int j = 0; j < board.length; j++) {
+                if (ints[j] == 0) occ++;
+            }
+        }
+
+        if (occ == 0) return 3;
+
+        return 0;
     }
 }
