@@ -37,6 +37,7 @@ public class SlashListener extends ListenerAdapter {
                 event.reply("You are not part of the game, you can't interact!").setEphemeral(true).queue();
                 return;
             }
+            event.getMessage().delete().queue();
 
             TTTCommand.playersTurn.put(event.getChannel().getIdLong(), TTTCommand.players.get(event.getChannel().getIdLong())[0]);
             TTTCommand.play(event, TTTCommand.playersTurn.get(event.getChannel().getIdLong()));
