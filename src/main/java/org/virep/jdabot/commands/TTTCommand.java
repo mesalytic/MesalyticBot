@@ -24,9 +24,9 @@ public class TTTCommand extends SlashCommand {
     }
 
     private static final int[][] board = new int[3][3];
-    public static Map<Long, int[][]> boards = new HashMap<>();
-    public static Map<Long, long[]> players = new HashMap<>();
-    public static Map<Long, Long> playersTurn = new HashMap<>();
+    public static final Map<Long, int[][]> boards = new HashMap<>();
+    public static final Map<Long, long[]> players = new HashMap<>();
+    public static final Map<Long, Long> playersTurn = new HashMap<>();
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {

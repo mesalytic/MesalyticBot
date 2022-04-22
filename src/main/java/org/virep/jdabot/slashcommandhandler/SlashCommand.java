@@ -4,8 +4,8 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 public abstract class SlashCommand {
-    public String name;
-    public String description;
+    public final String name;
+    public final String description;
     public OptionData options;
 
     public SlashCommand(String name, String description) {
