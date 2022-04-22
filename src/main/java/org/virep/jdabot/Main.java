@@ -2,7 +2,9 @@ package org.virep.jdabot;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.virep.jdabot.commands.PingCommand;
+import org.virep.jdabot.commands.JoinCommand;
 import org.virep.jdabot.commands.PongCommand;
 import org.virep.jdabot.commands.TTTCommand;
 import org.virep.jdabot.listeners.MessageListener;
@@ -14,11 +16,15 @@ public class Main {
         JDA api = JDABuilder
                 .createDefault(Config.get("TOKEN"))
                 .addEventListeners(new MessageListener())
+                .enableCache(CacheFlag.VOICE_STATE)
                 .build().awaitReady();
 
         SlashHandler slashHandler = new SlashHandler(api);
 
         api.addEventListener(new SlashListener(slashHandler));
-        slashHandler.addCommands(new PingCommand(), new PongCommand(), new TTTCommand());
+        slashHandler.addCommands(new PingCommand(),
+                new PongCommand(),
+                new TTTCommand(),
+                new JoinCommand());
     }
 }
