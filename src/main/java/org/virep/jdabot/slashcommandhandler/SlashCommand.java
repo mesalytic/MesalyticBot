@@ -28,13 +28,6 @@ public abstract class SlashCommand {
         this.options = options;
     }
 
-    public SlashCommand(String name, String description, OptionData[] options, SubcommandData[] subcommandData) {
-        this.name = name;
-        this.description = description;
-        this.options = options;
-        this.subcommandData = subcommandData;
-    }
-
     public abstract void execute(SlashCommandInteractionEvent event);
 
     public String getName() {
