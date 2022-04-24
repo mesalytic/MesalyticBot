@@ -38,16 +38,16 @@ public class PlayCommand extends SlashCommand {
             return;
         }
 
+        if (!isValidURL(Objects.requireNonNull(event.getOption("url")).getAsString(), "/^(?:https?:\\/\\/)?(?:m\\.|www\\.)?(?:youtu\\.be\\/|youtube\\.com\\/(?:embed\\/|v\\/|watch\\?v=|watch\\?.+&v=))((\\w|-){11})(?:\\S+)?$/")) {
+            event.reply("It is not a valid YouTube VIDEO link!").setEphemeral(true).queue();
+            return;
+        }
+
         if (!selfVoiceState.inAudioChannel()) {
             AudioManager manager = guild.getAudioManager();
             manager.openAudioConnection(memberVoiceState.getChannel());
         } else if (Objects.requireNonNull(selfVoiceState.getChannel()).getIdLong() != memberVoiceState.getChannel().getIdLong()) {
             event.reply("You are not in the same channel as me!").setEphemeral(true).queue();
-            return;
-        }
-
-        if (!isValidURL(Objects.requireNonNull(event.getOption("url")).getAsString(), "/^(?:https?:\\/\\/)?(?:m\\.|www\\.)?(?:youtu\\.be\\/|youtube\\.com\\/(?:embed\\/|v\\/|watch\\?v=|watch\\?.+&v=))((\\w|-){11})(?:\\S+)?$/")) {
-            event.reply("It is not a valid YouTube VIDEO link!").setEphemeral(true).queue();
             return;
         }
 
