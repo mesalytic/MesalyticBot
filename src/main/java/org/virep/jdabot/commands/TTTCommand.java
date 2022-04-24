@@ -20,7 +20,14 @@ public class TTTCommand extends SlashCommand {
     public TTTCommand() {
         super("tictactoe",
                 "Play TicTacToe with your friends!",
-                new OptionData(OptionType.USER, "opponent", "Ping the opponent"));
+                new OptionData[] {
+                        new OptionData(
+                                OptionType.USER,
+                                "opponent",
+                                "The member you want to play against"
+                        )
+                }
+        );
     }
 
     private static final int[][] board = new int[3][3];
