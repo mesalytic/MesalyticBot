@@ -29,8 +29,10 @@ public class SlashHandler {
         CommandListUpdateAction update = guild.updateCommands();
 
         Arrays.stream(commands).forEach(cmd -> {
-            if (cmd.hasOptions(cmd.options)) update.addCommands(Commands.slash(cmd.getName(), cmd.getDescription()).addOptions(cmd.options));
-            else update.addCommands(Commands.slash(cmd.getName(), cmd.getDescription()));
+
+            if (cmd.hasOptions(cmd.options) && !cmd.hasSubcommandData(cmd.subcommandData)) { System.out.println(cmd.getName() + 1); update.addCommands(Commands.slash(cmd.getName(), cmd.getDescription()).addOptions(cmd.getOptions())); }
+            else if (!cmd.hasOptions(cmd.options) && cmd.hasSubcommandData(cmd.subcommandData)) { System.out.println(cmd.getName() + 2); update.addCommands(Commands.slash(cmd.getName(), cmd.getDescription()).addSubcommands(cmd.getSubcommandData())); }
+            else if (!cmd.hasOptions(cmd.options) && !cmd.hasSubcommandData(cmd.subcommandData)) { System.out.println(cmd.getName() + 4); update.addCommands(Commands.slash(cmd.getName(), cmd.getDescription())); }
 
             slashCommandMap.put(cmd.getName(), cmd);
         });
