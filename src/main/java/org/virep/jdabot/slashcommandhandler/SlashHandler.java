@@ -29,7 +29,7 @@ public class SlashHandler {
         CommandListUpdateAction update = guild.updateCommands();
 
         Arrays.stream(commands).forEach(cmd -> {
-            if (cmd.hasOptions(cmd.options)) update.addCommands(Commands.slash(cmd.getName(), cmd.getDescription()).addOptions(cmd.getOptions()));
+            if (cmd.hasOptions(cmd.options)) update.addCommands(Commands.slash(cmd.getName(), cmd.getDescription()).addOptions(cmd.options));
             else update.addCommands(Commands.slash(cmd.getName(), cmd.getDescription()));
 
             slashCommandMap.put(cmd.getName(), cmd);
