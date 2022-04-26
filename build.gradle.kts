@@ -8,6 +8,7 @@ version = "1.0-SNAPSHOT"
 repositories {
     mavenCentral()
     maven("https://m2.dv8tion.net/releases")
+    maven("https://jitpack.io")
 }
 
 dependencies {
@@ -16,6 +17,7 @@ dependencies {
     implementation ("com.sedmelluq:lavaplayer:1.3.77")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
+    implementation("com.github.Xirado:Lavalink-Client:master-SNAPSHOT")
 }
 
 tasks.getByName<Test>("test") {

@@ -5,61 +5,46 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
+import lavalink.client.player.LavalinkPlayer;
+import lavalink.client.player.event.PlayerEventListenerAdapter;
+import net.dv8tion.jda.api.entities.Guild;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class TrackScheduler extends AudioEventAdapter {
+public class TrackScheduler extends PlayerEventListenerAdapter {
 
-    private final AudioPlayer player;
+    private final LavalinkPlayer player;
     private final BlockingQueue<AudioTrack> queue;
 
-    public TrackScheduler(AudioPlayer player) {
+    public TrackScheduler(Guild guild, LavalinkPlayer player) {
         this.player = player;
         this.queue = new LinkedBlockingQueue<>();
     }
 
-    public void nextTrack() {
-        this.player.startTrack(this.queue.poll(), true);
+    public boolean hasNextTrack() {
+        return queue.peek() != null;
     }
 
     public void queue(AudioTrack track) {
-        if (!this.player.startTrack(track, true)) {
-            this.queue.offer(track);
-        }
-
-    }
-    @Override
-    public void onPlayerPause(AudioPlayer player) {
-        // Paused
-    }
-
-    @Override
-    public void onPlayerResume(AudioPlayer player) {
-        // Resumed
-    }
-
-    @Override
-    public void onTrackStart(AudioPlayer player, AudioTrack track) {
-        // Track Start
-    }
-
-    @Override
-    public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-        if (endReason.mayStartNext) {
+        if (player.getPlayingTrack() == null) {
+            queue.add(track);
             nextTrack();
+            return;
         }
-
-        // track end
+        queue.offer(track);
     }
 
-    @Override
-    public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException excpetion) {
-        // Playing track threw exception
-    }
+    public void nextTrack() {
+        AudioTrack track = queue.poll();
 
-    @Override
-    public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs) {
-        // Unable to provide any audio
+        if (track == null) {
+            if (player.getPlayingTrack() != null) {
+                player.stopTrack();
+            }
+
+            return;
+        }
+        player.playTrack(track);
     }
 }
