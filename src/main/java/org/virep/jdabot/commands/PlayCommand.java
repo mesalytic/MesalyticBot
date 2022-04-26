@@ -2,11 +2,13 @@ package org.virep.jdabot.commands;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
+import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.managers.AudioManager;
-import org.virep.jdabot.lavaplayer.PlayerManager;
+import org.virep.jdabot.lavaplayer.AudioManagerController;
+import org.virep.jdabot.lavaplayer.GuildAudioManager;
 import org.virep.jdabot.slashcommandhandler.SlashCommand;
 
 import java.util.Objects;
@@ -14,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PlayCommand extends SlashCommand {
+
     public PlayCommand() {
         super("play",
                 "Play music on your voice channel!",
@@ -25,6 +28,8 @@ public class PlayCommand extends SlashCommand {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        GuildAudioManager manager = AudioManagerController.getGuildAudioManager(event.getGuild());
+
         Guild guild = event.getGuild();
 
         assert guild != null;
@@ -38,20 +43,19 @@ public class PlayCommand extends SlashCommand {
             return;
         }
 
-        if (!isValidURL(Objects.requireNonNull(event.getOption("url")).getAsString(), "/^(?:https?:\\/\\/)?(?:m\\.|www\\.)?(?:youtu\\.be\\/|youtube\\.com\\/(?:embed\\/|v\\/|watch\\?v=|watch\\?.+&v=))((\\w|-){11})(?:\\S+)?$/")) {
-            event.reply("It is not a valid YouTube VIDEO link!").setEphemeral(true).queue();
-            return;
-        }
-
         if (!selfVoiceState.inAudioChannel()) {
-            AudioManager manager = guild.getAudioManager();
-            manager.openAudioConnection(memberVoiceState.getChannel());
+            manager.openConnection((VoiceChannel) memberVoiceState.getChannel(), event.getTextChannel());
         } else if (Objects.requireNonNull(selfVoiceState.getChannel()).getIdLong() != memberVoiceState.getChannel().getIdLong()) {
             event.reply("You are not in the same channel as me!").setEphemeral(true).queue();
             return;
         }
 
-        PlayerManager.getInstance().loadAndPlay(event, Objects.requireNonNull(event.getOption("url")).getAsString());
+        AudioManager audioManager = event.getGuild().getAudioManager();
+        audioManager.setSelfDeafened(true);
+
+        String url = event.getOption("url").getAsString();
+
+        manager.loadAndPlay(manager, url, event);
     }
 
     private boolean isValidURL(String string, String regex) {
