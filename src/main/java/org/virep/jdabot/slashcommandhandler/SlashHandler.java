@@ -26,24 +26,6 @@ public class SlashHandler {
     // though it is queued line 38
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void addCommands(@Nonnull SlashCommand... commands) {
-        Guild guild = jda.getGuildById("418433461817180180");
-        assert guild != null;
-
-        CommandListUpdateAction update = guild.updateCommands();
-
-        Arrays.stream(commands).forEach(cmd -> {
-
-            if (cmd.hasOptions(cmd.options) && !cmd.hasSubcommandData(cmd.subcommandData)) { System.out.println(cmd.getName() + 1); update.addCommands(Commands.slash(cmd.getName(), cmd.getDescription()).addOptions(cmd.getOptions())); }
-            else if (!cmd.hasOptions(cmd.options) && cmd.hasSubcommandData(cmd.subcommandData)) { System.out.println(cmd.getName() + 2); update.addCommands(Commands.slash(cmd.getName(), cmd.getDescription()).addSubcommands(cmd.getSubcommandData())); }
-            else if (!cmd.hasOptions(cmd.options) && !cmd.hasSubcommandData(cmd.subcommandData)) { System.out.println(cmd.getName() + 4); update.addCommands(Commands.slash(cmd.getName(), cmd.getDescription())); }
-
-            slashCommandMap.put(cmd.getName(), cmd);
-        });
-
-        update.queue();
-    }
-
     public void addCommands() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         Guild guild = jda.getGuildById("418433461817180180");
         assert guild != null;
