@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import java.util.Objects;
 
 public class AudioLoadHandler {
-    public void loadAndPlay(GuildAudioManager manager, String trackURL, SlashCommandInteractionEvent event) {
+    public static void loadAndPlay(GuildAudioManager manager, String trackURL, SlashCommandInteractionEvent event) {
         manager.openConnection((VoiceChannel) Objects.requireNonNull(Objects.requireNonNull(event.getMember()).getVoiceState()).getChannel());
         AudioManagerController.getPlayerManager().loadItemOrdered(manager, trackURL, new AudioLoadResultHandler() {
             @Override
