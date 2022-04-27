@@ -35,7 +35,7 @@ public class AudioLoadHandler {
 
             @Override
             public void loadFailed(FriendlyException exception) {
-                throw exception;
+                System.out.println(exception.getMessage());
             }
         });
     }
