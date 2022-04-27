@@ -2,6 +2,7 @@ package org.virep.jdabot.lavaplayer;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
+import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import lavalink.client.io.Link;
@@ -18,6 +19,7 @@ public class AudioManagerController {
 
     public static void registerAudio() {
         playerManager.registerSourceManager(new YoutubeAudioSourceManager());
+        playerManager.registerSourceManager(SoundCloudAudioSourceManager.createDefault());
         playerManager.setTrackStuckThreshold(5000L);
     }
 
