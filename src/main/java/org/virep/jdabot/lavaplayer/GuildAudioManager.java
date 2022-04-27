@@ -25,45 +25,16 @@ public class GuildAudioManager {
         this.player.addListener(this.scheduler);
     }
 
-    public void openConnection(VoiceChannel voiceChannel, TextChannel textChannel) {
-        try {
-            this.link.connect(voiceChannel);
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-        }
+    public void openConnection(VoiceChannel voiceChannel) {
+        this.link.connect(voiceChannel);
     }
 
-    public void loadAndPlay(GuildAudioManager gam, String trackURL, SlashCommandInteractionEvent event) {
-        AudioManagerController.getPlayerManager().loadItemOrdered(gam, trackURL, new AudioLoadResultHandler() {
-            @Override
-            public void trackLoaded(AudioTrack track) {
-                getScheduler().queue(track);
-
-                event.replyFormat("Adding to Queue: %s by %s", track.getInfo().title, track.getInfo().author).queue();
-            }
-
-            @Override
-            public void playlistLoaded(AudioPlaylist playlist) {
-                for (AudioTrack track : playlist.getTracks()) {
-                    getScheduler().queue(track);
-                }
-                event.replyFormat("Adding Playlist to Queue: %s", playlist.getName()).queue();
-            }
-
-            @Override
-            public void noMatches() {
-                System.out.println("aaaaaaaaa");
-            }
-
-            @Override
-            public void loadFailed(FriendlyException exception) {
-                throw exception;
-            }
-        });
-    }
-
-    public void closeConnection() {
-        this.link.destroy();
+    protected void destroyConnection() {
+        scheduler.queue.clear();
+        player.stopTrack();
+        player.removeListener(scheduler);
+        link.resetPlayer();
+        link.destroy();
     }
 
     public void resetPlayer(Guild guild) {

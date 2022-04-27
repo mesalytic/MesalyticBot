@@ -15,7 +15,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class TrackScheduler extends PlayerEventListenerAdapter {
 
     private final LavalinkPlayer player;
-    private final BlockingQueue<AudioTrack> queue;
+    final BlockingQueue<AudioTrack> queue;
 
     public TrackScheduler(Guild guild, LavalinkPlayer player) {
         this.player = player;
