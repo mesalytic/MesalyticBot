@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.managers.AudioManager;
+import org.virep.jdabot.lavaplayer.AudioLoadHandler;
 import org.virep.jdabot.lavaplayer.AudioManagerController;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
 import org.virep.jdabot.slashcommandhandler.SlashCommand;
@@ -44,7 +45,7 @@ public class PlayCommand extends SlashCommand {
         }
 
         if (!selfVoiceState.inAudioChannel()) {
-            manager.openConnection((VoiceChannel) memberVoiceState.getChannel(), event.getTextChannel());
+            manager.openConnection((VoiceChannel) memberVoiceState.getChannel());
         } else if (Objects.requireNonNull(selfVoiceState.getChannel()).getIdLong() != memberVoiceState.getChannel().getIdLong()) {
             event.reply("You are not in the same channel as me!").setEphemeral(true).queue();
             return;
@@ -55,7 +56,7 @@ public class PlayCommand extends SlashCommand {
 
         String url = event.getOption("url").getAsString();
 
-        manager.loadAndPlay(manager, url, event);
+        AudioLoadHandler.loadAndPlay(manager, url, event);
     }
 
     private boolean isValidURL(String string, String regex) {
