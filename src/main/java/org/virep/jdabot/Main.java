@@ -4,10 +4,7 @@ import lavalink.client.io.jda.JdaLavalink;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
-import org.virep.jdabot.commands.PingCommand;
-import org.virep.jdabot.commands.JoinCommand;
-import org.virep.jdabot.commands.PlayCommand;
-import org.virep.jdabot.commands.TTTCommand;
+import org.virep.jdabot.commands.*;
 import org.virep.jdabot.lavaplayer.AudioManagerController;
 import org.virep.jdabot.listeners.EventListener;
 import org.virep.jdabot.slashcommandhandler.SlashHandler;
@@ -31,7 +28,8 @@ public class Main {
         slashHandler.addCommands(new PingCommand(),
                 new TTTCommand(),
                 new JoinCommand(),
-                new PlayCommand());
+                new PlayCommand(),
+                new StopCommand());
 
         lavalink.setAutoReconnect(true);
         lavalink.addNode(URI.create(Config.get("LAVALINKURI")), Config.get("LAVALINKPWD"));
