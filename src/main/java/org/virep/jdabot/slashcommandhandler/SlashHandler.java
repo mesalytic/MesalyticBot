@@ -1,6 +1,5 @@
 package org.virep.jdabot.slashcommandhandler;
 
-import kotlin.jvm.internal.Reflection;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -9,7 +8,6 @@ import org.reflections.Reflections;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.HashMap;
