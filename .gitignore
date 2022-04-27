@@ -45,3 +45,5 @@ bin/
 
 Lavalink.jar
 application.yml
+/lavalink/logs/spring.log
+/logs/spring.log
