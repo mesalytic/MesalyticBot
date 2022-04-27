@@ -4,14 +4,12 @@ import lavalink.client.io.jda.JdaLavalink;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
-import org.virep.jdabot.commands.*;
 import org.virep.jdabot.lavaplayer.AudioManagerController;
 import org.virep.jdabot.listeners.EventListener;
 import org.virep.jdabot.slashcommandhandler.SlashHandler;
 import org.virep.jdabot.listeners.SlashListener;
 
 import java.net.URI;
-import java.util.function.Function;
 
 public class Main {
     public static JDA PublicJDA = null;
@@ -25,11 +23,8 @@ public class Main {
         SlashHandler slashHandler = new SlashHandler(api);
 
         api.addEventListener(new SlashListener(slashHandler));
-        slashHandler.addCommands(new PingCommand(),
-                new TTTCommand(),
-                new JoinCommand(),
-                new PlayCommand(),
-                new StopCommand());
+
+        slashHandler.addCommands();
 
         lavalink.setAutoReconnect(true);
         lavalink.addNode(URI.create(Config.get("LAVALINKURI")), Config.get("LAVALINKPWD"));
