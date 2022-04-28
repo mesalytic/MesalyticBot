@@ -16,7 +16,7 @@ import java.util.concurrent.ScheduledFuture;
 public class TrackScheduler extends PlayerEventListenerAdapter {
 
     private final LavalinkPlayer player;
-    final BlockingQueue<AudioTrack> queue;
+    public final BlockingQueue<AudioTrack> queue;
     private ScheduledFuture<?> timeout = null;
     private AudioTrack background = null;
     private final Guild guild;
