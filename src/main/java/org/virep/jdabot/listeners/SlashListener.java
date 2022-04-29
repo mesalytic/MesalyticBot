@@ -5,12 +5,16 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import org.virep.jdabot.commands.TTTCommand;
+import org.virep.jdabot.lavaplayer.AudioManagerController;
+import org.virep.jdabot.lavaplayer.GuildAudioManager;
+import org.virep.jdabot.lavaplayer.TrackScheduler;
 import org.virep.jdabot.slashcommandhandler.SlashCommand;
 import org.virep.jdabot.slashcommandhandler.SlashHandler;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SlashListener extends ListenerAdapter {
     private final SlashHandler slashHandler;
@@ -31,6 +35,27 @@ public class SlashListener extends ListenerAdapter {
     @Override
     public void onButtonInteraction(@Nonnull ButtonInteractionEvent event) {
         Button button = event.getButton();
+
+        if ("queueFull".equals(button.getId())) {
+            GuildAudioManager guildAudioManager = AudioManagerController.getGuildAudioManager(event.getGuild());
+
+            StringBuilder queueBuilder = new StringBuilder();
+            AtomicInteger counter = new AtomicInteger();
+
+            guildAudioManager.getScheduler().queue.stream().forEach(audioTrack -> {
+                counter.getAndIncrement();
+                queueBuilder
+                        .append("\n")
+                        .append("[")
+                        .append(counter.get())
+                        .append("] ")
+                        .append(audioTrack.getInfo().title)
+                        .append(" - ")
+                        .append(audioTrack.getInfo().author);
+            });
+
+            event.replyFile(queueBuilder.toString().getBytes(), "queue.txt").setEphemeral(true).queue();
+        }
 
         if ("tictactoeAccept".equals(button.getId())) {
             if (Objects.requireNonNull(event.getMember()).getIdLong() != TTTCommand.players.get(event.getChannel().getIdLong())[1]) {
