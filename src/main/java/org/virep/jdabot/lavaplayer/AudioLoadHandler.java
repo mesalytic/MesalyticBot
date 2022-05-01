@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public class AudioLoadHandler {
     public static void loadAndPlay(GuildAudioManager manager, String trackURL, SlashCommandInteractionEvent event) {
@@ -22,6 +23,15 @@ public class AudioLoadHandler {
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
+                if (playlist.isSearchResult()) {
+
+                    AudioTrack track = playlist.getTracks().get(0);
+                    manager.getScheduler().queue(track);
+
+                    event.replyFormat("Adding to Queue: %s by %s", track.getInfo().title, track.getInfo().author).queue();
+                    return;
+                }
+
                 for (AudioTrack track : playlist.getTracks()) {
                     manager.getScheduler().queue(track);
                 }

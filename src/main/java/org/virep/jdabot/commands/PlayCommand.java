@@ -23,7 +23,7 @@ public class PlayCommand extends SlashCommand {
         super("play",
                 "Play music on your voice channel!",
                 new SubcommandData[] {
-                        new SubcommandData("youtube", "Play YouTube urls!").addOption(OptionType.STRING, "url", "YouTube Video or Playlist URL"),
+                        new SubcommandData("youtube", "Play YouTube urls!").addOption(OptionType.STRING, "url", "YouTube Video or Playlist URL").addOption(OptionType.STRING, "search", "Search string"),
                         new SubcommandData("soundcloud", "Play SoundCloud urls!").addOption(OptionType.STRING, "url", "SoundCloud URL")
                 }
         );
@@ -43,17 +43,23 @@ public class PlayCommand extends SlashCommand {
         assert selfVoiceState != null;
 
         OptionMapping urlOption = event.getOption("url");
+        OptionMapping searchOption = event.getOption("search");
 
-        if (urlOption == null) {
-            event.reply("You must specify a URL.").setEphemeral(true).queue();
+        String result;
+
+        if (urlOption == null && searchOption == null) {
+            event.reply("You must specify a URL or a search query.").setEphemeral(true).queue();
             return;
         } else {
-            try {
-                new URL(urlOption.getAsString());
-            } catch (MalformedURLException e) {
-                event.reply("You must specify a valid URL.").setEphemeral(true).queue();
-                return;
-            }
+            if (urlOption != null) {
+                try {
+                    new URL(urlOption.getAsString());
+                    result = urlOption.getAsString();
+                } catch (MalformedURLException e) {
+                    event.reply("You must specify a valid URL.").setEphemeral(true).queue();
+                    return;
+                }
+            } else result = "ytsearch:" + searchOption.getAsString();
         }
 
         if (memberVoiceState.getChannel() == null) {
@@ -71,6 +77,6 @@ public class PlayCommand extends SlashCommand {
         AudioManager audioManager = event.getGuild().getAudioManager();
         audioManager.setSelfDeafened(true);
 
-        AudioLoadHandler.loadAndPlay(manager, urlOption.getAsString(), event);
+        AudioLoadHandler.loadAndPlay(manager, result, event);
     }
 }
