@@ -6,6 +6,7 @@ import lavalink.client.player.IPlayer;
 import lavalink.client.player.LavalinkPlayer;
 import lavalink.client.player.event.PlayerEventListenerAdapter;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.TextChannel;
 import org.virep.jdabot.schedulers.ScheduleHandler;
 import org.virep.jdabot.schedulers.jobs.VoiceTimeoutJob;
 
@@ -21,9 +22,12 @@ public class TrackScheduler extends PlayerEventListenerAdapter {
     private AudioTrack background = null;
     private final Guild guild;
 
+    private TextChannel channel;
+
     public TrackScheduler(Guild guild, LavalinkPlayer player) {
         this.guild = guild;
         this.player = player;
+        this.channel = null;
         this.queue = new LinkedBlockingQueue<>();
     }
 
@@ -31,8 +35,9 @@ public class TrackScheduler extends PlayerEventListenerAdapter {
         return queue.peek() != null;
     }
 
-    public void queue(AudioTrack track) {
+    public void queue(AudioTrack track, TextChannel channel) {
         if (player.getPlayingTrack() == null) {
+            this.channel = channel;
             queue.add(track);
             nextTrack();
             return;
@@ -61,6 +66,7 @@ public class TrackScheduler extends PlayerEventListenerAdapter {
 
     @Override
     public void onTrackStart(IPlayer player, AudioTrack track) {
+        channel.sendMessageFormat("Now playing %s", track.getInfo().title).queue();
         if (timeout != null) {
             timeout.cancel(true);
         }
