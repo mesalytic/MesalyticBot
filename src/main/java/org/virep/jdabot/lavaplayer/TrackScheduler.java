@@ -18,16 +18,18 @@ public class TrackScheduler extends PlayerEventListenerAdapter {
 
     private final LavalinkPlayer player;
     public final BlockingQueue<AudioTrack> queue;
+    private final Guild guild;
+    private TextChannel channel;
+
+    private boolean looping;
     private ScheduledFuture<?> timeout = null;
     private AudioTrack background = null;
-    private final Guild guild;
-
-    private TextChannel channel;
 
     public TrackScheduler(Guild guild, LavalinkPlayer player) {
         this.guild = guild;
         this.player = player;
         this.channel = null;
+        this.looping = false;
         this.queue = new LinkedBlockingQueue<>();
     }
 
@@ -75,7 +77,17 @@ public class TrackScheduler extends PlayerEventListenerAdapter {
     @Override
     public void onTrackEnd(IPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         if (endReason.mayStartNext) {
+            if (looping) {
+                queue.offer(track.makeClone());
+            }
             nextTrack();
         }
+    }
+
+    public boolean isLooping() {
+        return this.looping;
+    }
+    public void setLooping(boolean status) {
+        this.looping = status;
     }
 }
