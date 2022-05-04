@@ -4,7 +4,8 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.managers.AudioManager;
+import org.virep.jdabot.lavaplayer.AudioManagerController;
+import org.virep.jdabot.lavaplayer.GuildAudioManager;
 import org.virep.jdabot.slashcommandhandler.SlashCommand;
 
 import java.util.Objects;
@@ -19,6 +20,7 @@ public class JoinCommand extends SlashCommand {
     @Override
     public void execute(SlashCommandInteractionEvent event) {
         Guild guild = event.getGuild();
+        GuildAudioManager manager = AudioManagerController.getGuildAudioManager(guild);
         GuildVoiceState voiceState = Objects.requireNonNull(event.getMember()).getVoiceState();
 
         assert voiceState != null;
@@ -34,10 +36,9 @@ public class JoinCommand extends SlashCommand {
             return;
         }
         VoiceChannel voiceChannel = guild.getVoiceChannelById(voiceState.getChannel().getIdLong());
-        AudioManager manager = guild.getAudioManager();
 
         assert voiceChannel != null;
-        manager.openAudioConnection(voiceChannel);
+        manager.openConnection(voiceChannel);
 
         event.replyFormat("\uD83D\uDD0A I joined `%s`", voiceChannel.getName()).queue();
     }
