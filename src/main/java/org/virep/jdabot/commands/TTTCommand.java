@@ -11,10 +11,6 @@ import org.virep.jdabot.slashcommandhandler.SlashCommand;
 
 import java.util.*;
 
-/*
-TODO: Translate all strings to English
-*/
-
 public class TTTCommand extends SlashCommand {
 
     public TTTCommand() {
