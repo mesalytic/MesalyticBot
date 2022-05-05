@@ -42,10 +42,9 @@ public class SlashHandler {
 
             SlashCommand command = commandClass.getConstructor().newInstance();
 
-            if (command.hasOptions(command.options) && !command.hasSubcommandData(command.subcommandData)) { System.out.println(command.getName() + 1); update.addCommands(Commands.slash(command.getName(), command.getDescription()).addOptions(command.getOptions())); }
-            else if (!command.hasOptions(command.options) && command.hasSubcommandData(command.subcommandData)) { System.out.println(command.getName() + 2); update.addCommands(Commands.slash(command.getName(), command.getDescription()).addSubcommands(command.getSubcommandData())); }
-            else if (!command.hasOptions(command.options) && !command.hasSubcommandData(command.subcommandData)) { System.out.println(command.getName() + 4); update.addCommands(Commands.slash(command.getName(), command.getDescription())); }
-
+            if (command.hasOptions(command.options) && !command.hasSubcommandData(command.subcommandData)) update.addCommands(Commands.slash(command.getName(), command.getDescription()).addOptions(command.getOptions()));
+            else if (!command.hasOptions(command.options) && command.hasSubcommandData(command.subcommandData)) update.addCommands(Commands.slash(command.getName(), command.getDescription()).addSubcommands(command.getSubcommandData()));
+            else if (!command.hasOptions(command.options) && !command.hasSubcommandData(command.subcommandData)) update.addCommands(Commands.slash(command.getName(), command.getDescription()));
 
             slashCommandMap.put(command.getName(), command);
         }
