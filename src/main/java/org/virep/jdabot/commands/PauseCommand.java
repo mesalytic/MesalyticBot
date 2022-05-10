@@ -3,7 +3,6 @@ package org.virep.jdabot.commands;
 import lavalink.client.player.LavalinkPlayer;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
-import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.virep.jdabot.lavaplayer.AudioManagerController;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
