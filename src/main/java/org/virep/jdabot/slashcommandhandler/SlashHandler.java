@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+//TODO: For production stage, add developerOnly commands through Guild#updateCommands()
 public class SlashHandler {
     private final JDA jda;
     private final Map<String, SlashCommand> slashCommandMap = new HashMap<>();

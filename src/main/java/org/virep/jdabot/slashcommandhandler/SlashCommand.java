@@ -8,9 +8,9 @@ public abstract class SlashCommand {
     public final String name;
     public final String description;
     public OptionData[] options;
-
     public SubcommandData[] subcommandData;
 
+    public boolean developerOnly;
     public SlashCommand(String name, String description) {
         this.name = name;
         this.description = description;
@@ -26,6 +26,12 @@ public abstract class SlashCommand {
         this.name = name;
         this.description = description;
         this.options = options;
+    }
+
+    public SlashCommand(String name, String description, boolean developerOnly) {
+        this.name = name;
+        this.description = description;
+        this.developerOnly = developerOnly;
     }
 
     public abstract void execute(SlashCommandInteractionEvent event);
@@ -47,5 +53,9 @@ public abstract class SlashCommand {
     public boolean hasSubcommandData(SubcommandData[] subcommandData) { return subcommandData != null; }
     public boolean hasOptions(OptionData[] options) {
         return options != null;
+    }
+
+    public boolean isDeveloperOnly() {
+        return developerOnly;
     }
 }
