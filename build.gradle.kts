@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    implementation("net.dv8tion:JDA:5.0.0-alpha.11")
+    implementation("net.dv8tion:JDA:5.0.0-alpha.12")
     implementation("io.github.cdimascio:java-dotenv:5.2.2")
     implementation("com.github.Xirado:Lavalink-Client:master-SNAPSHOT") {
         exclude (group = "com.sedmelluq", module = "lavaplayer")
