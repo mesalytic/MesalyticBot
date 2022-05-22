@@ -21,4 +21,21 @@ public class Utils {
         }
         return String.format("%02d:%02d", minutes, seconds);
     }
+
+    public static long lengthToMillis(final String length) {
+        String[] splitLength = length.split(":");
+
+        System.out.println(splitLength.length);
+
+        long millis = 0;
+        if (splitLength.length == 3) {
+            // h:m:s
+            millis = (Integer.parseInt(splitLength[0]) * 3600000L) + (Integer.parseInt(splitLength[1]) * 60000L) + (Integer.parseInt(splitLength[2]) * 1000L);
+        } else if (splitLength.length == 2) {
+            millis = (Integer.parseInt(splitLength[0]) * 60000L) + (Integer.parseInt(splitLength[1]) * 1000L);
+        }
+
+        System.out.println(millis);
+        return millis;
+    }
 }
