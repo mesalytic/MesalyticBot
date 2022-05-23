@@ -54,7 +54,7 @@ public class SeekCommand extends SlashCommand {
         }
 
         if (player.isPaused()) {
-            event.reply("The music is already paused !").setEphemeral(true).queue();
+            event.reply("The music is currently paused !").setEphemeral(true).queue();
             return;
         }
 
