@@ -10,6 +10,9 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import org.virep.jdabot.schedulers.ScheduleHandler;
 import org.virep.jdabot.schedulers.jobs.VoiceTimeoutJob;
 
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledFuture;
@@ -17,7 +20,7 @@ import java.util.concurrent.ScheduledFuture;
 public class TrackScheduler extends PlayerEventListenerAdapter {
 
     private final LavalinkPlayer player;
-    public final BlockingQueue<AudioTrack> queue;
+    public final Queue<AudioTrack> queue;
     private final Guild guild;
     private TextChannel channel;
 
@@ -30,7 +33,7 @@ public class TrackScheduler extends PlayerEventListenerAdapter {
         this.player = player;
         this.channel = null;
         this.looping = false;
-        this.queue = new LinkedBlockingQueue<>();
+        this.queue = new LinkedList<>();
     }
 
     public boolean hasNextTrack() {
