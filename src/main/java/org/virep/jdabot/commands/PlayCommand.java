@@ -24,7 +24,8 @@ public class PlayCommand extends SlashCommand {
                 "Play music on your voice channel!",
                 new SubcommandData[] {
                         new SubcommandData("youtube", "Play YouTube urls!").addOption(OptionType.STRING, "url", "YouTube Video or Playlist URL").addOption(OptionType.STRING, "search", "Search string"),
-                        new SubcommandData("soundcloud", "Play SoundCloud urls!").addOption(OptionType.STRING, "url", "SoundCloud URL")
+                        new SubcommandData("soundcloud", "Play SoundCloud urls!").addOption(OptionType.STRING, "url", "SoundCloud URL"),
+                        new SubcommandData("spotify", "Play Spotify URLs").addOption(OptionType.STRING, "url", "url").addOption(OptionType.STRING, "search", "search")
                 }
         );
     }
@@ -45,7 +46,7 @@ public class PlayCommand extends SlashCommand {
         OptionMapping urlOption = event.getOption("url");
         OptionMapping searchOption = event.getOption("search");
 
-        String result;
+        String result = "";
 
         if (urlOption == null && searchOption == null) {
             event.reply("You must specify a URL or a search query.").setEphemeral(true).queue();
@@ -59,7 +60,14 @@ public class PlayCommand extends SlashCommand {
                     event.reply("You must specify a valid URL.").setEphemeral(true).queue();
                     return;
                 }
-            } else result = "ytsearch:" + searchOption.getAsString();
+            } else {
+                assert event.getSubcommandName() != null;
+                switch (event.getSubcommandName()) {
+                    case "youtube" -> result = "ytsearch:" + searchOption.getAsString();
+                    case "soundcloud" -> result = "scsearch:" + searchOption.getAsString();
+                    case "spotify" -> result = "spsearch:" + searchOption.getAsString();
+                }
+            }
         }
 
         if (memberVoiceState.getChannel() == null) {
