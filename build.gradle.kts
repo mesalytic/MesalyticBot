@@ -22,6 +22,7 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
 
     implementation("org.reflections:reflections:0.10.2")
+    implementation("com.github.Topis-Lavalink-Plugins:Topis-Source-Managers:2.0.6")
 }
 
 tasks.getByName<Test>("test") {
