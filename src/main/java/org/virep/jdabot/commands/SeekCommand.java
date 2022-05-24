@@ -72,7 +72,7 @@ public class SeekCommand extends SlashCommand {
             return;
         }
 
-        if (lengthToMillis(time) > player.getPlayingTrack().getDuration()) {
+        if (lengthToMillis(time) > player.getPlayingTrack().getInfo().getLength()) {
             event.reply("The time specified is superior to the total duration of the current track !").setEphemeral(true).queue();
             return;
         }

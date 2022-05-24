@@ -47,9 +47,9 @@ public class QueueCommand extends SlashCommand {
                     .append("[")
                     .append(counter.get())
                     .append("] ")
-                    .append(audioTrack.getInfo().title)
+                    .append(audioTrack.getInfo().getTitle())
                     .append(" - ")
-                    .append(audioTrack.getInfo().author);
+                    .append(audioTrack.getInfo().getAuthor());
         });
 
         assert event.getGuild() != null;

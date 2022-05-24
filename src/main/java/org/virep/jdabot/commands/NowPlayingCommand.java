@@ -1,7 +1,7 @@
 package org.virep.jdabot.commands;
 
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import lavalink.client.player.LavalinkPlayer;
+import lavalink.client.player.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -54,7 +54,7 @@ public class NowPlayingCommand extends SlashCommand {
 
         MessageEmbed embed = new EmbedBuilder()
                 .setTitle("Currently playing in " + guild.getName())
-                .setDescription(playingTrack.getInfo().title + "\n" + Utils.progressBar(manager.getLink().getPlayer().getTrackPosition(), playingTrack.getInfo().length))
+                .setDescription(playingTrack.getInfo().getTitle() + "\n" + Utils.progressBar(manager.getLink().getPlayer().getTrackPosition(), playingTrack.getInfo().getLength()))
                 .setTimestamp(Instant.now())
                 .build();
 

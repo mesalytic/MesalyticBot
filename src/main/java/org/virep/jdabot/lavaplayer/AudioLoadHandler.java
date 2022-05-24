@@ -1,40 +1,42 @@
 package org.virep.jdabot.lavaplayer;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
-import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
-import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import lavalink.client.io.FriendlyException;
+import lavalink.client.io.LoadResultHandler;
+import lavalink.client.player.track.AudioPlaylist;
+import lavalink.client.player.track.AudioTrack;
+import lavalink.client.player.track.AudioTrackInfo;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
+import java.util.List;
 import java.util.Objects;
 
 public class AudioLoadHandler {
     public static void loadAndPlay(GuildAudioManager manager, String trackURL, SlashCommandInteractionEvent event) {
         manager.openConnection((VoiceChannel) Objects.requireNonNull(Objects.requireNonNull(event.getMember()).getVoiceState()).getChannel());
-        AudioManagerController.getPlayerManager().loadItemOrdered(manager, trackURL, new AudioLoadResultHandler() {
+        AudioManagerController.getExistingLink(event.getGuild()).getRestClient().loadItem(trackURL,  new LoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
+                AudioTrackInfo trackInfo = track.getInfo();
                 manager.getScheduler().queue(track, event.getTextChannel());
 
-                event.replyFormat("Adding to Queue: %s by %s", track.getInfo().title, track.getInfo().author).queue();
+                event.replyFormat("Adding to Queue: %s by %s", trackInfo.getTitle(), trackInfo.getAuthor()).queue();
             }
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
-                if (playlist.isSearchResult()) {
-
-                    AudioTrack track = playlist.getTracks().get(0);
-                    manager.getScheduler().queue(track, event.getTextChannel());
-
-                    event.replyFormat("Adding to Queue: %s by %s", track.getInfo().title, track.getInfo().author).queue();
-                    return;
-                }
-
                 for (AudioTrack track : playlist.getTracks()) {
                     manager.getScheduler().queue(track, event.getTextChannel());
                 }
                 event.replyFormat("Adding Playlist to Queue: %s", playlist.getName()).queue();
+            }
+
+            @Override
+            public void searchResultLoaded(List<AudioTrack> tracks) {
+                AudioTrack track = tracks.get(0);
+                manager.getScheduler().queue(track, event.getTextChannel());
+
+                event.replyFormat("Adding to Queue: %s by %s", track.getInfo().getTitle(), track.getInfo().getAuthor()).queue();
             }
 
             @Override

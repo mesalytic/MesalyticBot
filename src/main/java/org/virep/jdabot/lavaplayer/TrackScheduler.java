@@ -1,10 +1,10 @@
 package org.virep.jdabot.lavaplayer;
 
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import lavalink.client.player.IPlayer;
 import lavalink.client.player.LavalinkPlayer;
 import lavalink.client.player.event.PlayerEventListenerAdapter;
+import lavalink.client.player.track.AudioTrack;
+import lavalink.client.player.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.virep.jdabot.schedulers.ScheduleHandler;
@@ -12,9 +12,6 @@ import org.virep.jdabot.schedulers.jobs.VoiceTimeoutJob;
 
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledFuture;
 
 public class TrackScheduler extends PlayerEventListenerAdapter {
@@ -54,7 +51,6 @@ public class TrackScheduler extends PlayerEventListenerAdapter {
         AudioTrack track = queue.poll();
             if (track == null) {
                 if (background != null) {
-                    background = background.makeClone();
                     player.playTrack(background);
                 }
                 timeout = ScheduleHandler.registerUniqueJob(new VoiceTimeoutJob(guild));
@@ -71,7 +67,7 @@ public class TrackScheduler extends PlayerEventListenerAdapter {
 
     @Override
     public void onTrackStart(IPlayer player, AudioTrack track) {
-        channel.sendMessageFormat("Now playing %s", track.getInfo().title).queue();
+        channel.sendMessageFormat("Now playing %s", track.getInfo().getTitle()).queue();
         if (timeout != null) {
             timeout.cancel(true);
         }
@@ -81,7 +77,7 @@ public class TrackScheduler extends PlayerEventListenerAdapter {
     public void onTrackEnd(IPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         if (endReason.mayStartNext) {
             if (looping) {
-                queue.offer(track.makeClone());
+                queue.offer(track);
             }
             nextTrack();
         }

@@ -1,11 +1,7 @@
 package org.virep.jdabot.lavaplayer;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager;
-import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import lavalink.client.io.Link;
+import lavalink.client.player.track.AudioTrack;
 import net.dv8tion.jda.api.entities.Guild;
 import org.virep.jdabot.Main;
 
@@ -15,13 +11,7 @@ import java.util.Queue;
 
 public class AudioManagerController {
     private static final HashMap<Guild, GuildAudioManager> managers = new HashMap<>();
-    private static final AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
 
-    public static void registerAudio() {
-        playerManager.registerSourceManager(new YoutubeAudioSourceManager());
-        playerManager.registerSourceManager(SoundCloudAudioSourceManager.createDefault());
-        playerManager.setTrackStuckThreshold(5000L);
-    }
 
     public static GuildAudioManager getGuildAudioManager(Guild guild) {
         GuildAudioManager manager = managers.get(guild);
@@ -53,10 +43,6 @@ public class AudioManagerController {
             managers.get(guild).destroyConnection();
             managers.remove(guild);
         }
-    }
-
-    public static AudioPlayerManager getPlayerManager() {
-        return playerManager;
     }
 
     public static boolean hasLink(Guild guild) {

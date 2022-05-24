@@ -4,7 +4,6 @@ import lavalink.client.io.jda.JdaLavalink;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
-import org.virep.jdabot.lavaplayer.AudioManagerController;
 import org.virep.jdabot.listeners.EventListener;
 import org.virep.jdabot.slashcommandhandler.SlashHandler;
 import org.virep.jdabot.listeners.SlashListener;
@@ -28,8 +27,6 @@ public class Main {
 
         lavalink.setAutoReconnect(true);
         lavalink.addNode(URI.create(Config.get("LAVALINKURI")), Config.get("LAVALINKPWD"));
-
-        AudioManagerController.registerAudio();
 
         PublicJDA = api;
     }
