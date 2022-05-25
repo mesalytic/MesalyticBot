@@ -48,3 +48,4 @@ application.yml
 /lavalink/logs/spring.log
 /logs/spring.log
 src/main/java/org/virep/jdabot/devcommands/
+.idea/artifacts/
