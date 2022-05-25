@@ -31,26 +31,26 @@ public class ClearQueueCommand extends SlashCommand {
         assert selfVoiceState != null;
 
         if (memberVoiceState.getChannel() == null) {
-            event.reply("You are not in a voice channel!").setEphemeral(true).queue();
+            event.reply("\u274C - You must be in a voice channel!").setEphemeral(true).queue();
             return;
         }
 
         if (!selfVoiceState.inAudioChannel()) {
-            event.reply("I'm currently not playing any music!").setEphemeral(true).queue();
+            event.reply("\u274C - I'm currently not playing any music!").setEphemeral(true).queue();
             return;
         }
 
         if (Objects.requireNonNull(selfVoiceState.getChannel()).getIdLong() != memberVoiceState.getChannel().getIdLong()) {
-            event.reply("You are not in the same channel as me!").setEphemeral(true).queue();
+            event.reply("\u274C - You are not in the same channel as me!").setEphemeral(true).queue();
             return;
         }
 
         if (trackScheduler.queue.isEmpty()) {
-            event.reply("Nothing is in the queue right now.").setEphemeral(true).queue();
+            event.reply("\u274C - Nothing is in the queue right now.").setEphemeral(true).queue();
             return;
         }
 
         trackScheduler.queue.clear();
-        event.reply("The queue has been cleared.").queue();
+        event.reply("\u2705 - The queue has been cleared.").queue();
     }
 }

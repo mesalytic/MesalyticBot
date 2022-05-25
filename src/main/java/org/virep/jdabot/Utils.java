@@ -11,7 +11,7 @@ public class Utils {
         return progressBuilder.append("\u25AC").append(" [**").append(formatTrackLength(position)).append("/").append(formatTrackLength(duration)).append("**]").toString();
     }
 
-    private static String formatTrackLength(final long millis) {
+    public static String formatTrackLength(final long millis) {
         Duration duration = Duration.ofMillis(millis);
         int hours = duration.toHoursPart();
         int minutes = duration.toMinutesPart();

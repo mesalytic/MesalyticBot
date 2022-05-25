@@ -33,22 +33,22 @@ public class SkipCommand extends SlashCommand {
         assert selfVoiceState != null;
 
         if (memberVoiceState.getChannel() == null) {
-            event.reply("You are not in a voice channel!").setEphemeral(true).queue();
+            event.reply("\u274C - You are not in a voice channel!").setEphemeral(true).queue();
             return;
         }
 
         if (!selfVoiceState.inAudioChannel()) {
-            event.reply("I'm currently not playing any music!").setEphemeral(true).queue();
+            event.reply("\u274C - I'm currently not playing any music!").setEphemeral(true).queue();
             return;
         }
 
         if (Objects.requireNonNull(selfVoiceState.getChannel()).getIdLong() != memberVoiceState.getChannel().getIdLong()) {
-            event.reply("You are not in the same channel as me!").setEphemeral(true).queue();
+            event.reply("\u274C - You are not in the same channel as me!").setEphemeral(true).queue();
             return;
         }
 
         scheduler.nextTrack();
 
-        event.reply("Skipped!").queue();
+        event.reply("\u23E9 - Skipped current music !").queue();
     }
 }

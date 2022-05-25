@@ -7,6 +7,7 @@ import lavalink.client.player.track.AudioTrack;
 import lavalink.client.player.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
+import org.virep.jdabot.Utils;
 import org.virep.jdabot.schedulers.ScheduleHandler;
 import org.virep.jdabot.schedulers.jobs.VoiceTimeoutJob;
 
@@ -67,7 +68,7 @@ public class TrackScheduler extends PlayerEventListenerAdapter {
 
     @Override
     public void onTrackStart(IPlayer player, AudioTrack track) {
-        channel.sendMessageFormat("Now playing %s", track.getInfo().getTitle()).queue();
+        channel.sendMessageFormat("\u25B6 - Now playing : **%s** (`%s`)", track.getInfo().getTitle(), Utils.formatTrackLength(track.getInfo().getLength())).queue();
         if (timeout != null) {
             timeout.cancel(true);
         }

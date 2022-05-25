@@ -23,6 +23,10 @@ public class SlashListener extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(@Nonnull SlashCommandInteractionEvent event) {
+        if (event.getGuild() == null) {
+            event.reply("Commands do not work in DMs.").queue();
+            return;
+        }
         String commandName = event.getName();
         Map<String, SlashCommand> commandMap = slashHandler.getSlashCommandMap();
 

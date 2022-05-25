@@ -24,11 +24,11 @@ public class PlayCommand extends SlashCommand {
         super("play",
                 "Play music on your voice channel!",
                 new SubcommandData[] {
-                        new SubcommandData("youtube", "Play YouTube urls!").addOption(OptionType.STRING, "url", "YouTube Video or Playlist URL").addOption(OptionType.STRING, "search", "Search string"),
-                        new SubcommandData("soundcloud", "Play SoundCloud urls!").addOption(OptionType.STRING, "url", "SoundCloud URL").addOption(OptionType.STRING, "search", "Search string"),
-                        new SubcommandData("spotify", "Play Spotify URLs").addOption(OptionType.STRING, "url", "url").addOption(OptionType.STRING, "search", "search"),
-                        new SubcommandData("other", "URLs that are not from Spotify/YouTube/SoundCloud").addOption(OptionType.STRING, "url", "URL string", true),
-                        new SubcommandData("file", "MP3 file").addOption(OptionType.ATTACHMENT, "file", "file", true)
+                        new SubcommandData("youtube", "Play YouTube songs!").addOption(OptionType.STRING, "url", "YouTube Video or Playlist URL").addOption(OptionType.STRING, "search", "Search string"),
+                        new SubcommandData("soundcloud", "Play SoundCloud songs!").addOption(OptionType.STRING, "url", "SoundCloud Track or Playlist URL").addOption(OptionType.STRING, "search", "Search string"),
+                        new SubcommandData("spotify", "Play Spotify songs").addOption(OptionType.STRING, "url", "Spotify Track or Playlist URL").addOption(OptionType.STRING, "search", "Search string"),
+                        new SubcommandData("other", "Play URLs that are not from Spotify/YouTube/SoundCloud").addOption(OptionType.STRING, "url", "URL string", true),
+                        new SubcommandData("file", "Play the audio files you attach !").addOption(OptionType.ATTACHMENT, "file", "Audio File", true)
                 }
         );
     }
@@ -53,12 +53,12 @@ public class PlayCommand extends SlashCommand {
         String result = "";
 
         if (urlOption == null && searchOption == null && fileOption == null) {
-            event.reply("You must select at least an option.").setEphemeral(true).queue();
+            event.reply("\u274C - You must select at least an option.").setEphemeral(true).queue();
             return;
         }
 
         if (urlOption != null && searchOption != null) {
-            event.reply("You must select only one option. (either `search` or `url`).").setEphemeral(true).queue();
+            event.reply("\u274C - You must select only one option. (either `search` or `url`).").setEphemeral(true).queue();
             return;
         }
 
@@ -67,7 +67,7 @@ public class PlayCommand extends SlashCommand {
                 new URL(urlOption.getAsString());
                 result = urlOption.getAsString();
             } catch (MalformedURLException e) {
-                event.reply("You must specify a valid URL.").setEphemeral(true).queue();
+                event.reply("\u274C - You must specify a valid URL.").setEphemeral(true).queue();
                 return;
             }
         }
@@ -88,14 +88,14 @@ public class PlayCommand extends SlashCommand {
         }
 
         if (memberVoiceState.getChannel() == null) {
-            event.reply("You are not in a voice channel!").setEphemeral(true).queue();
+            event.reply("\u274C - You are not in a voice channel!").setEphemeral(true).queue();
             return;
         }
 
         if (!selfVoiceState.inAudioChannel()) {
             manager.openConnection((VoiceChannel) memberVoiceState.getChannel());
         } else if (Objects.requireNonNull(selfVoiceState.getChannel()).getIdLong() != memberVoiceState.getChannel().getIdLong()) {
-            event.reply("You are not in the same channel as me!").setEphemeral(true).queue();
+            event.reply("\u274C - You are not in the same channel as me!").setEphemeral(true).queue();
             return;
         }
 

@@ -19,7 +19,7 @@ public class SeekCommand extends SlashCommand {
     public SeekCommand() {
         super("seek", "Change the position of the currently playing music.",
                 new OptionData[]{
-                        new OptionData(OptionType.STRING, "time", "Time to seek to. (format H:M:S or M:S)")
+                        new OptionData(OptionType.STRING, "time", "Time to seek to. (format H:M:S or M:S)", true)
                 });
     }
 
@@ -39,45 +39,41 @@ public class SeekCommand extends SlashCommand {
         assert selfVoiceState != null;
 
         if (memberVoiceState.getChannel() == null) {
-            event.reply("You are not in a voice channel!").setEphemeral(true).queue();
+            event.reply("\u274C - You are not in a voice channel!").setEphemeral(true).queue();
             return;
         }
 
         if (!selfVoiceState.inAudioChannel()) {
-            event.reply("I'm currently not playing any music!").setEphemeral(true).queue();
+            event.reply("\u274C - I'm currently not playing any music!").setEphemeral(true).queue();
             return;
         }
 
         if (Objects.requireNonNull(selfVoiceState.getChannel()).getIdLong() != memberVoiceState.getChannel().getIdLong()) {
-            event.reply("You are not in the same channel as me!").setEphemeral(true).queue();
+            event.reply("\u274C - You are not in the same channel as me!").setEphemeral(true).queue();
             return;
         }
 
         if (player.isPaused()) {
-            event.reply("The music is currently paused !").setEphemeral(true).queue();
+            event.reply("\u274C - The music is currently paused !").setEphemeral(true).queue();
             return;
         }
 
         OptionMapping timeOption = event.getOption("time");
 
-        if (timeOption == null) {
-            event.reply("Time not specified").setEphemeral(true).queue();
-            return;
-        }
-
+        assert timeOption != null;
         String time = timeOption.getAsString();
 
         if (lengthToMillis(time) < 0) {
-            event.reply("The time specified is inferior or equal to 0.").setEphemeral(true).queue();
+            event.reply("\u274C - The time specified is inferior or equal to 0.").setEphemeral(true).queue();
             return;
         }
 
         if (lengthToMillis(time) > player.getPlayingTrack().getInfo().getLength()) {
-            event.reply("The time specified is superior to the total duration of the current track !").setEphemeral(true).queue();
+            event.reply("\u274C - The time specified is superior to the total duration of the current track !").setEphemeral(true).queue();
             return;
         }
 
         player.seekTo(lengthToMillis(time));
-        event.reply("Successfully seeked at " + time).queue();
+        event.replyFormat("\uD83D\uDD50 - Successfully seeked at `%s%`", time).queue();
     }
 }

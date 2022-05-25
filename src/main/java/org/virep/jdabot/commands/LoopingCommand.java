@@ -29,24 +29,24 @@ public class LoopingCommand extends SlashCommand {
         assert selfVoiceState != null;
 
         if (memberVoiceState.getChannel() == null) {
-            event.reply("You are not in a voice channel!").setEphemeral(true).queue();
+            event.reply("\u274C - You are not in a voice channel!").setEphemeral(true).queue();
             return;
         }
 
         if (!selfVoiceState.inAudioChannel()) {
-            event.reply("I'm currently not playing any music!").setEphemeral(true).queue();
+            event.reply("\u274C - I'm currently not playing any music!").setEphemeral(true).queue();
             return;
         }
 
         if (Objects.requireNonNull(selfVoiceState.getChannel()).getIdLong() != memberVoiceState.getChannel().getIdLong()) {
-            event.reply("You are not in the same channel as me!").setEphemeral(true).queue();
+            event.reply("\u274C - You are not in the same channel as me!").setEphemeral(true).queue();
             return;
         }
 
         boolean looping = trackScheduler.isLooping();
 
-        if (looping) event.reply("The current music is not looped anymore.").queue();
-        else event.reply("The current music is now looped.").queue();
+        if (looping) event.reply("\uD83D\uDD02 - Looping for the current music has been disabled.").queue();
+        else event.reply("\uD83D\uDD02 - Looping for the current music has been enabled.").queue();
 
         trackScheduler.setLooping(!trackScheduler.isLooping());
     }

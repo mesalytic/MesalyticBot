@@ -5,7 +5,7 @@ import org.virep.jdabot.slashcommandhandler.SlashCommand;
 
 public class PingCommand extends SlashCommand {
     public PingCommand() {
-        super("ping", "pong");
+        super("ping", "Pong !");
     }
 
     @Override

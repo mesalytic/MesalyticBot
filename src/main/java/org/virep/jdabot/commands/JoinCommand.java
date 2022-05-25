@@ -25,14 +25,14 @@ public class JoinCommand extends SlashCommand {
 
         assert voiceState != null;
         if (voiceState.getChannel() == null) {
-            event.reply("You are not in a voice channel!").setEphemeral(true).queue();
+            event.reply("\u274C - You are not in a voice channel!").setEphemeral(true).queue();
             return;
         }
         assert guild != null;
         final GuildVoiceState selfVoiceState = guild.getSelfMember().getVoiceState();
 
         if (selfVoiceState != null && selfVoiceState.inAudioChannel()) {
-            event.reply("I'm already in a voice channel!").setEphemeral(true).queue();
+            event.reply("\u274C - I'm already in a voice channel!").setEphemeral(true).queue();
             return;
         }
         VoiceChannel voiceChannel = guild.getVoiceChannelById(voiceState.getChannel().getIdLong());
@@ -40,6 +40,6 @@ public class JoinCommand extends SlashCommand {
         assert voiceChannel != null;
         manager.openConnection(voiceChannel);
 
-        event.replyFormat("\uD83D\uDD0A I joined `%s`", voiceChannel.getName()).queue();
+        event.replyFormat("\u2705 - Joined `%s !`", voiceChannel.getName()).queue();
     }
 }

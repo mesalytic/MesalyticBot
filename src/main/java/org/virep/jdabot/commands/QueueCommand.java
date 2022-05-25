@@ -56,7 +56,7 @@ public class QueueCommand extends SlashCommand {
         EmbedBuilder embed = new EmbedBuilder()
                 .setColor(Color.RED)
                 .setTimestamp(Instant.now())
-                .setTitle("Queue for " + event.getGuild().getName() + " | The first 20 upcoming tracks")
+                .setAuthor("Queue for " + event.getGuild().getName(), event.getGuild().getIconUrl())
                 .setDescription(queueBuilder.toString())
                 .setFooter("The queue has " + trackScheduler.queue.size() + " total tracks.");
 

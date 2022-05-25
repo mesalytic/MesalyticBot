@@ -36,17 +36,17 @@ public class VolumeCommand extends SlashCommand {
         assert selfVoiceState != null;
 
         if (memberVoiceState.getChannel() == null) {
-            event.reply("You are not in a voice channel!").setEphemeral(true).queue();
+            event.reply("\u274C - You are not in a voice channel!").setEphemeral(true).queue();
             return;
         }
 
         if (!selfVoiceState.inAudioChannel()) {
-            event.reply("I'm currently not playing any music!").setEphemeral(true).queue();
+            event.reply("\u274C - I'm currently not playing any music!").setEphemeral(true).queue();
             return;
         }
 
         if (Objects.requireNonNull(selfVoiceState.getChannel()).getIdLong() != memberVoiceState.getChannel().getIdLong()) {
-            event.reply("You are not in the same channel as me!").setEphemeral(true).queue();
+            event.reply("\u274C - You are not in the same channel as me!").setEphemeral(true).queue();
             return;
         }
 
@@ -56,10 +56,10 @@ public class VolumeCommand extends SlashCommand {
         int value = valueOption.getAsInt();
 
         if (value < 0 || value > 100) {
-            event.reply("The volume value must be between 0 and 100.").setEphemeral(true).queue();
+            event.reply("\u274C - The volume value must be between 0 and 100.").setEphemeral(true).queue();
         }
 
         player.setVolume(value);
-        event.replyFormat("Volume has been set to %d", value).queue();
+        event.replyFormat("\uD83D\uDD0A - Volume has been set to **%d%** !", value).queue();
     }
 }
