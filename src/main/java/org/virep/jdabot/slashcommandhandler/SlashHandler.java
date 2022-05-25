@@ -31,10 +31,10 @@ public class SlashHandler {
         Guild guild = jda.getGuildById("418433461817180180");
         assert guild != null;
 
-        CommandListUpdateAction update = guild.updateCommands();
+        CommandListUpdateAction globalUpdate = jda.updateCommands();
 
-        Reflections reflections = new Reflections("org.virep.jdabot.commands");
-        Set<Class<? extends SlashCommand>> commandClasses = reflections.getSubTypesOf(SlashCommand.class);
+        Reflections reflectionsCommands = new Reflections("org.virep.jdabot.commands");
+        Set<Class<? extends SlashCommand>> commandClasses = reflectionsCommands.getSubTypesOf(SlashCommand.class);
 
         for (Class<? extends SlashCommand> commandClass : commandClasses) {
             if (Modifier.isAbstract(commandClass.getModifiers())) {
@@ -43,6 +43,25 @@ public class SlashHandler {
 
             SlashCommand command = commandClass.getConstructor().newInstance();
 
+            if (command.hasOptions(command.options) && !command.hasSubcommandData(command.subcommandData)) globalUpdate.addCommands(Commands.slash(command.getName(), command.getDescription()).addOptions(command.getOptions()));
+            else if (!command.hasOptions(command.options) && command.hasSubcommandData(command.subcommandData)) globalUpdate.addCommands(Commands.slash(command.getName(), command.getDescription()).addSubcommands(command.getSubcommandData()));
+            else if (!command.hasOptions(command.options) && !command.hasSubcommandData(command.subcommandData)) globalUpdate.addCommands(Commands.slash(command.getName(), command.getDescription()));
+
+            slashCommandMap.put(command.getName(), command);
+        }
+
+
+        CommandListUpdateAction update = guild.updateCommands();
+
+        Reflections reflectionsInDev = new Reflections("org.virep.jdabot.devcommands");
+        Set<Class<? extends SlashCommand>> commandInDevClasses = reflectionsInDev.getSubTypesOf(SlashCommand.class);
+        for (Class<? extends SlashCommand> commandInDevClass : commandInDevClasses) {
+            if (Modifier.isAbstract(commandInDevClass.getModifiers())) {
+                continue;
+            }
+
+            SlashCommand command = commandInDevClass.getConstructor().newInstance();
+
             if (command.hasOptions(command.options) && !command.hasSubcommandData(command.subcommandData)) update.addCommands(Commands.slash(command.getName(), command.getDescription()).addOptions(command.getOptions()));
             else if (!command.hasOptions(command.options) && command.hasSubcommandData(command.subcommandData)) update.addCommands(Commands.slash(command.getName(), command.getDescription()).addSubcommands(command.getSubcommandData()));
             else if (!command.hasOptions(command.options) && !command.hasSubcommandData(command.subcommandData)) update.addCommands(Commands.slash(command.getName(), command.getDescription()));
@@ -50,6 +69,7 @@ public class SlashHandler {
             slashCommandMap.put(command.getName(), command);
         }
 
+        globalUpdate.queue();
         update.queue();
     }
 
