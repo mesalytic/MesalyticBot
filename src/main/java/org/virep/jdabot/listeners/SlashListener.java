@@ -185,6 +185,10 @@ public class SlashListener extends ListenerAdapter {
             } else {
                 String replyBoard = TTTCommand.replyBoard(board, TTTCommand.playersTurn.get(event.getChannel().getIdLong()));
                 event.editMessage(replyBoard).setActionRows().queue();
+
+                TTTCommand.boards.remove(event.getChannel().getIdLong());
+                TTTCommand.playersTurn.remove(event.getChannel().getIdLong());
+                TTTCommand.players.remove(event.getChannel().getIdLong());
             }
         }
     }
