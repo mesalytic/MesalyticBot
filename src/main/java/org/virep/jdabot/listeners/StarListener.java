@@ -31,6 +31,7 @@ public class StarListener extends ListenerAdapter {
                             ResultSet resultSet1 = etoileUSERstatement.executeQuery();
                             ResultSet resultSet2 = etoileMESSAGEstatement.executeQuery();
 
+                            if (resultSet2.first()) return;
                             if (resultSet1.first()) {
                                 try (PreparedStatement updateUSER = Main.connectionDB.prepareStatement("UPDATE etoileUSER SET etoiles = ? WHERE userID = ?")) {
                                     updateUSER.setInt(1, resultSet1.getInt(1) + 1);
@@ -53,18 +54,15 @@ public class StarListener extends ListenerAdapter {
                                     throw new RuntimeException(e);
                                 }
                             }
-
-                            if (!resultSet2.first()) {
-                                try (PreparedStatement statement = Main.connectionDB.prepareStatement("""
-                                    INSERT INTO etoileMessages(messageID)
-                                    VALUES (?)
-                                    """)
-                                ) {
-                                    statement.setString(1, event.getMessageId());
-                                    statement.executeUpdate();
-                                } catch (SQLException e) {
-                                    throw new RuntimeException(e);
-                                }
+                            try (PreparedStatement statement = Main.connectionDB.prepareStatement("""
+                                INSERT INTO etoileMessages(messageID)
+                                VALUES (?)
+                                """)
+                            ) {
+                                statement.setString(1, event.getMessageId());
+                                statement.executeUpdate();
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
                             }
                         } catch (SQLException e) {
                             throw new RuntimeException(e);
