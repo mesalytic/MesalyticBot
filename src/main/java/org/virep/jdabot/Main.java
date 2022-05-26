@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.virep.jdabot.database.DatabaseConnector;
 import org.virep.jdabot.listeners.EventListener;
+import org.virep.jdabot.listeners.StarListener;
 import org.virep.jdabot.slashcommandhandler.SlashHandler;
 import org.virep.jdabot.listeners.SlashListener;
 
@@ -17,7 +18,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         JDA api = JDABuilder
                 .createDefault(Config.get("TOKEN"))
-                .addEventListeners(lavalink, new EventListener())
+                .addEventListeners(lavalink, new EventListener(), new StarListener())
                 .setVoiceDispatchInterceptor(lavalink.getVoiceInterceptor())
                 .enableCache(CacheFlag.VOICE_STATE).build().awaitReady();
 
