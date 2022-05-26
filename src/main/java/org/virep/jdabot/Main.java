@@ -4,14 +4,16 @@ import lavalink.client.io.jda.JdaLavalink;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
+import org.virep.jdabot.database.DatabaseConnector;
 import org.virep.jdabot.listeners.EventListener;
 import org.virep.jdabot.slashcommandhandler.SlashHandler;
 import org.virep.jdabot.listeners.SlashListener;
 
 import java.net.URI;
-
+import java.sql.Connection;
 public class Main {
     public static JDA PublicJDA = null;
+    public static Connection connectionDB = DatabaseConnector.openConnection();
     public static void main(String[] args) throws Exception {
         JDA api = JDABuilder
                 .createDefault(Config.get("TOKEN"))
