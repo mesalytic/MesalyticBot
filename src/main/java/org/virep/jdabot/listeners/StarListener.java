@@ -31,38 +31,39 @@ public class StarListener extends ListenerAdapter {
                             ResultSet resultSet1 = etoileUSERstatement.executeQuery();
                             ResultSet resultSet2 = etoileMESSAGEstatement.executeQuery();
 
-                            if (resultSet2.first()) return;
-                            if (resultSet1.first()) {
-                                try (PreparedStatement updateUSER = Main.connectionDB.prepareStatement("UPDATE etoileUSER SET etoiles = ? WHERE userID = ?")) {
-                                    updateUSER.setInt(1, resultSet1.getInt(1) + 1);
-                                    updateUSER.setString(2, event.getUserId());
+                            if (!resultSet2.first()) {
+                                if (resultSet1.first()) {
+                                    try (PreparedStatement updateUSER = Main.connectionDB.prepareStatement("UPDATE etoileUSER SET etoiles = ? WHERE userID = ?")) {
+                                        updateUSER.setInt(1, resultSet1.getInt(1) + 1);
+                                        updateUSER.setString(2, event.getUserId());
 
-                                    updateUSER.executeUpdate();
-                                } catch (SQLException e) {
-                                    throw new RuntimeException(e);
-                                }
-                            } else {
-                                try (PreparedStatement statement = Main.connectionDB.prepareStatement("""
+                                        updateUSER.executeUpdate();
+                                    } catch (SQLException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                } else {
+                                    try (PreparedStatement statement = Main.connectionDB.prepareStatement("""
                                     INSERT INTO etoileUSER(etoiles, userID)
                                     VALUES (?, ?)
                                     """)
+                                    ) {
+                                        statement.setInt(1, 1);
+                                        statement.setString(2, event.getUserId());
+                                        statement.executeUpdate();
+                                    } catch (SQLException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                }
+                                try (PreparedStatement statement = Main.connectionDB.prepareStatement("""
+                                INSERT INTO etoileMessages(messageID)
+                                VALUES (?)
+                                """)
                                 ) {
-                                    statement.setInt(1, 1);
-                                    statement.setString(2, event.getUserId());
+                                    statement.setString(1, event.getMessageId());
                                     statement.executeUpdate();
                                 } catch (SQLException e) {
                                     throw new RuntimeException(e);
                                 }
-                            }
-                            try (PreparedStatement statement = Main.connectionDB.prepareStatement("""
-                                INSERT INTO etoileMessages(messageID)
-                                VALUES (?)
-                                """)
-                            ) {
-                                statement.setString(1, event.getMessageId());
-                                statement.executeUpdate();
-                            } catch (SQLException e) {
-                                throw new RuntimeException(e);
                             }
                         } catch (SQLException e) {
                             throw new RuntimeException(e);
