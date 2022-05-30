@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class ClearQueueCommand extends SlashCommand {
     public ClearQueueCommand() {
-        super("clearqueue", "Clears the current queue.");
+        super("clearqueue", "Clears the current queue.", "music");
     }
 
     @Override

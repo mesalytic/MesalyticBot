@@ -12,9 +12,7 @@ import java.util.Objects;
 
 public class JoinCommand extends SlashCommand {
     public JoinCommand() {
-        super("join",
-                "Join channel to play music"
-                );
+        super("join", "Join channel to play music", "music");
     }
 
     @Override

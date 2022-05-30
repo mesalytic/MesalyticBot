@@ -15,7 +15,7 @@ import java.util.Objects;
 
 public class VolumeCommand extends SlashCommand {
     public VolumeCommand() {
-        super("volume", "Changes volume for the current queue.", new OptionData[] {
+        super("volume", "Changes volume for the current queue.", "music", new OptionData[] {
                 new OptionData(OptionType.INTEGER, "value", "Volume value", true)
         });
     }

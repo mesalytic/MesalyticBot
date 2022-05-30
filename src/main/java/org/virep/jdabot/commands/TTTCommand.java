@@ -16,6 +16,7 @@ public class TTTCommand extends SlashCommand {
     public TTTCommand() {
         super("tictactoe",
                 "Play TicTacToe with your friends!",
+                "fun",
                 new OptionData[] {
                         new OptionData(
                                 OptionType.USER,

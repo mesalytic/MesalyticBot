@@ -17,9 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class QueueCommand extends SlashCommand {
     public QueueCommand() {
-        super("queue",
-                "Returns the current music queue!"
-        );
+        super("queue", "Returns the current music queue!", "music");
     }
 
     @Override

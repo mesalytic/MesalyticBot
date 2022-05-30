@@ -7,30 +7,35 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 public abstract class SlashCommand {
     public final String name;
     public final String description;
+    public final String category;
     public OptionData[] options;
     public SubcommandData[] subcommandData;
 
     public boolean developerOnly;
-    public SlashCommand(String name, String description) {
+    public SlashCommand(String name, String description, String category) {
         this.name = name;
         this.description = description;
+        this.category = category;
     }
 
-    public SlashCommand(String name, String description, SubcommandData[] subcommandData) {
+    public SlashCommand(String name, String description, String category, SubcommandData[] subcommandData) {
         this.name = name;
         this.description = description;
+        this.category = category;
         this.subcommandData = subcommandData;
     }
 
-    public SlashCommand(String name, String description, OptionData[] options) {
+    public SlashCommand(String name, String description, String category, OptionData[] options) {
         this.name = name;
         this.description = description;
+        this.category = category;
         this.options = options;
     }
 
-    public SlashCommand(String name, String description, boolean developerOnly) {
+    public SlashCommand(String name, String description, String category, boolean developerOnly) {
         this.name = name;
         this.description = description;
+        this.category = category;
         this.developerOnly = developerOnly;
     }
 

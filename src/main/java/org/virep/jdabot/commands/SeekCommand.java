@@ -17,7 +17,7 @@ import static org.virep.jdabot.Utils.lengthToMillis;
 
 public class SeekCommand extends SlashCommand {
     public SeekCommand() {
-        super("seek", "Change the position of the currently playing music.",
+        super("seek", "Change the position of the currently playing music.", "music",
                 new OptionData[]{
                         new OptionData(OptionType.STRING, "time", "Time to seek to. (format H:M:S or M:S)", true)
                 });

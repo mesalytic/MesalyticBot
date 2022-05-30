@@ -17,7 +17,7 @@ import java.util.Set;
 //TODO: For production stage, add developerOnly commands through Guild#updateCommands()
 public class SlashHandler {
     private final JDA jda;
-    private final Map<String, SlashCommand> slashCommandMap = new HashMap<>();
+    public static final Map<String, SlashCommand> slashCommandMap = new HashMap<>();
 
     public SlashHandler(JDA jda) {
         this.jda = jda;
@@ -74,6 +74,6 @@ public class SlashHandler {
     }
 
     public Map<String, SlashCommand> getSlashCommandMap() {
-        return this.slashCommandMap;
+        return slashCommandMap;
     }
 }

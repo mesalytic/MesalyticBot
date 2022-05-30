@@ -10,7 +10,7 @@ import java.util.Objects;
 
 public class StopCommand extends SlashCommand {
     public StopCommand() {
-        super("stop", "Stops the currently played music.");
+        super("stop", "Stops the currently played music.", "music");
     }
 
     @Override
