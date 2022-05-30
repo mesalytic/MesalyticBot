@@ -9,19 +9,54 @@ import javax.annotation.Nonnull;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StarListener extends ListenerAdapter {
+
+    private final static Map<Long, Integer> starCount = new HashMap<>();
     @Override
     public void onMessageReactionAdd(@Nonnull MessageReactionAddEvent event) {
-        if (event.getGuild().getIdLong() != 730517027160195162L) return;
-        String starCodepoint = "u+2b50";
+        if (!event.getGuild().getId().equals("418433461817180180")) return;
+
+        String starCodepoint = "U+2b50";
+
         MessageReaction.ReactionEmote reactionEmote = event.getReactionEmote();
 
         if (reactionEmote.isEmoji()) {
             String emoji = reactionEmote.getAsCodepoints();
 
             if (emoji.equals(starCodepoint)) {
-                int count = event.getReaction().getCount();
+                try (PreparedStatement st = Main.connectionDB.prepareStatement("SELECT * FROM etoileUserReactedToMessages WHERE messageID = ? AND userID = ?")) {
+                    st.setString(1, event.getMessageId());
+                    st.setString(2, event.getUserId());
+
+                    ResultSet result = st.executeQuery();
+
+                    if (!result.first()) {
+                        if (starCount.get(event.getMessageIdLong()) == null) {
+                            starCount.put(event.getMessageIdLong(), 1);
+
+                        } else {
+                            starCount.replace(event.getMessageIdLong(), starCount.get(event.getMessageIdLong()) + 1);
+                        }
+                        try (PreparedStatement statement = Main.connectionDB.prepareStatement("""
+                                    INSERT INTO etoileUserReactedToMessages(messageID, userID)
+                                    VALUES (?, ?)
+                                    """)
+                        ) {
+                            statement.setString(1, event.getMessageId());
+                            statement.setString(2, event.getUserId());
+                            statement.executeUpdate();
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        }
+                    } else return;
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+                int count = starCount.get(event.getMessageIdLong());
                 if (count >= 3) {
                     try (PreparedStatement etoileUSERstatement = Main.connectionDB.prepareStatement("SELECT etoiles FROM etoileUSER WHERE userID = ?")) {
                         try (PreparedStatement etoileMESSAGEstatement = Main.connectionDB.prepareStatement("SELECT * FROM etoileMessages WHERE messageID = ?")) {
