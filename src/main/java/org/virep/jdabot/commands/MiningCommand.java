@@ -3,6 +3,7 @@ package org.virep.jdabot.commands;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.virep.jdabot.Main;
 import org.virep.jdabot.slashcommandhandler.SlashCommand;
@@ -11,13 +12,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import static org.virep.jdabot.utils.MiningCollections.getCollectionProgression;
+
 public class MiningCommand extends SlashCommand {
 
     public MiningCommand() {
         super("mining", "mining", "wip",
                 new SubcommandData[] {
                         new SubcommandData("profile", "profile"),
-                        new SubcommandData("start", "start")
+                        new SubcommandData("start", "start"),
+                        new SubcommandData("collections", "collections").addOption(OptionType.STRING, "collectionname", "Name of the collection", true)
                 });
     }
 
@@ -73,7 +77,14 @@ public class MiningCommand extends SlashCommand {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+        }
 
+        if (event.getSubcommandName().equals("collections")) {
+            try {
+                event.reply(getCollectionProgression(event.getOption("collectionname").getAsString())).queue();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }
