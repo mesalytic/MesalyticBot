@@ -9,6 +9,7 @@ import org.virep.jdabot.listeners.EventListener;
 import org.virep.jdabot.listeners.StarListener;
 import org.virep.jdabot.slashcommandhandler.SlashHandler;
 import org.virep.jdabot.listeners.SlashListener;
+import org.virep.jdabot.utils.Config;
 
 import java.net.URI;
 import java.sql.Connection;

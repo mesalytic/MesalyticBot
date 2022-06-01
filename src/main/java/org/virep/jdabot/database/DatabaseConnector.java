@@ -1,7 +1,7 @@
 package org.virep.jdabot.database;
 
 import org.mariadb.jdbc.MariaDbPoolDataSource;
-import org.virep.jdabot.Config;
+import org.virep.jdabot.utils.Config;
 
 import java.sql.Connection;
 import java.sql.SQLException;

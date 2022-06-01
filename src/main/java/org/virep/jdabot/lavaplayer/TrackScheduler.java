@@ -7,7 +7,7 @@ import lavalink.client.player.track.AudioTrack;
 import lavalink.client.player.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
-import org.virep.jdabot.Utils;
+import org.virep.jdabot.utils.Utils;
 import org.virep.jdabot.schedulers.ScheduleHandler;
 import org.virep.jdabot.schedulers.jobs.VoiceTimeoutJob;
 

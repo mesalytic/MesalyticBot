@@ -13,7 +13,7 @@ import org.virep.jdabot.slashcommandhandler.SlashCommand;
 
 import java.util.Objects;
 
-import static org.virep.jdabot.Utils.lengthToMillis;
+import static org.virep.jdabot.utils.Utils.lengthToMillis;
 
 public class SeekCommand extends SlashCommand {
     public SeekCommand() {

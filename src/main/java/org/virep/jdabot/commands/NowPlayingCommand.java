@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import org.virep.jdabot.lavaplayer.AudioManagerController;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
 import org.virep.jdabot.slashcommandhandler.SlashCommand;
-import org.virep.jdabot.Utils;
+import org.virep.jdabot.utils.Utils;
 
 import java.time.Instant;
 import java.util.Objects;
