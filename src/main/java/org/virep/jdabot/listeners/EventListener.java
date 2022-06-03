@@ -3,12 +3,10 @@ package org.virep.jdabot.listeners;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.audio.hooks.ConnectionStatus;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.managers.AudioManager;
-import org.virep.jdabot.lavaplayer.AudioLoadHandler;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
 
 public class EventListener extends ListenerAdapter {

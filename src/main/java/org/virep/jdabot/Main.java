@@ -15,7 +15,7 @@ import java.net.URI;
 import java.sql.Connection;
 public class Main {
     public static JDA PublicJDA = null;
-    public static Connection connectionDB = DatabaseConnector.openConnection();
+    public static final Connection connectionDB = DatabaseConnector.openConnection();
     public static void main(String[] args) throws Exception {
         JDA api = JDABuilder
                 .createDefault(Config.get("TOKEN"))
@@ -35,7 +35,7 @@ public class Main {
         PublicJDA = api;
     }
 
-    public static JdaLavalink lavalink = new JdaLavalink(
+    public static final JdaLavalink lavalink = new JdaLavalink(
             "816407992505073725",
             1,
             integer -> PublicJDA

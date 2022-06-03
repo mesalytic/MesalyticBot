@@ -24,7 +24,7 @@ public class TrackScheduler extends PlayerEventListenerAdapter {
 
     private boolean looping;
     private ScheduledFuture<?> timeout = null;
-    private AudioTrack background = null;
+    private final AudioTrack background = null;
 
     public TrackScheduler(Guild guild, LavalinkPlayer player) {
         this.guild = guild;
@@ -51,9 +51,9 @@ public class TrackScheduler extends PlayerEventListenerAdapter {
     public void nextTrack() {
         AudioTrack track = queue.poll();
             if (track == null) {
-                if (background != null) {
+                /*if (background != null) {
                     player.playTrack(background);
-                }
+                }*/
                 timeout = ScheduleHandler.registerUniqueJob(new VoiceTimeoutJob(guild));
 
                 if (player.getPlayingTrack() != null) {
