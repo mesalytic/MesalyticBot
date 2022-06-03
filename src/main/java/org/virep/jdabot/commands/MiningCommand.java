@@ -3,7 +3,9 @@ package org.virep.jdabot.commands;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.virep.jdabot.Main;
 import org.virep.jdabot.slashcommandhandler.SlashCommand;
@@ -12,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import static org.virep.jdabot.utils.MiningCollections.getChoices;
 import static org.virep.jdabot.utils.MiningCollections.getCollectionProgression;
 
 public class MiningCommand extends SlashCommand {
@@ -21,7 +24,9 @@ public class MiningCommand extends SlashCommand {
                 new SubcommandData[] {
                         new SubcommandData("profile", "profile"),
                         new SubcommandData("start", "start"),
-                        new SubcommandData("collections", "collections").addOption(OptionType.STRING, "collectionname", "Name of the collection", true)
+                        new SubcommandData("collections", "collections").addOptions(
+                                new OptionData(OptionType.STRING, "collectionname", "Collection name", true).addChoices(getChoices())
+                        )
                 });
     }
 
@@ -30,22 +35,39 @@ public class MiningCommand extends SlashCommand {
         assert event.getSubcommandName() != null;
 
         if (event.getSubcommandName().equals("start")) {
-            try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM miningProfile WHERE userID = ?")) {
-                statement.setString(1, event.getUser().getId());
+            try (PreparedStatement profileStatement = Main.connectionDB.prepareStatement("SELECT * FROM miningProfile WHERE userID = ?")) {
+                profileStatement.setString(1, event.getUser().getId());
 
-                ResultSet result = statement.executeQuery();
+                ResultSet result = profileStatement.executeQuery();
 
                 if (!result.first()) {
-                    try(PreparedStatement insertStatement = Main.connectionDB.prepareStatement("""
-                            INSERT INTO miningProfile(userID)
+                    try(PreparedStatement insertStatement1 = Main.connectionDB.prepareStatement("""
+                        INSERT INTO miningProfile(userID)
+                        VALUES (?)
+                        """)) {
+                        try(PreparedStatement insertStatement2 = Main.connectionDB.prepareStatement("""
+                            INSERT INTO miningCollectionsAmount(userID)
                             VALUES (?)
                             """)) {
+                            try(PreparedStatement insertStatement3 = Main.connectionDB.prepareStatement("""
+                            INSERT INTO miningCollectionsLevels(userID)
+                            VALUES (?)
+                            """)) {
+                                insertStatement1.setString(1, event.getUser().getId());
+                                insertStatement2.setString(1, event.getUser().getId());
+                                insertStatement3.setString(1, event.getUser().getId());
 
-                        insertStatement.setString(1, event.getUser().getId());
-
-                        insertStatement.executeUpdate();
-                        event.reply("Your mining account has successfully been created! To learn more, use the `/mining tutorial` command !").setEphemeral(true).queue();
-                        return;
+                                insertStatement1.executeUpdate();
+                                insertStatement2.executeUpdate();
+                                insertStatement3.executeUpdate();
+                                event.reply("Your mining account has successfully been created! To learn more, use the `/mining tutorial` command !").setEphemeral(true).queue();
+                                return;
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        }
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
@@ -80,8 +102,23 @@ public class MiningCommand extends SlashCommand {
         }
 
         if (event.getSubcommandName().equals("collections")) {
+            try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM miningProfile WHERE userID=?")) {
+                statement.setString(1, event.getUser().getId());
+
+                ResultSet result = statement.executeQuery();
+
+                if (!result.first()) {
+                    event.reply("You don't have an account ! Use the `/mining start` to create an account !").setEphemeral(true).queue();
+                    return;
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
             try {
-                event.reply(getCollectionProgression(event.getOption("collectionname").getAsString())).queue();
+                OptionMapping collectionName = event.getOption("collectionname");
+                assert collectionName != null;
+
+                event.reply(getCollectionProgression(collectionName.getAsString(), event.getUser().getId())).queue();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
