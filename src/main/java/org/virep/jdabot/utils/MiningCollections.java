@@ -7,7 +7,8 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.virep.jdabot.Main;
 
-import java.io.InputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,10 +20,9 @@ import java.util.List;
 // TODO: Implement Database support
 public class MiningCollections {
     private static JSONArray getCollection(String collectionName) throws Exception {
-        InputStream is = MiningCollections.class.getResourceAsStream("/collections.json");
+        FileInputStream in = new FileInputStream("./collections.json");
 
-        assert is != null;
-        JSONTokener tokener = new JSONTokener(is);
+        JSONTokener tokener = new JSONTokener(in);
         JSONObject jsonObject = new JSONObject(tokener);
 
         if (!jsonObject.has(collectionName)) throw new Exception("Specified collection does not exist.");
@@ -30,13 +30,12 @@ public class MiningCollections {
         return jsonObject.getJSONArray(collectionName);
     }
 
-    public static List<Command.Choice> getChoices() {
+    public static List<Command.Choice> getChoices() throws FileNotFoundException {
         List<Command.Choice> choices = new ArrayList<>();
 
-        InputStream is = MiningCollections.class.getResourceAsStream("/collections.json");
+        FileInputStream in = new FileInputStream("./collections.json");
 
-        assert is != null;
-        JSONTokener tokener = new JSONTokener(is);
+        JSONTokener tokener = new JSONTokener(in);
         JSONObject jsonObject = new JSONObject(tokener);
 
         Iterator<String> keys = jsonObject.keys();

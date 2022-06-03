@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.virep.jdabot.Main;
 import org.virep.jdabot.slashcommandhandler.SlashCommand;
 
+import java.io.FileNotFoundException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,7 +20,7 @@ import static org.virep.jdabot.utils.MiningCollections.getCollectionProgression;
 
 public class MiningCommand extends SlashCommand {
 
-    public MiningCommand() {
+    public MiningCommand() throws FileNotFoundException {
         super("mining", "mining", "wip",
                 new SubcommandData[] {
                         new SubcommandData("profile", "profile"),
