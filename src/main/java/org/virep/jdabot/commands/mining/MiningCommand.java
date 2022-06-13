@@ -1,4 +1,4 @@
-package org.virep.jdabot.commands.wip;
+package org.virep.jdabot.commands.mining;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
