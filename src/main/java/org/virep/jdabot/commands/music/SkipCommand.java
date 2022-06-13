@@ -1,25 +1,34 @@
-package org.virep.jdabot.commands;
+package org.virep.jdabot.commands.music;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.virep.jdabot.lavaplayer.AudioManagerController;
+import org.virep.jdabot.lavaplayer.GuildAudioManager;
+import org.virep.jdabot.lavaplayer.TrackScheduler;
 import org.virep.jdabot.slashcommandhandler.SlashCommand;
 
 import java.util.Objects;
 
-public class StopCommand extends SlashCommand {
-    public StopCommand() {
-        super("stop", "Stops the currently played music.", "music");
+//TODO: Add support for skipping to a specific music (index queue)
+// Due to Discord limitations, it needs to be in a seperate file (options w or w/o)
+public class SkipCommand extends SlashCommand {
+    public SkipCommand() {
+        super("skip", "Skips the currently playing music.", "music");
     }
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
         Guild guild = event.getGuild();
+
+        GuildAudioManager manager = AudioManagerController.getGuildAudioManager(guild);
+        TrackScheduler scheduler = manager.getScheduler();
+
         assert guild != null;
 
         final GuildVoiceState selfVoiceState = guild.getSelfMember().getVoiceState();
         final GuildVoiceState memberVoiceState = Objects.requireNonNull(event.getMember()).getVoiceState();
+
         assert memberVoiceState != null;
         assert selfVoiceState != null;
 
@@ -38,12 +47,8 @@ public class StopCommand extends SlashCommand {
             return;
         }
 
-        AudioManagerController.destroyGuildAudioManager(event.getGuild());
+        scheduler.nextTrack();
 
-        event.replyFormat("\u23F9 - Disconnected from `%s`!", memberVoiceState.getChannel().getName()).queue();
-    }
-
-    public void disconnect(Guild guild) {
-        AudioManagerController.destroyGuildAudioManager(guild);
+        event.reply("\u23E9 - Skipped current music !").queue();
     }
 }

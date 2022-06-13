@@ -1,18 +1,23 @@
-package org.virep.jdabot.commands;
+package org.virep.jdabot.commands.music;
 
 import lavalink.client.player.LavalinkPlayer;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.virep.jdabot.lavaplayer.AudioManagerController;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
 import org.virep.jdabot.slashcommandhandler.SlashCommand;
 
 import java.util.Objects;
 
-public class PauseCommand extends SlashCommand {
-    public PauseCommand() {
-        super("pause", "pauses the currently playing music.", "music");
+public class VolumeCommand extends SlashCommand {
+    public VolumeCommand() {
+        super("volume", "Changes volume for the current queue.", "music", new OptionData[] {
+                new OptionData(OptionType.INTEGER, "value", "Volume value", true)
+        });
     }
 
     @Override
@@ -45,13 +50,16 @@ public class PauseCommand extends SlashCommand {
             return;
         }
 
-        if (player.isPaused()) {
-            event.reply("\u274C - The music is already paused !").setEphemeral(true).queue();
-            return;
+        OptionMapping valueOption = event.getOption("value");
+        assert valueOption != null;
+
+        int value = valueOption.getAsInt();
+
+        if (value < 0 || value > 100) {
+            event.reply("\u274C - The volume value must be between 0 and 100.").setEphemeral(true).queue();
         }
 
-        player.setPaused(true);
-
-        event.reply("\u23F8 - The music has been paused.").queue();
+        player.setVolume(value);
+        event.replyFormat("\uD83D\uDD0A - Volume has been set to **%d%** !", value).queue();
     }
 }

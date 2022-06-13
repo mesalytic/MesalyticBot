@@ -1,26 +1,18 @@
-package org.virep.jdabot.commands;
+package org.virep.jdabot.commands.music;
 
 import lavalink.client.player.LavalinkPlayer;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.commands.OptionMapping;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.virep.jdabot.lavaplayer.AudioManagerController;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
 import org.virep.jdabot.slashcommandhandler.SlashCommand;
 
 import java.util.Objects;
 
-import static org.virep.jdabot.utils.Utils.lengthToMillis;
-
-public class SeekCommand extends SlashCommand {
-    public SeekCommand() {
-        super("seek", "Change the position of the currently playing music.", "music",
-                new OptionData[]{
-                        new OptionData(OptionType.STRING, "time", "Time to seek to. (format H:M:S or M:S)", true)
-                });
+public class ResumeCommand extends SlashCommand {
+    public ResumeCommand() {
+        super("resume", "Resumes the currently playing music.", "music");
     }
 
     @Override
@@ -53,27 +45,13 @@ public class SeekCommand extends SlashCommand {
             return;
         }
 
-        if (player.isPaused()) {
-            event.reply("\u274C - The music is currently paused !").setEphemeral(true).queue();
+        if (!player.isPaused()) {
+            event.reply("\u274C - The music is already playing !").setEphemeral(true).queue();
             return;
         }
 
-        OptionMapping timeOption = event.getOption("time");
+        player.setPaused(false);
 
-        assert timeOption != null;
-        String time = timeOption.getAsString();
-
-        if (lengthToMillis(time) < 0) {
-            event.reply("\u274C - The time specified is inferior or equal to 0.").setEphemeral(true).queue();
-            return;
-        }
-
-        if (lengthToMillis(time) > player.getPlayingTrack().getInfo().getLength()) {
-            event.reply("\u274C - The time specified is superior to the total duration of the current track !").setEphemeral(true).queue();
-            return;
-        }
-
-        player.seekTo(lengthToMillis(time));
-        event.replyFormat("\uD83D\uDD50 - Successfully seeked at `%s%`", time).queue();
+        event.reply("\u25B6 - The music has been resumed.").queue();
     }
 }

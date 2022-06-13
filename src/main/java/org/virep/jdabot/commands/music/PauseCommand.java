@@ -1,30 +1,32 @@
-package org.virep.jdabot.commands;
+package org.virep.jdabot.commands.music;
 
+import lavalink.client.player.LavalinkPlayer;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.virep.jdabot.lavaplayer.AudioManagerController;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
-import org.virep.jdabot.lavaplayer.TrackScheduler;
 import org.virep.jdabot.slashcommandhandler.SlashCommand;
 
 import java.util.Objects;
 
-public class LoopingCommand extends SlashCommand {
-    public LoopingCommand() {
-        super("looping", "Loops the currently playing music.", "music");
+public class PauseCommand extends SlashCommand {
+    public PauseCommand() {
+        super("pause", "pauses the currently playing music.", "music");
     }
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
         Guild guild = event.getGuild();
-        assert guild != null;
 
         GuildAudioManager manager = AudioManagerController.getGuildAudioManager(guild);
-        TrackScheduler trackScheduler = manager.getScheduler();
+        LavalinkPlayer player = manager.getPlayer();
+
+        assert guild != null;
 
         final GuildVoiceState selfVoiceState = guild.getSelfMember().getVoiceState();
         final GuildVoiceState memberVoiceState = Objects.requireNonNull(event.getMember()).getVoiceState();
+
         assert memberVoiceState != null;
         assert selfVoiceState != null;
 
@@ -43,11 +45,13 @@ public class LoopingCommand extends SlashCommand {
             return;
         }
 
-        boolean looping = trackScheduler.isLooping();
+        if (player.isPaused()) {
+            event.reply("\u274C - The music is already paused !").setEphemeral(true).queue();
+            return;
+        }
 
-        if (looping) event.reply("\uD83D\uDD02 - Looping for the current music has been disabled.").queue();
-        else event.reply("\uD83D\uDD02 - Looping for the current music has been enabled.").queue();
+        player.setPaused(true);
 
-        trackScheduler.setLooping(!trackScheduler.isLooping());
+        event.reply("\u23F8 - The music has been paused.").queue();
     }
 }

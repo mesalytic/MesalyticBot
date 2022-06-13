@@ -1,4 +1,4 @@
-package org.virep.jdabot.commands;
+package org.virep.jdabot.commands.music;
 
 import lavalink.client.player.LavalinkPlayer;
 import lavalink.client.player.track.AudioTrack;

@@ -1,19 +1,18 @@
-package org.virep.jdabot.commands;
+package org.virep.jdabot.commands.music;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.virep.jdabot.lavaplayer.AudioManagerController;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
+import org.virep.jdabot.lavaplayer.TrackScheduler;
 import org.virep.jdabot.slashcommandhandler.SlashCommand;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
-public class ShuffleCommand extends SlashCommand {
-    public ShuffleCommand() {
-        super("shuffle", "Shuffles the queue", "music");
+public class ClearQueueCommand extends SlashCommand {
+    public ClearQueueCommand() {
+        super("clearqueue", "Clears the current queue.", "music");
     }
 
     @Override
@@ -21,6 +20,7 @@ public class ShuffleCommand extends SlashCommand {
         Guild guild = event.getGuild();
 
         GuildAudioManager manager = AudioManagerController.getGuildAudioManager(guild);
+        TrackScheduler trackScheduler = manager.getScheduler();
 
         assert guild != null;
 
@@ -31,7 +31,7 @@ public class ShuffleCommand extends SlashCommand {
         assert selfVoiceState != null;
 
         if (memberVoiceState.getChannel() == null) {
-            event.reply("\u274C - You are not in a voice channel!").setEphemeral(true).queue();
+            event.reply("\u274C - You must be in a voice channel!").setEphemeral(true).queue();
             return;
         }
 
@@ -45,8 +45,12 @@ public class ShuffleCommand extends SlashCommand {
             return;
         }
 
-        Collections.shuffle((List<?>) manager.getScheduler().queue);
+        if (trackScheduler.queue.isEmpty()) {
+            event.reply("\u274C - Nothing is in the queue right now.").setEphemeral(true).queue();
+            return;
+        }
 
-        event.reply("\uD83D\uDD00 - The queue has successfully been shuffled!").queue();
+        trackScheduler.queue.clear();
+        event.reply("\u2705 - The queue has been cleared.").queue();
     }
 }

@@ -1,4 +1,4 @@
-package org.virep.jdabot.commands;
+package org.virep.jdabot.commands.music;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;

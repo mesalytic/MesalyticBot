@@ -1,32 +1,25 @@
-package org.virep.jdabot.commands;
+package org.virep.jdabot.commands.music;
 
-import lavalink.client.player.LavalinkPlayer;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.virep.jdabot.lavaplayer.AudioManagerController;
-import org.virep.jdabot.lavaplayer.GuildAudioManager;
 import org.virep.jdabot.slashcommandhandler.SlashCommand;
 
 import java.util.Objects;
 
-public class ResumeCommand extends SlashCommand {
-    public ResumeCommand() {
-        super("resume", "Resumes the currently playing music.", "music");
+public class StopCommand extends SlashCommand {
+    public StopCommand() {
+        super("stop", "Stops the currently played music.", "music");
     }
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
         Guild guild = event.getGuild();
-
-        GuildAudioManager manager = AudioManagerController.getGuildAudioManager(guild);
-        LavalinkPlayer player = manager.getPlayer();
-
         assert guild != null;
 
         final GuildVoiceState selfVoiceState = guild.getSelfMember().getVoiceState();
         final GuildVoiceState memberVoiceState = Objects.requireNonNull(event.getMember()).getVoiceState();
-
         assert memberVoiceState != null;
         assert selfVoiceState != null;
 
@@ -45,13 +38,12 @@ public class ResumeCommand extends SlashCommand {
             return;
         }
 
-        if (!player.isPaused()) {
-            event.reply("\u274C - The music is already playing !").setEphemeral(true).queue();
-            return;
-        }
+        AudioManagerController.destroyGuildAudioManager(event.getGuild());
 
-        player.setPaused(false);
+        event.replyFormat("\u23F9 - Disconnected from `%s`!", memberVoiceState.getChannel().getName()).queue();
+    }
 
-        event.reply("\u25B6 - The music has been resumed.").queue();
+    public void disconnect(Guild guild) {
+        AudioManagerController.destroyGuildAudioManager(guild);
     }
 }

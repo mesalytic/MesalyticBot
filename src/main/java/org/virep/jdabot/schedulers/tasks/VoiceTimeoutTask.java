@@ -2,7 +2,7 @@ package org.virep.jdabot.schedulers.tasks;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
-import org.virep.jdabot.commands.StopCommand;
+import org.virep.jdabot.commands.music.StopCommand;
 import org.virep.jdabot.schedulers.Task;
 
 public class VoiceTimeoutTask implements Task {

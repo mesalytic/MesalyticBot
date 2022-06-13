@@ -1,4 +1,4 @@
-package org.virep.jdabot.commands;
+package org.virep.jdabot.commands.games;
 
 import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.User;

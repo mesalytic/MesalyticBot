@@ -1,4 +1,4 @@
-package org.virep.jdabot.commands;
+package org.virep.jdabot.commands.music;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -10,25 +10,21 @@ import org.virep.jdabot.slashcommandhandler.SlashCommand;
 
 import java.util.Objects;
 
-//TODO: Add support for skipping to a specific music (index queue)
-// Due to Discord limitations, it needs to be in a seperate file (options w or w/o)
-public class SkipCommand extends SlashCommand {
-    public SkipCommand() {
-        super("skip", "Skips the currently playing music.", "music");
+public class LoopingCommand extends SlashCommand {
+    public LoopingCommand() {
+        super("looping", "Loops the currently playing music.", "music");
     }
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
         Guild guild = event.getGuild();
+        assert guild != null;
 
         GuildAudioManager manager = AudioManagerController.getGuildAudioManager(guild);
-        TrackScheduler scheduler = manager.getScheduler();
-
-        assert guild != null;
+        TrackScheduler trackScheduler = manager.getScheduler();
 
         final GuildVoiceState selfVoiceState = guild.getSelfMember().getVoiceState();
         final GuildVoiceState memberVoiceState = Objects.requireNonNull(event.getMember()).getVoiceState();
-
         assert memberVoiceState != null;
         assert selfVoiceState != null;
 
@@ -47,8 +43,11 @@ public class SkipCommand extends SlashCommand {
             return;
         }
 
-        scheduler.nextTrack();
+        boolean looping = trackScheduler.isLooping();
 
-        event.reply("\u23E9 - Skipped current music !").queue();
+        if (looping) event.reply("\uD83D\uDD02 - Looping for the current music has been disabled.").queue();
+        else event.reply("\uD83D\uDD02 - Looping for the current music has been enabled.").queue();
+
+        trackScheduler.setLooping(!trackScheduler.isLooping());
     }
 }

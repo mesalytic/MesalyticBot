@@ -1,4 +1,4 @@
-package org.virep.jdabot.commands;
+package org.virep.jdabot.commands.music;
 
 import lavalink.client.player.LavalinkPlayer;
 import net.dv8tion.jda.api.entities.Guild;
@@ -13,11 +13,14 @@ import org.virep.jdabot.slashcommandhandler.SlashCommand;
 
 import java.util.Objects;
 
-public class VolumeCommand extends SlashCommand {
-    public VolumeCommand() {
-        super("volume", "Changes volume for the current queue.", "music", new OptionData[] {
-                new OptionData(OptionType.INTEGER, "value", "Volume value", true)
-        });
+import static org.virep.jdabot.utils.Utils.lengthToMillis;
+
+public class SeekCommand extends SlashCommand {
+    public SeekCommand() {
+        super("seek", "Change the position of the currently playing music.", "music",
+                new OptionData[]{
+                        new OptionData(OptionType.STRING, "time", "Time to seek to. (format H:M:S or M:S)", true)
+                });
     }
 
     @Override
@@ -50,16 +53,27 @@ public class VolumeCommand extends SlashCommand {
             return;
         }
 
-        OptionMapping valueOption = event.getOption("value");
-        assert valueOption != null;
-
-        int value = valueOption.getAsInt();
-
-        if (value < 0 || value > 100) {
-            event.reply("\u274C - The volume value must be between 0 and 100.").setEphemeral(true).queue();
+        if (player.isPaused()) {
+            event.reply("\u274C - The music is currently paused !").setEphemeral(true).queue();
+            return;
         }
 
-        player.setVolume(value);
-        event.replyFormat("\uD83D\uDD0A - Volume has been set to **%d%** !", value).queue();
+        OptionMapping timeOption = event.getOption("time");
+
+        assert timeOption != null;
+        String time = timeOption.getAsString();
+
+        if (lengthToMillis(time) < 0) {
+            event.reply("\u274C - The time specified is inferior or equal to 0.").setEphemeral(true).queue();
+            return;
+        }
+
+        if (lengthToMillis(time) > player.getPlayingTrack().getInfo().getLength()) {
+            event.reply("\u274C - The time specified is superior to the total duration of the current track !").setEphemeral(true).queue();
+            return;
+        }
+
+        player.seekTo(lengthToMillis(time));
+        event.replyFormat("\uD83D\uDD50 - Successfully seeked at `%s%`", time).queue();
     }
 }
