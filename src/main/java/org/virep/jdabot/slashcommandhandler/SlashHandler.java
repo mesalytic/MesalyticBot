@@ -42,7 +42,7 @@ public class SlashHandler {
 
             SlashCommand command = commandClass.getConstructor().newInstance();
 
-            if (command.category.equals("wip")) {
+            if (command.isWIP()) {
                 if (command.hasOptions(command.options) && !command.hasSubcommandData(command.subcommandData)) guildUpdate.addCommands(Commands.slash(command.getName(), command.getDescription()).addOptions(command.getOptions()));
                 else if (!command.hasOptions(command.options) && command.hasSubcommandData(command.subcommandData)) guildUpdate.addCommands(Commands.slash(command.getName(), command.getDescription()).addSubcommands(command.getSubcommandData()));
                 else if (!command.hasOptions(command.options) && !command.hasSubcommandData(command.subcommandData)) guildUpdate.addCommands(Commands.slash(command.getName(), command.getDescription()));

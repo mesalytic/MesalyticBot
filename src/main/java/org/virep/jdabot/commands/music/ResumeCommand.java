@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class ResumeCommand extends SlashCommand {
     public ResumeCommand() {
-        super("resume", "Resumes the currently playing music.", "music");
+        super("resume", "Resumes the currently playing music.", false);
     }
 
     @Override

@@ -21,7 +21,7 @@ import static org.virep.jdabot.utils.MiningCollections.getCollectionProgression;
 public class MiningCommand extends SlashCommand {
 
     public MiningCommand() throws FileNotFoundException {
-        super("mining", "mining", "wip",
+        super("mining", "mining", true,
                 new SubcommandData[] {
                         new SubcommandData("profile", "profile"),
                         new SubcommandData("start", "start"),

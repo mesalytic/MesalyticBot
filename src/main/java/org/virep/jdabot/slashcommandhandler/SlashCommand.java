@@ -7,36 +7,34 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 public abstract class SlashCommand {
     public final String name;
     public final String description;
-    public final String category;
+    public final boolean isWIP;
     public OptionData[] options;
     public SubcommandData[] subcommandData;
 
-    public boolean developerOnly;
-    public SlashCommand(String name, String description, String category) {
+    public SlashCommand(String name, String description, boolean isWIP) {
         this.name = name;
         this.description = description;
-        this.category = category;
+        this.isWIP = isWIP;
     }
 
-    public SlashCommand(String name, String description, String category, SubcommandData[] subcommandData) {
+    public SlashCommand(String name, String description, boolean isWIP, SubcommandData[] subcommandData) {
         this.name = name;
         this.description = description;
-        this.category = category;
+        this.isWIP = isWIP;
         this.subcommandData = subcommandData;
     }
 
-    public SlashCommand(String name, String description, String category, OptionData[] options) {
+    public SlashCommand(String name, String description, boolean isWIP, OptionData[] options) {
         this.name = name;
         this.description = description;
-        this.category = category;
+        this.isWIP = isWIP;
         this.options = options;
     }
 
-    public SlashCommand(String name, String description, String category, boolean developerOnly) {
+    public SlashCommand(String name, String description, boolean isWIP, boolean developerOnly) {
         this.name = name;
         this.description = description;
-        this.category = category;
-        this.developerOnly = developerOnly;
+        this.isWIP = isWIP;
     }
 
     public abstract void execute(SlashCommandInteractionEvent event);
@@ -60,7 +58,7 @@ public abstract class SlashCommand {
         return options != null;
     }
 
-    public boolean isDeveloperOnly() {
-        return developerOnly;
+    public boolean isWIP() {
+        return isWIP;
     }
 }

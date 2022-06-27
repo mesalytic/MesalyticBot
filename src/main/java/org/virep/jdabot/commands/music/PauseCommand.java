@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class PauseCommand extends SlashCommand {
     public PauseCommand() {
-        super("pause", "pauses the currently playing music.", "music");
+        super("pause", "pauses the currently playing music.", false);
     }
 
     @Override

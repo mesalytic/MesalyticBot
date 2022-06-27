@@ -23,7 +23,7 @@ public class PlayCommand extends SlashCommand {
     public PlayCommand() {
         super("play",
                 "Play music on your voice channel!",
-                "music",
+                false,
                 new SubcommandData[] {
                         new SubcommandData("youtube", "Play YouTube songs!").addOption(OptionType.STRING, "url", "YouTube Video or Playlist URL").addOption(OptionType.STRING, "search", "Search string"),
                         new SubcommandData("soundcloud", "Play SoundCloud songs!").addOption(OptionType.STRING, "url", "SoundCloud Track or Playlist URL").addOption(OptionType.STRING, "search", "Search string"),

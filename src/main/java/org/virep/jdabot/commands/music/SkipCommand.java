@@ -14,7 +14,7 @@ import java.util.Objects;
 // Due to Discord limitations, it needs to be in a seperate file (options w or w/o)
 public class SkipCommand extends SlashCommand {
     public SkipCommand() {
-        super("skip", "Skips the currently playing music.", "music");
+        super("skip", "Skips the currently playing music.", false);
     }
 
     @Override

@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class LoopingCommand extends SlashCommand {
     public LoopingCommand() {
-        super("looping", "Loops the currently playing music.", "music");
+        super("looping", "Loops the currently playing music.", false);
     }
 
     @Override

@@ -13,7 +13,7 @@ import java.util.Objects;
 
 public class ShuffleCommand extends SlashCommand {
     public ShuffleCommand() {
-        super("shuffle", "Shuffles the queue", "music");
+        super("shuffle", "Shuffles the queue", false);
     }
 
     @Override

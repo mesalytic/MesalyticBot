@@ -17,7 +17,7 @@ import java.util.Objects;
 
 public class NowPlayingCommand extends SlashCommand {
     public NowPlayingCommand() {
-        super("nowplaying", "Display informations about the currently playing music.", "music");
+        super("nowplaying", "Display informations about the currently playing music.", false);
     }
 
     @Override
