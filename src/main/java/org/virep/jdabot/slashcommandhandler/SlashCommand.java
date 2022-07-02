@@ -3,6 +3,7 @@ package org.virep.jdabot.slashcommandhandler;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandGroupData;
 
 public abstract class SlashCommand {
     public final String name;
@@ -10,6 +11,8 @@ public abstract class SlashCommand {
     public final boolean isWIP;
     public OptionData[] options;
     public SubcommandData[] subcommandData;
+
+    public SubcommandGroupData[] subcommandGroupData;
 
     public SlashCommand(String name, String description, boolean isWIP) {
         this.name = name;
@@ -31,10 +34,11 @@ public abstract class SlashCommand {
         this.options = options;
     }
 
-    public SlashCommand(String name, String description, boolean isWIP, boolean developerOnly) {
+    public SlashCommand(String name, String description, boolean isWIP, SubcommandGroupData[] subcommandGroupData) {
         this.name = name;
         this.description = description;
         this.isWIP = isWIP;
+        this.subcommandGroupData = subcommandGroupData;
     }
 
     public abstract void execute(SlashCommandInteractionEvent event);
@@ -53,7 +57,10 @@ public abstract class SlashCommand {
 
     public SubcommandData[] getSubcommandData() { return subcommandData; }
 
+    public SubcommandGroupData[] getSubcommandGroupData() { return subcommandGroupData; }
+
     public boolean hasSubcommandData(SubcommandData[] subcommandData) { return subcommandData != null; }
+    public boolean hasSubcommandGroupData(SubcommandGroupData[] subcommandGroupData) { return subcommandGroupData != null; }
     public boolean hasOptions(OptionData[] options) {
         return options != null;
     }
