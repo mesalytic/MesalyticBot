@@ -3,6 +3,7 @@ package org.virep.jdabot;
 import lavalink.client.io.jda.JdaLavalink;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.virep.jdabot.database.DatabaseConnector;
 import org.virep.jdabot.listeners.EventListener;
@@ -18,6 +19,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         JDA api = JDABuilder
                 .createDefault(Config.get("TOKEN"))
+                .enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGES)
                 .addEventListeners(lavalink, new EventListener())
                 .setVoiceDispatchInterceptor(lavalink.getVoiceInterceptor())
                 .enableCache(CacheFlag.VOICE_STATE).build().awaitReady();
