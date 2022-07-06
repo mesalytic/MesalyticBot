@@ -60,6 +60,6 @@ public class VolumeCommand extends SlashCommand {
         }
 
         player.setVolume(value);
-        event.replyFormat("\uD83D\uDD0A - Volume has been set to **%d%** !", value).queue();
+        event.reply("\uD83D\uDD0A - Volume has been set to **" + value + "%** !").queue();
     }
 }
