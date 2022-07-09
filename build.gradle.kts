@@ -20,6 +20,7 @@ dependencies {
     implementation("org.mariadb.jdbc:mariadb-java-client:3.0.6")
     implementation("com.googlecode.json-simple:json-simple:1.1.1")
     implementation("org.apache.commons:commons-lang3:3.12.0")
+    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.10")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
