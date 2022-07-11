@@ -22,11 +22,11 @@ public class ImageCommand extends SlashCommand {
     public ImageCommand() {
         super("image", "Image", true, new SubcommandData[]{
                 new SubcommandData("circle", "circle image edit")
-                        .addOptions(new OptionData(OptionType.USER, "user", "Use the avatar of a user"), new OptionData(OptionType.STRING, "url", "Edit any specified image url.")),
+                        .addOptions(new OptionData(OptionType.USER, "user", "Use the avatar of a user"), new OptionData(OptionType.STRING, "url", "Edit any specified image url."), new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
                 new SubcommandData("blur", "blur image edit")
-                        .addOptions(new OptionData(OptionType.USER, "user", "Use the avatar of a user"), new OptionData(OptionType.STRING, "url", "Edit any specified image url.")),
+                        .addOptions(new OptionData(OptionType.USER, "user", "Use the avatar of a user"), new OptionData(OptionType.STRING, "url", "Edit any specified image url."), new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
                 new SubcommandData("deepfry", "deepfry image edit")
-                        .addOptions(new OptionData(OptionType.USER, "user", "Use the avatar of a user"), new OptionData(OptionType.STRING, "url", "Edit any specified image url.")),
+                        .addOptions(new OptionData(OptionType.USER, "user", "Use the avatar of a user"), new OptionData(OptionType.STRING, "url", "Edit any specified image url."), new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
                 new SubcommandData("fractal", "generate fractal")
         });
     }
@@ -39,8 +39,9 @@ public class ImageCommand extends SlashCommand {
 
         OptionMapping userOption = event.getOption("user");
         OptionMapping urlOption = event.getOption("url");
+        OptionMapping attachmentOption = event.getOption("attachment");
 
-        String url = userOption != null ? userOption.getAsUser().getAvatarUrl() : urlOption != null ? urlOption.getAsString() : event.getUser().getAvatarUrl();
+        String url = userOption != null ? userOption.getAsUser().getAvatarUrl() : urlOption != null ? urlOption.getAsString() : attachmentOption != null ? attachmentOption.getAsAttachment().getUrl() : event.getUser().getAvatarUrl();
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .readTimeout(30, TimeUnit.SECONDS)
