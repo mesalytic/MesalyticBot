@@ -25,6 +25,8 @@ public class ImageCommand extends SlashCommand {
                         .addOptions(new OptionData(OptionType.USER, "user", "Use the avatar of a user"), new OptionData(OptionType.STRING, "url", "Edit any specified image url.")),
                 new SubcommandData("blur", "blur image edit")
                         .addOptions(new OptionData(OptionType.USER, "user", "Use the avatar of a user"), new OptionData(OptionType.STRING, "url", "Edit any specified image url.")),
+                new SubcommandData("deepfry", "deepfry image edit")
+                        .addOptions(new OptionData(OptionType.USER, "user", "Use the avatar of a user"), new OptionData(OptionType.STRING, "url", "Edit any specified image url.")),
                 new SubcommandData("fractal", "generate fractal")
         });
     }
