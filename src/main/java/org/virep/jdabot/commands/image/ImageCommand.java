@@ -27,6 +27,16 @@ public class ImageCommand extends SlashCommand {
                         .addOptions(new OptionData(OptionType.USER, "user", "Use the avatar of a user"), new OptionData(OptionType.STRING, "url", "Edit any specified image url."), new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
                 new SubcommandData("deepfry", "deepfry image edit")
                         .addOptions(new OptionData(OptionType.USER, "user", "Use the avatar of a user"), new OptionData(OptionType.STRING, "url", "Edit any specified image url."), new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
+                new SubcommandData("3000years", "3000years image edit")
+                        .addOptions(new OptionData(OptionType.USER, "user", "Use the avatar of a user"), new OptionData(OptionType.STRING, "url", "Edit any specified image url."), new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
+                new SubcommandData("beautiful", "beautiful image edit")
+                        .addOptions(new OptionData(OptionType.USER, "user", "Use the avatar of a user"), new OptionData(OptionType.STRING, "url", "Edit any specified image url."), new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
+                new SubcommandData("bobross", "bobross image edit")
+                        .addOptions(new OptionData(OptionType.USER, "user", "Use the avatar of a user"), new OptionData(OptionType.STRING, "url", "Edit any specified image url."), new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
+                new SubcommandData("distort", "distort image edit")
+                        .addOptions(new OptionData(OptionType.USER, "user", "Use the avatar of a user"), new OptionData(OptionType.STRING, "url", "Edit any specified image url."), new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
+                new SubcommandData("fire", "fire image edit")
+                        .addOptions(new OptionData(OptionType.USER, "user", "Use the avatar of a user"), new OptionData(OptionType.STRING, "url", "Edit any specified image url."), new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
                 new SubcommandData("fractal", "generate fractal")
         });
     }
@@ -49,7 +59,7 @@ public class ImageCommand extends SlashCommand {
 
         try {
             Request request = new Request.Builder()
-                    .url("https://api.mesavirep.xyz/" + endpoint + "?url=" + url)
+                    .url("https://api.mesavirep.xyz/" + endpoint + "?url=" + url+"?size=256")
                     .build();
 
             Response res = client.newCall(request).execute();
