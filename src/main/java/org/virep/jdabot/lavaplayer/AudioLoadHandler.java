@@ -19,7 +19,10 @@ public class AudioLoadHandler {
             @Override
             public void trackLoaded(AudioTrack track) {
                 AudioTrackInfo trackInfo = track.getInfo();
-                manager.getScheduler().queue(track, event.getTextChannel());
+
+                event.getChannel().asTextChannel();
+
+                manager.getScheduler().queue(track, event.getChannel().asTextChannel());
 
                 event.replyFormat("\uD83C\uDFB6 - Adding to Queue: **%s** (`%s`)", trackInfo.getTitle(), Utils.formatTrackLength(trackInfo.getLength())).queue();
             }
@@ -27,7 +30,7 @@ public class AudioLoadHandler {
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
                 for (AudioTrack track : playlist.getTracks()) {
-                    manager.getScheduler().queue(track, event.getTextChannel());
+                    manager.getScheduler().queue(track, event.getChannel().asTextChannel());
                 }
                 event.replyFormat("\uD83C\uDFB6 - Adding Playlist to Queue: **%s**", playlist.getName()).queue();
             }
@@ -35,7 +38,7 @@ public class AudioLoadHandler {
             @Override
             public void searchResultLoaded(List<AudioTrack> tracks) {
                 AudioTrack track = tracks.get(0);
-                manager.getScheduler().queue(track, event.getTextChannel());
+                manager.getScheduler().queue(track, event.getChannel().asTextChannel());
 
                 event.replyFormat("\uD83C\uDFB6 - Adding to Queue: **%s** (`%s`)", track.getInfo().getTitle(), Utils.formatTrackLength(track.getInfo().getLength())).queue();
             }
