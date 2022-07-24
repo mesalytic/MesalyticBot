@@ -68,7 +68,7 @@ public class RoleCommand extends SlashCommand {
                             updateStatement.executeUpdate();
                             event.reply("The role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " has been added to the autorole !").setEphemeral(true).queue();
                         } catch (SQLException e) {
-                            throw new RuntimeException(e);
+                            e.printStackTrace();
                         }
                     } else {
                         // add role
@@ -82,11 +82,11 @@ public class RoleCommand extends SlashCommand {
                             updateStatement.executeUpdate();
                             event.reply("The role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " has been added to the autorole !").setEphemeral(true).queue();
                         } catch (SQLException e) {
-                            throw new RuntimeException(e);
+                            e.printStackTrace();
                         }
                     }
                 } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
                 }
             } else {
                 try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM autorole WHERE guildID = ?")) {
@@ -107,10 +107,10 @@ public class RoleCommand extends SlashCommand {
                         updateStatement.executeUpdate();
                         event.reply("Roles configured for the autorole have been cleared.").setEphemeral(true).queue();
                     } catch (SQLException e) {
-                        throw new RuntimeException(e);
+                        e.printStackTrace();
                     }
                 } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
                 }
             }
         } else if (subcommandGroup.equals("reaction")) {
@@ -139,7 +139,7 @@ public class RoleCommand extends SlashCommand {
                             updateStatement.executeUpdate();
                             event.reply("The role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " has replaced the already specified role for this emoji, and can now be obtained via the reaction role.").setEphemeral(true).queue();
                         } catch (SQLException e) {
-                            throw new RuntimeException(e);
+                            e.printStackTrace();
                         }
                     } else {
                         try(PreparedStatement updateStatement = Main.connectionDB.prepareStatement("""
@@ -157,11 +157,11 @@ public class RoleCommand extends SlashCommand {
                             updateStatement.executeUpdate();
                             event.reply("The role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " can now be obtained via the reaction role !").setEphemeral(true).queue();
                         } catch (SQLException e) {
-                            throw new RuntimeException(e);
+                            e.printStackTrace();
                         }
                     }
                 } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
                 }
             } else {
                 try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM reactionRole WHERE messageID = ? AND emojiID = ?")) {
