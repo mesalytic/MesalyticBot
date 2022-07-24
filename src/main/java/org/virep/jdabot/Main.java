@@ -19,7 +19,10 @@ public class Main {
     public static void main(String[] args) throws Exception {
         JDA api = JDABuilder
                 .createDefault(Config.get("TOKEN"))
-                .enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT)
+                .enableIntents(GatewayIntent.GUILD_MEMBERS,
+                        GatewayIntent.GUILD_MESSAGES,
+                        GatewayIntent.MESSAGE_CONTENT,
+                        GatewayIntent.GUILD_MESSAGE_REACTIONS)
                 .addEventListeners(lavalink, new EventListener())
                 .setVoiceDispatchInterceptor(lavalink.getVoiceInterceptor())
                 .enableCache(CacheFlag.VOICE_STATE).build().awaitReady();

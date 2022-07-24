@@ -2,18 +2,20 @@ package org.virep.jdabot.listeners;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.audio.hooks.ConnectionStatus;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.entities.emoji.EmojiUnion;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.virep.jdabot.Main;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
 
+import javax.annotation.Nonnull;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -91,7 +93,71 @@ public class EventListener extends ListenerAdapter {
                 event.getGuild().addRoleToMember(member, role).queue();
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onMessageReactionAdd(@Nonnull MessageReactionAddEvent event) {
+        try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM reactionRole WHERE messageID = ? AND emojiID = ?")) {
+            Guild guild = event.getGuild();
+            Member member = event.getMember();
+
+            EmojiUnion fromFormattedEmoji = event.getEmoji();
+            Emoji.Type emojiType = fromFormattedEmoji.getType();
+
+            String emoji;
+            if (emojiType == Emoji.Type.CUSTOM) emoji = fromFormattedEmoji.asCustom().getId();
+            else emoji = fromFormattedEmoji.asUnicode().getAsCodepoints();
+
+            statement.setString(1, event.getMessageId());
+            statement.setString(2, emoji);
+
+            ResultSet result = statement.executeQuery();
+
+            if (result.next()) {
+                String roleID = result.getString(2);
+                Role role = guild.getRoleById(roleID);
+
+                assert role != null;
+                assert member != null;
+
+                event.getGuild().addRoleToMember(member, role).queue();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onMessageReactionRemove(@Nonnull MessageReactionRemoveEvent event) {
+        try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM reactionRole WHERE messageID = ? AND emojiID = ?")) {
+            Guild guild = event.getGuild();
+            User member = event.getUser();
+
+            EmojiUnion fromFormattedEmoji = event.getEmoji();
+            Emoji.Type emojiType = fromFormattedEmoji.getType();
+
+            String emoji;
+            if (emojiType == Emoji.Type.CUSTOM) emoji = fromFormattedEmoji.asCustom().getId();
+            else emoji = fromFormattedEmoji.asUnicode().getAsCodepoints();
+
+            statement.setString(1, event.getMessageId());
+            statement.setString(2, emoji);
+
+            ResultSet result = statement.executeQuery();
+
+            if (result.next()) {
+                String roleID = result.getString(2);
+                Role role = guild.getRoleById(roleID);
+
+                assert role != null;
+                assert member != null;
+
+                event.getGuild().removeRoleFromMember(member, role).queue();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
