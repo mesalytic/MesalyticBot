@@ -22,7 +22,7 @@ public class RoleCommand extends SlashCommand {
         super(
                 "role",
                 "Configure roles that can be given for specific actions.",
-                true,
+                false,
                 new SubcommandGroupData[] {
                         new SubcommandGroupData("auto", "Configure roles that are automatically given to new members.")
                                 .addSubcommands(new SubcommandData("add", "Add a role to autorole").addOption(OptionType.ROLE, "role", "Role that will be given automatically to new members.", true),
@@ -162,6 +162,39 @@ public class RoleCommand extends SlashCommand {
                     }
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
+                }
+            } else {
+                try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM reactionRole WHERE messageID = ? AND emojiID = ?")) {
+                    EmojiUnion fromFormattedEmoji = Emoji.fromFormatted(event.getOption("emoji").getAsString());
+                    Emoji.Type emojiType = fromFormattedEmoji.getType();
+
+                    String emoji;
+                    if (emojiType == Emoji.Type.CUSTOM) emoji = fromFormattedEmoji.asCustom().getId();
+                    else emoji = fromFormattedEmoji.asUnicode().getAsCodepoints();
+
+                    statement.setString(1, event.getOption("messageid").getAsString());
+                    statement.setString(2, emoji);
+
+                    ResultSet result = statement.executeQuery();
+
+                    if (!result.first()) {
+                        event.reply("No role has been configured for this emoji in the reaction role.").setEphemeral(true).queue();
+                        return;
+                    }
+
+                    try(PreparedStatement updateStatement = Main.connectionDB.prepareStatement("""
+                                DELETE FROM reactionRole WHERE messageID = ? AND emojiID = ?
+                                """)) {
+                        updateStatement.setString(1, Objects.requireNonNull(event.getOption("messageid")).getAsString());
+                        updateStatement.setString(2, emoji);
+
+                        updateStatement.executeUpdate();
+                        event.reply("THe role configured for this emoji in the reaction role has been cleared.").setEphemeral(true).queue();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
             }
         }
