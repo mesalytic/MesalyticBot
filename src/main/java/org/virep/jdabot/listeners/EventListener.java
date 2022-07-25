@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.entities.emoji.EmojiUnion;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
@@ -73,11 +74,12 @@ public class EventListener extends ListenerAdapter {
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
         System.out.println("Event triggered!");
+
+        Guild guild = event.getGuild();
+        Member member = event.getMember();
+
         try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM autorole WHERE guildID = ?")) {
             System.out.println("Triggered 2");
-            Guild guild = event.getGuild();
-            Member member = event.getMember();
-
             statement.setString(1, guild.getId());
 
             ResultSet result = statement.executeQuery();
@@ -90,7 +92,55 @@ public class EventListener extends ListenerAdapter {
                 assert role != null;
                 System.out.println(role.getName());
 
-                event.getGuild().addRoleToMember(member, role).queue();
+                guild.addRoleToMember(member, role).queue();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM joinmessages WHERE guildID = ?")) {
+            statement.setString(1, guild.getId());
+
+            ResultSet result = statement.executeQuery();
+
+            if (result.next()) {
+                String message = result.getString(1);
+
+                String channelID = result.getString(2);
+                TextChannel channel = guild.getTextChannelById(channelID);
+
+                assert channel != null;
+                channel.sendMessage(message
+                        .replace("%USER%", event.getMember().getAsMention())
+                        .replace("%USERNAME%", event.getUser().getAsTag())
+                        .replace("%SERVERNAME%", event.getGuild().getName())
+                        .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))).queue();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onGuildMemberRemove(GuildMemberRemoveEvent event) {
+        Guild guild = event.getGuild();
+
+        try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM leavemessages WHERE guildID = ?")) {
+            statement.setString(1, guild.getId());
+
+            ResultSet result = statement.executeQuery();
+
+            if (result.next()) {
+                String message = result.getString(1);
+
+                String channelID = result.getString(2);
+                TextChannel channel = guild.getTextChannelById(channelID);
+
+                assert channel != null;
+                channel.sendMessage(message
+                        .replace("%USERNAME%", event.getUser().getAsTag())
+                        .replace("%SERVERNAME%", event.getGuild().getName())
+                        .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))).queue();
             }
         } catch (SQLException e) {
             e.printStackTrace();
