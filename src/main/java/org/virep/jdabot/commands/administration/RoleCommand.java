@@ -1,5 +1,6 @@
 package org.virep.jdabot.commands.administration;
 
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
@@ -43,6 +44,11 @@ public class RoleCommand extends SlashCommand {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        if (!event.getMember().hasPermission(Permission.MANAGE_SERVER)) {
+            event.reply("You do not have permission to use this command.").setEphemeral(true).queue();
+            return;
+        }
+
         String subcommandGroup = event.getSubcommandGroup();
         String subcommandName = event.getSubcommandName();
 

@@ -1,5 +1,8 @@
 package org.virep.jdabot.commands.administration;
 
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -36,6 +39,15 @@ public class MessageCommand extends SlashCommand {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+
+        Member member = event.getMember();
+
+        assert member != null;
+        if (!member.hasPermission(Permission.MANAGE_SERVER)) {
+            event.reply("You do not have permission to use this command.").setEphemeral(true).queue();
+            return;
+        }
+
         String group = event.getSubcommandGroup();
         String method = event.getSubcommandName();
 
