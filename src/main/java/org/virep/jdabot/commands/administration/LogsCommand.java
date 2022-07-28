@@ -87,7 +87,7 @@ public class LogsCommand extends SlashCommand {
                         SelectMenu.create("selectMenu:logs:modules")
                                 .addOption("Channel Creation", "selectMenu:logs:modules:channelCreate")
                                 .addOption("Channel Deletion", "selectMenu:logs:modules:channelDelete")
-                                .addOption("Channel Update (NSFW, Name, Description, Slowmode)", "selectMenu:logs:modules:channelUpdate")
+                                .addOption("Channel Update", "selectMenu:logs:modules:channelUpdate", "Related to NSFW status, Name, Description, and Slowmode changes")
                                 .setPlaceholder("Use this selection menu to toggle specific logging modules.")
                                 .setMaxValues(3)
                                 .setMinValues(0)
