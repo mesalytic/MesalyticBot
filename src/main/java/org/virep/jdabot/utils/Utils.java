@@ -35,4 +35,19 @@ public class Utils {
 
         return millis;
     }
+
+    public static String secondsToSeperatedTime(final int seconds) {
+        Duration duration = Duration.ofSeconds(seconds);
+        String response = "";
+
+        int hour = duration.toHoursPart();
+        int minute = duration.toMinutesPart();
+        int second = duration.toSecondsPart();
+
+        if (hour > 0) response += "%dh ".formatted(hour);
+        if (minute > 0) response += "%dm ".formatted(minute);
+        response += "%ds".formatted(second);
+
+        return response;
+    }
 }

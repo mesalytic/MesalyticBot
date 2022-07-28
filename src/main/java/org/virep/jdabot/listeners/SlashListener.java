@@ -45,7 +45,7 @@ public class SlashListener extends ListenerAdapter {
 
     @Override
     public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {
-        String[] modules = {"channelCreate", "channelDelete"};
+        String[] modules = {"channelCreate", "channelDelete", "channelUpdate"};
 
         try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM logs WHERE guildID = ?")) {
             statement.setString(1, event.getGuild().getId());
