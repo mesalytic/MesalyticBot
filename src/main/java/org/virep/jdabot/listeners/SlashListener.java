@@ -2,8 +2,11 @@ package org.virep.jdabot.listeners;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
+import org.virep.jdabot.Main;
 import org.virep.jdabot.commands.games.TTTCommand;
 import org.virep.jdabot.lavaplayer.AudioManagerController;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
@@ -11,6 +14,11 @@ import org.virep.jdabot.slashcommandhandler.SlashCommand;
 import org.virep.jdabot.slashcommandhandler.SlashHandler;
 
 import javax.annotation.Nonnull;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -32,6 +40,45 @@ public class SlashListener extends ListenerAdapter {
 
         if (commandMap.containsKey(commandName)) {
             commandMap.get(commandName).execute(event);
+        }
+    }
+
+    @Override
+    public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {
+        String[] modules = {"channelCreate", "channelDelete"};
+
+        try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM logs WHERE guildID = ?")) {
+            statement.setString(1, event.getGuild().getId());
+
+            ResultSet result = statement.executeQuery();
+
+            if (!result.first()) {
+                event.reply("You must set up a log channel before. Use `/logs channel`").setEphemeral(true).queue();
+                return;
+            }
+
+            StringBuilder query = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
+            sb.append("UPDATE logs SET ");
+
+            for (String module : modules) {
+                if (!event.getValues().isEmpty() && event.getValues().contains("selectMenu:logs:modules:" + module)) query.append(module).append(" = \"true\", ");
+                else query.append(module).append(" = \"false\", ");
+            }
+
+            String builtQuery = query.toString();
+
+            sb.append(builtQuery, 0, builtQuery.length() - 2);
+            sb.append(" WHERE guildID = ?");
+
+            try (PreparedStatement updateStatement = Main.connectionDB.prepareStatement(sb.toString())) {
+                updateStatement.setString(1, event.getGuild().getId());
+                updateStatement.executeUpdate();
+
+                event.reply("Successfully configured").setEphemeral(true).queue();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 

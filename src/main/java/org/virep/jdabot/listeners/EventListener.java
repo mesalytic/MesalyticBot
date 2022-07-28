@@ -73,25 +73,19 @@ public class EventListener extends ListenerAdapter {
 
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
-        System.out.println("Event triggered!");
-
         Guild guild = event.getGuild();
         Member member = event.getMember();
 
         try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM autorole WHERE guildID = ?")) {
-            System.out.println("Triggered 2");
             statement.setString(1, guild.getId());
 
             ResultSet result = statement.executeQuery();
 
             if (result.next()) {
-                System.out.println("Triggered 3");
                 String roleID = result.getString(1);
                 Role role = guild.getRoleById(roleID);
 
                 assert role != null;
-                System.out.println(role.getName());
-
                 guild.addRoleToMember(member, role).queue();
             }
         } catch (SQLException e) {

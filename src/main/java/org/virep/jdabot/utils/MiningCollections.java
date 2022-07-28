@@ -68,9 +68,6 @@ public class MiningCollections {
                     int collectionAmt = resultAmount.getInt(collectionIndex);
 
 
-                    System.out.println(collectionAmt);
-                    System.out.println(collection.length());
-
                     int level = levelAmount.getInt(collectionIndex);
 
                     for (int i = 1; i < collection.length(); i++) {

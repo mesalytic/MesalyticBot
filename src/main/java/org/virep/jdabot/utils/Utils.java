@@ -25,8 +25,6 @@ public class Utils {
     public static long lengthToMillis(final String length) {
         String[] splitLength = length.split(":");
 
-        System.out.println(splitLength.length);
-
         long millis = 0;
         if (splitLength.length == 3) {
             // h:m:s
@@ -35,7 +33,6 @@ public class Utils {
             millis = (Integer.parseInt(splitLength[0]) * 60000L) + (Integer.parseInt(splitLength[1]) * 1000L);
         }
 
-        System.out.println(millis);
         return millis;
     }
 }
