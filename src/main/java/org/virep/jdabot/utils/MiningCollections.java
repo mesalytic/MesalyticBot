@@ -30,10 +30,15 @@ public class MiningCollections {
         return jsonObject.getJSONArray(collectionName);
     }
 
-    public static List<Command.Choice> getChoices() throws FileNotFoundException {
+    public static List<Command.Choice> getChoices() {
         List<Command.Choice> choices = new ArrayList<>();
 
-        FileInputStream in = new FileInputStream("./collections.json");
+        FileInputStream in = null;
+        try {
+            in = new FileInputStream("./collections.json");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
         JSONTokener tokener = new JSONTokener(in);
         JSONObject jsonObject = new JSONObject(tokener);
