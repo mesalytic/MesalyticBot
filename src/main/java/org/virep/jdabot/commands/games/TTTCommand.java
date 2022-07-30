@@ -5,32 +5,34 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
-import org.virep.jdabot.slashcommandhandler.SlashCommand;
+import net.dv8tion.jda.internal.interactions.CommandDataImpl;
+import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.util.*;
 
-public class TTTCommand extends SlashCommand {
-
-    public TTTCommand() {
-        super("tictactoe",
-                "Play TicTacToe with your friends!",
-                false,
-                new OptionData[] {
-                        new OptionData(
-                                OptionType.USER,
-                                "opponent",
-                                "The member you want to play against"
-                        )
-                }
-        );
-    }
-
+public class TTTCommand implements Command {
     private static final int[][] board = new int[3][3];
     public static final Map<Long, int[][]> boards = new HashMap<>();
     public static final Map<Long, long[]> players = new HashMap<>();
     public static final Map<Long, Long> playersTurn = new HashMap<>();
+
+    @Override
+    public String getName() {
+        return "tictactoe";
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandDataImpl(getName(), "Play TicTacToe with your friends!")
+                .addOption(OptionType.USER, "opponent", "The member you want to play against");
+    }
+
+    @Override
+    public boolean isDev() {
+        return false;
+    }
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {

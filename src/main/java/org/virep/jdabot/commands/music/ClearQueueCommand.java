@@ -3,16 +3,30 @@ package org.virep.jdabot.commands.music;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import org.virep.jdabot.lavaplayer.AudioManagerController;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
 import org.virep.jdabot.lavaplayer.TrackScheduler;
-import org.virep.jdabot.slashcommandhandler.SlashCommand;
+import org.virep.jdabot.slashcommandhandler.Command;
 
+import java.io.FileNotFoundException;
 import java.util.Objects;
 
-public class ClearQueueCommand extends SlashCommand {
-    public ClearQueueCommand() {
-        super("clearqueue", "Clears the current queue.", false);
+public class ClearQueueCommand implements Command {
+    @Override
+    public String getName() {
+        return "clearqueue";
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandDataImpl(getName(), "Clears the current queue.");
+    }
+
+    @Override
+    public boolean isDev() {
+        return false;
     }
 
     @Override

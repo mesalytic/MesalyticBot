@@ -5,19 +5,32 @@ import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import org.virep.jdabot.lavaplayer.AudioManagerController;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
 import org.virep.jdabot.lavaplayer.TrackScheduler;
-import org.virep.jdabot.slashcommandhandler.SlashCommand;
+import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.awt.*;
 import java.time.Instant;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class QueueCommand extends SlashCommand {
-    public QueueCommand() {
-        super("queue", "Returns the current music queue!", false);
+public class QueueCommand implements Command {
+    @Override
+    public String getName() {
+        return "queue";
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandDataImpl(getName(), "Returns the current music queue.");
+    }
+
+    @Override
+    public boolean isDev() {
+        return false;
     }
 
     @Override

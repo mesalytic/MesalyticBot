@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import org.reflections.Reflections;
 
+import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -15,7 +16,7 @@ import java.util.Set;
 //TODO: For production stage, add developerOnly commands through Guild#updateCommands()
 public class SlashHandler {
     private final JDA jda;
-    public static final Map<String, SlashCommand> slashCommandMap = new HashMap<>();
+    public static final Map<String, Command> slashCommandMap = new HashMap<>();
 
     public SlashHandler(JDA jda) {
         this.jda = jda;
@@ -25,7 +26,7 @@ public class SlashHandler {
     // though it is queued line 38
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void addCommands() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public void addCommands() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, FileNotFoundException {
         Guild guild = jda.getGuildById("418433461817180180");
         assert guild != null;
 
@@ -33,26 +34,17 @@ public class SlashHandler {
         CommandListUpdateAction guildUpdate = guild.updateCommands();
 
         Reflections reflectionsCommands = new Reflections("org.virep.jdabot.commands");
-        Set<Class<? extends SlashCommand>> commandClasses = reflectionsCommands.getSubTypesOf(SlashCommand.class);
+        Set<Class<? extends Command>> commandClasses = reflectionsCommands.getSubTypesOf(Command.class);
 
-        for (Class<? extends SlashCommand> commandClass : commandClasses) {
+        for (Class<? extends Command> commandClass : commandClasses) {
             if (Modifier.isAbstract(commandClass.getModifiers())) {
                 continue;
             }
 
-            SlashCommand command = commandClass.getConstructor().newInstance();
+            Command command = commandClass.getConstructor().newInstance();
 
-            if (command.isWIP()) {
-                if (command.hasOptions(command.options) && !command.hasSubcommandData(command.subcommandData)) guildUpdate.addCommands(Commands.slash(command.getName(), command.getDescription()).addOptions(command.getOptions()));
-                else if (!command.hasOptions(command.options) && command.hasSubcommandData(command.subcommandData)) guildUpdate.addCommands(Commands.slash(command.getName(), command.getDescription()).addSubcommands(command.getSubcommandData()));
-                else if (!command.hasOptions(command.options) && command.hasSubcommandGroupData(command.subcommandGroupData)) guildUpdate.addCommands(Commands.slash(command.getName(), command.getDescription()).addSubcommandGroups(command.getSubcommandGroupData()));
-                else if (!command.hasOptions(command.options) && !command.hasSubcommandData(command.subcommandData) && !command.hasSubcommandGroupData(command.subcommandGroupData)) guildUpdate.addCommands(Commands.slash(command.getName(), command.getDescription()));
-            } else {
-                if (command.hasOptions(command.options) && !command.hasSubcommandData(command.subcommandData)) globalUpdate.addCommands(Commands.slash(command.getName(), command.getDescription()).addOptions(command.getOptions()));
-                else if (!command.hasOptions(command.options) && command.hasSubcommandData(command.subcommandData)) globalUpdate.addCommands(Commands.slash(command.getName(), command.getDescription()).addSubcommands(command.getSubcommandData()));
-                else if (!command.hasOptions(command.options) && command.hasSubcommandGroupData(command.subcommandGroupData)) globalUpdate.addCommands(Commands.slash(command.getName(), command.getDescription()).addSubcommandGroups(command.getSubcommandGroupData()));
-                else if (!command.hasOptions(command.options) && !command.hasSubcommandData(command.subcommandData) && !command.hasSubcommandGroupData(command.subcommandGroupData)) globalUpdate.addCommands(Commands.slash(command.getName(), command.getDescription()));
-            }
+            if (command.isDev()) guildUpdate.addCommands(command.getCommandData());
+            else globalUpdate.addCommands(command.getCommandData());
 
             slashCommandMap.put(command.getName(), command);
         }
@@ -61,7 +53,7 @@ public class SlashHandler {
         guildUpdate.queue();
     }
 
-    public Map<String, SlashCommand> getSlashCommandMap() {
+    public Map<String, Command> getSlashCommandMap() {
         return slashCommandMap;
     }
 }

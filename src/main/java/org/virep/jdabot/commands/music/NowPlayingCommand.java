@@ -7,17 +7,31 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import org.virep.jdabot.lavaplayer.AudioManagerController;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
-import org.virep.jdabot.slashcommandhandler.SlashCommand;
+import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.utils.Utils;
 
+import java.io.FileNotFoundException;
 import java.time.Instant;
 import java.util.Objects;
 
-public class NowPlayingCommand extends SlashCommand {
-    public NowPlayingCommand() {
-        super("nowplaying", "Display informations about the currently playing music.", false);
+public class NowPlayingCommand implements Command {
+    @Override
+    public String getName() {
+        return "nowplaying";
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandDataImpl(getName(), "Display informations about the currently playing music.");
+    }
+
+    @Override
+    public boolean isDev() {
+        return false;
     }
 
     @Override

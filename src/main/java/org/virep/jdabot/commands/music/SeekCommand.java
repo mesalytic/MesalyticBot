@@ -6,21 +6,33 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import org.virep.jdabot.lavaplayer.AudioManagerController;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
-import org.virep.jdabot.slashcommandhandler.SlashCommand;
+import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.util.Objects;
 
 import static org.virep.jdabot.utils.Utils.lengthToMillis;
 
-public class SeekCommand extends SlashCommand {
-    public SeekCommand() {
-        super("seek", "Change the position of the currently playing music.", false,
-                new OptionData[]{
-                        new OptionData(OptionType.STRING, "time", "Time to seek to. (format H:M:S or M:S)", true)
-                });
+public class SeekCommand implements Command {
+    @Override
+    public String getName() {
+        return "seek";
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandDataImpl(getName(), "Change the position of the currently playing music.").addOptions(
+                new OptionData(OptionType.STRING, "time", "Time to seek to. (format H:M:S or M:S)", true)
+        );
+    }
+
+    @Override
+    public boolean isDev() {
+        return false;
     }
 
     @Override

@@ -4,15 +4,28 @@ import lavalink.client.player.LavalinkPlayer;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import org.virep.jdabot.lavaplayer.AudioManagerController;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
-import org.virep.jdabot.slashcommandhandler.SlashCommand;
+import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.util.Objects;
 
-public class ResumeCommand extends SlashCommand {
-    public ResumeCommand() {
-        super("resume", "Resumes the currently playing music.", false);
+public class ResumeCommand implements Command {
+    @Override
+    public String getName() {
+        return "resume";
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandDataImpl(getName(), "Resumes the currently playing music.");
+    }
+
+    @Override
+    public boolean isDev() {
+        return false;
     }
 
     @Override

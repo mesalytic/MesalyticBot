@@ -5,10 +5,12 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import org.virep.jdabot.Main;
-import org.virep.jdabot.slashcommandhandler.SlashCommand;
+import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.io.FileNotFoundException;
 import java.sql.PreparedStatement;
@@ -18,17 +20,30 @@ import java.sql.SQLException;
 import static org.virep.jdabot.utils.MiningCollections.getChoices;
 import static org.virep.jdabot.utils.MiningCollections.getCollectionProgression;
 
-public class MiningCommand extends SlashCommand {
+public class MiningCommand implements Command {
 
-    public MiningCommand() throws FileNotFoundException {
-        super("mining", "mining", true,
-                new SubcommandData[] {
+    @Override
+    public String getName() {
+        return "mining";
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandDataImpl(getName(), "mining desc")
+                .addSubcommands(
                         new SubcommandData("profile", "profile"),
                         new SubcommandData("start", "start"),
-                        new SubcommandData("collections", "collections").addOptions(
-                                new OptionData(OptionType.STRING, "collectionname", "Collection name", true).addChoices(getChoices())
-                        )
-                });
+                        new SubcommandData("collections", "collections")
+                                .addOptions(
+                                        new OptionData(OptionType.STRING, "collectionname", "Collection name")
+                                                .addChoices(getChoices())
+                                )
+                );
+    }
+
+    @Override
+    public boolean isDev() {
+        return true;
     }
 
     @Override

@@ -6,18 +6,32 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import org.virep.jdabot.lavaplayer.AudioManagerController;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
-import org.virep.jdabot.slashcommandhandler.SlashCommand;
+import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.util.Objects;
 
-public class VolumeCommand extends SlashCommand {
-    public VolumeCommand() {
-        super("volume", "Changes volume for the current queue.", false, new OptionData[] {
-                new OptionData(OptionType.INTEGER, "value", "Volume value", true)
-        });
+public class VolumeCommand implements Command {
+    @Override
+    public String getName() {
+        return "volume";
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandDataImpl(getName(), "Changes volume for the current queue.")
+                .addOptions(
+                        new OptionData(OptionType.INTEGER, "value", "Volume value", true)
+                );
+    }
+
+    @Override
+    public boolean isDev() {
+        return false;
     }
 
     @Override

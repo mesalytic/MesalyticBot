@@ -7,31 +7,49 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.managers.AudioManager;
+import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import org.virep.jdabot.lavaplayer.AudioLoadHandler;
 import org.virep.jdabot.lavaplayer.AudioManagerController;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
-import org.virep.jdabot.slashcommandhandler.SlashCommand;
+import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Objects;
 
-public class PlayCommand extends SlashCommand {
+public class PlayCommand implements Command {
 
-    public PlayCommand() {
-        super("play",
-                "Play music on your voice channel!",
-                false,
-                new SubcommandData[] {
-                        new SubcommandData("youtube", "Play YouTube songs!").addOption(OptionType.STRING, "url", "YouTube Video or Playlist URL").addOption(OptionType.STRING, "search", "Search string"),
-                        new SubcommandData("soundcloud", "Play SoundCloud songs!").addOption(OptionType.STRING, "url", "SoundCloud Track or Playlist URL").addOption(OptionType.STRING, "search", "Search string"),
-                        new SubcommandData("spotify", "Play Spotify songs").addOption(OptionType.STRING, "url", "Spotify Track or Playlist URL").addOption(OptionType.STRING, "search", "Search string"),
-                        new SubcommandData("other", "Play URLs that are not from Spotify/YouTube/SoundCloud").addOption(OptionType.STRING, "url", "URL string", true),
-                        new SubcommandData("file", "Play the audio files you attach !").addOption(OptionType.ATTACHMENT, "file", "Audio File", true)
-                }
-        );
+    @Override
+    public String getName() {
+        return "play";
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandDataImpl(getName(), "Play music on any voice channel.")
+                .addSubcommands(
+                        new SubcommandData("youtube", "Play YouTube songs!")
+                                .addOption(OptionType.STRING, "url", "YouTube Video or Playlist URL")
+                                .addOption(OptionType.STRING, "search", "Search string"),
+                        new SubcommandData("soundcloud", "Play SoundCloud songs!")
+                                .addOption(OptionType.STRING, "url", "SoundCloud Track or Playlist URL")
+                                .addOption(OptionType.STRING, "search", "Search string"),
+                        new SubcommandData("spotify", "Play Spotify songs")
+                                .addOption(OptionType.STRING, "url", "Spotify Track or Playlist URL")
+                                .addOption(OptionType.STRING, "search", "Search string"),
+                        new SubcommandData("other", "Play URLs that are not from Spotify/YouTube/SoundCloud")
+                                .addOption(OptionType.STRING, "url", "URL string", true),
+                        new SubcommandData("file", "Play the audio files you attach !")
+                                .addOption(OptionType.ATTACHMENT, "file", "Audio File", true)
+                );
+    }
+
+    @Override
+    public boolean isDev() {
+        return false;
     }
 
     @Override

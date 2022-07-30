@@ -10,7 +10,7 @@ import org.virep.jdabot.Main;
 import org.virep.jdabot.commands.games.TTTCommand;
 import org.virep.jdabot.lavaplayer.AudioManagerController;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
-import org.virep.jdabot.slashcommandhandler.SlashCommand;
+import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.slashcommandhandler.SlashHandler;
 
 import javax.annotation.Nonnull;
@@ -36,7 +36,7 @@ public class SlashListener extends ListenerAdapter {
             return;
         }
         String commandName = event.getName();
-        Map<String, SlashCommand> commandMap = slashHandler.getSlashCommandMap();
+        Map<String, Command> commandMap = slashHandler.getSlashCommandMap();
 
         if (commandMap.containsKey(commandName)) {
             commandMap.get(commandName).execute(event);

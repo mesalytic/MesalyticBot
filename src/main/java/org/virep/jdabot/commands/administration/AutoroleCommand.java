@@ -2,21 +2,36 @@ package org.virep.jdabot.commands.administration;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import org.virep.jdabot.Main;
-import org.virep.jdabot.slashcommandhandler.SlashCommand;
+import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
 
-public class AutoroleCommand extends SlashCommand {
-    public AutoroleCommand() {
-        super("autorole", "Configure roles that are automatically given to new members.", true, new SubcommandData[]{
-                new SubcommandData("add", "Add a role to autorole").addOption(OptionType.ROLE, "role", "Role that will be given automatically to new members.", true),
-                new SubcommandData("remove", "Removes any role that has been configured from autorole")
-        });
+public class AutoroleCommand implements Command {
+    @Override
+    public String getName() {
+        return "autorole";
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandDataImpl(getName(), "Configure roles that are automatically given to new members.")
+                .addSubcommands(
+                        new SubcommandData("add", "Add a role to autorole")
+                                .addOption(OptionType.ROLE, "role", "Role that will be given automatically to new members.", true),
+                        new SubcommandData("remove", "Removes any role that has been configured from autorole")
+                );
+    }
+
+    @Override
+    public boolean isDev() {
+        return false;
     }
 
     @Override

@@ -1,40 +1,55 @@
 package org.virep.jdabot.commands.administration;
 
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandGroupData;
+import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import org.virep.jdabot.Main;
-import org.virep.jdabot.slashcommandhandler.SlashCommand;
+import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class MessageCommand extends SlashCommand {
-    public MessageCommand() {
-        super("message", "Lets you configure join and leave messages.", false, new SubcommandGroupData[]{
-                new SubcommandGroupData("join", "The bot will send a message whenever someone joins the server.").addSubcommands(
-                        new SubcommandData("set", "Configure the join message.").addOptions(
-                                new OptionData(OptionType.CHANNEL, "channel", "The channel where the message will be sent.", true),
-                                new OptionData(OptionType.STRING, "message", "The message that will be sent. You can use tags, the list is at /message join tags.", true)
+public class MessageCommand implements Command {
+    @Override
+    public String getName() {
+        return "message";
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandDataImpl(getName(), "Lets you configure join and leave messages.")
+                .addSubcommandGroups(
+                        new SubcommandGroupData("join", "The bot will send a message whenever someone joins the server.")
+                                .addSubcommands(
+                                        new SubcommandData("set", "Configure the join message.").addOptions(
+                                                new OptionData(OptionType.CHANNEL, "channel", "The channel where the message will be sent.", true),
+                                                new OptionData(OptionType.STRING, "message", "The message that will be sent. You can use tags, the list is at /message join tags.", true)
+                                ),
+                                new SubcommandData("remove", "Remove the join message."),
+                                new SubcommandData("tags", "List of tags you can use on your message.")
                         ),
-                        new SubcommandData("remove", "Remove the join message."),
-                        new SubcommandData("tags", "List of tags you can use on your message.")
-                ),
-                new SubcommandGroupData("leave", "The bot will send a message whenever someone leaves the server.").addSubcommands(
-                        new SubcommandData("set", "Configure the leave message.").addOptions(
-                                new OptionData(OptionType.CHANNEL, "channel", "The channel where the message will be sent.", true),
-                                new OptionData(OptionType.STRING, "message", "The message that will be sent. You can use tags, the list is at /message leave tags.", true )
-                        ),
-                        new SubcommandData("remove", "Remove the leave message."),
-                        new SubcommandData("tags", "List of tags you can use on your message.")
-                )
-        });
+                        new SubcommandGroupData("leave", "The bot will send a message whenever someone leaves the server.")
+                                .addSubcommands(
+                                        new SubcommandData("set", "Configure the leave message.").addOptions(
+                                                new OptionData(OptionType.CHANNEL, "channel", "The channel where the message will be sent.", true),
+                                                new OptionData(OptionType.STRING, "message", "The message that will be sent. You can use tags, the list is at /message leave tags.", true )
+                                ),
+                                new SubcommandData("remove", "Remove the leave message."),
+                                new SubcommandData("tags", "List of tags you can use on your message.")
+                        )
+                );
+    }
+
+    @Override
+    public boolean isDev() {
+        return false;
     }
 
     @Override

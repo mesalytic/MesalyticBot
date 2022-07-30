@@ -4,15 +4,29 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import org.virep.jdabot.lavaplayer.AudioManagerController;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
-import org.virep.jdabot.slashcommandhandler.SlashCommand;
+import org.virep.jdabot.slashcommandhandler.Command;
 
+import java.io.FileNotFoundException;
 import java.util.Objects;
 
-public class JoinCommand extends SlashCommand {
-    public JoinCommand() {
-        super("join", "Join channel to play music", false);
+public class JoinCommand implements Command {
+    @Override
+    public String getName() {
+        return "join";
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandDataImpl(getName(), "Join channel to play music.");
+    }
+
+    @Override
+    public boolean isDev() {
+        return false;
     }
 
     @Override

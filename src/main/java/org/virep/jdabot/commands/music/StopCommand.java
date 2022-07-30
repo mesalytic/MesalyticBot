@@ -3,14 +3,27 @@ package org.virep.jdabot.commands.music;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import org.virep.jdabot.lavaplayer.AudioManagerController;
-import org.virep.jdabot.slashcommandhandler.SlashCommand;
+import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.util.Objects;
 
-public class StopCommand extends SlashCommand {
-    public StopCommand() {
-        super("stop", "Stops the currently played music.", false);
+public class StopCommand implements Command {
+    @Override
+    public String getName() {
+        return "stop";
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandDataImpl(getName(), "Stops the currently played music.");
+    }
+
+    @Override
+    public boolean isDev() {
+        return false;
     }
 
     @Override

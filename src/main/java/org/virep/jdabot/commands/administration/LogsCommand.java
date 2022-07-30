@@ -1,28 +1,38 @@
 package org.virep.jdabot.commands.administration;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
+import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import org.virep.jdabot.Main;
-import org.virep.jdabot.slashcommandhandler.SlashCommand;
-
+import org.virep.jdabot.slashcommandhandler.Command;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.Set;
 
-public class LogsCommand extends SlashCommand {
-    public LogsCommand() {
-        super("logs", "Lets you configure the logging system.", true, new SubcommandData[]{
-                new SubcommandData("modules", "desc modules"),
-                new SubcommandData("channel", "Configure the log channel.").addOption(OptionType.CHANNEL, "channel", "The log channel", true)
-        });
+public class LogsCommand implements Command {
+    @Override
+    public String getName() {
+        return "logs";
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandDataImpl(getName(), "Lets you configure the logging system.")
+                .addSubcommands(
+                        new SubcommandData("modules", "desc modules"),
+                        new SubcommandData("channel", "Configure the log channel.")
+                                .addOption(OptionType.CHANNEL, "channel", "The log channel", true)
+                );
+    }
+
+    @Override
+    public boolean isDev() {
+        return true;
     }
 
     @Override

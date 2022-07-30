@@ -3,38 +3,51 @@ package org.virep.jdabot.commands.games;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.Command.Choice;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import okhttp3.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import org.virep.jdabot.slashcommandhandler.SlashCommand;
+import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 
-public class ActivityCommand extends SlashCommand {
-    public ActivityCommand() {
-        super("activity", "Launch a voice channel activity.", false, new OptionData[] {
-                new OptionData(OptionType.STRING, "application", "Choose the activity you want !", true).addChoices(
-                        new Command.Choice("Watch Together", "880218394199220334"),
-                        new Command.Choice("Sketch Heads", "902271654783242291"),
-                        new Command.Choice("Word Snacks", "879863976006127627"),
-                        new Command.Choice("Ask Away", "976052223358406656"),
-                        new Command.Choice("Know What I Meme", "950505761862189096"),
-                        new Command.Choice("Bobble League (Boost Level 1)", "947957217959759964"),
-                        new Command.Choice("Putt Party (Boost Level 1)", "945737671223947305"),
-                        new Command.Choice("Chess In The Park (Boost Level 1)", "832012774040141894"),
-                        new Command.Choice("Poker Night (Boost Level 1)", "755827207812677713"),
-                        new Command.Choice("Letter League (Boost Level 1)", "879863686565621790"),
-                        new Command.Choice("SpellCast (Boost Level 1)", "852509694341283871"),
-                        new Command.Choice("Checkers In The Park (Boost Level 1)", "832013003968348200"),
-                        new Command.Choice("Blazing 8s (Boost Level 1)", "832025144389533716"),
-                        new Command.Choice("Land-io (Boost Level 1)", "903769130790969345")
-                        )
-        });
+public class ActivityCommand implements Command {
+    @Override
+    public String getName() {
+        return "activity";
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandDataImpl(getName(), "Launch a voice channel activity.")
+                .addOptions(new OptionData(OptionType.STRING, "application", "Choose the activity you want !", true)
+                        .addChoices(
+                                new Choice("Watch Together", "880218394199220334"),
+                                new Choice("Sketch Heads", "902271654783242291"),
+                                new Choice("Word Snacks", "879863976006127627"),
+                                new Choice("Ask Away", "976052223358406656"),
+                                new Choice("Know What I Meme", "950505761862189096"),
+                                new Choice("Bobble League (Boost Level 1)", "947957217959759964"),
+                                new Choice("Putt Party (Boost Level 1)", "945737671223947305"),
+                                new Choice("Chess In The Park (Boost Level 1)", "832012774040141894"),
+                                new Choice("Poker Night (Boost Level 1)", "755827207812677713"),
+                                new Choice("Letter League (Boost Level 1)", "879863686565621790"),
+                                new Choice("SpellCast (Boost Level 1)", "852509694341283871"),
+                                new Choice("Checkers In The Park (Boost Level 1)", "832013003968348200"),
+                                new Choice("Blazing 8s (Boost Level 1)", "832025144389533716"),
+                                new Choice("Land-io (Boost Level 1)", "903769130790969345")
+                ));
+    }
+
+    @Override
+    public boolean isDev() {
+        return false;
     }
 
     @Override

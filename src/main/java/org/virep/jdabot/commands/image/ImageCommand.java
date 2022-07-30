@@ -1,44 +1,79 @@
 package org.virep.jdabot.commands.image;
 
-import net.dv8tion.jda.api.entities.IMentionable;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.virep.jdabot.slashcommandhandler.SlashCommand;
+import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.io.*;
 import java.util.concurrent.TimeUnit;
 
-public class ImageCommand extends SlashCommand {
-    public ImageCommand() {
-        super("image", "Image", true, new SubcommandData[]{
-                new SubcommandData("circle", "circle image edit")
-                        .addOptions(new OptionData(OptionType.USER, "user", "Use the avatar of a user"), new OptionData(OptionType.STRING, "url", "Edit any specified image url."), new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
-                new SubcommandData("blur", "blur image edit")
-                        .addOptions(new OptionData(OptionType.USER, "user", "Use the avatar of a user"), new OptionData(OptionType.STRING, "url", "Edit any specified image url."), new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
-                new SubcommandData("deepfry", "deepfry image edit")
-                        .addOptions(new OptionData(OptionType.USER, "user", "Use the avatar of a user"), new OptionData(OptionType.STRING, "url", "Edit any specified image url."), new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
-                new SubcommandData("3000years", "3000years image edit")
-                        .addOptions(new OptionData(OptionType.USER, "user", "Use the avatar of a user"), new OptionData(OptionType.STRING, "url", "Edit any specified image url."), new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
-                new SubcommandData("beautiful", "beautiful image edit")
-                        .addOptions(new OptionData(OptionType.USER, "user", "Use the avatar of a user"), new OptionData(OptionType.STRING, "url", "Edit any specified image url."), new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
-                new SubcommandData("bobross", "bobross image edit")
-                        .addOptions(new OptionData(OptionType.USER, "user", "Use the avatar of a user"), new OptionData(OptionType.STRING, "url", "Edit any specified image url."), new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
-                new SubcommandData("distort", "distort image edit")
-                        .addOptions(new OptionData(OptionType.USER, "user", "Use the avatar of a user"), new OptionData(OptionType.STRING, "url", "Edit any specified image url."), new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
-                new SubcommandData("fire", "fire image edit")
-                        .addOptions(new OptionData(OptionType.USER, "user", "Use the avatar of a user"), new OptionData(OptionType.STRING, "url", "Edit any specified image url."), new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
-                new SubcommandData("fractal", "generate fractal")
-        });
+public class ImageCommand implements Command {
+    @Override
+    public String getName() {
+        return "image";
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandDataImpl(getName(), "Edit any image you want.")
+                .addSubcommands(
+                        new SubcommandData("circle", "circle image edit")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
+                                        new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
+                                        new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
+                        new SubcommandData("blur", "blur image edit")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
+                                        new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
+                                        new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
+                        new SubcommandData("deepfry", "deepfry image edit")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
+                                        new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
+                                        new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
+                        new SubcommandData("3000years", "3000years image edit")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
+                                        new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
+                                        new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
+                        new SubcommandData("beautiful", "beautiful image edit")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
+                                        new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
+                                        new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
+                        new SubcommandData("bobross", "bobross image edit")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
+                                        new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
+                                        new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
+                        new SubcommandData("distort", "distort image edit")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
+                                        new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
+                                        new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
+                        new SubcommandData("fire", "fire image edit")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
+                                        new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
+                                        new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
+                        new SubcommandData("fractal", "generate fractal")
+                );
+    }
+
+    @Override
+    public boolean isDev() {
+        return true;
     }
 
     @Override

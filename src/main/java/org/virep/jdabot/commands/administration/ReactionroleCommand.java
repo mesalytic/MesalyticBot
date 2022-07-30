@@ -5,29 +5,47 @@ import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.entities.emoji.EmojiUnion;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import org.virep.jdabot.Main;
-import org.virep.jdabot.slashcommandhandler.SlashCommand;
+import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
 
-public class ReactionroleCommand extends SlashCommand {
-    public ReactionroleCommand() {
-        super("reactionrole", "Configure roles that are given when clicking on a reaction.", true, new SubcommandData[]{
-                new SubcommandData("add", "Add roles to the reaction role.")
-                        .addOptions(new OptionData(OptionType.STRING, "messageid", "The ID of the message that users will interact on.", true),
-                        new OptionData(OptionType.CHANNEL, "channel", "The channel that contains the message.", true),
-                        new OptionData(OptionType.ROLE, "role", "The role that users will obtain.", true),
-                        new OptionData(OptionType.STRING, "emoji", "The emoji that users will interact with.", true)),
-                new SubcommandData("remove", "Removes roles from the reaction role.")
-                        .addOptions(new OptionData(OptionType.STRING, "messageid", "The ID of the message that users will interact on.", true),
-                        new OptionData(OptionType.CHANNEL, "channel", "The channel that contains the message.", true),
-                        new OptionData(OptionType.STRING, "emoji", "The emoji that users will interact with.", true))
-        });
+public class ReactionroleCommand implements Command {
+    @Override
+    public String getName() {
+        return "reactionrole";
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandDataImpl(getName(), "Configure roles that are given when clicking on a reaction.")
+                .addSubcommands(
+                        new SubcommandData("add", "Add roles to the reaction role.")
+                                .addOptions(
+                                        new OptionData(OptionType.STRING, "messageid", "The ID of the message that users will interact on.", true),
+                                        new OptionData(OptionType.CHANNEL, "channel", "The channel that contains the message.", true),
+                                        new OptionData(OptionType.ROLE, "role", "The role that users will obtain.", true),
+                                        new OptionData(OptionType.STRING, "emoji", "The emoji that users will interact with.", true)
+                                ),
+                        new SubcommandData("remove", "Removes roles from the reaction role.")
+                                .addOptions(
+                                        new OptionData(OptionType.STRING, "messageid", "The ID of the message that users will interact on.", true),
+                                        new OptionData(OptionType.CHANNEL, "channel", "The channel that contains the message.", true),
+                                        new OptionData(OptionType.STRING, "emoji", "The emoji that users will interact with.", true)
+                                )
+                );
+    }
+
+    @Override
+    public boolean isDev() {
+        return false;
     }
 
     @Override
