@@ -1,9 +1,12 @@
 package org.virep.jdabot.commands.administration;
 
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.entities.emoji.EmojiUnion;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -26,6 +29,7 @@ public class ReactionroleCommand implements Command {
     @Override
     public CommandData getCommandData() {
         return new CommandDataImpl(getName(), "Configure roles that are given when clicking on a reaction.")
+                .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MANAGE_SERVER))
                 .addSubcommands(
                         new SubcommandData("add", "Add roles to the reaction role.")
                                 .addOptions(
@@ -50,6 +54,14 @@ public class ReactionroleCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        Member member = event.getMember();
+
+        assert member != null;
+        if (!member.hasPermission(Permission.MANAGE_SERVER)) {
+            event.reply("You do not have permission to use this command.").setEphemeral(true).queue();
+            return;
+        }
+
         if (event.getSubcommandName().equals("add")) {
             try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM reactionRole WHERE messageID = ? AND emojiID = ?")) {
                 EmojiUnion fromFormattedEmoji = Emoji.fromFormatted(event.getOption("emoji").getAsString());

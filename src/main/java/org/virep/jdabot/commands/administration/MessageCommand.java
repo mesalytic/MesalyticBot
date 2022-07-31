@@ -3,6 +3,7 @@ package org.virep.jdabot.commands.administration;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -25,6 +26,7 @@ public class MessageCommand implements Command {
     @Override
     public CommandData getCommandData() {
         return new CommandDataImpl(getName(), "Lets you configure join and leave messages.")
+                .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MANAGE_SERVER))
                 .addSubcommandGroups(
                         new SubcommandGroupData("join", "The bot will send a message whenever someone joins the server.")
                                 .addSubcommands(

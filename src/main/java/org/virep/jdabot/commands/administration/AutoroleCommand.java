@@ -1,6 +1,9 @@
 package org.virep.jdabot.commands.administration;
 
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
@@ -22,6 +25,7 @@ public class AutoroleCommand implements Command {
     @Override
     public CommandData getCommandData() {
         return new CommandDataImpl(getName(), "Configure roles that are automatically given to new members.")
+                .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MANAGE_SERVER))
                 .addSubcommands(
                         new SubcommandData("add", "Add a role to autorole")
                                 .addOption(OptionType.ROLE, "role", "Role that will be given automatically to new members.", true),
@@ -36,6 +40,14 @@ public class AutoroleCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        Member member = event.getMember();
+
+        assert member != null;
+        if (!member.hasPermission(Permission.MANAGE_SERVER)) {
+            event.reply("You do not have permission to use this command.").setEphemeral(true).queue();
+            return;
+        }
+
         if (event.getSubcommandName().equals("add")) {
 
             try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM autorole WHERE guildID = ?")) {
