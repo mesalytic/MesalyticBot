@@ -29,6 +29,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+* TODO: Add roles to Selection Menus
+* TODO: Remove roles from Selection Menus
+* TODO: List roles from Selection Menus
+*
+* TODO: Add new Interaction Messages to specific channels
+* TODO: Possibility to edit Interaction Messages
+*/
+
 public class InteractionroleCommand implements Command {
     @Override
     public String getName() {
