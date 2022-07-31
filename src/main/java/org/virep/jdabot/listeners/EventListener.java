@@ -208,13 +208,9 @@ public class EventListener extends ListenerAdapter {
 
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
-        System.out.println("test");
         String buttonID = event.getButton().getId();
 
-        System.out.println(buttonID);
-
         if (buttonID.startsWith("interactionrole")) {
-            System.out.println("cccc");
             String[] args = buttonID.split(":");
 
             String roleID = args[2];

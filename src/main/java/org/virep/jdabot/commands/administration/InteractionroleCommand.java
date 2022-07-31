@@ -108,33 +108,24 @@ public class InteractionroleCommand implements Command {
 
         if (subcommandName.equals("set")) {
             if (event.getSubcommandGroup().equals("button")) {
-                System.out.println("cc");
                 String messageID = event.getOption("messageid").getAsString();
                 Role role = event.getOption("role").getAsRole();
                 String buttonName = event.getOption("name").getAsString();
 
                 try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM buttonrole WHERE messageID = ?")) {
-                    System.out.println("dd");
                     statement.setString(1, messageID);
 
                     ResultSet result = statement.executeQuery();
 
-
                     if (result.first()) {
-
-                        System.out.println("ee");
                         try (PreparedStatement otherStatement = Main.connectionDB.prepareStatement("SELECT * FROM interactionrole_buttons WHERE messageID = ?")) {
                             otherStatement.setString(1, messageID);
 
                             ResultSet otherResult = otherStatement.executeQuery();
-                            ResultSetMetaData rsmd = otherStatement.getMetaData();
 
                             otherResult.last();
 
-
-
                             if (!otherResult.first()) {
-                                System.out.println("ff");
                                 try (PreparedStatement insertStatement = Main.connectionDB.prepareStatement("INSERT INTO interactionrole_buttons(guildID, messageID, buttonID, roleID) VALUES (?,?,?,?)")) {
                                     insertStatement.setString(1, event.getGuild().getId());
                                     insertStatement.setString(2, messageID);
@@ -144,7 +135,6 @@ public class InteractionroleCommand implements Command {
                                     insertStatement.executeUpdate();
 
                                     TextChannel channel = event.getGuild().getTextChannelById(result.getString(1));
-                                    System.out.println(channel.getName());
 
                                     channel.retrieveMessageById(messageID).queue(msg -> {
                                         msg.editMessageComponents().setActionRow(
@@ -153,9 +143,6 @@ public class InteractionroleCommand implements Command {
 
                                         event.reply("!otherResult.first() success").queue();
                                     });
-
-
-                                    System.out.println(otherResult.getRow());
                                 } catch (SQLException e) {
                                     e.printStackTrace();
                                 }
@@ -169,10 +156,8 @@ public class InteractionroleCommand implements Command {
                                     insertStatement.executeUpdate();
 
                                     TextChannel channel = event.getGuild().getTextChannelById(result.getString(1));
-                                    System.out.println(channel.getName());
 
                                     channel.retrieveMessageById(messageID).queue(msg -> {
-                                        System.out.println(msg.getButtons().size());
                                         if (msg.getButtons().size() >= 5) {
                                             event.reply("You cannot put more than 5 buttons on a message. Please create a new one.").setEphemeral(true).queue();
                                             return;
@@ -186,23 +171,12 @@ public class InteractionroleCommand implements Command {
                                         buttons.add(Button.primary("interactionrole:" + event.getGuild().getId() + ":" + role.getId(), buttonName));
 
                                         msg.editMessageComponents().setActionRow(buttons).queue();
-/*                                        msg.ediMessageComponents().setActionRow
-                                                (ItemComponent) msg.getActionRows().get(1).getComponents(),
-                                                Button.primary("interactionrole:" + event.getGuild().getId() + ":" + role.getId(), buttonName)
-                                        ).queue();*/
-
                                         event.reply("otherResult.first() success").queue();
                                     });
-
-
-                                    System.out.println(otherResult.getRow());
                                 } catch (SQLException e) {
                                     e.printStackTrace();
                                 }
                             }
-
-
-
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
@@ -232,7 +206,6 @@ public class InteractionroleCommand implements Command {
                             otherStatement.setString(2, role.getId());
 
                             ResultSet otherResult = otherStatement.executeQuery();
-                            ResultSetMetaData rsmd = otherStatement.getMetaData();
 
                             if (otherResult.first()) {
                                 TextChannel channel = event.getGuild().getTextChannelById(result.getString(1));
@@ -244,8 +217,6 @@ public class InteractionroleCommand implements Command {
                                     removeStatement.executeUpdate();
 
                                     channel.retrieveMessageById(messageID).queue(msg -> {
-                                        System.out.println(msg.getButtons().size());
-
                                         List<Button> buttons = new ArrayList<>();
 
                                         msg.getButtons().forEach(button -> {
@@ -253,19 +224,12 @@ public class InteractionroleCommand implements Command {
                                         });
 
                                         msg.editMessageComponents().setActionRow(buttons).queue();
-/*                                        msg.editMessageComponents().setActionRow(
-                                                (ItemComponent) msg.getActionRows().get(1).getComponents(),
-                                                Button.primary("interactionrole:" + event.getGuild().getId() + ":" + role.getId(), buttonName)
-                                        ).queue();*/
-
                                         event.reply("otherResult.first() success").queue();
                                     });
                                 } catch (SQLException e) {
                                     e.printStackTrace();
                                 }
                             }
-
-
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
@@ -322,7 +286,5 @@ public class InteractionroleCommand implements Command {
                 e.printStackTrace();
             }
         }
-
-
     }
 }
