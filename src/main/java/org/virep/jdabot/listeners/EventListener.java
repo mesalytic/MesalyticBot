@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.emoji.EmojiUnion;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
@@ -202,6 +203,26 @@ public class EventListener extends ListenerAdapter {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onButtonInteraction(ButtonInteractionEvent event) {
+        System.out.println("test");
+        String buttonID = event.getButton().getId();
+
+        System.out.println(buttonID);
+
+        if (buttonID.startsWith("interactionrole")) {
+            System.out.println("cccc");
+            String[] args = buttonID.split(":");
+
+            String roleID = args[2];
+
+            Role role = event.getGuild().getRoleById(roleID);
+            event.getGuild().addRoleToMember(event.getUser(), role).queue();
+
+            event.reply("You successfully got the role !").setEphemeral(true).queue();
         }
     }
 }
