@@ -232,7 +232,9 @@ public class InteractionroleCommand implements Command {
                                             if (!button.getId().equals("interactionrole:" + event.getGuild().getId() + ":" + role.getId())) buttons.add(Button.primary(button.getId(), button.getLabel()));
                                         });
 
-                                        msg.editMessageComponents().setActionRow(buttons).queue();
+                                        if (buttons.isEmpty()) msg.editMessageComponents().setActionRows().queue();
+                                        else msg.editMessageComponents().setActionRows(ActionRow.of(buttons)).queue();
+
                                         event.reply("otherResult.first() success").queue();
                                     });
                                 } catch (SQLException e) {
