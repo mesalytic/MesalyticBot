@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
@@ -212,6 +213,22 @@ public class EventListener extends ListenerAdapter {
 
         if (buttonID.startsWith("interactionrole")) {
             String[] args = buttonID.split(":");
+
+            String roleID = args[2];
+
+            Role role = event.getGuild().getRoleById(roleID);
+            event.getGuild().addRoleToMember(event.getUser(), role).queue();
+
+            event.reply("You successfully got the role !").setEphemeral(true).queue();
+        }
+    }
+
+    @Override
+    public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {
+        String selectMenuID = event.getSelectMenu().getId();
+
+        if (selectMenuID.startsWith("selectmenurole")) {
+            String[] args = selectMenuID.split(":");
 
             String roleID = args[2];
 
