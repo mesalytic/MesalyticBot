@@ -34,9 +34,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
-* TODO: Add new Interaction Messages to specific channels
-* TODO: Possibility to edit Interaction Messages
-*
 * TODO: Check if an existing ActionRow is in the message, if so, return error because one ActionRow per msg
 *
 * TODO: Once finished, CLEAN THE GODDAMN COMMAND
@@ -85,11 +82,17 @@ public class InteractionroleCommand implements Command {
                                                         new OptionData(OptionType.ROLE, "role", "the role", true)
                                                 ),
                                         new SubcommandData("list", "list selectmenu roles")
+                                ),
+                        new SubcommandGroupData("message", "msg related cmds")
+                                .addSubcommands(
+                                        new SubcommandData("create", "create message on specific")
+                                                .addOption(OptionType.CHANNEL, "channel", "Channel used for the interaction roles.", true),
+                                        new SubcommandData("edit", "edit msg from channel")
+                                                .addOptions(
+                                                        new OptionData(OptionType.STRING, "messageid", "the message id", true),
+                                                        new OptionData(OptionType.STRING, "text", "text to edit the message", true)
+                                                )
                                 )
-                )
-                .addSubcommands(
-                        new SubcommandData("channel", "Set the channel that will be used. (Advised on it being empty.)")
-                                .addOption(OptionType.CHANNEL, "channel", "Channel used for the interaction roles.", true)
                 );
     }
 
@@ -107,6 +110,71 @@ public class InteractionroleCommand implements Command {
 
         String subcommandName = event.getSubcommandName();
         assert subcommandName != null;
+
+        if (event.getSubcommandGroup().equals("message")) {
+            if (subcommandName.equals("create")) {
+                GuildChannelUnion channelOption = event.getOption("channel").getAsChannel();
+                TextChannel channel = channelOption.asTextChannel();
+
+                try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM buttonrole WHERE channelID = ?")) {
+                    statement.setString(1, event.getOption("channel").getAsChannel().getId());
+
+                    ResultSet result = statement.executeQuery();
+
+                    channel.sendMessage("Hi there, this is the message that will be used for Interaction Roles. Interaction Roles are a neat way for users to claim specific roles.\n" +
+                            "\n" +
+                            "Right now, no roles have been configured, but there are multiple ways to do so :\n" +
+                            "\n" +
+                            "You can use `/interactionrole button set messageID:messageID role:@role name?:name` to set up a button that will be directly linked to a button on the message. Please consider right now there is a limit of 5 buttons per message.\n" +
+                            "\n" +
+                            "If you want to add a new message, to set up more roles using buttons, or to organize things up, you can use the `/interactionrole message add` command to create a new message.\n" +
+                            "\n" +
+                            "Instead, if you want to use selection menus, you can use the `/interactionrole menu set messageID:messageID role:@role name:name selectDescription:description` that will add a Selection Menu on the message, with the specified name and description as a choice.\n" +
+                            "\n" +
+                            "Of course, you can edit this message to not show this tutorial, use `/interactionrole message edit messageID:messageID text:text`\n" +
+                            "\n" +
+                            "Have fun configuring the Interaction Roles !").queue(message -> {
+                        try (PreparedStatement insertStatement = Main.connectionDB.prepareStatement("INSERT INTO buttonrole (channelID, guildID, messageID) VALUES (?,?,?)")) {
+                            insertStatement.setString(1, event.getOption("channel").getAsChannel().getId());
+                            insertStatement.setString(2, event.getGuild().getId());
+                            insertStatement.setString(3, message.getId());
+
+                            insertStatement.executeUpdate();
+
+                            event.reply("Sucessfully set up the message. Here is the messageID that you'll need to configure things up: `" + message.getId() + "`").queue();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (subcommandName.equals("edit")) {
+                try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM buttonrole WHERE messageID = ?")) {
+                    statement.setString(1, event.getOption("messageid").getAsString());
+
+                    ResultSet result = statement.executeQuery();
+
+                    if (!result.first()) {
+                        event.reply("no msg here").queue();
+                        return;
+                    }
+
+                    String channelID = result.getString(1);
+                    TextChannel channel = event.getGuild().getTextChannelById(channelID);
+
+                    channel.retrieveMessageById(event.getOption("messageid").getAsString()).queue(msg -> {
+                        msg.editMessage(event.getOption("text").getAsString()).queue();
+
+                        event.reply("Message edited").queue();
+                    });
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
         if (subcommandName.equals("list")) {
             if (event.getSubcommandGroup().equals("button")) {
@@ -462,50 +530,6 @@ public class InteractionroleCommand implements Command {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-            }
-        }
-
-        if (subcommandName.equals("channel")) {
-            GuildChannelUnion channelOption = event.getOption("channel").getAsChannel();
-            TextChannel channel = channelOption.asTextChannel();
-
-            try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM buttonrole WHERE channelID = ?")) {
-                statement.setString(1, event.getOption("channel").getAsChannel().getId());
-
-                ResultSet result = statement.executeQuery();
-
-                if (result.first()) {
-                    event.reply("This channel is already used for the Interaction Role feature. Please select another channel.").setEphemeral(true).queue();
-                    return;
-                }
-
-                channel.sendMessage("Hi there, this is the message that will be used for Interaction Roles. Interaction Roles are a neat way for users to claim specific roles.\n" +
-                        "\n" +
-                        "Right now, no roles have been configured, but there are multiple ways to do so :\n" +
-                        "\n" +
-                        "You can use `/interactionrole button set messageID:messageID role:@role name?:name` to set up a button that will be directly linked to a button on the message. Please consider right now there is a limit of 5 buttons per message.\n" +
-                        "\n" +
-                        "If you want to add a new message, to set up more roles using buttons, or to organize things up, you can use the `/interactionrole message add` command to create a new message.\n" +
-                        "\n" +
-                        "Instead, if you want to use selection menus, you can use the `/interactionrole menu set messageID:messageID role:@role name:name selectDescription:description` that will add a Selection Menu on the message, with the specified name and description as a choice.\n" +
-                        "\n" +
-                        "Of course, you can edit this message to not show this tutorial, use `/interactionrole message edit messageID:messageID text:text`\n" +
-                        "\n" +
-                        "Have fun configuring the Interaction Roles !").queue(message -> {
-                            try (PreparedStatement insertStatement = Main.connectionDB.prepareStatement("INSERT INTO buttonrole (channelID, guildID, messageID) VALUES (?,?,?)")) {
-                                insertStatement.setString(1, event.getOption("channel").getAsChannel().getId());
-                                insertStatement.setString(2, event.getGuild().getId());
-                                insertStatement.setString(3, message.getId());
-
-                                insertStatement.executeUpdate();
-
-                                event.reply("Sucessfully set up the channel. A setup message has been sent, here is the messageID that you'll need to configure things up: `" + message.getId() + "`").queue();
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                            }
-                        });
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
         }
     }
