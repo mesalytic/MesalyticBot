@@ -45,40 +45,42 @@ public class SlashListener extends ListenerAdapter {
 
     @Override
     public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {
-        String[] modules = {"channelCreate", "channelDelete", "channelUpdate"};
+        if (event.getSelectMenu().getId().equals("selectMenu:logs:modules")) {
+            String[] modules = {"channelCreate", "channelDelete", "channelUpdate"};
 
-        try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM logs WHERE guildID = ?")) {
-            statement.setString(1, event.getGuild().getId());
+            try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM logs WHERE guildID = ?")) {
+                statement.setString(1, event.getGuild().getId());
 
-            ResultSet result = statement.executeQuery();
+                ResultSet result = statement.executeQuery();
 
-            if (!result.first()) {
-                event.reply("You must set up a log channel before. Use `/logs channel`").setEphemeral(true).queue();
-                return;
+                if (!result.first()) {
+                    event.reply("You must set up a log channel before. Use `/logs channel`").setEphemeral(true).queue();
+                    return;
+                }
+
+                StringBuilder query = new StringBuilder();
+                StringBuilder sb = new StringBuilder();
+                sb.append("UPDATE logs SET ");
+
+                for (String module : modules) {
+                    if (!event.getValues().isEmpty() && event.getValues().contains("selectMenu:logs:modules:" + module)) query.append(module).append(" = \"true\", ");
+                    else query.append(module).append(" = \"false\", ");
+                }
+
+                String builtQuery = query.toString();
+
+                sb.append(builtQuery, 0, builtQuery.length() - 2);
+                sb.append(" WHERE guildID = ?");
+
+                try (PreparedStatement updateStatement = Main.connectionDB.prepareStatement(sb.toString())) {
+                    updateStatement.setString(1, event.getGuild().getId());
+                    updateStatement.executeUpdate();
+
+                    event.reply("Successfully configured").setEphemeral(true).queue();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-
-            StringBuilder query = new StringBuilder();
-            StringBuilder sb = new StringBuilder();
-            sb.append("UPDATE logs SET ");
-
-            for (String module : modules) {
-                if (!event.getValues().isEmpty() && event.getValues().contains("selectMenu:logs:modules:" + module)) query.append(module).append(" = \"true\", ");
-                else query.append(module).append(" = \"false\", ");
-            }
-
-            String builtQuery = query.toString();
-
-            sb.append(builtQuery, 0, builtQuery.length() - 2);
-            sb.append(" WHERE guildID = ?");
-
-            try (PreparedStatement updateStatement = Main.connectionDB.prepareStatement(sb.toString())) {
-                updateStatement.setString(1, event.getGuild().getId());
-                updateStatement.executeUpdate();
-
-                event.reply("Successfully configured").setEphemeral(true).queue();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
