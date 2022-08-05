@@ -17,6 +17,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandGroupData;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
+import net.dv8tion.jda.api.interactions.components.Component;
 import net.dv8tion.jda.api.interactions.components.ItemComponent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
@@ -34,11 +35,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
-* TODO: Check if an existing ActionRow is in the message, if so, return error because one ActionRow per msg
-*
-* TODO: Once finished, CLEAN THE GODDAMN COMMAND
-* TODO: Once finished, send proper output to the user
-*/
+ * TODO: Once finished, CLEAN THE GODDAMN COMMAND
+ * TODO: Once finished, send proper output to the user
+ */
 
 public class InteractionroleCommand implements Command {
     @Override
@@ -190,7 +189,7 @@ public class InteractionroleCommand implements Command {
 
                     StringBuilder sb = new StringBuilder();
 
-                    while(result.next()) {
+                    while (result.next()) {
                         sb.append(result.getString(2)).append(" - ").append(event.getGuild().getRoleById(result.getString(4)).getAsMention()).append("\n");
                     }
 
@@ -217,7 +216,7 @@ public class InteractionroleCommand implements Command {
 
                     StringBuilder sb = new StringBuilder();
 
-                    while(result.next()) {
+                    while (result.next()) {
                         sb.append(result.getString(2)).append(" - ").append(event.getGuild().getRoleById(result.getString(4)).getAsMention()).append("\n");
                     }
 
@@ -252,26 +251,32 @@ public class InteractionroleCommand implements Command {
                             otherResult.last();
 
                             if (!otherResult.first()) {
-                                try (PreparedStatement insertStatement = Main.connectionDB.prepareStatement("INSERT INTO interactionrole_buttons(guildID, messageID, buttonID, roleID) VALUES (?,?,?,?)")) {
-                                    insertStatement.setString(1, event.getGuild().getId());
-                                    insertStatement.setString(2, messageID);
-                                    insertStatement.setString(3, "interactionrole:" + event.getGuild().getId() + ":" + role.getId());
-                                    insertStatement.setString(4, role.getId());
+                                TextChannel channel = event.getGuild().getTextChannelById(result.getString(1));
 
-                                    insertStatement.executeUpdate();
+                                channel.retrieveMessageById(messageID).queue(msg -> {
 
-                                    TextChannel channel = event.getGuild().getTextChannelById(result.getString(1));
+                                    if (!msg.getActionRows().isEmpty() && msg.getActionRows().get(0).getComponents().get(0).getType().equals(Component.Type.SELECT_MENU)) {
+                                        event.reply("Select Menu already present").queue();
+                                        return;
+                                    }
 
-                                    channel.retrieveMessageById(messageID).queue(msg -> {
+                                    try (PreparedStatement insertStatement = Main.connectionDB.prepareStatement("INSERT INTO interactionrole_buttons(guildID, messageID, buttonID, roleID) VALUES (?,?,?,?)")) {
+                                        insertStatement.setString(1, event.getGuild().getId());
+                                        insertStatement.setString(2, messageID);
+                                        insertStatement.setString(3, "interactionrole:" + event.getGuild().getId() + ":" + role.getId());
+                                        insertStatement.setString(4, role.getId());
+
+                                        insertStatement.executeUpdate();
+
                                         msg.editMessageComponents().setActionRow(
                                                 Button.primary("interactionrole:" + event.getGuild().getId() + ":" + role.getId(), buttonName)
                                         ).queue();
 
                                         event.reply("!otherResult.first() success").queue();
-                                    });
-                                } catch (SQLException e) {
-                                    e.printStackTrace();
-                                }
+                                    } catch (SQLException e) {
+                                        e.printStackTrace();
+                                    }
+                                });
                             } else {
                                 try (PreparedStatement insertStatement = Main.connectionDB.prepareStatement("INSERT INTO interactionrole_buttons(guildID, messageID, buttonID, roleID) VALUES (?,?,?,?)")) {
                                     insertStatement.setString(1, event.getGuild().getId());
@@ -330,17 +335,20 @@ public class InteractionroleCommand implements Command {
                             ResultSet smResult = selectMenuStatement.executeQuery();
 
                             if (!smResult.first()) {
-                                try (PreparedStatement insertStatement = Main.connectionDB.prepareStatement("INSERT INTO interactionrole_selectmenu (messageID, guildID, choiceID, roleID) VALUES (?,?,?,?)")) {
-                                    insertStatement.setString(1, messageID);
-                                    insertStatement.setString(2, event.getGuild().getId());
-                                    insertStatement.setString(3, "selectmenurole:" + event.getGuild().getId() + ":" + event.getOption("role").getAsRole().getId());
-                                    insertStatement.setString(4, event.getOption("role").getAsRole().getId());
+                                TextChannel channel = event.getGuild().getTextChannelById(result.getString(1));
 
-                                    insertStatement.executeUpdate();
+                                channel.retrieveMessageById(messageID).queue(msg -> {
+                                    if (!msg.getActionRows().isEmpty() && msg.getActionRows().get(0).getComponents().get(0).getType().equals(Component.Type.BUTTON)) {
+                                        event.reply("Select Menu already present").queue();
+                                        return;
+                                    }
+                                    try (PreparedStatement insertStatement = Main.connectionDB.prepareStatement("INSERT INTO interactionrole_selectmenu (messageID, guildID, choiceID, roleID) VALUES (?,?,?,?)")) {
+                                        insertStatement.setString(1, messageID);
+                                        insertStatement.setString(2, event.getGuild().getId());
+                                        insertStatement.setString(3, "selectmenurole:" + event.getGuild().getId() + ":" + event.getOption("role").getAsRole().getId());
+                                        insertStatement.setString(4, event.getOption("role").getAsRole().getId());
 
-                                    TextChannel channel = event.getGuild().getTextChannelById(result.getString(1));
-
-                                    channel.retrieveMessageById(messageID).queue(msg -> {
+                                        insertStatement.executeUpdate();
 
                                         String choiceLabel = event.getOption("name").getAsString();
                                         String choiceValue = ("selectmenurole:" + event.getGuild().getId() + ":" + event.getOption("role").getAsRole().getId());
@@ -367,10 +375,10 @@ public class InteractionroleCommand implements Command {
                                         ).queue();
 
                                         event.reply("sm no result success").queue();
-                                    });
-                                } catch (SQLException e) {
-                                    e.printStackTrace();
-                                }
+                                    } catch (SQLException e) {
+                                        e.printStackTrace();
+                                    }
+                                });
                             } else {
                                 try (PreparedStatement insertStatement = Main.connectionDB.prepareStatement("INSERT INTO interactionrole_selectmenu (messageID, guildID, choiceID, roleID) VALUES (?,?,?,?)")) {
                                     insertStatement.setString(1, messageID);
@@ -450,7 +458,8 @@ public class InteractionroleCommand implements Command {
                                         List<Button> buttons = new ArrayList<>();
 
                                         msg.getButtons().forEach(button -> {
-                                            if (!button.getId().equals("interactionrole:" + event.getGuild().getId() + ":" + role.getId())) buttons.add(Button.primary(button.getId(), button.getLabel()));
+                                            if (!button.getId().equals("interactionrole:" + event.getGuild().getId() + ":" + role.getId()))
+                                                buttons.add(Button.primary(button.getId(), button.getLabel()));
                                         });
 
                                         if (buttons.isEmpty()) msg.editMessageComponents().setActionRows().queue();
@@ -506,7 +515,8 @@ public class InteractionroleCommand implements Command {
                                         List<SelectOption> selectOptions = new ArrayList<>();
 
                                         selectMenu.getOptions().forEach(option -> {
-                                            if (!option.getValue().equals("selectmenurole:" + event.getGuild().getId() + ":" + role.getId())) selectOptions.add(option);
+                                            if (!option.getValue().equals("selectmenurole:" + event.getGuild().getId() + ":" + role.getId()))
+                                                selectOptions.add(option);
                                         });
 
                                         SelectMenu newMenu = SelectMenu.create("selectmenurole:" + event.getGuild().getId()).addOptions(selectOptions).build();
