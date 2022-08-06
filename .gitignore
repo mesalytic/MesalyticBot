@@ -49,3 +49,4 @@ application.yml
 /logs/spring.log
 src/main/java/org/virep/jdabot/devcommands/
 .idea/artifacts/
+/.idea/inspectionProfiles/
