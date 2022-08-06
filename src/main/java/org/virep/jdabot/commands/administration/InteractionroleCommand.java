@@ -37,7 +37,6 @@ import java.util.List;
 /*
  * TODO: Allow configuration of max selection for select menu
  * TODO: Once finished, CLEAN THE GODDAMN COMMAND
- * TODO: Change buttonrole db name to interactionrole
  */
 
 public class InteractionroleCommand implements Command {
@@ -116,7 +115,7 @@ public class InteractionroleCommand implements Command {
                 GuildChannelUnion channelOption = event.getOption("channel").getAsChannel();
                 TextChannel channel = channelOption.asTextChannel();
 
-                try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM buttonrole WHERE channelID = ?")) {
+                try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM interactionrole WHERE channelID = ?")) {
                     statement.setString(1, event.getOption("channel").getAsChannel().getId());
 
                     ResultSet result = statement.executeQuery();
@@ -134,7 +133,7 @@ public class InteractionroleCommand implements Command {
                             "Of course, you can edit this message to not show this tutorial, use `/interactionrole message edit messageID:messageID text:text`\n" +
                             "\n" +
                             "Have fun configuring the Interaction Roles !").queue(message -> {
-                        try (PreparedStatement insertStatement = Main.connectionDB.prepareStatement("INSERT INTO buttonrole (channelID, guildID, messageID) VALUES (?,?,?)")) {
+                        try (PreparedStatement insertStatement = Main.connectionDB.prepareStatement("INSERT INTO interactionrole (channelID, guildID, messageID) VALUES (?,?,?)")) {
                             insertStatement.setString(1, event.getOption("channel").getAsChannel().getId());
                             insertStatement.setString(2, event.getGuild().getId());
                             insertStatement.setString(3, message.getId());
@@ -152,7 +151,7 @@ public class InteractionroleCommand implements Command {
             }
 
             if (subcommandName.equals("edit")) {
-                try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM buttonrole WHERE messageID = ?")) {
+                try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM interactionrole WHERE messageID = ?")) {
                     statement.setString(1, event.getOption("messageid").getAsString());
 
                     ResultSet result = statement.executeQuery();
@@ -238,7 +237,7 @@ public class InteractionroleCommand implements Command {
                 Role role = event.getOption("role").getAsRole();
                 String buttonName = event.getOption("name").getAsString();
 
-                try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM buttonrole WHERE messageID = ?")) {
+                try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM interactionrole WHERE messageID = ?")) {
                     statement.setString(1, messageID);
 
                     ResultSet result = statement.executeQuery();
@@ -324,7 +323,7 @@ public class InteractionroleCommand implements Command {
             if (event.getSubcommandGroup().equals("selectmenu")) {
                 String messageID = event.getOption("messageid").getAsString();
 
-                try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM buttonrole WHERE messageID = ?")) {
+                try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM interactionrole WHERE messageID = ?")) {
                     statement.setString(1, messageID);
 
                     ResultSet result = statement.executeQuery();
@@ -434,7 +433,7 @@ public class InteractionroleCommand implements Command {
                 String messageID = event.getOption("messageid").getAsString();
                 Role role = event.getOption("role").getAsRole();
 
-                try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM buttonrole WHERE messageID = ?")) {
+                try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM interactionrole WHERE messageID = ?")) {
                     statement.setString(1, messageID);
 
                     ResultSet result = statement.executeQuery();
@@ -488,7 +487,7 @@ public class InteractionroleCommand implements Command {
                 String messageID = event.getOption("messageid").getAsString();
                 Role role = event.getOption("role").getAsRole();
 
-                try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM buttonrole WHERE messageID = ?")) {
+                try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM interactionrole WHERE messageID = ?")) {
                     statement.setString(1, messageID);
 
                     ResultSet result = statement.executeQuery();
