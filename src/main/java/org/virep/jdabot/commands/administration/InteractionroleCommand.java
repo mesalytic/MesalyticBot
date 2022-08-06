@@ -88,7 +88,7 @@ public class InteractionroleCommand implements Command {
 
     @Override
     public boolean isDev() {
-        return true;
+        return false;
     }
 
     @Override
