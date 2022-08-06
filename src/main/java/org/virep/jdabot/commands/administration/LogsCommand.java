@@ -97,27 +97,12 @@ public class LogsCommand implements Command {
                     return;
                 }
 
-                ResultSetMetaData resultSetMetaData = result.getMetaData();
-
-                /*for (int i = 1; i < resultSetMetaData.getColumnCount() - 1; i++) {
-                    String modState = result.getString(i);
-
-                    if (modState.equals("true")) col.add("selectMenu:logs:modules:" + resultSetMetaData.getColumnName(i));
-                }*/
-
                 event.reply("Using this menu you can select what type of events you want to log.").addActionRow(
                         SelectMenu.create("selectMenu:logs:categoryModule")
-                                .addOption("Channel Logging", "selectMenu:logs:categoryModule:channel")
-
-
-                                /*
-                                .addOption("Channel Creation", "selectMenu:logs:modules:channelCreate")
-                                .addOption("Channel Deletion", "selectMenu:logs:modules:channelDelete")
-                                .addOption("Channel Update", "selectMenu:logs:modules:channelUpdate", "Related to NSFW status, Name, Description, and Slowmode changes")
-                                */
+                                .addOption("Channel Events", "selectMenu:logs:categoryModule:channel")
+                                .addOption("Emoji Events", "selectMenu:logs:categoryModule:emoji")
                                 .setPlaceholder("Use this selection menu to toggle specific logging modules.")
-                                .setMinValues(0)
-                                .setDefaultValues(col)
+                                .setMinValues(1)
                                 .build()
                 ).queue();
 

@@ -4,12 +4,16 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 import net.dv8tion.jda.api.events.channel.ChannelCreateEvent;
 import net.dv8tion.jda.api.events.channel.ChannelDeleteEvent;
 import net.dv8tion.jda.api.events.channel.update.ChannelUpdateNSFWEvent;
 import net.dv8tion.jda.api.events.channel.update.ChannelUpdateNameEvent;
 import net.dv8tion.jda.api.events.channel.update.ChannelUpdateSlowmodeEvent;
 import net.dv8tion.jda.api.events.channel.update.ChannelUpdateTopicEvent;
+import net.dv8tion.jda.api.events.emoji.EmojiAddedEvent;
+import net.dv8tion.jda.api.events.emoji.EmojiRemovedEvent;
+import net.dv8tion.jda.api.events.emoji.update.EmojiUpdateNameEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.time.Instant;
@@ -158,6 +162,78 @@ public class LogsListener extends ListenerAdapter {
                     .addField("New:", "**" + secondsToSeperatedTime(newValue) + "**", true)
                     .setColor(3066993)
                     .setFooter("Channel ID: " + event.getChannel().getId())
+                    .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
+                    .setTimestamp(Instant.now())
+                    .build();
+
+            String logChannelID = getLogChannelID(event.getGuild().getId());
+
+            assert logChannelID != null;
+            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+        }
+    }
+
+    @Override
+    public void onEmojiAdded(EmojiAddedEvent event) {
+        RichCustomEmoji emoji = event.getEmoji();
+        String emojiFormatted = emoji.getFormatted();
+
+        if (isEnabled("emojiAdded", event.getGuild().getId())) {
+            MessageEmbed embed = new EmbedBuilder()
+                    .setDescription("**Emoji: " + emojiFormatted + " (" + emoji.getName() + ") has been created**")
+                    .setColor(3066993)
+                    .setFooter("Emoji ID: " + emoji.getId())
+                    .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
+                    .setTimestamp(Instant.now())
+                    .build();
+
+            String logChannelID = getLogChannelID(event.getGuild().getId());
+
+            assert logChannelID != null;
+            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+        }
+    }
+
+    @Override
+    public void onEmojiRemoved(EmojiRemovedEvent event) {
+        RichCustomEmoji emoji = event.getEmoji();
+
+        if (isEnabled("emojiAdded", event.getGuild().getId())) {
+            MessageEmbed embed = new EmbedBuilder()
+                    .setColor(3066993)
+                    .setFooter("Emoji ID: " + emoji.getId())
+                    .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
+                    .setTimestamp(Instant.now())
+                    .build();
+
+            String logChannelID = getLogChannelID(event.getGuild().getId());
+
+            assert logChannelID != null;
+            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+        }
+    }
+
+    @Override
+    public void onEmojiUpdateName(EmojiUpdateNameEvent event) {
+        RichCustomEmoji emoji = event.getEmoji();
+        String emojiFormatted = event.getEmoji().getFormatted();
+
+        String oldName = event.getOldName();
+        String newName = event.getNewName();
+
+        if (isEnabled("emojiAdded", event.getGuild().getId())) {
+            MessageEmbed embed = new EmbedBuilder()
+                    .setDescription("**Emoji: " + emojiFormatted + " (" + emoji.getName() + ") name has been updated**")
+                    .addField("Old:", "**" + oldName + "**", true)
+                    .addField("New:", "**" + newName + "**", true)
+                    .setColor(3066993)
+                    .setFooter("Emoji ID: " + emoji.getId())
                     .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
                     .setTimestamp(Instant.now())
                     .build();

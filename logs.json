@@ -30,5 +30,22 @@
       "value": "channelSlowmodeUpdate",
       "description": "Triggers whenever the slowmode of a channel changes."
     }
+  ],
+  "emoji": [
+    {
+      "label": "Emoji Addition",
+      "value": "emojiAdded",
+      "description": "Triggers whenever a new emoji is created."
+    },
+    {
+      "label": "Emoji Removal",
+      "value": "emojiRemoved",
+      "description": "Triggers whenever an emoji is removed."
+    },
+    {
+      "label": "Emoji Name Update",
+      "value": "emojiUpdateName",
+      "description": "Triggers whenver an emoji name is updated."
+    }
   ]
 }
