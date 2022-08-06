@@ -116,10 +116,6 @@ public class SlashListener extends ListenerAdapter {
 
                 event.getSelectMenu().getOptions().forEach(option -> options.add(option.getValue().split(":")[3]));
 
-                for (int i = 1; i < metaData.getColumnCount() - 1; i++) {
-                    options.add(metaData.getColumnName(i));
-                }
-
                 StringBuilder query = new StringBuilder();
                 StringBuilder sb = new StringBuilder();
                 sb.append("UPDATE logs SET ");
