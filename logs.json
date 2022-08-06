@@ -7,7 +7,7 @@
     },
     {
       "label": "Channel Delete",
-      "value": "channelUpdate",
+      "value": "channelDelete",
       "description": "Triggers whenever a channel is deleted."
     },
     {
