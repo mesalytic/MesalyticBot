@@ -1,0 +1,34 @@
+{
+  "channel": [
+    {
+      "label": "Channel Create",
+      "value": "channelCreate",
+      "description": "Triggers whenever a channel is created."
+    },
+    {
+      "label": "Channel Delete",
+      "value": "channelUpdate",
+      "description": "Triggers whenever a channel is deleted."
+    },
+    {
+      "label": "Channel NSFW Status Update",
+      "value": "channelNSFWUpdate",
+      "description": "Triggers whenever the NSFW status of a channel changes."
+    },
+    {
+      "label": "Channel Topic Update",
+      "value": "channelTopicUpdate",
+      "description": "Triggers whenever the topic of a channel changes."
+    },
+    {
+      "label": "Channel Name Update",
+      "value": "channelNameUpdate",
+      "description": "Triggers whenever the name of a channel changes."
+    },
+    {
+      "label": "Channel Slowmode Update",
+      "value": "channelSlowmodeUpdate",
+      "description": "Triggers whenever the slowmode of a channel changes."
+    }
+  ]
+}

@@ -4,8 +4,13 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.virep.jdabot.Main;
 import org.virep.jdabot.commands.games.TTTCommand;
 import org.virep.jdabot.lavaplayer.AudioManagerController;
@@ -14,17 +19,18 @@ import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.slashcommandhandler.SlashHandler;
 
 import javax.annotation.Nonnull;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SlashListener extends ListenerAdapter {
     private final SlashHandler slashHandler;
+
     public SlashListener(SlashHandler slashHandler) {
         this.slashHandler = slashHandler;
     }
@@ -45,6 +51,55 @@ public class SlashListener extends ListenerAdapter {
 
     @Override
     public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {
+        if (event.getSelectMenu().getId().equals("selectMenu:logs:categoryModule")) {
+            try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM logs WHERE guildID = ?")) {
+                statement.setString(1, event.getGuild().getId());
+
+                ResultSet result = statement.executeQuery();
+                ResultSetMetaData resultSetMetaData = result.getMetaData();
+
+                if (result.first()) {
+                    FileInputStream in = new FileInputStream("./logs.json");
+
+                    JSONTokener tokener = new JSONTokener(in);
+                    JSONObject logsObject = new JSONObject(tokener);
+
+                    JSONArray logArray = logsObject.getJSONArray(event.getSelectedOptions().get(0).getValue().split(":")[3]);
+
+                    List<SelectOption> moduleOptions = new ArrayList<>();
+                    HashSet<String> defaultOptions = new HashSet<>();
+
+                    for (int i = 0; i < logArray.length(); i++) {
+                        JSONObject module = logArray.getJSONObject(i);
+
+                        moduleOptions.add(SelectOption.of(module.getString("label"), "selectMenu:logs:modules:" + module.getString("value")).withDescription(module.getString("description")));
+                    }
+
+                    for (int i = 1; i < resultSetMetaData.getColumnCount() - 1; i++) {
+                        String modState = result.getString(i);
+
+                        if (modState.equals("true"))
+                            defaultOptions.add("selectMenu:logs:modules:" + resultSetMetaData.getColumnName(i));
+                    }
+
+                    moduleOptions.forEach(mo -> System.out.println(mo.getLabel()));
+
+                    event.editComponents().setActionRows(
+                            ActionRow.of(event.getSelectMenu().createCopy().setDefaultOptions(Collections.singleton(event.getSelectedOptions().get(0))).build()),
+                            ActionRow.of(
+                                    SelectMenu.create("selectMenu:logs:modules")
+                                            .addOptions(moduleOptions)
+                                            .setDefaultValues(defaultOptions)
+                                            .setMaxValues(moduleOptions.size())
+                                            .build()
+                            )
+                    ).queue();
+                }
+            } catch (SQLException | FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+        }
         if (event.getSelectMenu().getId().equals("selectMenu:logs:modules")) {
             String[] modules = {"channelCreate", "channelDelete", "channelUpdate"};
 
@@ -63,7 +118,8 @@ public class SlashListener extends ListenerAdapter {
                 sb.append("UPDATE logs SET ");
 
                 for (String module : modules) {
-                    if (!event.getValues().isEmpty() && event.getValues().contains("selectMenu:logs:modules:" + module)) query.append(module).append(" = \"true\", ");
+                    if (!event.getValues().isEmpty() && event.getValues().contains("selectMenu:logs:modules:" + module))
+                        query.append(module).append(" = \"true\", ");
                     else query.append(module).append(" = \"false\", ");
                 }
 
