@@ -73,7 +73,7 @@ public class LogsListener extends ListenerAdapter {
 
     @Override
     public void onChannelUpdateNSFW(ChannelUpdateNSFWEvent event) {
-        if (isEnabled("channelUpdate", event.getGuild().getId())) {
+        if (isEnabled("channelNSFWUpdate", event.getGuild().getId())) {
             boolean oldValue = event.getOldValue();
             boolean newValue = event.getNewValue();
 
@@ -98,7 +98,7 @@ public class LogsListener extends ListenerAdapter {
 
     @Override
     public void onChannelUpdateTopic(ChannelUpdateTopicEvent event) {
-        if (isEnabled("channelUpdate", event.getGuild().getId())) {
+        if (isEnabled("channelTopicUpdate", event.getGuild().getId())) {
             String oldValue = event.getOldValue();
             String newValue = event.getNewValue();
 
@@ -123,7 +123,7 @@ public class LogsListener extends ListenerAdapter {
 
     @Override
     public void onChannelUpdateName(ChannelUpdateNameEvent event) {
-        if (isEnabled("channelUpdate", event.getGuild().getId())) {
+        if (isEnabled("channelNameUpdate", event.getGuild().getId())) {
             String oldName = event.getOldValue();
             String newName = event.getNewValue();
 
@@ -148,7 +148,7 @@ public class LogsListener extends ListenerAdapter {
 
     @Override
     public void onChannelUpdateSlowmode(ChannelUpdateSlowmodeEvent event) {
-        if (isEnabled("channelUpdate", event.getGuild().getId())) {
+        if (isEnabled("channelSlowmodeUpdate", event.getGuild().getId())) {
             int oldValue = event.getOldValue();
             int newValue = event.getNewValue();
 
