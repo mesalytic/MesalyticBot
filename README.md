@@ -23,8 +23,6 @@ It is still in active development, with a release ETA of early 2023.
 - [OkHttpClient3](https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp)
 
 ## SelfHost
-You are free to self-host the bot, as long as it is not for any commercial or public use.
-
 You are required to have at least some Java knowledge, know how MariaDB databases work, and how Gradle works.
 
 Database Schemas are not available at the moment, though they will be in the future.
