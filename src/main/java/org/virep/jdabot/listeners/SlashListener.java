@@ -101,23 +101,28 @@ public class SlashListener extends ListenerAdapter {
 
         }
         if (event.getSelectMenu().getId().equals("selectMenu:logs:modules")) {
-            String[] modules = {"channelCreate", "channelDelete", "channelUpdate"};
+            HashSet<String> options = new HashSet<>();
 
             try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM logs WHERE guildID = ?")) {
                 statement.setString(1, event.getGuild().getId());
 
                 ResultSet result = statement.executeQuery();
+                ResultSetMetaData metaData = statement.getMetaData();
 
                 if (!result.first()) {
                     event.reply("You must set up a log channel before. Use `/logs channel`").setEphemeral(true).queue();
                     return;
                 }
 
+                for (int i = 1; i < metaData.getColumnCount() - 1; i++) {
+                    options.add(metaData.getColumnName(i));
+                }
+
                 StringBuilder query = new StringBuilder();
                 StringBuilder sb = new StringBuilder();
                 sb.append("UPDATE logs SET ");
 
-                for (String module : modules) {
+                for (String module : options) {
                     if (!event.getValues().isEmpty() && event.getValues().contains("selectMenu:logs:modules:" + module))
                         query.append(module).append(" = \"true\", ");
                     else query.append(module).append(" = \"false\", ");
