@@ -202,7 +202,7 @@ public class LogsListener extends ListenerAdapter {
     public void onEmojiRemoved(EmojiRemovedEvent event) {
         RichCustomEmoji emoji = event.getEmoji();
 
-        if (isEnabled("emojiAdded", event.getGuild().getId())) {
+        if (isEnabled("emojiRemoved", event.getGuild().getId())) {
             MessageEmbed embed = new EmbedBuilder()
                     .setColor(3066993)
                     .setFooter("Emoji ID: " + emoji.getId())
@@ -227,7 +227,7 @@ public class LogsListener extends ListenerAdapter {
         String oldName = event.getOldName();
         String newName = event.getNewName();
 
-        if (isEnabled("emojiAdded", event.getGuild().getId())) {
+        if (isEnabled("emojiUpdateName", event.getGuild().getId())) {
             MessageEmbed embed = new EmbedBuilder()
                     .setDescription("**Emoji: " + emojiFormatted + " (" + emoji.getName() + ") name has been updated**")
                     .addField("Old:", "**" + oldName + "**", true)
