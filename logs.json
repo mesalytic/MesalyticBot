@@ -59,5 +59,37 @@
       "value": "guildUnban",
       "description": "Triggers whenever a user is unbanned."
     }
+  ],
+  "guildmember": [
+    {
+      "label": "Member Join",
+      "value": "guildMemberJoin",
+      "description": "Triggers whenever a user joins the server."
+    },
+    {
+      "label": "Member Leave",
+      "value": "guildMemberRemove",
+      "description": "Triggers whenever a user leaves the server."
+    },
+    {
+      "label": "Member Role Add",
+      "value": "guildMemberRoleAdd",
+      "description": "Triggers whenever a member gets a new role."
+    },
+    {
+      "label": "Member Role Remove",
+      "value": "guildMemberRoleRemove",
+      "description": "Triggers whenever a member gets removed a role."
+    },
+    {
+      "label": "Member Nickname Update",
+      "value": "guildMemberUpdateNickname",
+      "description": "Triggers whenever a member changes their nickname."
+    },
+    {
+      "label": "Member Timeout Update",
+      "value": "guildMemberUpdateTimeOut",
+      "description": "Triggers whenever a member gets timed out."
+    }
   ]
 }

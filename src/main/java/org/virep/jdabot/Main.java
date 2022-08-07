@@ -4,6 +4,8 @@ import lavalink.client.io.jda.JdaLavalink;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.virep.jdabot.database.DatabaseConnector;
 import org.virep.jdabot.listeners.EventListener;
@@ -26,6 +28,8 @@ public class Main {
                         GatewayIntent.GUILD_MESSAGE_REACTIONS)
                 .addEventListeners(lavalink, new EventListener(), new LogsListener())
                 .setVoiceDispatchInterceptor(lavalink.getVoiceInterceptor())
+                .setMemberCachePolicy(MemberCachePolicy.ALL)
+                .setChunkingFilter(ChunkingFilter.ALL)
                 .enableCache(CacheFlag.VOICE_STATE).build().awaitReady();
 
         SlashHandler slashHandler = new SlashHandler(api);

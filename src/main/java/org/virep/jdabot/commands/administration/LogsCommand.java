@@ -102,6 +102,7 @@ public class LogsCommand implements Command {
                                 .addOption("Channel Events", "selectMenu:logs:categoryModule:channel")
                                 .addOption("Emoji Events", "selectMenu:logs:categoryModule:emoji")
                                 .addOption("Ban Events", "selectMenu:logs:categoryModule:ban")
+                                .addOption("Member Related Events", "selectMenu:logs:categoryModule:guildmember")
                                 .setPlaceholder("Use this selection menu to toggle specific logging modules.")
                                 .setMinValues(1)
                                 .build()
@@ -110,8 +111,6 @@ public class LogsCommand implements Command {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
-
         }
     }
 }

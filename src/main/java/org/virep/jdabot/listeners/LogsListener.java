@@ -3,10 +3,7 @@ package org.virep.jdabot.listeners;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.audit.ActionType;
 import net.dv8tion.jda.api.audit.AuditLogEntry;
-import net.dv8tion.jda.api.entities.ChannelType;
-import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 import net.dv8tion.jda.api.events.channel.ChannelCreateEvent;
 import net.dv8tion.jda.api.events.channel.ChannelDeleteEvent;
@@ -19,10 +16,18 @@ import net.dv8tion.jda.api.events.emoji.EmojiRemovedEvent;
 import net.dv8tion.jda.api.events.emoji.update.EmojiUpdateNameEvent;
 import net.dv8tion.jda.api.events.guild.GuildBanEvent;
 import net.dv8tion.jda.api.events.guild.GuildUnbanEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleAddEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
+import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateNicknameEvent;
+import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateTimeOutEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.restaction.pagination.AuditLogPaginationAction;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.virep.jdabot.utils.DatabaseUtils.getLogChannelID;
@@ -308,6 +313,179 @@ public class LogsListener extends ListenerAdapter {
                         .addField("Unbanned by:", moderator, true)
                         .setTimestamp(Instant.now())
                         .setFooter("ID: " + unbannedUser.getId())
+                        .build();
+
+                String logChannelID = getLogChannelID(event.getGuild().getId());
+
+                assert logChannelID != null;
+                TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+                if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+            });
+        }
+    }
+
+    @Override
+    public void onGuildMemberJoin(GuildMemberJoinEvent event) {
+        if (isEnabled("guildMemberJoin", event.getGuild().getId())) {
+            User member = event.getUser();
+            MessageEmbed embed = new EmbedBuilder()
+                    .setDescription(member.getAsMention() + "\nMember count: " + event.getGuild().getMemberCount())
+                    .setColor(3066993)
+                    .setFooter("ID: " + member.getId())
+                    .setThumbnail(member.getAvatarUrl())
+                    .setAuthor("Member joined:", null, member.getAvatarUrl())
+                    .setTimestamp(Instant.now())
+                    .build();
+
+            String logChannelID = getLogChannelID(event.getGuild().getId());
+
+            assert logChannelID != null;
+            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+        }
+    }
+
+    @Override
+    public void onGuildMemberRemove(GuildMemberRemoveEvent event) {
+        if (isEnabled("guildMemberRemove", event.getGuild().getId())) {
+            User member = event.getUser();
+            MessageEmbed embed = new EmbedBuilder()
+                    .setDescription(member.getAsMention() + "\nMember count: " + event.getGuild().getMemberCount())
+                    .setColor(15158332)
+                    .setFooter("ID: " + member.getId())
+                    .setThumbnail(member.getAvatarUrl())
+                    .setAuthor("Member left:", null, member.getAvatarUrl())
+                    .setTimestamp(Instant.now())
+                    .build();
+
+            String logChannelID = getLogChannelID(event.getGuild().getId());
+
+            assert logChannelID != null;
+            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+        }
+    }
+
+    @Override
+    public void onGuildMemberRoleAdd(GuildMemberRoleAddEvent event) {
+        System.out.println("ll");
+        if (isEnabled("guildMemberRoleAdd", event.getGuild().getId())) {
+            List<Role> roles = event.getRoles();
+            StringBuilder addedRoles = new StringBuilder();
+            User member = event.getUser();
+
+            if (!roles.isEmpty()) {
+                for (Role role : roles) {
+                    addedRoles.append(role.getName()).append(", ");
+                }
+
+                String roleString = addedRoles.toString();
+
+                MessageEmbed embed = new EmbedBuilder()
+                        .setDescription("**" + member.getAsTag() + " roles added**")
+                        .setFooter("ID: " + member.getId())
+                        .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
+                        .addField("Added roles", roleString.substring(0, roleString.length() - 2), true)
+                        .setTimestamp(Instant.now())
+                        .build();
+
+                String logChannelID = getLogChannelID(event.getGuild().getId());
+
+                assert logChannelID != null;
+                TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+                if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+            }
+        }
+    }
+
+    @Override
+    public void onGuildMemberRoleRemove(GuildMemberRoleRemoveEvent event) {
+        if (isEnabled("guildMemberRoleRemove", event.getGuild().getId())) {
+            List<Role> roles = event.getRoles();
+            StringBuilder removedRoles = new StringBuilder();
+            User member = event.getUser();
+
+            if (!roles.isEmpty()) {
+                for (Role role : roles) {
+                    removedRoles.append(role.getName()).append(", ");
+                }
+
+                String roleString = removedRoles.toString();
+
+                MessageEmbed embed = new EmbedBuilder()
+                        .setDescription("**" + member.getAsTag() + " roles removed**")
+                        .setFooter("ID: " + member.getId())
+                        .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
+                        .addField("Removed roles", roleString.substring(0, roleString.length() - 2), true)
+                        .setTimestamp(Instant.now())
+                        .build();
+
+                String logChannelID = getLogChannelID(event.getGuild().getId());
+
+                assert logChannelID != null;
+                TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+                if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+            }
+        }
+    }
+
+    @Override
+    public void onGuildMemberUpdateNickname(GuildMemberUpdateNicknameEvent event) {
+        if (isEnabled("guildMemberUpdateNickname", event.getGuild().getId())) {
+            Member member = event.getMember();
+
+            String oldNickname = event.getOldNickname();
+            String newNickname = event.getNewNickname();
+
+            MessageEmbed embed = new EmbedBuilder()
+                    .setDescription("**" + member.getUser().getAsTag() + " nickname changed**")
+                    .setFooter("ID: " + member.getId())
+                    .setAuthor(member.getUser().getAsTag(), null, member.getUser().getAvatarUrl())
+                    .addField("Old:", oldNickname != null ? oldNickname : "None", true)
+                    .addField("New:", newNickname != null ? newNickname : "None", true)
+                    .setTimestamp(Instant.now())
+                    .build();
+
+            String logChannelID = getLogChannelID(event.getGuild().getId());
+
+            assert logChannelID != null;
+            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+        }
+    }
+
+    @Override
+    public void onGuildMemberUpdateTimeOut(GuildMemberUpdateTimeOutEvent event) {
+        if (isEnabled("guildMemberUpdateTimeOut", event.getGuild().getId())) {
+            AuditLogPaginationAction auditLogs = event.getGuild().retrieveAuditLogs();
+
+            auditLogs.type(ActionType.MEMBER_UPDATE);
+            auditLogs.limit(1);
+
+            auditLogs.queue((entries) -> {
+                String moderator = entries.isEmpty() ? "N/A" : entries.get(0).getUser().getAsTag();
+                String reason = entries.isEmpty() ? "N/A" : entries.get(0).getReason();
+
+                User member = event.getUser();
+                OffsetDateTime oldTimeout = event.getOldTimeOutEnd();
+                OffsetDateTime newTimeout = event.getNewTimeOutEnd();
+
+                MessageEmbed embed = new EmbedBuilder()
+                        .setDescription("**" + member.getAsTag() + " timeout changed**")
+                        .addField("Old Timeout:", oldTimeout != null ? "Until <t:" + oldTimeout.toEpochSecond() + ":F>" : "None", true)
+                        .addField("New Timeout:", newTimeout != null ? "Until <t:" + newTimeout.toEpochSecond() + ":F>" : "None", true)
+                        .addField("Reason:", reason != null ? reason : "N/A", false)
+                        .addField("Timed out by:", moderator, true)
+                        .setColor(3066993)
+                        .setFooter("ID: " + member.getId())
+                        .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
+                        .setTimestamp(Instant.now())
                         .build();
 
                 String logChannelID = getLogChannelID(event.getGuild().getId());
