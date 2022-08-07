@@ -47,5 +47,17 @@
       "value": "emojiUpdateName",
       "description": "Triggers whenver an emoji name is updated."
     }
+  ],
+  "ban": [
+    {
+      "label": "Ban",
+      "value": "guildBan",
+      "description": "Triggers whenever a member is banned."
+    },
+    {
+      "label": "Unban",
+      "value": "guildUnban",
+      "description": "Triggers whenever a user is unbanned."
+    }
   ]
 }

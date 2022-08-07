@@ -101,6 +101,7 @@ public class LogsCommand implements Command {
                         SelectMenu.create("selectMenu:logs:categoryModule")
                                 .addOption("Channel Events", "selectMenu:logs:categoryModule:channel")
                                 .addOption("Emoji Events", "selectMenu:logs:categoryModule:emoji")
+                                .addOption("Ban Events", "selectMenu:logs:categoryModule:ban")
                                 .setPlaceholder("Use this selection menu to toggle specific logging modules.")
                                 .setMinValues(1)
                                 .build()

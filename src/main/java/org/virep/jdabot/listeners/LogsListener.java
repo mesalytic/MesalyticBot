@@ -1,9 +1,12 @@
 package org.virep.jdabot.listeners;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.audit.ActionType;
+import net.dv8tion.jda.api.audit.AuditLogEntry;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 import net.dv8tion.jda.api.events.channel.ChannelCreateEvent;
 import net.dv8tion.jda.api.events.channel.ChannelDeleteEvent;
@@ -14,9 +17,13 @@ import net.dv8tion.jda.api.events.channel.update.ChannelUpdateTopicEvent;
 import net.dv8tion.jda.api.events.emoji.EmojiAddedEvent;
 import net.dv8tion.jda.api.events.emoji.EmojiRemovedEvent;
 import net.dv8tion.jda.api.events.emoji.update.EmojiUpdateNameEvent;
+import net.dv8tion.jda.api.events.guild.GuildBanEvent;
+import net.dv8tion.jda.api.events.guild.GuildUnbanEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.restaction.pagination.AuditLogPaginationAction;
 
 import java.time.Instant;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.virep.jdabot.utils.DatabaseUtils.getLogChannelID;
 import static org.virep.jdabot.utils.DatabaseUtils.isEnabled;
@@ -37,7 +44,6 @@ public class LogsListener extends ListenerAdapter {
                     .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
                     .setTimestamp(Instant.now())
                     .build();
-
 
 
             String logChannelID = getLogChannelID(event.getGuild().getId());
@@ -63,7 +69,6 @@ public class LogsListener extends ListenerAdapter {
                     .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
                     .setTimestamp(Instant.now())
                     .build();
-
 
 
             String logChannelID = getLogChannelID(event.getGuild().getId());
@@ -247,6 +252,74 @@ public class LogsListener extends ListenerAdapter {
         }
     }
 
+    @Override
+    public void onGuildBan(GuildBanEvent event) {
+        if (isEnabled("guildBan", event.getGuild().getId())) {
+            User bannedUser = event.getUser();
+
+            AuditLogPaginationAction auditLogs = event.getGuild().retrieveAuditLogs();
+
+            auditLogs.type(ActionType.BAN);
+            auditLogs.limit(1);
+
+            auditLogs.queue((entries) -> {
+                String moderator = entries.isEmpty() ? "N/A" : entries.get(0).getUser().getAsTag();
+                String reason = entries.isEmpty() ? "N/A" : entries.get(0).getReason();
+
+                MessageEmbed embed = new EmbedBuilder()
+                        .setDescription("User: " + bannedUser.getAsTag())
+                        .setColor(15158332)
+                        .setAuthor("User banned:", null, bannedUser.getAvatarUrl())
+                        .setThumbnail(bannedUser.getAvatarUrl())
+                        .addField("Reason:", reason != null ? reason : "N/A", true)
+                        .addField("Banned by:", moderator, true)
+                        .setTimestamp(Instant.now())
+                        .setFooter("ID: " + bannedUser.getId())
+                        .build();
+
+                String logChannelID = getLogChannelID(event.getGuild().getId());
+
+                assert logChannelID != null;
+                TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+                if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+            });
+        }
+    }
+
+    @Override
+    public void onGuildUnban(GuildUnbanEvent event) {
+        if (isEnabled("guildUnban", event.getGuild().getId())) {
+            User unbannedUser = event.getUser();
+
+            AuditLogPaginationAction auditLogs = event.getGuild().retrieveAuditLogs();
+
+            auditLogs.type(ActionType.UNBAN);
+            auditLogs.limit(1);
+
+            auditLogs.queue((entries) -> {
+                String moderator = entries.isEmpty() ? "N/A" : entries.get(0).getUser().getAsTag();
+
+                MessageEmbed embed = new EmbedBuilder()
+                        .setDescription("User: " + unbannedUser.getAsTag())
+                        .setColor(15158332)
+                        .setAuthor("User unbanned:", null, unbannedUser.getAvatarUrl())
+                        .setThumbnail(unbannedUser.getAvatarUrl())
+                        .addField("Unbanned by:", moderator, true)
+                        .setTimestamp(Instant.now())
+                        .setFooter("ID: " + unbannedUser.getId())
+                        .build();
+
+                String logChannelID = getLogChannelID(event.getGuild().getId());
+
+                assert logChannelID != null;
+                TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+                if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+            });
+        }
+    }
+
     enum Type {
         CATEGORY("Category"),
         GUILD_NEWS_THREAD("News Thread"),
@@ -258,6 +331,7 @@ public class LogsListener extends ListenerAdapter {
         VOICE("Voice");
 
         public final String type;
+
         Type(String type) {
             this.type = type;
         }
