@@ -91,6 +91,7 @@ public class SlashListener extends ListenerAdapter {
                                             .addOptions(moduleOptions)
                                             .setDefaultValues(defaultOptions)
                                             .setMaxValues(moduleOptions.size())
+                                            .setMinValues(0)
                                             .build()
                             )
                     ).queue();
