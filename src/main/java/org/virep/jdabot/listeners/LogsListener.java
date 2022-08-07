@@ -43,11 +43,11 @@ public class LogsListener extends ListenerAdapter {
 
         if (isEnabled("channelCreate", event.getGuild().getId())) {
             MessageEmbed embed = new EmbedBuilder()
-                    .setDescription("**" + Type.valueOf(type.toString()).type + " channel created: " + event.getChannel().getAsMention() + "**")
-                    .setColor(3066993)
-                    .setFooter("Channel ID: " + event.getChannel().getId())
                     .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
+                    .setColor(3066993)
+                    .setDescription("**" + Type.valueOf(type.toString()).type + " channel created: " + event.getChannel().getAsMention() + "**")
                     .setTimestamp(Instant.now())
+                    .setFooter("Channel ID: " + event.getChannel().getId())
                     .build();
 
 
@@ -68,11 +68,11 @@ public class LogsListener extends ListenerAdapter {
 
         if (isEnabled("channelDelete", event.getGuild().getId())) {
             MessageEmbed embed = new EmbedBuilder()
-                    .setDescription("**" + Type.valueOf(type.toString()).type + " channel delete: " + event.getChannel().getName() + "**")
-                    .setColor(3066993)
-                    .setFooter("Channel ID: " + event.getChannel().getId())
                     .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
+                    .setColor(3066993)
+                    .setDescription("**" + Type.valueOf(type.toString()).type + " channel delete: " + event.getChannel().getName() + "**")
                     .setTimestamp(Instant.now())
+                    .setFooter("Channel ID: " + event.getChannel().getId())
                     .build();
 
 
@@ -92,13 +92,13 @@ public class LogsListener extends ListenerAdapter {
             boolean newValue = event.getNewValue();
 
             MessageEmbed embed = new EmbedBuilder()
+                    .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
+                    .setColor(3066993)
                     .setDescription("**" + Type.valueOf(event.getChannel().getType().toString()).type + " channel NSFW status changed: " + event.getChannel().getAsMention() + "**")
                     .addField("Old:", (oldValue ? "__**Enabled**__" : "__**Disabled**__"), true)
                     .addField("New:", (newValue ? "__**Enabled**__" : "__**Disabled**__"), true)
-                    .setColor(3066993)
-                    .setFooter("Channel ID: " + event.getChannel().getId())
-                    .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
                     .setTimestamp(Instant.now())
+                    .setFooter("Channel ID: " + event.getChannel().getId())
                     .build();
 
             String logChannelID = getLogChannelID(event.getGuild().getId());
@@ -117,13 +117,13 @@ public class LogsListener extends ListenerAdapter {
             String newValue = event.getNewValue();
 
             MessageEmbed embed = new EmbedBuilder()
+                    .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
+                    .setColor(3066993)
                     .setDescription("**" + Type.valueOf(event.getChannel().getType().toString()).type + " channel topic changed: " + event.getChannel().getAsMention() + "**")
                     .addField("Old:", (oldValue != null ? oldValue : "No Topic Specified"), true)
                     .addField("New:", (newValue != null ? newValue : "No Topic Specified"), true)
-                    .setColor(3066993)
-                    .setFooter("Channel ID: " + event.getChannel().getId())
-                    .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
                     .setTimestamp(Instant.now())
+                    .setFooter("Channel ID: " + event.getChannel().getId())
                     .build();
 
             String logChannelID = getLogChannelID(event.getGuild().getId());
@@ -142,13 +142,13 @@ public class LogsListener extends ListenerAdapter {
             String newName = event.getNewValue();
 
             MessageEmbed embed = new EmbedBuilder()
+                    .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
+                    .setColor(3066993)
                     .setDescription("**" + Type.valueOf(event.getChannel().getType().toString()).type + " channel name changed: " + event.getChannel().getAsMention() + "**")
                     .addField("Old:", "**" + oldName + "**", true)
                     .addField("New:", "**" + newName + "**", true)
-                    .setColor(3066993)
-                    .setFooter("Channel ID: " + event.getChannel().getId())
-                    .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
                     .setTimestamp(Instant.now())
+                    .setFooter("Channel ID: " + event.getChannel().getId())
                     .build();
 
             String logChannelID = getLogChannelID(event.getGuild().getId());
@@ -167,13 +167,13 @@ public class LogsListener extends ListenerAdapter {
             int newValue = event.getNewValue();
 
             MessageEmbed embed = new EmbedBuilder()
+                    .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
+                    .setColor(3066993)
                     .setDescription("**" + Type.valueOf(event.getChannel().getType().toString()).type + " channel slowmode changed: " + event.getChannel().getAsMention() + "**")
                     .addField("Old:", "**" + secondsToSeperatedTime(oldValue) + "**", true)
                     .addField("New:", "**" + secondsToSeperatedTime(newValue) + "**", true)
-                    .setColor(3066993)
-                    .setFooter("Channel ID: " + event.getChannel().getId())
-                    .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
                     .setTimestamp(Instant.now())
+                    .setFooter("Channel ID: " + event.getChannel().getId())
                     .build();
 
             String logChannelID = getLogChannelID(event.getGuild().getId());
@@ -192,11 +192,11 @@ public class LogsListener extends ListenerAdapter {
 
         if (isEnabled("emojiAdded", event.getGuild().getId())) {
             MessageEmbed embed = new EmbedBuilder()
-                    .setDescription("**Emoji: " + emojiFormatted + " (" + emoji.getName() + ") has been created**")
-                    .setColor(3066993)
-                    .setFooter("Emoji ID: " + emoji.getId())
                     .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
+                    .setColor(3066993)
+                    .setDescription("**Emoji: " + emojiFormatted + " (" + emoji.getName() + ") has been created**")
                     .setTimestamp(Instant.now())
+                    .setFooter("Emoji ID: " + emoji.getId())
                     .build();
 
             String logChannelID = getLogChannelID(event.getGuild().getId());
@@ -214,10 +214,11 @@ public class LogsListener extends ListenerAdapter {
 
         if (isEnabled("emojiRemoved", event.getGuild().getId())) {
             MessageEmbed embed = new EmbedBuilder()
-                    .setColor(3066993)
-                    .setFooter("Emoji ID: " + emoji.getId())
                     .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
+                    .setColor(3066993)
+                    .setDescription("**Emoji: " + emoji.getName() + " has been deleted**")
                     .setTimestamp(Instant.now())
+                    .setFooter("Emoji ID: " + emoji.getId())
                     .build();
 
             String logChannelID = getLogChannelID(event.getGuild().getId());
@@ -239,13 +240,13 @@ public class LogsListener extends ListenerAdapter {
 
         if (isEnabled("emojiUpdateName", event.getGuild().getId())) {
             MessageEmbed embed = new EmbedBuilder()
+                    .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
+                    .setColor(3066993)
                     .setDescription("**Emoji: " + emojiFormatted + " (" + emoji.getName() + ") name has been updated**")
                     .addField("Old:", "**" + oldName + "**", true)
                     .addField("New:", "**" + newName + "**", true)
-                    .setColor(3066993)
-                    .setFooter("Emoji ID: " + emoji.getId())
-                    .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
                     .setTimestamp(Instant.now())
+                    .setFooter("Emoji ID: " + emoji.getId())
                     .build();
 
             String logChannelID = getLogChannelID(event.getGuild().getId());
@@ -272,14 +273,14 @@ public class LogsListener extends ListenerAdapter {
                 String reason = entries.isEmpty() ? "N/A" : entries.get(0).getReason();
 
                 MessageEmbed embed = new EmbedBuilder()
-                        .setDescription("User: " + bannedUser.getAsTag())
-                        .setColor(15158332)
                         .setAuthor("User banned:", null, bannedUser.getAvatarUrl())
                         .setThumbnail(bannedUser.getAvatarUrl())
+                        .setColor(15158332)
+                        .setDescription("User: " + bannedUser.getAsTag())
                         .addField("Reason:", reason != null ? reason : "N/A", true)
                         .addField("Banned by:", moderator, true)
-                        .setTimestamp(Instant.now())
                         .setFooter("ID: " + bannedUser.getId())
+                        .setTimestamp(Instant.now())
                         .build();
 
                 String logChannelID = getLogChannelID(event.getGuild().getId());
@@ -306,13 +307,13 @@ public class LogsListener extends ListenerAdapter {
                 String moderator = entries.isEmpty() ? "N/A" : entries.get(0).getUser().getAsTag();
 
                 MessageEmbed embed = new EmbedBuilder()
-                        .setDescription("User: " + unbannedUser.getAsTag())
-                        .setColor(15158332)
                         .setAuthor("User unbanned:", null, unbannedUser.getAvatarUrl())
                         .setThumbnail(unbannedUser.getAvatarUrl())
+                        .setColor(15158332)
+                        .setDescription("User: " + unbannedUser.getAsTag())
                         .addField("Unbanned by:", moderator, true)
-                        .setTimestamp(Instant.now())
                         .setFooter("ID: " + unbannedUser.getId())
+                        .setTimestamp(Instant.now())
                         .build();
 
                 String logChannelID = getLogChannelID(event.getGuild().getId());
@@ -330,12 +331,12 @@ public class LogsListener extends ListenerAdapter {
         if (isEnabled("guildMemberJoin", event.getGuild().getId())) {
             User member = event.getUser();
             MessageEmbed embed = new EmbedBuilder()
-                    .setDescription(member.getAsMention() + "\nMember count: " + event.getGuild().getMemberCount())
-                    .setColor(3066993)
-                    .setFooter("ID: " + member.getId())
-                    .setThumbnail(member.getAvatarUrl())
                     .setAuthor("Member joined:", null, member.getAvatarUrl())
+                    .setThumbnail(member.getAvatarUrl())
+                    .setColor(3066993)
+                    .setDescription(member.getAsMention() + "\nMember count: " + event.getGuild().getMemberCount())
                     .setTimestamp(Instant.now())
+                    .setFooter("ID: " + member.getId())
                     .build();
 
             String logChannelID = getLogChannelID(event.getGuild().getId());
@@ -352,12 +353,12 @@ public class LogsListener extends ListenerAdapter {
         if (isEnabled("guildMemberRemove", event.getGuild().getId())) {
             User member = event.getUser();
             MessageEmbed embed = new EmbedBuilder()
-                    .setDescription(member.getAsMention() + "\nMember count: " + event.getGuild().getMemberCount())
-                    .setColor(15158332)
-                    .setFooter("ID: " + member.getId())
-                    .setThumbnail(member.getAvatarUrl())
                     .setAuthor("Member left:", null, member.getAvatarUrl())
+                    .setThumbnail(member.getAvatarUrl())
+                    .setColor(15158332)
+                    .setDescription(member.getAsMention() + "\nMember count: " + event.getGuild().getMemberCount())
                     .setTimestamp(Instant.now())
+                    .setFooter("ID: " + member.getId())
                     .build();
 
             String logChannelID = getLogChannelID(event.getGuild().getId());
@@ -385,11 +386,11 @@ public class LogsListener extends ListenerAdapter {
                 String roleString = addedRoles.toString();
 
                 MessageEmbed embed = new EmbedBuilder()
-                        .setDescription("**" + member.getAsTag() + " roles added**")
-                        .setFooter("ID: " + member.getId())
                         .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
+                        .setDescription("**" + member.getAsTag() + " roles added**")
                         .addField("Added roles", roleString.substring(0, roleString.length() - 2), true)
                         .setTimestamp(Instant.now())
+                        .setFooter("ID: " + member.getId())
                         .build();
 
                 String logChannelID = getLogChannelID(event.getGuild().getId());
@@ -417,11 +418,11 @@ public class LogsListener extends ListenerAdapter {
                 String roleString = removedRoles.toString();
 
                 MessageEmbed embed = new EmbedBuilder()
-                        .setDescription("**" + member.getAsTag() + " roles removed**")
-                        .setFooter("ID: " + member.getId())
                         .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
+                        .setDescription("**" + member.getAsTag() + " roles removed**")
                         .addField("Removed roles", roleString.substring(0, roleString.length() - 2), true)
                         .setTimestamp(Instant.now())
+                        .setFooter("ID: " + member.getId())
                         .build();
 
                 String logChannelID = getLogChannelID(event.getGuild().getId());
@@ -443,12 +444,12 @@ public class LogsListener extends ListenerAdapter {
             String newNickname = event.getNewNickname();
 
             MessageEmbed embed = new EmbedBuilder()
-                    .setDescription("**" + member.getUser().getAsTag() + " nickname changed**")
-                    .setFooter("ID: " + member.getId())
                     .setAuthor(member.getUser().getAsTag(), null, member.getUser().getAvatarUrl())
+                    .setDescription("**" + member.getUser().getAsTag() + " nickname changed**")
                     .addField("Old:", oldNickname != null ? oldNickname : "None", true)
                     .addField("New:", newNickname != null ? newNickname : "None", true)
                     .setTimestamp(Instant.now())
+                    .setFooter("ID: " + member.getId())
                     .build();
 
             String logChannelID = getLogChannelID(event.getGuild().getId());
@@ -477,15 +478,15 @@ public class LogsListener extends ListenerAdapter {
                 OffsetDateTime newTimeout = event.getNewTimeOutEnd();
 
                 MessageEmbed embed = new EmbedBuilder()
+                        .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
+                        .setColor(3066993)
                         .setDescription("**" + member.getAsTag() + " timeout changed**")
                         .addField("Old Timeout:", oldTimeout != null ? "Until <t:" + oldTimeout.toEpochSecond() + ":F>" : "None", true)
                         .addField("New Timeout:", newTimeout != null ? "Until <t:" + newTimeout.toEpochSecond() + ":F>" : "None", true)
                         .addField("Reason:", reason != null ? reason : "N/A", false)
                         .addField("Timed out by:", moderator, true)
-                        .setColor(3066993)
-                        .setFooter("ID: " + member.getId())
-                        .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
                         .setTimestamp(Instant.now())
+                        .setFooter("ID: " + member.getId())
                         .build();
 
                 String logChannelID = getLogChannelID(event.getGuild().getId());
