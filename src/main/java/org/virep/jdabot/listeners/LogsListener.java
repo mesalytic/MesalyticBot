@@ -22,6 +22,7 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleAddEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateNicknameEvent;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateTimeOutEvent;
+import net.dv8tion.jda.api.events.guild.voice.*;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.restaction.pagination.AuditLogPaginationAction;
 
@@ -496,6 +497,159 @@ public class LogsListener extends ListenerAdapter {
 
                 if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
             });
+        }
+    }
+
+    @Override
+    public void onGuildVoiceSelfDeafen(GuildVoiceSelfDeafenEvent event) {
+        if (isEnabled("guildVoiceDeafen", event.getGuild().getId())) {
+            User member = event.getMember().getUser();
+            MessageEmbed embed = new EmbedBuilder()
+                    .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
+                    .setColor(event.isSelfDeafened() ? 15158332 : 3066993)
+                    .setDescription("**" + member.getAsTag() + " has been self " + (event.isSelfDeafened() ? "" : "un") + "deafened in " + event.getVoiceState().getChannel().getAsMention() + "**")
+                    .setTimestamp(Instant.now())
+                    .setFooter("User ID: " + member.getId())
+                    .build();
+
+            String logChannelID = getLogChannelID(event.getGuild().getId());
+
+            assert logChannelID != null;
+            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+        }
+    }
+
+    @Override
+    public void onGuildVoiceGuildDeafen(GuildVoiceGuildDeafenEvent event) {
+        if (isEnabled("guildVoiceGuildDeafen", event.getGuild().getId())) {
+            User member = event.getMember().getUser();
+            MessageEmbed embed = new EmbedBuilder()
+                    .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
+                    .setColor(event.isGuildDeafened() ? 15158332 : 3066993)
+                    .setDescription("**" + member.getAsTag() + " has been server " + (event.isGuildDeafened() ? "" : "un") + "deafened in " + event.getVoiceState().getChannel().getAsMention() + "**")
+                    .setTimestamp(Instant.now())
+                    .setFooter("User ID: " + member.getId())
+                    .build();
+
+            String logChannelID = getLogChannelID(event.getGuild().getId());
+
+            assert logChannelID != null;
+            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+        }
+    }
+
+    @Override
+    public void onGuildVoiceSelfMute(GuildVoiceSelfMuteEvent event) {
+        if (isEnabled("guildVoiceMute", event.getGuild().getId())) {
+            User member = event.getMember().getUser();
+            MessageEmbed embed = new EmbedBuilder()
+                    .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
+                    .setColor(event.isSelfMuted() ? 15158332 : 3066993)
+                    .setDescription("**" + member.getAsTag() + " has been self " + (event.isSelfMuted() ? "" : "un") + "muted in " + event.getVoiceState().getChannel().getAsMention() + "**")
+                    .setTimestamp(Instant.now())
+                    .setFooter("User ID: " + member.getId())
+                    .build();
+
+            String logChannelID = getLogChannelID(event.getGuild().getId());
+
+            assert logChannelID != null;
+            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+        }
+    }
+
+    @Override
+    public void onGuildVoiceGuildMute(GuildVoiceGuildMuteEvent event) {
+        if (isEnabled("guildVoiceGuildMute", event.getGuild().getId())) {
+            User member = event.getMember().getUser();
+            MessageEmbed embed = new EmbedBuilder()
+                    .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
+                    .setColor(event.isGuildMuted() ? 15158332 : 3066993)
+                    .setDescription("**" + member.getAsTag() + " has been server " + (event.isGuildMuted() ? "" : "un") + "muted in " + event.getVoiceState().getChannel().getAsMention() + "**")
+                    .setTimestamp(Instant.now())
+                    .setFooter("User ID: " + member.getId())
+                    .build();
+
+            String logChannelID = getLogChannelID(event.getGuild().getId());
+
+            assert logChannelID != null;
+            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+        }
+    }
+
+    @Override
+    public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
+        if (isEnabled("guildVoiceJoin", event.getGuild().getId())) {
+            User member = event.getMember().getUser();
+            MessageEmbed embed = new EmbedBuilder()
+                    .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
+                    .setColor(3066993)
+                    .setDescription("**" + member.getAsTag() + " joined voice channel " + event.getVoiceState().getChannel().getAsMention() + "**")
+                    .setTimestamp(Instant.now())
+                    .setFooter("User ID: " + member.getId())
+                    .build();
+
+            String logChannelID = getLogChannelID(event.getGuild().getId());
+
+            assert logChannelID != null;
+            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+        }
+    }
+
+    @Override
+    public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
+        if (isEnabled("guildVoiceLeave", event.getGuild().getId())) {
+
+            User member = event.getMember().getUser();
+            MessageEmbed embed = new EmbedBuilder()
+                    .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
+                    .setColor(15158332)
+                    .setDescription("**" + member.getAsTag() + " left voice channel " + event.getChannelLeft().getAsMention() + "**")
+                    .setTimestamp(Instant.now())
+                    .setFooter("User ID: " + member.getId())
+                    .build();
+
+            String logChannelID = getLogChannelID(event.getGuild().getId());
+
+            assert logChannelID != null;
+            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+        }
+    }
+
+    @Override
+    public void onGuildVoiceMove(GuildVoiceMoveEvent event) {
+        AudioChannel oldChannel = event.getChannelLeft();
+        AudioChannel newChannel = event.getChannelJoined();
+
+        if (isEnabled("guildVoiceMove", event.getGuild().getId())) {
+            User member = event.getMember().getUser();
+            MessageEmbed embed = new EmbedBuilder()
+                    .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
+                    .setColor(15158332)
+                    .setDescription("**" + member.getAsTag() + " switched voice channel to" + newChannel.getAsMention() + "**")
+                    .addField("Old channel:", oldChannel.getAsMention(), true)
+                    .addField("New channel:", newChannel.getAsMention(), true)
+                    .setTimestamp(Instant.now())
+                    .setFooter("User ID: " + member.getId())
+                    .build();
+
+            String logChannelID = getLogChannelID(event.getGuild().getId());
+
+            assert logChannelID != null;
+            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
         }
     }
 

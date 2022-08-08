@@ -25,7 +25,8 @@ public class Main {
                 .enableIntents(GatewayIntent.GUILD_MEMBERS,
                         GatewayIntent.GUILD_MESSAGES,
                         GatewayIntent.MESSAGE_CONTENT,
-                        GatewayIntent.GUILD_MESSAGE_REACTIONS)
+                        GatewayIntent.GUILD_MESSAGE_REACTIONS,
+                        GatewayIntent.GUILD_VOICE_STATES)
                 .addEventListeners(lavalink, new EventListener(), new LogsListener())
                 .setVoiceDispatchInterceptor(lavalink.getVoiceInterceptor())
                 .setMemberCachePolicy(MemberCachePolicy.ALL)

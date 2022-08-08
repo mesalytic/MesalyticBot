@@ -91,5 +91,42 @@
       "value": "guildMemberUpdateTimeOut",
       "description": "Triggers whenever a member gets timed out."
     }
+  ],
+  "voice": [
+    {
+      "label": "Member Deafen",
+      "value": "guildVoiceDeafen",
+      "description": "Triggers whenever a member is self deafened/un-deafened."
+    },
+    {
+      "label": "Member Server Deafen",
+      "value": "guildVoiceGuildDeafen",
+      "description": "Triggers whenever a member gets server deafened/un-deafened."
+    },
+    {
+      "label": "Member Mute",
+      "value": "guildVoiceMute",
+      "description": "Triggers whenever a member is self muted/un-muted."
+    },
+    {
+      "label": "Member Server Mute",
+      "value": "guildVoiceGuildMute",
+      "description": "Triggers whenever a member gets server muted/un-muted."
+    },
+    {
+      "label": "Join Voice Channel",
+      "value": "guildVoiceJoin",
+      "description": "Triggers whenever a member joins a voice channel."
+    },
+    {
+      "label": "Leave Voice Channel",
+      "value": "guildVoiceLeave",
+      "description": "Triggers whenever a member leaves a voice channel."
+    },
+    {
+      "label": "Move Voice Channel",
+      "value": "guildVoiceMove",
+      "description": "Triggers whenever a member moves from one voice channel to another."
+    }
   ]
 }

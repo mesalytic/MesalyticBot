@@ -99,10 +99,11 @@ public class LogsCommand implements Command {
 
                 event.reply("Using this menu you can select what type of events you want to log.").addActionRow(
                         SelectMenu.create("selectMenu:logs:categoryModule")
-                                .addOption("Channel Events", "selectMenu:logs:categoryModule:channel")
-                                .addOption("Emoji Events", "selectMenu:logs:categoryModule:emoji")
-                                .addOption("Ban Events", "selectMenu:logs:categoryModule:ban")
+                                .addOption("Channel Related Events", "selectMenu:logs:categoryModule:channel")
+                                .addOption("Emoji Related Events", "selectMenu:logs:categoryModule:emoji")
+                                .addOption("Ban Related Events", "selectMenu:logs:categoryModule:ban")
                                 .addOption("Member Related Events", "selectMenu:logs:categoryModule:guildmember")
+                                .addOption("Voice Related Events", "selectMenu:logs:categoryModule:voice")
                                 .setPlaceholder("Use this selection menu to toggle specific logging modules.")
                                 .setMinValues(1)
                                 .build()
