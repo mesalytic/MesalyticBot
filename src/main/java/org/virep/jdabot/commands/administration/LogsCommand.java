@@ -104,6 +104,7 @@ public class LogsCommand implements Command {
                                 .addOption("Ban Related Events", "selectMenu:logs:categoryModule:ban")
                                 .addOption("Member Related Events", "selectMenu:logs:categoryModule:guildmember")
                                 .addOption("Voice Related Events", "selectMenu:logs:categoryModule:voice")
+                                .addOption("Message Related Events", "selectMenu:logs:categoryModule:message")
                                 .setPlaceholder("Use this selection menu to toggle specific logging modules.")
                                 .setMinValues(1)
                                 .build()

@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.audit.ActionType;
 import net.dv8tion.jda.api.audit.AuditLogEntry;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 import net.dv8tion.jda.api.events.channel.ChannelCreateEvent;
 import net.dv8tion.jda.api.events.channel.ChannelDeleteEvent;
@@ -23,12 +24,16 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateNicknameEvent;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateTimeOutEvent;
 import net.dv8tion.jda.api.events.guild.voice.*;
+import net.dv8tion.jda.api.events.message.MessageBulkDeleteEvent;
+import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageUpdateEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.restaction.pagination.AuditLogPaginationAction;
 
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.util.List;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.virep.jdabot.utils.DatabaseUtils.getLogChannelID;
@@ -36,6 +41,10 @@ import static org.virep.jdabot.utils.DatabaseUtils.isEnabled;
 import static org.virep.jdabot.utils.Utils.secondsToSeperatedTime;
 
 public class LogsListener extends ListenerAdapter {
+
+    // Map<messageID, messageContent>
+    private Map<Long, Message> messageMap = new HashMap<>();
+
     @Override
     public void onChannelCreate(ChannelCreateEvent event) {
         ChannelType type = event.getChannelType();
@@ -650,6 +659,120 @@ public class LogsListener extends ListenerAdapter {
             TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
 
             if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+        }
+    }
+
+    @Override
+    public void onMessageReceived(MessageReceivedEvent event) {
+
+        // Store Message in cache
+        messageMap.put(event.getMessageIdLong(), event.getMessage());
+    }
+
+
+    @Override
+    public void onMessageUpdate(MessageUpdateEvent event) {
+        if (isEnabled("messageUpdate", event.getGuild().getId())) {
+            Member member = event.getMember();
+
+            MessageChannelUnion channel = event.getChannel();
+
+            String oldMessage = messageMap.containsKey(event.getMessageIdLong()) ? messageMap.get(event.getMessageIdLong()).getContentRaw() : "Not in Cache";
+            String newMessage = event.getMessage().getContentRaw();
+
+            MessageEmbed embed = new EmbedBuilder()
+                    .setAuthor(member.getUser().getAsTag(), null, member.getUser().getAvatarUrl())
+                    .setColor(3066993)
+                    .setDescription("**" + member.getUser().getAsTag() + " updated a message in " + channel.getAsMention() + "**")
+                    .addField("Old message:", oldMessage, true)
+                    .addField("New message:", newMessage, true)
+                    .setTimestamp(Instant.now())
+                    .setFooter("User ID:" + member.getId())
+                    .build();
+
+            String logChannelID = getLogChannelID(event.getGuild().getId());
+
+            assert logChannelID != null;
+            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+        }
+
+        // Update MessageCache if present, else add to cache
+        if (!messageMap.containsKey(event.getMessageIdLong())) messageMap.put(event.getMessageIdLong(), event.getMessage());
+        else messageMap.replace(event.getMessageIdLong(), event.getMessage());
+    }
+
+    @Override
+    public void onMessageDelete(MessageDeleteEvent event) {
+        if (isEnabled("messageDelete", event.getGuild().getId())) {
+            boolean hasMember = messageMap.containsKey(event.getMessageIdLong());
+
+            Message message = messageMap.getOrDefault(event.getMessageIdLong(), null);
+            Member member = hasMember ? event.getGuild().getMemberById(message.getAuthor().getId()) : null;
+
+            MessageChannelUnion channel = event.getChannel();
+
+            MessageEmbed embed = new EmbedBuilder()
+                    .setAuthor(member != null ? member.getUser().getAsTag() : "Unknown User", null, member != null ? member.getUser().getAvatarUrl() : null)
+                    .setColor(15158332)
+                    .setDescription("**" + (member != null ? member.getUser().getAsTag() : "An Unknown User") + " deleted a message in " + channel.getAsMention() + "**")
+                    .addField("Message:", message != null ? !message.getContentRaw().equals("") ? message.getContentRaw() : "The message had no content." : "The message was not in cache. This is probably due to the message being an old one.", true)
+                    .setTimestamp(Instant.now())
+                    .setFooter("User ID: " + (member != null ? member.getId() : "N/A"))
+                    .build();
+
+            String logChannelID = getLogChannelID(event.getGuild().getId());
+
+            assert logChannelID != null;
+            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+        }
+
+        messageMap.remove(event.getMessageIdLong());
+    }
+
+    @Override
+    public void onMessageBulkDelete(MessageBulkDeleteEvent event) {
+        if (isEnabled("messageBulkDelete", event.getGuild().getId())) {
+            List<String> messageIds = new ArrayList<>(event.getMessageIds());
+
+            Collections.reverse(messageIds);
+
+            StringBuilder sb = new StringBuilder();
+
+            for (String msgId : messageIds) {
+                Message message = messageMap.getOrDefault(Long.parseLong(msgId), null);
+
+                LocalDateTime date = message != null ? LocalDateTime.ofInstant(message.getTimeCreated().toInstant(), ZoneId.of("Europe/Paris")) : null;
+
+                sb
+                        .append(date != null ? date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) : "??")
+                        .append(" - ")
+                        .append(message != null ? event.getGuild().getMemberById(message.getAuthor().getId()).getUser().getAsTag() : "N/A")
+                        .append(" - ")
+                        .append(message != null ? !message.getContentRaw().equals("") ? message.getContentRaw() : "No Message Content" : "N/A")
+                        .append("\n");
+
+                messageMap.remove(Long.parseLong(msgId));
+            }
+
+            MessageEmbed embed = new EmbedBuilder()
+                    .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
+                    .setColor(15158332)
+                    .setDescription("**" + messageIds.size() + " were deleted a message in " + event.getChannel().getAsMention() + "**")
+                    .setTimestamp(Instant.now())
+                    .build();
+
+            String logChannelID = getLogChannelID(event.getGuild().getId());
+
+            assert logChannelID != null;
+            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).addFile(sb.toString().getBytes(), "messageLog.txt").queue();
+
+
         }
     }
 

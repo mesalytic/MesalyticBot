@@ -28,6 +28,7 @@ public class Main {
                         GatewayIntent.GUILD_MESSAGE_REACTIONS,
                         GatewayIntent.GUILD_VOICE_STATES)
                 .addEventListeners(lavalink, new EventListener(), new LogsListener())
+                .setBulkDeleteSplittingEnabled(false)
                 .setVoiceDispatchInterceptor(lavalink.getVoiceInterceptor())
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .setChunkingFilter(ChunkingFilter.ALL)

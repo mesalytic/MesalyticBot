@@ -128,5 +128,22 @@
       "value": "guildVoiceMove",
       "description": "Triggers whenever a member moves from one voice channel to another."
     }
+  ],
+  "message": [
+    {
+      "label": "Message Update",
+      "value": "messageUpdate",
+      "description": "Triggers whenever a message is updated."
+    },
+    {
+      "label": "Message Delete",
+      "value": "messageDelete",
+      "description": "Triggers whenever a message is deleted."
+    },
+    {
+      "label": "Message Bulk Delete",
+      "value": "messageBulkDelete",
+      "description": "Triggers whenever messages are bulk deleted (mass deleted)"
+    }
   ]
 }
