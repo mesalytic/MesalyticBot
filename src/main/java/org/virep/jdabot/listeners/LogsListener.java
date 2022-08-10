@@ -274,6 +274,7 @@ public class LogsListener extends ListenerAdapter {
 
     @Override
     public void onGuildBan(GuildBanEvent event) {
+        if (event.getUser().isBot()) return;
         if (isEnabled("guildBan", event.getGuild().getId())) {
             User bannedUser = event.getUser();
 
@@ -309,6 +310,7 @@ public class LogsListener extends ListenerAdapter {
 
     @Override
     public void onGuildUnban(GuildUnbanEvent event) {
+        if (event.getUser().isBot()) return;
         if (isEnabled("guildUnban", event.getGuild().getId())) {
             User unbannedUser = event.getUser();
 
@@ -342,6 +344,7 @@ public class LogsListener extends ListenerAdapter {
 
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
+        if (event.getUser().isBot()) return;
         if (isEnabled("guildMemberJoin", event.getGuild().getId())) {
             User member = event.getUser();
             MessageEmbed embed = new EmbedBuilder()
@@ -364,6 +367,7 @@ public class LogsListener extends ListenerAdapter {
 
     @Override
     public void onGuildMemberRemove(GuildMemberRemoveEvent event) {
+        if (event.getUser().isBot()) return;
         if (isEnabled("guildMemberRemove", event.getGuild().getId())) {
             User member = event.getUser();
             MessageEmbed embed = new EmbedBuilder()
@@ -386,7 +390,7 @@ public class LogsListener extends ListenerAdapter {
 
     @Override
     public void onGuildMemberRoleAdd(GuildMemberRoleAddEvent event) {
-        System.out.println("ll");
+        if (event.getUser().isBot()) return;
         if (isEnabled("guildMemberRoleAdd", event.getGuild().getId())) {
             List<Role> roles = event.getRoles();
             StringBuilder addedRoles = new StringBuilder();
@@ -420,6 +424,7 @@ public class LogsListener extends ListenerAdapter {
 
     @Override
     public void onGuildMemberRoleRemove(GuildMemberRoleRemoveEvent event) {
+        if (event.getUser().isBot()) return;
         if (isEnabled("guildMemberRoleRemove", event.getGuild().getId())) {
             List<Role> roles = event.getRoles();
             StringBuilder removedRoles = new StringBuilder();
@@ -453,6 +458,7 @@ public class LogsListener extends ListenerAdapter {
 
     @Override
     public void onGuildMemberUpdateNickname(GuildMemberUpdateNicknameEvent event) {
+        if (event.getUser().isBot()) return;
         if (isEnabled("guildMemberUpdateNickname", event.getGuild().getId())) {
             Member member = event.getMember();
 
@@ -479,6 +485,7 @@ public class LogsListener extends ListenerAdapter {
 
     @Override
     public void onGuildMemberUpdateTimeOut(GuildMemberUpdateTimeOutEvent event) {
+        if (event.getUser().isBot()) return;
         if (isEnabled("guildMemberUpdateTimeOut", event.getGuild().getId())) {
             AuditLogPaginationAction auditLogs = event.getGuild().retrieveAuditLogs();
 
@@ -517,6 +524,7 @@ public class LogsListener extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceSelfDeafen(GuildVoiceSelfDeafenEvent event) {
+        if (event.getMember().getUser().isBot()) return;
         if (isEnabled("guildVoiceDeafen", event.getGuild().getId())) {
             User member = event.getMember().getUser();
             MessageEmbed embed = new EmbedBuilder()
@@ -538,6 +546,7 @@ public class LogsListener extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceGuildDeafen(GuildVoiceGuildDeafenEvent event) {
+        if (event.getMember().getUser().isBot()) return;
         if (isEnabled("guildVoiceGuildDeafen", event.getGuild().getId())) {
             User member = event.getMember().getUser();
             MessageEmbed embed = new EmbedBuilder()
@@ -559,6 +568,7 @@ public class LogsListener extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceSelfMute(GuildVoiceSelfMuteEvent event) {
+        if (event.getMember().getUser().isBot()) return;
         if (isEnabled("guildVoiceMute", event.getGuild().getId())) {
             User member = event.getMember().getUser();
             MessageEmbed embed = new EmbedBuilder()
@@ -580,6 +590,7 @@ public class LogsListener extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceGuildMute(GuildVoiceGuildMuteEvent event) {
+        if (event.getMember().getUser().isBot()) return;
         if (isEnabled("guildVoiceGuildMute", event.getGuild().getId())) {
             User member = event.getMember().getUser();
             MessageEmbed embed = new EmbedBuilder()
@@ -601,6 +612,7 @@ public class LogsListener extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
+        if (event.getMember().getUser().isBot()) return;
         if (isEnabled("guildVoiceJoin", event.getGuild().getId())) {
             User member = event.getMember().getUser();
             MessageEmbed embed = new EmbedBuilder()
@@ -622,6 +634,7 @@ public class LogsListener extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
+        if (event.getMember().getUser().isBot()) return;
         if (isEnabled("guildVoiceLeave", event.getGuild().getId())) {
 
             User member = event.getMember().getUser();
@@ -644,6 +657,8 @@ public class LogsListener extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceMove(GuildVoiceMoveEvent event) {
+        if (event.getMember().getUser().isBot()) return;
+
         AudioChannel oldChannel = event.getChannelLeft();
         AudioChannel newChannel = event.getChannelJoined();
 
@@ -670,6 +685,7 @@ public class LogsListener extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
+        if (event.getAuthor().isBot()) return;
 
         // Store Message in cache
         messageMap.put(event.getMessageIdLong(), event.getMessage());
@@ -678,6 +694,7 @@ public class LogsListener extends ListenerAdapter {
 
     @Override
     public void onMessageUpdate(MessageUpdateEvent event) {
+        if (event.getAuthor().isBot()) return;
         if (isEnabled("messageUpdate", event.getGuild().getId())) {
             Member member = event.getMember();
 
@@ -717,6 +734,8 @@ public class LogsListener extends ListenerAdapter {
             Message message = messageMap.getOrDefault(event.getMessageIdLong(), null);
             Member member = hasMember ? event.getGuild().getMemberById(message.getAuthor().getId()) : null;
 
+            if (member != null && member.getUser().isBot()) return;
+
             MessageChannelUnion channel = event.getChannel();
 
             MessageEmbed embed = new EmbedBuilder()
@@ -750,6 +769,8 @@ public class LogsListener extends ListenerAdapter {
 
             for (String msgId : messageIds) {
                 Message message = messageMap.getOrDefault(Long.parseLong(msgId), null);
+
+                if (message != null && message.getAuthor().isBot()) return;
 
                 LocalDateTime date = message != null ? LocalDateTime.ofInstant(message.getTimeCreated().toInstant(), ZoneId.of("Europe/Paris")) : null;
 
