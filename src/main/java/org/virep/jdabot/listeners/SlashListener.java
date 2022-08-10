@@ -51,7 +51,7 @@ public class SlashListener extends ListenerAdapter {
 
     @Override
     public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {
-        if (event.getSelectMenu().getId().equals("selectMenu:logs:categoryModule")) {
+        if (event.getSelectMenu().getId().equals("selectMenu:logs:categoryEvents")) {
             try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM logs WHERE guildID = ?")) {
                 statement.setString(1, event.getGuild().getId());
 
@@ -72,14 +72,14 @@ public class SlashListener extends ListenerAdapter {
                     for (int i = 0; i < logArray.length(); i++) {
                         JSONObject module = logArray.getJSONObject(i);
 
-                        moduleOptions.add(SelectOption.of(module.getString("label"), "selectMenu:logs:modules:" + module.getString("value")).withDescription(module.getString("description")));
+                        moduleOptions.add(SelectOption.of(module.getString("label"), "selectMenu:logs:events:" + module.getString("value")).withDescription(module.getString("description")));
                     }
 
                     for (int i = 1; i < resultSetMetaData.getColumnCount() - 1; i++) {
                         String modState = result.getString(i);
 
                         if (modState.equals("true"))
-                            defaultOptions.add("selectMenu:logs:modules:" + resultSetMetaData.getColumnName(i));
+                            defaultOptions.add("selectMenu:logs:events:" + resultSetMetaData.getColumnName(i));
                     }
 
                     moduleOptions.forEach(mo -> System.out.println(mo.getLabel()));
@@ -87,7 +87,7 @@ public class SlashListener extends ListenerAdapter {
                     event.editComponents().setActionRows(
                             ActionRow.of(event.getSelectMenu().createCopy().setDefaultOptions(Collections.singleton(event.getSelectedOptions().get(0))).build()),
                             ActionRow.of(
-                                    SelectMenu.create("selectMenu:logs:modules")
+                                    SelectMenu.create("selectMenu:logs:events")
                                             .addOptions(moduleOptions)
                                             .setDefaultValues(defaultOptions)
                                             .setMaxValues(moduleOptions.size())
@@ -101,7 +101,7 @@ public class SlashListener extends ListenerAdapter {
             }
 
         }
-        if (event.getSelectMenu().getId().equals("selectMenu:logs:modules")) {
+        if (event.getSelectMenu().getId().equals("selectMenu:logs:events")) {
             HashSet<String> options = new HashSet<>();
 
             try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM logs WHERE guildID = ?")) {
@@ -122,7 +122,7 @@ public class SlashListener extends ListenerAdapter {
                 sb.append("UPDATE logs SET ");
 
                 for (String module : options) {
-                    if (!event.getValues().isEmpty() && event.getValues().contains("selectMenu:logs:modules:" + module))
+                    if (!event.getValues().isEmpty() && event.getValues().contains("selectMenu:logs:events:" + module))
                         query.append(module).append(" = \"true\", ");
                     else query.append(module).append(" = \"false\", ");
                 }
@@ -136,7 +136,7 @@ public class SlashListener extends ListenerAdapter {
                     updateStatement.setString(1, event.getGuild().getId());
                     updateStatement.executeUpdate();
 
-                    event.reply("Successfully configured").setEphemeral(true).queue();
+                    event.reply("The (un)selected events have been successfully configured.").setEphemeral(true).queue();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();

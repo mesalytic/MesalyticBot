@@ -3,7 +3,6 @@ package org.virep.jdabot.listeners;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.audit.ActionType;
-import net.dv8tion.jda.api.audit.AuditLogEntry;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
@@ -40,7 +39,6 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static org.virep.jdabot.utils.DatabaseUtils.getLogChannelID;
 import static org.virep.jdabot.utils.DatabaseUtils.isEnabled;
@@ -49,7 +47,7 @@ import static org.virep.jdabot.utils.Utils.secondsToSeperatedTime;
 public class LogsListener extends ListenerAdapter {
 
     // Map<messageID, messageContent>
-    private Map<Long, Message> messageMap = new HashMap<>();
+    private final Map<Long, Message> messageMap = new HashMap<>();
 
     @Override
     public void onChannelCreate(ChannelCreateEvent event) {
@@ -85,7 +83,7 @@ public class LogsListener extends ListenerAdapter {
         if (isEnabled("channelDelete", event.getGuild().getId())) {
             MessageEmbed embed = new EmbedBuilder()
                     .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
-                    .setColor(3066993)
+                    .setColor(15158332)
                     .setDescription("**" + Type.valueOf(type.toString()).type + " channel delete: " + event.getChannel().getName() + "**")
                     .setTimestamp(Instant.now())
                     .setFooter("Channel ID: " + event.getChannel().getId())
@@ -231,7 +229,7 @@ public class LogsListener extends ListenerAdapter {
         if (isEnabled("emojiRemoved", event.getGuild().getId())) {
             MessageEmbed embed = new EmbedBuilder()
                     .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
-                    .setColor(3066993)
+                    .setColor(15158332)
                     .setDescription("**Emoji: " + emoji.getName() + " has been deleted**")
                     .setTimestamp(Instant.now())
                     .setFooter("Emoji ID: " + emoji.getId())
@@ -325,7 +323,7 @@ public class LogsListener extends ListenerAdapter {
                 MessageEmbed embed = new EmbedBuilder()
                         .setAuthor("User unbanned:", null, unbannedUser.getAvatarUrl())
                         .setThumbnail(unbannedUser.getAvatarUrl())
-                        .setColor(15158332)
+                        .setColor(3066993)
                         .setDescription("User: " + unbannedUser.getAsTag())
                         .addField("Unbanned by:", moderator, true)
                         .setFooter("ID: " + unbannedUser.getId())
@@ -403,6 +401,7 @@ public class LogsListener extends ListenerAdapter {
 
                 MessageEmbed embed = new EmbedBuilder()
                         .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
+                        .setColor(3066993)
                         .setDescription("**" + member.getAsTag() + " roles added**")
                         .addField("Added roles", roleString.substring(0, roleString.length() - 2), true)
                         .setTimestamp(Instant.now())
@@ -435,6 +434,7 @@ public class LogsListener extends ListenerAdapter {
 
                 MessageEmbed embed = new EmbedBuilder()
                         .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
+                        .setColor(15158332)
                         .setDescription("**" + member.getAsTag() + " roles removed**")
                         .addField("Removed roles", roleString.substring(0, roleString.length() - 2), true)
                         .setTimestamp(Instant.now())
@@ -495,7 +495,7 @@ public class LogsListener extends ListenerAdapter {
 
                 MessageEmbed embed = new EmbedBuilder()
                         .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
-                        .setColor(3066993)
+                        .setColor(15158332)
                         .setDescription("**" + member.getAsTag() + " timeout changed**")
                         .addField("Old Timeout:", oldTimeout != null ? "Until <t:" + oldTimeout.toEpochSecond() + ":F>" : "None", true)
                         .addField("New Timeout:", newTimeout != null ? "Until <t:" + newTimeout.toEpochSecond() + ":F>" : "None", true)
@@ -651,7 +651,7 @@ public class LogsListener extends ListenerAdapter {
             User member = event.getMember().getUser();
             MessageEmbed embed = new EmbedBuilder()
                     .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
-                    .setColor(15158332)
+                    .setColor(16751616)
                     .setDescription("**" + member.getAsTag() + " switched voice channel to" + newChannel.getAsMention() + "**")
                     .addField("Old channel:", oldChannel.getAsMention(), true)
                     .addField("New channel:", newChannel.getAsMention(), true)
@@ -688,7 +688,7 @@ public class LogsListener extends ListenerAdapter {
 
             MessageEmbed embed = new EmbedBuilder()
                     .setAuthor(member.getUser().getAsTag(), null, member.getUser().getAvatarUrl())
-                    .setColor(3066993)
+                    .setColor(16751616)
                     .setDescription("**" + member.getUser().getAsTag() + " updated a message in " + channel.getAsMention() + "**")
                     .addField("Old message:", oldMessage, true)
                     .addField("New message:", newMessage, true)
@@ -805,7 +805,7 @@ public class LogsListener extends ListenerAdapter {
         if (isEnabled("roleDelete", event.getGuild().getId())) {
             MessageEmbed embed = new EmbedBuilder()
                     .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
-                    .setColor(3066993)
+                    .setColor(15158332)
                     .setDescription("** Role deleted: " + event.getRole().getName() + "**")
                     .setTimestamp(Instant.now())
                     .setFooter("Role ID: " + event.getRole().getId())
