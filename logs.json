@@ -145,5 +145,52 @@
       "value": "messageBulkDelete",
       "description": "Triggers whenever messages are bulk deleted (mass deleted)"
     }
+  ],
+  "role": [
+    {
+      "label": "Role Create",
+      "value": "roleCreate",
+      "description": "Triggers whenever a role is created."
+    },
+    {
+      "label": "Role Delete",
+      "value": "roleDelete",
+      "description": "Triggers whenever a role is deleted."
+    },
+    {
+      "label": "Role Color Update",
+      "value": "roleUpdateColor",
+      "description": "Triggers whenever a role color is updated."
+    },
+    {
+      "label": "Role Hoisted Update",
+      "value": "roleUpdateHoisted",
+      "description": "Triggers whenever a role hoist status is updated."
+    },
+    {
+      "label": "Role Icon Update",
+      "value": "roleUpdateIcon",
+      "description": "Triggers whenever a role icon is updated."
+    },
+    {
+      "label": "Role Mentionable Update",
+      "value": "roleUpdateMentionable",
+      "description": "Triggers whenever a role mentionable status is updated."
+    },
+    {
+      "label": "Role Name Update",
+      "value": "roleUpdateName",
+      "description": "Triggers whenever a role name is updated."
+    },
+    {
+      "label": "Role Permissions Update",
+      "value": "roleUpdatePermissions",
+      "description": "Triggers whenever a role permissions are updated."
+    },
+    {
+      "label": "Role Position Update",
+      "value": "roleUpdatePosition",
+      "description": "Triggers whenever a role position is updated."
+    }
   ]
 }

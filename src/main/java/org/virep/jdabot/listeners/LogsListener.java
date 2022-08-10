@@ -1,6 +1,7 @@
 package org.virep.jdabot.listeners;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.audit.ActionType;
 import net.dv8tion.jda.api.audit.AuditLogEntry;
 import net.dv8tion.jda.api.entities.*;
@@ -28,12 +29,17 @@ import net.dv8tion.jda.api.events.message.MessageBulkDeleteEvent;
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.MessageUpdateEvent;
+import net.dv8tion.jda.api.events.role.RoleCreateEvent;
+import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
+import net.dv8tion.jda.api.events.role.update.*;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.restaction.pagination.AuditLogPaginationAction;
 
+import java.awt.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.virep.jdabot.utils.DatabaseUtils.getLogChannelID;
@@ -771,8 +777,225 @@ public class LogsListener extends ListenerAdapter {
             TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
 
             if (logChannel != null) logChannel.sendMessageEmbeds(embed).addFile(sb.toString().getBytes(), "messageLog.txt").queue();
+        }
+    }
+
+    @Override
+    public void onRoleCreate(RoleCreateEvent event) {
+        if (isEnabled("roleCreate", event.getGuild().getId())) {
+            MessageEmbed embed = new EmbedBuilder()
+                    .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
+                    .setColor(3066993)
+                    .setDescription("** Role created: " + event.getRole().getAsMention() + "**")
+                    .setTimestamp(Instant.now())
+                    .setFooter("Role ID: " + event.getRole().getId())
+                    .build();
+
+            String logChannelID = getLogChannelID(event.getGuild().getId());
+
+            assert logChannelID != null;
+            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+        }
+    }
+
+    @Override
+    public void onRoleDelete(RoleDeleteEvent event) {
+        if (isEnabled("roleDelete", event.getGuild().getId())) {
+            MessageEmbed embed = new EmbedBuilder()
+                    .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
+                    .setColor(3066993)
+                    .setDescription("** Role deleted: " + event.getRole().getName() + "**")
+                    .setTimestamp(Instant.now())
+                    .setFooter("Role ID: " + event.getRole().getId())
+                    .build();
+
+            String logChannelID = getLogChannelID(event.getGuild().getId());
+
+            assert logChannelID != null;
+            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+        }
+    }
+
+    @Override
+    public void onRoleUpdateColor(RoleUpdateColorEvent event) {
+        if (isEnabled("roleUpdateColor", event.getGuild().getId())) {
+            Color oldColor = event.getOldColor();
+            Color newColor = event.getNewColor();
+
+            MessageEmbed embed = new EmbedBuilder()
+                    .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
+                    .setColor(newColor != null ? newColor.getRGB() : 3066993)
+                    .setDescription("** Role color changed: " + event.getRole().getName() + "**")
+                    .addField("Old Color:", oldColor != null ? String.format("#%02x%02x%02x", oldColor.getRed(), oldColor.getGreen(), oldColor.getBlue()) : "Default", true)
+                    .addField("New Color:", newColor != null ? String.format("#%02x%02x%02x", newColor.getRed(), newColor.getGreen(), newColor.getBlue()) : "Default", true)
+                    .setTimestamp(Instant.now())
+                    .setFooter("Role ID: " + event.getRole().getId())
+                    .build();
+
+            String logChannelID = getLogChannelID(event.getGuild().getId());
+
+            assert logChannelID != null;
+            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+        }
+    }
+
+    @Override
+    public void onRoleUpdateHoisted(RoleUpdateHoistedEvent event) {
+        if (isEnabled("roleUpdateHoisted", event.getGuild().getId())) {
+            MessageEmbed embed = new EmbedBuilder()
+                    .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
+                    .setColor(3066993)
+                    .setDescription("** Role has been " + (event.wasHoisted() ? "un-" : "") + "hoisted :" + event.getRole().getAsMention() + "**")
+                    .setTimestamp(Instant.now())
+                    .setFooter("Role ID: " + event.getRole().getId())
+                    .build();
+
+            String logChannelID = getLogChannelID(event.getGuild().getId());
+
+            assert logChannelID != null;
+            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+        }
+    }
+
+    @Override
+    public void onRoleUpdateIcon(RoleUpdateIconEvent event) {
+        if (isEnabled("roleUpdateIcon", event.getGuild().getId())) {
+            RoleIcon oldIcon = event.getOldIcon();
+            RoleIcon newIcon = event.getNewIcon();
+
+            MessageEmbed embed = new EmbedBuilder()
+                    .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
+                    .setColor(3066993)
+                    .setDescription("** Role icon changed: " + event.getRole().getName() + "**")
+                    .addField("Old Icon:", oldIcon != null ? oldIcon.getIconUrl() != null ? oldIcon.getIconUrl() : "No Role Icon" : "No Role Icon", true)
+                    .addField("New Icon:", newIcon != null ? newIcon.getIconUrl() != null ? newIcon.getIconUrl() : "No Role Icon" : "No Role Icon", true)
+                    .setTimestamp(Instant.now())
+                    .setFooter("Role ID: " + event.getRole().getId())
+                    .build();
+
+            String logChannelID = getLogChannelID(event.getGuild().getId());
+
+            assert logChannelID != null;
+            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+        }
+    }
+
+    @Override
+    public void onRoleUpdateMentionable(RoleUpdateMentionableEvent event) {
+        if (isEnabled("roleUpdateMentionable", event.getGuild().getId())) {
+            MessageEmbed embed = new EmbedBuilder()
+                    .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
+                    .setColor(3066993)
+                    .setDescription("** Role is now " + (event.wasMentionable() ? "un-" : "") + "mentionable :" + event.getRole().getAsMention() + "**")
+                    .setTimestamp(Instant.now())
+                    .setFooter("Role ID: " + event.getRole().getId())
+                    .build();
+
+            String logChannelID = getLogChannelID(event.getGuild().getId());
+
+            assert logChannelID != null;
+            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+        }
+    }
+
+    @Override
+    public void onRoleUpdateName(RoleUpdateNameEvent event) {
+        if (isEnabled("roleUpdateName", event.getGuild().getId())) {
+            String oldName = event.getOldName();
+            String newName = event.getNewName();
+
+            MessageEmbed embed = new EmbedBuilder()
+                    .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
+                    .setColor(3066993)
+                    .setDescription("** Role name changed: " + event.getRole().getAsMention() + "**")
+                    .addField("Old Name:", oldName, true)
+                    .addField("New Name:", newName, true)
+                    .setTimestamp(Instant.now())
+                    .setFooter("Role ID: " + event.getRole().getId())
+                    .build();
+
+            String logChannelID = getLogChannelID(event.getGuild().getId());
+
+            assert logChannelID != null;
+            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+        }
+    }
+
+    @Override
+    public void onRoleUpdatePermissions(RoleUpdatePermissionsEvent event) {
+        if (isEnabled("roleUpdatePermissions", event.getGuild().getId())) {
+            EnumSet<Permission> oldPermissions = event.getOldPermissions();
+            EnumSet<Permission> newPermissions = event.getNewPermissions();
+
+            StringBuilder addedSB = new StringBuilder();
+            StringBuilder removedSB = new StringBuilder();
+
+            for (Permission permission : newPermissions) {
+                if (!oldPermissions.contains(permission)) addedSB.append(permission.getName()).append(", ");
+            }
+
+            for (Permission permission : oldPermissions) {
+                if (!newPermissions.contains(permission)) removedSB.append(permission.getName()).append(", ");
+            }
+
+            String addedString = addedSB.toString();
+            String removedString = removedSB.toString();
 
 
+            MessageEmbed embed = new EmbedBuilder()
+                    .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
+                    .setColor(3066993)
+                    .setDescription("** Role permissions changed: " + event.getRole().getAsMention() + "**")
+                    .addField("Added:", !addedString.equals("") ? addedString.substring(0, addedString.length() - 2) : "N/A", true)
+                    .addField("Removed:", !removedString.equals("") ? removedString.substring(0, removedString.length() - 2) : "N/A", true)
+                    .setTimestamp(Instant.now())
+                    .setFooter("Role ID: " + event.getRole().getId())
+                    .build();
+
+            String logChannelID = getLogChannelID(event.getGuild().getId());
+
+            assert logChannelID != null;
+            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
+        }
+    }
+
+    @Override
+    public void onRoleUpdatePosition(RoleUpdatePositionEvent event) {
+        if (isEnabled("roleUpdatePosition", event.getGuild().getId())) {
+            int oldPosition = event.getOldPosition();
+            int newPosition = event.getNewPosition();
+
+            MessageEmbed embed = new EmbedBuilder()
+                    .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
+                    .setColor(3066993)
+                    .setDescription("** Role position changed: " + event.getRole().getAsMention() + "**")
+                    .addField("Position", oldPosition + " > " + newPosition, true)
+                    .setTimestamp(Instant.now())
+                    .setFooter("Role ID: " + event.getRole().getId())
+                    .build();
+
+            String logChannelID = getLogChannelID(event.getGuild().getId());
+
+            assert logChannelID != null;
+            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
         }
     }
 
