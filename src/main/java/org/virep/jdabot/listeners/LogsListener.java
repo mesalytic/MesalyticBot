@@ -707,8 +707,8 @@ public class LogsListener extends ListenerAdapter {
                     .setAuthor(member.getUser().getAsTag(), null, member.getUser().getAvatarUrl())
                     .setColor(16751616)
                     .setDescription("**" + member.getUser().getAsTag() + " updated a message in " + channel.getAsMention() + "**")
-                    .addField("Old message:", oldMessage, true)
-                    .addField("New message:", newMessage, true)
+                    .addField("Old message:", oldMessage.length() > 1024 ? oldMessage.substring(0, 1021) + "..." : oldMessage, true)
+                    .addField("New message:", newMessage.length() > 1024 ? newMessage.substring(0, 1021) + "..." : newMessage, true)
                     .setTimestamp(Instant.now())
                     .setFooter("User ID:" + member.getId())
                     .build();
@@ -742,7 +742,7 @@ public class LogsListener extends ListenerAdapter {
                     .setAuthor(member != null ? member.getUser().getAsTag() : "Unknown User", null, member != null ? member.getUser().getAvatarUrl() : null)
                     .setColor(15158332)
                     .setDescription("**" + (member != null ? member.getUser().getAsTag() : "An Unknown User") + " deleted a message in " + channel.getAsMention() + "**")
-                    .addField("Message:", message != null ? !message.getContentRaw().equals("") ? message.getContentRaw() : "The message had no content." : "The message was not in cache. This is probably due to the message being an old one.", true)
+                    .addField("Message:", message != null ? !message.getContentRaw().equals("") ? message.getContentRaw().length() > 1024 ? message.getContentRaw().substring(0, 1021) + "..." : message.getContentRaw() : "The message had no content." : "The message was not in cache. This is probably due to the message being an old one.", true)
                     .setTimestamp(Instant.now())
                     .setFooter("User ID: " + (member != null ? member.getId() : "N/A"))
                     .build();
