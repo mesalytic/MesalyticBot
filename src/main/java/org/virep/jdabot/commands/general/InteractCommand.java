@@ -29,21 +29,21 @@ public class InteractCommand implements Command {
     public CommandData getCommandData() {
         return new CommandDataImpl(getName(), "Interact with others")
                 .addSubcommands(
-                        new SubcommandData("smug", "Smug")
+                        new SubcommandData("smug", "Smug at someone.")
                                 .addOption(OptionType.USER, "user", "The user you want to interact with."),
-                        new SubcommandData("cuddle", "baka")
+                        new SubcommandData("cuddle", "Cuddle someone.")
                                 .addOption(OptionType.USER, "user", "The user you want to interact with."),
-                        new SubcommandData("slap", "baka")
+                        new SubcommandData("slap", "Slap someone.")
                                 .addOption(OptionType.USER, "user", "The user you want to interact with."),
-                        new SubcommandData("pat", "baka")
+                        new SubcommandData("pat", "Pat someone.")
                                 .addOption(OptionType.USER, "user", "The user you want to interact with."),
-                        new SubcommandData("feed", "feed")
+                        new SubcommandData("feed", "Feed someone.")
                                 .addOption(OptionType.USER, "user", "The user you want to interact with."),
-                        new SubcommandData("hug", "baka")
+                        new SubcommandData("hug", "Give a hug to someone.")
                                 .addOption(OptionType.USER, "user", "The user you want to interact with."),
-                        new SubcommandData("kiss", "baka")
+                        new SubcommandData("kiss", "Give a kiss to someone.")
                                 .addOption(OptionType.USER, "user", "The user you want to interact with."),
-                        new SubcommandData("tickle", "baka")
+                        new SubcommandData("tickle", "Tickle someone.")
                                 .addOption(OptionType.USER, "user", "The user you want to interact with.")
                 );
     }
