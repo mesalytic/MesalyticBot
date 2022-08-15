@@ -693,8 +693,6 @@ public class LogsListener extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        if (event.getAuthor().isBot()) return;
-
         // Store Message in cache
         messageMap.put(event.getMessageIdLong(), event.getMessage());
     }
