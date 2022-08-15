@@ -342,6 +342,7 @@ public class InteractionroleCommand implements Command {
                                         msg.editMessageComponents().setActionRow(
                                                 SelectMenu.create("selectmenurole:" + event.getGuild().getId())
                                                         .addOption(choiceLabel, choiceValue, choiceDescription, emoji)
+                                                        .setMinValues(0)
                                                         .build()
                                         ).queue();
 
@@ -351,7 +352,7 @@ public class InteractionroleCommand implements Command {
                                         SelectMenu selectMenu = (SelectMenu) actionRow.getComponents().get(0);
 
                                         SelectMenu copyMenu = selectMenu.createCopy().build();
-                                        SelectMenu.Builder builder = selectMenu.createCopy().addOption(choiceLabel, choiceValue, choiceDescription, emoji).setMaxValues(copyMenu.getOptions().size() + 1);
+                                        SelectMenu.Builder builder = selectMenu.createCopy().addOption(choiceLabel, choiceValue, choiceDescription, emoji).setMaxValues(copyMenu.getOptions().size() + 1).setMinValues(0);
 
                                         msg.editMessageComponents().setActionRow(builder.build()).queue();
 
