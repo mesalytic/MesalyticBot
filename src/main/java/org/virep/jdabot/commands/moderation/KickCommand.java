@@ -1,7 +1,9 @@
 package org.virep.jdabot.commands.moderation;
 
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -19,6 +21,7 @@ public class KickCommand implements Command {
     @Override
     public CommandData getCommandData() {
         return new CommandDataImpl(getName(), "Kick someone.")
+                .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.KICK_MEMBERS))
                 .addOptions(
                         new OptionData(OptionType.USER, "member", "the member you want to kick", true),
                         new OptionData(OptionType.STRING, "reason", "The reason of the kick.")
@@ -32,6 +35,11 @@ public class KickCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        if (!event.getMember().hasPermission(Permission.KICK_MEMBERS)) {
+            event.reply("You do not have permission to use this command.").setEphemeral(true).queue();
+            return;
+        }
+
         Member member = Objects.requireNonNull(event.getOption("member")).getAsMember();
         String reason = event.getOption("reason") != null ? Objects.requireNonNull(event.getOption("reason")).getAsString() : "No reason.";
 
