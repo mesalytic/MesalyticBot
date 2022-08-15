@@ -238,10 +238,11 @@ public class InteractionroleCommand implements Command {
 
                             ResultSet otherResult = otherStatement.executeQuery();
 
-                            otherResult.last();
+                            boolean hasOtherButtons = otherResult.first();
 
                             TextChannel channel = event.getGuild().getTextChannelById(result.getString(1));
 
+                            assert channel != null;
                             channel.retrieveMessageById(messageID).queue(msg -> {
 
                                 if (!msg.getActionRows().isEmpty() && msg.getActionRows().get(0).getComponents().get(0).getType().equals(Component.Type.SELECT_MENU)) {
@@ -257,7 +258,7 @@ public class InteractionroleCommand implements Command {
 
                                     insertStatement.executeUpdate();
 
-                                    if (!otherResult.first()) {
+                                    if (!hasOtherButtons) {
                                         msg.editMessageComponents().setActionRow(
                                                 Button.primary("interactionrole:" + event.getGuild().getId() + ":" + role.getId(), buttonName)
                                         ).queue();
@@ -307,6 +308,8 @@ public class InteractionroleCommand implements Command {
 
                             ResultSet smResult = selectMenuStatement.executeQuery();
 
+                            boolean hasOtherMenus = smResult.first();
+
                             TextChannel channel = event.getGuild().getTextChannelById(result.getString(1));
 
                             channel.retrieveMessageById(messageID).queue(msg -> {
@@ -335,7 +338,7 @@ public class InteractionroleCommand implements Command {
                                         else emoji = fromFormattedEmoji.asUnicode();
                                     } else emoji = null;
 
-                                    if (!smResult.first()) {
+                                    if (!hasOtherMenus) {
                                         msg.editMessageComponents().setActionRow(
                                                 SelectMenu.create("selectmenurole:" + event.getGuild().getId())
                                                         .addOption(choiceLabel, choiceValue, choiceDescription, emoji)
@@ -448,6 +451,8 @@ public class InteractionroleCommand implements Command {
 
                                     removeStatement.executeUpdate();
 
+                                    System.out.println("dd");
+
                                     channel.retrieveMessageById(messageID).queue(msg -> {
                                         ActionRow actionRow = msg.getActionRows().get(0);
                                         SelectMenu selectMenu = (SelectMenu) actionRow.getComponents().get(0);
@@ -458,9 +463,14 @@ public class InteractionroleCommand implements Command {
                                             if (!option.getValue().equals("selectmenurole:" + event.getGuild().getId() + ":" + role.getId()))
                                                 selectOptions.add(option);
                                         });
-                                        SelectMenu newMenu = SelectMenu.create("selectmenurole:" + event.getGuild().getId()).addOptions(selectOptions).setMaxValues(selectOptions.size()).build();
 
-                                        msg.editMessageComponents().setActionRow(newMenu).queue();
+                                        System.out.println("cc");
+
+                                        if (selectOptions.isEmpty()) msg.editMessageComponents().setActionRows().queue();
+                                        else {
+                                            SelectMenu newMenu = SelectMenu.create("selectmenurole:" + event.getGuild().getId()).addOptions(selectOptions).setMaxValues(selectOptions.size()).build();
+                                            msg.editMessageComponents().setActionRow(newMenu).queue();
+                                        }
 
                                         event.reply("Successfully removed selection from the select menu!").queue();
                                     });

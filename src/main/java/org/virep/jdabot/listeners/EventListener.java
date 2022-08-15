@@ -14,6 +14,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.virep.jdabot.Main;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
@@ -22,6 +23,8 @@ import javax.annotation.Nonnull;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 
 public class EventListener extends ListenerAdapter {
 
@@ -217,25 +220,44 @@ public class EventListener extends ListenerAdapter {
             String roleID = args[2];
 
             Role role = event.getGuild().getRoleById(roleID);
-            event.getGuild().addRoleToMember(event.getUser(), role).queue();
 
-            event.reply("You successfully got the role !").setEphemeral(true).queue();
+            if (event.getMember().getRoles().contains(role)) {
+                event.getGuild().removeRoleFromMember(event.getUser(), role).queue();
+                event.reply("The role has successfully been removed !").setEphemeral(true).queue();
+            }
+            else  {
+                event.getGuild().addRoleToMember(event.getUser(), role).queue();
+                event.reply("You successfully got the role !").setEphemeral(true).queue();
+            }
+
+
         }
     }
 
     @Override
     public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {
         String selectMenuID = event.getSelectMenu().getId();
+        List<SelectOption> selectOptionsIDs = event.getSelectedOptions();
 
         if (selectMenuID.startsWith("selectmenurole")) {
-            String[] args = selectMenuID.split(":");
+            selectOptionsIDs.forEach(selectOption -> {
+                String[] args = selectOption.getValue().split(":");
 
-            String roleID = args[2];
+                System.out.println(Arrays.toString(args));
 
-            Role role = event.getGuild().getRoleById(roleID);
-            event.getGuild().addRoleToMember(event.getUser(), role).queue();
+                String roleID = args[2];
 
-            event.reply("You successfully got the role !").setEphemeral(true).queue();
+                Role role = event.getGuild().getRoleById(roleID);
+
+                if (event.getMember().getRoles().contains(role)) {
+                    event.getGuild().removeRoleFromMember(event.getUser(), role).queue();
+                }
+                else  {
+                    event.getGuild().addRoleToMember(event.getUser(), role).queue();
+                }
+            });
+
+            event.reply("Your roles have successfully been updated.").setEphemeral(true).queue();
         }
     }
 }
