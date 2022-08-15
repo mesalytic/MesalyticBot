@@ -525,6 +525,8 @@ public class LogsListener extends ListenerAdapter {
     @Override
     public void onGuildVoiceSelfDeafen(GuildVoiceSelfDeafenEvent event) {
         if (event.getMember().getUser().isBot()) return;
+        if (!event.getVoiceState().inAudioChannel()) return;
+
         if (isEnabled("guildVoiceDeafen", event.getGuild().getId())) {
             User member = event.getMember().getUser();
             MessageEmbed embed = new EmbedBuilder()
@@ -547,6 +549,8 @@ public class LogsListener extends ListenerAdapter {
     @Override
     public void onGuildVoiceGuildDeafen(GuildVoiceGuildDeafenEvent event) {
         if (event.getMember().getUser().isBot()) return;
+        if (!event.getVoiceState().inAudioChannel()) return;
+
         if (isEnabled("guildVoiceGuildDeafen", event.getGuild().getId())) {
             User member = event.getMember().getUser();
             MessageEmbed embed = new EmbedBuilder()
@@ -569,6 +573,8 @@ public class LogsListener extends ListenerAdapter {
     @Override
     public void onGuildVoiceSelfMute(GuildVoiceSelfMuteEvent event) {
         if (event.getMember().getUser().isBot()) return;
+        if (!event.getVoiceState().inAudioChannel()) return;
+
         if (isEnabled("guildVoiceMute", event.getGuild().getId())) {
             User member = event.getMember().getUser();
             MessageEmbed embed = new EmbedBuilder()
@@ -591,6 +597,8 @@ public class LogsListener extends ListenerAdapter {
     @Override
     public void onGuildVoiceGuildMute(GuildVoiceGuildMuteEvent event) {
         if (event.getMember().getUser().isBot()) return;
+        if (!event.getVoiceState().inAudioChannel()) return;
+
         if (isEnabled("guildVoiceGuildMute", event.getGuild().getId())) {
             User member = event.getMember().getUser();
             MessageEmbed embed = new EmbedBuilder()
