@@ -29,8 +29,6 @@ public class InteractCommand implements Command {
     public CommandData getCommandData() {
         return new CommandDataImpl(getName(), "Interact with others")
                 .addSubcommands(
-                        new SubcommandData("smug", "Smug at someone.")
-                                .addOption(OptionType.USER, "user", "The user you want to interact with."),
                         new SubcommandData("cuddle", "Cuddle someone.")
                                 .addOption(OptionType.USER, "user", "The user you want to interact with."),
                         new SubcommandData("slap", "Slap someone.")
@@ -44,6 +42,16 @@ public class InteractCommand implements Command {
                         new SubcommandData("kiss", "Give a kiss to someone.")
                                 .addOption(OptionType.USER, "user", "The user you want to interact with."),
                         new SubcommandData("tickle", "Tickle someone.")
+                                .addOption(OptionType.USER, "user", "The user you want to interact with."),
+                        new SubcommandData("bite", "Bite someone.")
+                                .addOption(OptionType.USER, "user", "The user you want to interact with."),
+                        new SubcommandData("blush", "Blush at someone.")
+                                .addOption(OptionType.USER, "user", "The user you want to interact with."),
+                        new SubcommandData("lick", "Lick someone.")
+                                .addOption(OptionType.USER, "user", "The user you want to interact with."),
+                        new SubcommandData("poke", "Poke someone.")
+                                .addOption(OptionType.USER, "user", "The user you want to interact with."),
+                        new SubcommandData("smile", "Smile at someone.")
                                 .addOption(OptionType.USER, "user", "The user you want to interact with.")
                 );
     }
@@ -56,14 +64,19 @@ public class InteractCommand implements Command {
     @Override
     public void execute(SlashCommandInteractionEvent event) {
         JSONObject descriptions = new JSONObject();
-        descriptions.put("smug", "got smugged by");
-        descriptions.put("cuddle", "got cuddled by");
-        descriptions.put("slap", "got slapped by");
-        descriptions.put("pat", "got pat by");
-        descriptions.put("feed", "got feeded by");
-        descriptions.put("hug", "got a hug from");
-        descriptions.put("kiss", "got a kiss from");
-        descriptions.put("tickle", "got tickled by");
+        descriptions.put("cuddle", "**%author% cuddles %user% !**");
+        descriptions.put("slap", "**%author% slapped %user% !**");
+        descriptions.put("pat", "**%user% got a pat by %author% !**");
+        descriptions.put("feed", "**%user% got feeded by %author% !**");
+        descriptions.put("hug", "**%author% gives a hug to %user% !**");
+        descriptions.put("kiss", "**%author% gives a kiss to %user% !**");
+        descriptions.put("tickle", "**%author% tickled %user% !**");
+        descriptions.put("bite", "**%author% bit %user% !**");
+        descriptions.put("blush", "**%user% made %author% blush !**");
+        descriptions.put("lick", "**%author% licked %user% !**");
+        descriptions.put("poke", "**%author% poked %user% !**");
+        descriptions.put("smile", "**%author% smiled at %user% !**");
+
 
         String endpoint = event.getSubcommandName();
         String author = event.getUser().getAsMention();
@@ -75,7 +88,7 @@ public class InteractCommand implements Command {
 
         try {
             Request request = new Request.Builder()
-                    .url("https://nekos.life/api/v2/img/" + endpoint)
+                    .url("https://purrbot.site/api/img/sfw/" + endpoint + "/gif")
                     .build();
 
             Response res = client.newCall(request).execute();
@@ -84,10 +97,10 @@ public class InteractCommand implements Command {
             assert body != null;
 
             JSONObject jsonObject = new JSONObject(body.string());
-            String url = jsonObject.getString("url");
+            String url = jsonObject.getString("link");
 
             MessageEmbed embed = new EmbedBuilder()
-                    .setDescription("**" + user + " " + descriptions.get(endpoint) + " " + author + " !**")
+                    .setDescription(descriptions.getString(endpoint).replace("%author%", author).replace("%user%", user))
                     .setImage(url)
                     .setTimestamp(Instant.now())
                     .build();
