@@ -224,8 +224,7 @@ public class EventListener extends ListenerAdapter {
             if (event.getMember().getRoles().contains(role)) {
                 event.getGuild().removeRoleFromMember(event.getUser(), role).queue();
                 event.reply("The role has successfully been removed !").setEphemeral(true).queue();
-            }
-            else  {
+            } else {
                 event.getGuild().addRoleToMember(event.getUser(), role).queue();
                 event.reply("You successfully got the role !").setEphemeral(true).queue();
             }
@@ -236,24 +235,22 @@ public class EventListener extends ListenerAdapter {
 
     @Override
     public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {
+
         String selectMenuID = event.getSelectMenu().getId();
-        List<SelectOption> selectOptionsIDs = event.getSelectedOptions();
+        List<SelectOption> selectedOptions = event.getSelectedOptions();
+        List<SelectOption> allOptions = event.getSelectMenu().getOptions();
 
         if (selectMenuID.startsWith("selectmenurole")) {
-            selectOptionsIDs.forEach(selectOption -> {
-                String[] args = selectOption.getValue().split(":");
-
-                System.out.println(Arrays.toString(args));
-
+            allOptions.forEach(option -> {
+                String[] args = option.getValue().split(":");
                 String roleID = args[2];
 
                 Role role = event.getGuild().getRoleById(roleID);
 
-                if (event.getMember().getRoles().contains(role)) {
-                    event.getGuild().removeRoleFromMember(event.getUser(), role).queue();
-                }
-                else  {
+                if (selectedOptions.contains(option)) {
                     event.getGuild().addRoleToMember(event.getUser(), role).queue();
+                } else {
+                    event.getGuild().removeRoleFromMember(event.getUser(), role).queue();
                 }
             });
 
