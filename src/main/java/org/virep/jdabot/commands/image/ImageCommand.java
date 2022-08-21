@@ -27,47 +27,114 @@ public class ImageCommand implements Command {
     public CommandData getCommandData() {
         return new CommandDataImpl(getName(), "Edit any image you want.")
                 .addSubcommands(
-                        new SubcommandData("circle", "circle image edit")
+                        new SubcommandData("circle", "Adds a circle around the image.")
                                 .addOptions(
                                         new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
                                         new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
                                         new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
-                        new SubcommandData("blur", "blur image edit")
+                        new SubcommandData("blur", "Blurs the image.")
                                 .addOptions(
                                         new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
                                         new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
                                         new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
-                        new SubcommandData("deepfry", "deepfry image edit")
+                        new SubcommandData("deepfry", "Deepfries the image.")
                                 .addOptions(
                                         new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
                                         new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
                                         new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
-                        new SubcommandData("3000years", "3000years image edit")
+                        new SubcommandData("3000years", "Add\\'s your (or someone elses) profile pic to the Pokemon Meme `It\\'s been 3000 years...`")
                                 .addOptions(
                                         new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
                                         new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
                                         new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
-                        new SubcommandData("beautiful", "beautiful image edit")
+                        new SubcommandData("beautiful", "U see this? Beautiful.")
                                 .addOptions(
                                         new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
                                         new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
                                         new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
-                        new SubcommandData("bobross", "bobross image edit")
+                        new SubcommandData("bobross", "You are now a Bob Ross art.")
                                 .addOptions(
                                         new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
                                         new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
                                         new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
-                        new SubcommandData("distort", "distort image edit")
+                        new SubcommandData("distort", "Distorts the image.")
                                 .addOptions(
                                         new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
                                         new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
                                         new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
-                        new SubcommandData("fire", "fire image edit")
+                        new SubcommandData("fire", "Sends a GIF with a fire effect.")
                                 .addOptions(
                                         new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
                                         new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
                                         new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
-                        new SubcommandData("fractal", "generate fractal")
+                        new SubcommandData("fisheye", "Adds a fisheye effect to the image.")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
+                                        new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
+                                        new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
+                        new SubcommandData("frame", "Adds a frame in the image.")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
+                                        new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
+                                        new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
+                        new SubcommandData("glitch", "Glitches the image.")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
+                                        new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
+                                        new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
+                        new SubcommandData("grayscale", "Adds a grayscale effect to the image.")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
+                                        new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
+                                        new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
+                        new SubcommandData("hearts", "Adds hearts to the image.")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
+                                        new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
+                                        new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
+                        new SubcommandData("invert", "Inverts the image.")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
+                                        new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
+                                        new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
+                        new SubcommandData("pixel", "Pixelize the image.")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
+                                        new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
+                                        new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
+                        new SubcommandData("rainbow", "Adds a Rainbow effect to the image.")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
+                                        new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
+                                        new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
+                        new SubcommandData("sepia", "Adds a sepia effect to the image.")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
+                                        new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
+                                        new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
+                        new SubcommandData("spotify", "Allows you to create a customized Spotify Now Playing card.")
+                                .addOptions(
+                                        new OptionData(OptionType.STRING, "author", "The custom track author", true),
+                                        new OptionData(OptionType.STRING, "title", "The custom track title.", true)),
+                        new SubcommandData("steam", "Lets you create a customized `Steam Playing` card.")
+                                .addOptions(
+                                        new OptionData(OptionType.STRING, "game", "The custom game title.", true)),
+                        new SubcommandData("triggered", "Sends a GIF with the Triggered effect.")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
+                                        new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
+                                        new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
+                        new SubcommandData("ussr", "Adds the USSR flag to the image.")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
+                                        new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
+                                        new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
+                        new SubcommandData("wanted", "Adds the Wanted frame from One Piece to the image")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "Use the avatar of a user"),
+                                        new OptionData(OptionType.STRING, "url", "Edit any specified image url."),
+                                        new OptionData(OptionType.ATTACHMENT, "attachment", "Edit any attached image.")),
+                        new SubcommandData("fractal", "Generate a fractal. May take some time.")
                 );
     }
 
@@ -92,9 +159,16 @@ public class ImageCommand implements Command {
                 .readTimeout(30, TimeUnit.SECONDS)
                 .build();
 
+        String apiURL = "";
+
+        assert endpoint != null;
+        if (endpoint.equals("spotify")) apiURL = "http://localhost:8239/" + endpoint + "?url=" + url + "?size=1024" + "&author=" + event.getOption("author").getAsString() + "&title=" + event.getOption("title").getAsString();
+        else if (endpoint.equals("steam")) apiURL = "http://localhost:8239/" + endpoint + "?url=" + url + "?size=1024" + "&game=" + event.getOption("game").getAsString() + "&player=" + event.getUser().getName();
+        else apiURL = "http://localhost:8239/" + endpoint + "?url=" + url + "?size=1024";
+
         try {
             Request request = new Request.Builder()
-                    .url("https://api.mesavirep.xyz/" + endpoint + "?url=" + url+"?size=256")
+                    .url(apiURL)
                     .build();
 
             Response res = client.newCall(request).execute();
