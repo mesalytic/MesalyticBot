@@ -140,7 +140,7 @@ public class ImageCommand implements Command {
 
     @Override
     public boolean isDev() {
-        return true;
+        return false;
     }
 
     @Override
