@@ -12,9 +12,9 @@ repositories {
 }
 
 dependencies {
-    implementation("net.dv8tion:JDA:5.0.0-alpha.17")
+    implementation("net.dv8tion:JDA:5.0.0-alpha.18")
     implementation("io.github.cdimascio:java-dotenv:5.2.2")
-    implementation("com.github.chocololat:Lavalink-Client:03e6fcd027")
+    implementation("com.github.chocololat:Lavalink-Client:a0ef4b41aa")
     implementation("org.reflections:reflections:0.10.2")
     implementation("com.github.Topis-Lavalink-Plugins:Topis-Source-Managers:2.0.6")
     implementation("org.mariadb.jdbc:mariadb-java-client:3.0.6")

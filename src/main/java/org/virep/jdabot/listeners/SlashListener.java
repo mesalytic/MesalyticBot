@@ -8,6 +8,8 @@ import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
+import net.dv8tion.jda.api.utils.AttachedFile;
+import net.dv8tion.jda.api.utils.FileUpload;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -84,7 +86,7 @@ public class SlashListener extends ListenerAdapter {
 
                     moduleOptions.forEach(mo -> System.out.println(mo.getLabel()));
 
-                    event.editComponents().setActionRows(
+                    event.editComponents().setComponents(
                             ActionRow.of(event.getSelectMenu().createCopy().setDefaultOptions(Collections.singleton(event.getSelectedOptions().get(0))).build()),
                             ActionRow.of(
                                     SelectMenu.create("selectMenu:logs:events")
@@ -165,7 +167,9 @@ public class SlashListener extends ListenerAdapter {
                         .append(audioTrack.getInfo().getAuthor());
             });
 
-            event.replyFile(queueBuilder.toString().getBytes(), "queue.txt").setEphemeral(true).queue();
+            FileUpload file = AttachedFile.fromData(queueBuilder.toString().getBytes(), "queue.txt");
+
+            event.replyFiles(file).setEphemeral(true).queue();
         }
 
         if ("tictactoeAccept".equals(button.getId())) {
@@ -293,7 +297,7 @@ public class SlashListener extends ListenerAdapter {
                 event.editMessage(replyBoard).queue();
             } else {
                 String replyBoard = TTTCommand.replyBoard(board, TTTCommand.playersTurn.get(event.getChannel().getIdLong()));
-                event.editMessage(replyBoard).setActionRows().queue();
+                event.editMessage(replyBoard).setComponents().queue();
 
                 TTTCommand.boards.remove(event.getChannel().getIdLong());
                 TTTCommand.playersTurn.remove(event.getChannel().getIdLong());

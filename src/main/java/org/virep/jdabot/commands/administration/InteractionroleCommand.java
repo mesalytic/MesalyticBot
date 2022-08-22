@@ -406,8 +406,8 @@ public class InteractionroleCommand implements Command {
                                                 buttons.add(Button.primary(button.getId(), button.getLabel()));
                                         });
 
-                                        if (buttons.isEmpty()) msg.editMessageComponents().setActionRows().queue();
-                                        else msg.editMessageComponents().setActionRows(ActionRow.of(buttons)).queue();
+                                        if (buttons.isEmpty()) msg.editMessageComponents().setComponents().queue();
+                                        else msg.editMessageComponents().setComponents(ActionRow.of(buttons)).queue();
 
                                         event.reply("Successfully removed the button.").queue();
                                     });
@@ -467,7 +467,7 @@ public class InteractionroleCommand implements Command {
 
                                         System.out.println("cc");
 
-                                        if (selectOptions.isEmpty()) msg.editMessageComponents().setActionRows().queue();
+                                        if (selectOptions.isEmpty()) msg.editMessageComponents().setComponents().queue();
                                         else {
                                             SelectMenu newMenu = SelectMenu.create("selectmenurole:" + event.getGuild().getId()).addOptions(selectOptions).setMaxValues(selectOptions.size()).build();
                                             msg.editMessageComponents().setActionRow(newMenu).queue();

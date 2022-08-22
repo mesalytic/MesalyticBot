@@ -6,6 +6,8 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import net.dv8tion.jda.api.utils.AttachedFile;
+import net.dv8tion.jda.api.utils.FileUpload;
 import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -184,7 +186,9 @@ public class ImageCommand implements Command {
                 bytes[i] = (byte)(((int)jsonBody.get(i)) & 0xFF);
             }
 
-            event.getHook().editOriginal(bytes, endpoint + jsonObject.get("ext")).queue();
+            FileUpload file = AttachedFile.fromData(bytes, endpoint + jsonObject.get("ext"));
+
+            event.getHook().editOriginalAttachments(file).queue();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

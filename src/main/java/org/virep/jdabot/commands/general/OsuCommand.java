@@ -1,9 +1,12 @@
 package org.virep.jdabot.commands.general;
 
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.utils.AttachedFile;
+import net.dv8tion.jda.api.utils.FileUpload;
 import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -73,7 +76,9 @@ public class OsuCommand implements Command {
 
             InputStream targetBytes = new ByteArrayInputStream(bytes);
 
-            event.getHook().editOriginal(targetBytes, "osu-" + username + jsonObject.get("ext")).queue();
+            FileUpload file = AttachedFile.fromData(targetBytes, "osu-" + username + jsonObject.get("ext"));
+
+            event.getHook().editOriginalAttachments(file).queue();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -33,6 +33,8 @@ import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
 import net.dv8tion.jda.api.events.role.update.*;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.restaction.pagination.AuditLogPaginationAction;
+import net.dv8tion.jda.api.utils.AttachedFile;
+import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.awt.*;
 import java.time.*;
@@ -803,7 +805,9 @@ public class LogsListener extends ListenerAdapter {
             assert logChannelID != null;
             TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
 
-            if (logChannel != null) logChannel.sendMessageEmbeds(embed).addFile(sb.toString().getBytes(), "messageLog.txt").queue();
+            FileUpload file = AttachedFile.fromData(sb.toString().getBytes(), "messageLog.txt");
+
+            if (logChannel != null) logChannel.sendMessageEmbeds(embed).addFiles(file).queue();
         }
     }
 
