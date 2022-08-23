@@ -49,6 +49,11 @@ public class SlowmodeCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        if (!Objects.requireNonNull(event.getMember()).hasPermission(Permission.MANAGE_CHANNEL)) {
+            event.reply("You do not have permission to use this command.").setEphemeral(true).queue();
+            return;
+        }
+
         OptionMapping channelMapping = event.getOption("channel");
         assert channelMapping != null;
 
