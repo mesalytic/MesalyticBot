@@ -5,10 +5,8 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
-import net.dv8tion.jda.internal.interactions.CommandDataImpl;
+import net.dv8tion.jda.api.interactions.commands.build.*;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import org.virep.jdabot.Main;
 import org.virep.jdabot.slashcommandhandler.Command;
 
@@ -28,8 +26,8 @@ public class MiningCommand implements Command {
     }
 
     @Override
-    public CommandData getCommandData() {
-        return new CommandDataImpl(getName(), "mining desc")
+    public SlashCommandData getCommandData() {
+        return Commands.slash(getName(), "mining desc")
                 .addSubcommands(
                         new SubcommandData("profile", "profile"),
                         new SubcommandData("start", "start"),

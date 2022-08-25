@@ -4,9 +4,9 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
-import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -26,8 +26,8 @@ public class InteractCommand implements Command {
     }
 
     @Override
-    public CommandData getCommandData() {
-        return new CommandDataImpl(getName(), "Interact with others")
+    public SlashCommandData getCommandData() {
+        return Commands.slash(getName(), "Interact with others")
                 .addSubcommands(
                         new SubcommandData("cuddle", "Cuddle someone.")
                                 .addOption(OptionType.USER, "user", "The user you want to interact with."),

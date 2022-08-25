@@ -3,12 +3,10 @@ package org.virep.jdabot.commands.image;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import net.dv8tion.jda.api.interactions.commands.build.*;
 import net.dv8tion.jda.api.utils.AttachedFile;
 import net.dv8tion.jda.api.utils.FileUpload;
-import net.dv8tion.jda.internal.interactions.CommandDataImpl;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -26,8 +24,8 @@ public class ImageCommand implements Command {
     }
 
     @Override
-    public CommandData getCommandData() {
-        return new CommandDataImpl(getName(), "Edit any image you want.")
+    public SlashCommandData getCommandData() {
+        return Commands.slash(getName(), "Edit any image you want.")
                 .addSubcommands(
                         new SubcommandData("circle", "Adds a circle around the image.")
                                 .addOptions(

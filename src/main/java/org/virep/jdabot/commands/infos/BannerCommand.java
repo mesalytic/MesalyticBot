@@ -5,9 +5,10 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-import net.dv8tion.jda.internal.interactions.CommandDataImpl;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -28,8 +29,8 @@ public class BannerCommand implements Command {
     }
 
     @Override
-    public CommandData getCommandData() {
-        return new CommandDataImpl(getName(), "Get the banner of a user (either global or guild-specific).")
+    public SlashCommandData getCommandData() {
+        return Commands.slash(getName(), "Get the banner of a user (either global or guild-specific).")
                 .addOptions(
                         new OptionData(OptionType.USER, "user", "The user you want to see the banner"),
                         new OptionData(OptionType.BOOLEAN, "color", "Shows the color of the banner.")

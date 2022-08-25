@@ -2,9 +2,10 @@ package org.virep.jdabot.commands.general;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
-import net.dv8tion.jda.internal.interactions.CommandDataImpl;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.util.Objects;
@@ -16,8 +17,8 @@ public class RandomCommand implements Command {
     }
 
     @Override
-    public CommandData getCommandData() {
-        return new CommandDataImpl(getName(), "Returns random values for a specific theme.")
+    public SlashCommandData getCommandData() {
+        return Commands.slash(getName(), "Returns random values for a specific theme.")
                 .addSubcommands(
                         new SubcommandData("coinflip", "Heads or tails ?"),
                         new SubcommandData("dice", "Returns a random number.")

@@ -5,9 +5,9 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
-import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.util.*;
@@ -24,8 +24,8 @@ public class TTTCommand implements Command {
     }
 
     @Override
-    public CommandData getCommandData() {
-        return new CommandDataImpl(getName(), "Play TicTacToe with your friends!")
+    public SlashCommandData getCommandData() {
+        return Commands.slash(getName(), "Play TicTacToe with your friends!")
                 .addOption(OptionType.USER, "opponent", "The member you want to play against");
     }
 

@@ -1,8 +1,9 @@
 package org.virep.jdabot.commands.general;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
-import net.dv8tion.jda.internal.interactions.CommandDataImpl;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.virep.jdabot.slashcommandhandler.Command;
 
 public class PingCommand implements Command {
@@ -12,8 +13,8 @@ public class PingCommand implements Command {
     }
 
     @Override
-    public CommandData getCommandData() {
-        return new CommandDataImpl(getName(), "Pong !");
+    public SlashCommandData getCommandData() {
+        return Commands.slash(getName(), "Pong !");
     }
 
     @Override

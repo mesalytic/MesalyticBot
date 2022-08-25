@@ -2,8 +2,8 @@ package org.virep.jdabot.commands.administration;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
-import net.dv8tion.jda.internal.interactions.CommandDataImpl;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.virep.jdabot.slashcommandhandler.Command;
 
 public class test implements Command {
@@ -14,8 +14,8 @@ public class test implements Command {
     }
 
     @Override
-    public CommandData getCommandData() {
-        return new CommandDataImpl("testcommand", "test!")
+    public SlashCommandData getCommandData() {
+        return Commands.slash("testcommand", "test!")
                 .addOption(OptionType.CHANNEL, "testoption", "test");
     }
 

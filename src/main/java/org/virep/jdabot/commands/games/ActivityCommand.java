@@ -5,9 +5,9 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.Command.Choice;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-import net.dv8tion.jda.internal.interactions.CommandDataImpl;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import okhttp3.*;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,8 +24,8 @@ public class ActivityCommand implements Command {
     }
 
     @Override
-    public CommandData getCommandData() {
-        return new CommandDataImpl(getName(), "Launch a voice channel activity.")
+    public SlashCommandData getCommandData() {
+        return Commands.slash(getName(), "Launch a voice channel activity.")
                 .addOptions(new OptionData(OptionType.STRING, "application", "Choose the activity you want !", true)
                         .addChoices(
                                 new Choice("Watch Together", "880218394199220334"),
