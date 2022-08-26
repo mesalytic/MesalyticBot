@@ -45,10 +45,12 @@ public class Utils {
         Duration duration = Duration.ofSeconds(seconds);
         String response = "";
 
+        int day = (int)duration.toDaysPart();
         int hour = duration.toHoursPart();
         int minute = duration.toMinutesPart();
         int second = duration.toSecondsPart();
 
+        if (day > 0) response += "%dd ".formatted(day);
         if (hour > 0) response += "%dh ".formatted(hour);
         if (minute > 0) response += "%dm ".formatted(minute);
         response += "%ds".formatted(second);
@@ -92,5 +94,48 @@ public class Utils {
         }
 
         return buf.toString();
+    }
+
+    public static int timeStringToSeconds(String input) {
+        input = input.toLowerCase();
+        input = input.replaceAll(" ", "");
+
+        if (input.isEmpty()) return -1;
+        int time = 0;
+        StringBuilder number = new StringBuilder();
+        for (char c : input.toCharArray()) {
+            if (isInt(String.valueOf(c))) {
+                number.append(c);
+                continue;
+            }
+            if (number.toString().isEmpty()) return -1;
+            int add = Integer.parseInt(number.toString());
+            switch (c) {
+                case 'w':
+                    add *= 7;
+                case 'd':
+                    add *= 24;
+                case 'h':
+                    add *= 60;
+                case 'm':
+                    add *= 60;
+                case 's':
+                    time += add;
+                    number.setLength(0);
+                    break;
+                default:
+                    return -1;
+            }
+        }
+        return time;
+    }
+
+    public static boolean isInt(String s) {
+        try {
+            Integer.parseInt(s);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }
