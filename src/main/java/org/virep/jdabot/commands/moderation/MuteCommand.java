@@ -50,7 +50,7 @@ public class MuteCommand implements Command {
 
     @Override
     public boolean isDev() {
-        return true;
+        return false;
     }
 
     @Override
