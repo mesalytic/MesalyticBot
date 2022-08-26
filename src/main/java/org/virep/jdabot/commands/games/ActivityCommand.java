@@ -71,7 +71,8 @@ public class ActivityCommand implements Command {
         }
 
         // Is deprecated, must find replacement for RequestBody#create();
-        RequestBody body = RequestBody.create(JSON, jsonObject.toString());
+        // I HATE MY LIFE WHY SWAPPING ?
+        RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
 
         try {
             Request request = new Request.Builder()
