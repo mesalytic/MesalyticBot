@@ -70,8 +70,6 @@ public class ActivityCommand implements Command {
             e.printStackTrace();
         }
 
-        // Is deprecated, must find replacement for RequestBody#create();
-        // I HATE MY LIFE WHY SWAPPING ?
         RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
 
         try {
