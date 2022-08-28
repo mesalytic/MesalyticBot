@@ -138,4 +138,21 @@ public class Utils {
             return false;
         }
     }
+
+    public static String badgesToEmote(String flags) {
+        return flags
+                .replace("boost", "<:boost:1013341121516159046>")
+                .replace("Bug Hunter Level 1", "<:bughunter1:776631999959531570>")
+                .replace("Bug Hunter Level 2", "<:bughunter2:776632040643624990>")
+                .replace("Early Supporter", "<:earlysupporter:776627862597009408>")
+                .replace("HypeSquad Events", "<:hypesquad:776630121985343499>")
+                .replace("HypeSquad Balance", "<:balancehouse:776629582950432820>")
+                .replace("HypeSquad Bravery", "<:braveryhouse:776629630408327189>")
+                .replace("HypeSquad Brilliance", "<:brilliancehouse:776629668848861255>")
+                .replace("Partenered Server Owner", "<:partnerowner:776628269356417036>")
+                .replace("Discord Employee", "<:discordemployee:776633014502555678>")
+                .replace("Early Verified Bot Developer", "<:verifieddev:776627149452083212>")
+                .replace("Verified Bot", "<:verifiedbot:776626551025958912>")
+                .replace("Discord Certified Moderator", "<:certifiedmod:1013331823868256297>");
+    }
 }
