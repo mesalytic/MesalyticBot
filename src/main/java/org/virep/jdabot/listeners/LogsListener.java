@@ -1006,30 +1006,6 @@ public class LogsListener extends ListenerAdapter {
         }
     }
 
-    @Override
-    public void onRoleUpdatePosition(RoleUpdatePositionEvent event) {
-        if (isEnabled("roleUpdatePosition", event.getGuild().getId())) {
-            int oldPosition = event.getOldPosition();
-            int newPosition = event.getNewPosition();
-
-            MessageEmbed embed = new EmbedBuilder()
-                    .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
-                    .setColor(3066993)
-                    .setDescription("** Role position changed: " + event.getRole().getAsMention() + "**")
-                    .addField("Position", oldPosition + " > " + newPosition, true)
-                    .setTimestamp(Instant.now())
-                    .setFooter("Role ID: " + event.getRole().getId())
-                    .build();
-
-            String logChannelID = getLogChannelID(event.getGuild().getId());
-
-            assert logChannelID != null;
-            TextChannel logChannel = event.getGuild().getTextChannelById(logChannelID);
-
-            if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
-        }
-    }
-
     enum Type {
         CATEGORY("Category"),
         GUILD_NEWS_THREAD("News Thread"),

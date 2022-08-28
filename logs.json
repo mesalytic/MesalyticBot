@@ -186,11 +186,6 @@
       "label": "Role Permissions Update",
       "value": "roleUpdatePermissions",
       "description": "Triggers whenever a role permissions are updated."
-    },
-    {
-      "label": "Role Position Update",
-      "value": "roleUpdatePosition",
-      "description": "Triggers whenever a role position is updated."
     }
   ]
 }
