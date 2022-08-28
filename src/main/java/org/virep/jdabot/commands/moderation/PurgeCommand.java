@@ -1,9 +1,11 @@
 package org.virep.jdabot.commands.moderation;
 
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -24,6 +26,7 @@ public class PurgeCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Bulk delete messages in the channel. You can specify a channel.")
+                .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MESSAGE_MANAGE))
                 .addSubcommands(
                         new SubcommandData("any", "Delete any message")
                                 .addOptions(
@@ -51,6 +54,10 @@ public class PurgeCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        if (!Objects.requireNonNull(event.getMember()).hasPermission(Permission.MESSAGE_MANAGE)) {
+            event.reply("You do not have permission to use this command.").setEphemeral(true).queue();
+            return;
+        }
 
         OptionMapping channelOption = event.getOption("channel");
         OptionMapping amountOption = event.getOption("amount");
