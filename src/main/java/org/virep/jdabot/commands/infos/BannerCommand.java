@@ -70,7 +70,7 @@ public class BannerCommand implements Command {
                     .setTimestamp(Instant.now());
 
             if (!color) {
-                if (jsonObject.getString("link") == null) {
+                if (jsonObject.get("link") == null) {
                     event.reply("This user does not have a banner. Try using the `/banner color:true` parameter.").queue();
                     return;
                 }
