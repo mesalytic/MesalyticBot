@@ -21,7 +21,7 @@ public class Main {
     public static final Connection connectionDB = DatabaseConnector.openConnection();
     public static void main(String[] args) throws Exception {
         JDA api = JDABuilder
-                .createDefault(Config.get("TOKEN"))
+                .createDefault(Config.get("TOKENBETA"))
                 .enableIntents(GatewayIntent.GUILD_MEMBERS,
                         GatewayIntent.GUILD_MESSAGES,
                         GatewayIntent.MESSAGE_CONTENT,

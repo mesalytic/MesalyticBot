@@ -21,6 +21,8 @@ dependencies {
     implementation("com.googlecode.json-simple:json-simple:1.1.1")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.10")
+    implementation("net.objecthunter:exp4j:0.4.8")
+    implementation("org.scilab.forge:jlatexmath:1.0.7")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")

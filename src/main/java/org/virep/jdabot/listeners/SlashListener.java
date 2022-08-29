@@ -1,5 +1,7 @@
 package org.virep.jdabot.listeners;
 
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
@@ -27,6 +29,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -53,9 +56,9 @@ public class SlashListener extends ListenerAdapter {
 
     @Override
     public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {
-        if (event.getSelectMenu().getId().equals("selectMenu:logs:categoryEvents")) {
+        if (Objects.equals(event.getSelectMenu().getId(), "selectMenu:logs:categoryEvents")) {
             try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM logs WHERE guildID = ?")) {
-                statement.setString(1, event.getGuild().getId());
+                statement.setString(1, Objects.requireNonNull(event.getGuild()).getId());
 
                 ResultSet result = statement.executeQuery();
                 ResultSetMetaData resultSetMetaData = result.getMetaData();
@@ -103,14 +106,13 @@ public class SlashListener extends ListenerAdapter {
             }
 
         }
-        if (event.getSelectMenu().getId().equals("selectMenu:logs:events")) {
+        if (Objects.equals(event.getSelectMenu().getId(), "selectMenu:logs:events")) {
             HashSet<String> options = new HashSet<>();
 
             try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM logs WHERE guildID = ?")) {
-                statement.setString(1, event.getGuild().getId());
+                statement.setString(1, Objects.requireNonNull(event.getGuild()).getId());
 
                 ResultSet result = statement.executeQuery();
-                ResultSetMetaData metaData = statement.getMetaData();
 
                 if (!result.first()) {
                     event.reply("You must set up a log channel before. Use `/logs channel`").setEphemeral(true).queue();
@@ -143,6 +145,56 @@ public class SlashListener extends ListenerAdapter {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+
+        if (event.getSelectMenu().getId().equals("selectMenu:math")) {
+            String label = event.getSelectedOptions().get(0).getLabel();
+
+            EmbedBuilder embedBuilder = new EmbedBuilder()
+                    .setColor(11868671)
+                    .setTimestamp(Instant.now());
+
+            if (label.equals("Operators")) {
+                embedBuilder
+                        .setDescription("""
+                                __**Addition**__: `2 + 2`
+                                __**Substraction**__: `2 - 2`
+                                __**Multiplication**__: `2 * 2`
+                                __**Division**__: `2 / 2`
+                                __**Exponentation**__: `2 ^ 2`
+                                __**Unary Minus/Plus (Sign Operators)**__: `+2 - (-2)`
+                                __**Modulo**__: `2 % 2`
+                                """)
+                        .setTitle("Supported Operators");
+            } else {
+                embedBuilder
+                        .setDescription("""
+                                __**Absolute Value**__: `abs(x)`
+                                __**Arc Cosine**__: `acos(x)`
+                                __**Arc Sine**__: `asin(x)`
+                                __**Arc Tangent**__: `atan(x)`
+                                __**Cosine**__: `cos(x)`
+                                __**Cubic Root**__: `cbrt(x)`
+                                __**Euler's Number Raised to the power (e^x)**__: `exp(x)`
+                                __**Hyperbolic Cosine**__: `cosh(x)`
+                                __**Hyperbolic Sine**__: `sinh(x)`
+                                __**Hyperbolic Tangent**__: `tanh(x)`
+                                __**Logarithm (base 10)**__: `log1O(x)`
+                                __**Logarithm (base 2)**__: `log2(x)`
+                                __**Logarithmus Naturalis (base e)**__: `log(x, y)`
+                                __**Nearest Upper Integer**__: `ceil(x)`
+                                __**Nearest Lower Integer**__: `floor(x)`
+                                __**Signum Function**__: `signum(x)`
+                                __**Sine**__: `sin(x)`
+                                __**Square Root**__: `sqrt(x)`
+                                __**Tangent**__: `tan(x)`
+                                """)
+                        .setTitle("Supported Operators");
+            }
+
+            MessageEmbed embed = embedBuilder.build();
+
+            event.getInteraction().editMessageEmbeds(embed).queue();
         }
     }
 
