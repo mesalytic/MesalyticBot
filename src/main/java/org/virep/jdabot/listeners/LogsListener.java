@@ -276,7 +276,6 @@ public class LogsListener extends ListenerAdapter {
 
     @Override
     public void onGuildBan(GuildBanEvent event) {
-        if (event.getUser().isBot()) return;
         if (isEnabled("guildBan", event.getGuild().getId())) {
             User bannedUser = event.getUser();
 
@@ -312,7 +311,6 @@ public class LogsListener extends ListenerAdapter {
 
     @Override
     public void onGuildUnban(GuildUnbanEvent event) {
-        if (event.getUser().isBot()) return;
         if (isEnabled("guildUnban", event.getGuild().getId())) {
             User unbannedUser = event.getUser();
 
