@@ -86,7 +86,7 @@ public class MathCommand implements Command {
 
             try {
                 Request request = new Request.Builder()
-                        .url("http://localhost:8239/math?expression=" + expression)
+                        .url("https://api.mesavirep.xyz/math?expression=" + expression)
                         .build();
 
                 Response res = client.newCall(request).execute();
