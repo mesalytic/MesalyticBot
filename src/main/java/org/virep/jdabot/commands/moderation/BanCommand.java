@@ -36,7 +36,7 @@ public class BanCommand implements Command {
 
     @Override
     public boolean isDev() {
-        return true;
+        return false;
     }
 
     @Override
