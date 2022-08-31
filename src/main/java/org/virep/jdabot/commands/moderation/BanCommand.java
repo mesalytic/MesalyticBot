@@ -41,7 +41,7 @@ public class BanCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
-        if (event.getMember().hasPermission(Permission.BAN_MEMBERS)) {
+        if (!event.getMember().hasPermission(Permission.BAN_MEMBERS)) {
             event.reply("You do not have permission to use this command.").setEphemeral(true).queue();
             return;
         }
