@@ -12,9 +12,9 @@ import net.dv8tion.jda.api.requests.ErrorResponse;
 import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.util.EnumSet;
-import java.util.Objects;
 
-
+//TODO: Change ErrorResponse.UNKNOWN_MEMBER to ErrorResponse.UNKNOWN_USER in JDA 5 alpha.19
+//TODO: Change delDays feature to delTime, as Discord API v10 now supports deletion with seconds precision (JDA 5 alpha.19)
 public class BanCommand implements Command {
     @Override
     public String getName() {
