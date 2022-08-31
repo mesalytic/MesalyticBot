@@ -1,6 +1,10 @@
 package org.virep.jdabot.utils;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class Utils {
     private static final long SECOND = 1000;
@@ -154,5 +158,20 @@ public class Utils {
                 .replace("Early Verified Bot Developer", "<:verifieddev:776627149452083212>")
                 .replace("Verified Bot", "<:verifiedbot:776626551025958912>")
                 .replace("Discord Certified Moderator", "<:certifiedmod:1013331823868256297>");
+    }
+
+    public static <T> List<List<T>> getPages(Collection<T> collection, Integer pageSize) {
+        if (collection == null) return Collections.emptyList();
+
+        List<T> list = new ArrayList<T>(collection);
+        if (pageSize == null || pageSize <= 0 || pageSize > list.size()) pageSize = list.size();
+
+        int numPages = (int) Math.ceil((double) list.size() / (double) pageSize);
+        List<List<T>> pages = new ArrayList<List<T>>(numPages);
+
+        for (int pageNum = 0; pageNum < numPages; )
+            pages.add(list.subList(pageNum * pageSize, Math.min(++pageNum * pageSize, list.size())));
+
+        return pages;
     }
 }

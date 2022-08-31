@@ -1,6 +1,7 @@
 package org.virep.jdabot.listeners;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -17,6 +18,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.virep.jdabot.Main;
 import org.virep.jdabot.commands.games.TTTCommand;
+import org.virep.jdabot.commands.moderation.BansCommand;
 import org.virep.jdabot.lavaplayer.AudioManagerController;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
 import org.virep.jdabot.slashcommandhandler.Command;
@@ -32,6 +34,8 @@ import java.sql.SQLException;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.virep.jdabot.utils.Utils.getPages;
 
 public class SlashListener extends ListenerAdapter {
     private final SlashHandler slashHandler;
@@ -200,6 +204,58 @@ public class SlashListener extends ListenerAdapter {
 
     public void onButtonInteraction(@Nonnull ButtonInteractionEvent event) {
         Button button = event.getButton();
+
+        if (button.getId().startsWith("button:bans")) {
+            ArrayList<Long> authors = BansCommand.authors;
+
+            if (!authors.contains(event.getUser().getIdLong())) {
+                event.reply("You do not have access to interact with this, or the interaction has expired.").setEphemeral(true).queue();
+                return;
+            }
+
+            System.out.println("a");
+            String[] labels = button.getId().split(":");
+            System.out.println(labels[2]);
+
+            event.getGuild().retrieveBanList().queue(bans -> {
+                Map<Long, Integer> pageNumbers = BansCommand.pageNumber;
+
+                List<List<Guild.Ban>> banPages = getPages(bans, 50);
+
+                int pageNumber = switch(labels[2]) {
+                    case "first" -> 0;
+                    case "last" -> banPages.size() - 1;
+                    case "previous" -> pageNumbers.get(event.getChannel().getIdLong()) - 1;
+                    case "next" -> pageNumbers.get(event.getChannel().getIdLong()) + 1;
+                    default -> throw new IllegalStateException("Unexpected value");
+                };
+
+                EmbedBuilder embedBuilder = new EmbedBuilder()
+                        .setAuthor(event.getUser().getAsTag(), null, event.getUser().getAvatarUrl())
+                        .setTitle("Ban list for " + event.getGuild().getName())
+                        .setFooter("Page " + (pageNumber + 1) +"/" + banPages.size())
+                        .setTimestamp(Instant.now());
+
+                List<Guild.Ban> page = banPages.get(pageNumber);
+
+                StringBuilder embedDescription = new StringBuilder();
+
+                page.forEach(ban -> {
+                    embedDescription
+                            .append("**")
+                            .append(ban.getUser().getAsTag())
+                            .append("** - ")
+                            .append(ban.getReason())
+                            .append("\n");
+                });
+
+                embedBuilder.setDescription(embedDescription.toString());
+
+                pageNumbers.replace(event.getChannel().getIdLong(), pageNumber);
+
+                event.editMessageEmbeds(embedBuilder.build()).queue();
+            });
+        }
 
         if ("queueFull".equals(button.getId())) {
             GuildAudioManager guildAudioManager = AudioManagerController.getGuildAudioManager(event.getGuild());
