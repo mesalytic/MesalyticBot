@@ -1,8 +1,10 @@
 package org.virep.jdabot.commands.moderation;
 
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.exceptions.ErrorHandler;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -24,6 +26,7 @@ public class BanCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Ban a user.")
+                .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.BAN_MEMBERS))
                 .addOptions(
                         new OptionData(OptionType.USER, "user", "The User to ban.", true),
                         new OptionData(OptionType.STRING, "reason", "The reason of the ban."),
@@ -38,6 +41,10 @@ public class BanCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        if (event.getMember().hasPermission(Permission.BAN_MEMBERS)) {
+            event.reply("You do not have permission to use this command.").setEphemeral(true).queue();
+            return;
+        }
         ErrorHandler errorHandler = new ErrorHandler()
                 .handle(EnumSet.of(ErrorResponse.MISSING_PERMISSIONS),
                         (ex) -> event.reply("The specified member cannot be banned, because of permission discrepancy.").setEphemeral(true).queue())
