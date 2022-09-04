@@ -104,5 +104,10 @@
             <artifactId>discord-webhooks</artifactId>
             <version>a5eff5d210</version>
         </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.8</version>
+        </dependency>
     </dependencies>
 </project>
