@@ -2,6 +2,7 @@ package org.virep.jdabot.commands.administration;
 
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -29,25 +30,28 @@ public class MessageCommand implements Command {
                                         new SubcommandData("set", "Configure the join message.").addOptions(
                                                 new OptionData(OptionType.CHANNEL, "channel", "The channel where the message will be sent.", true),
                                                 new OptionData(OptionType.STRING, "message", "The message that will be sent. You can use tags, the list is at /message join tags.", true)
-                                ),
-                                new SubcommandData("remove", "Remove the join message."),
-                                new SubcommandData("tags", "List of tags you can use on your message.")
+                                        ),
+                                        new SubcommandData("remove", "Remove the join message."),
+                                        new SubcommandData("tags", "List of tags you can use on your message."),
+                                        new SubcommandData("test", "Test your message !")
                         ),
                         new SubcommandGroupData("leave", "The bot will send a message whenever someone leaves the server.")
                                 .addSubcommands(
                                         new SubcommandData("set", "Configure the leave message.").addOptions(
                                                 new OptionData(OptionType.CHANNEL, "channel", "The channel where the message will be sent.", true),
                                                 new OptionData(OptionType.STRING, "message", "The message that will be sent. You can use tags, the list is at /message leave tags.", true )
-                                ),
-                                new SubcommandData("remove", "Remove the leave message."),
-                                new SubcommandData("tags", "List of tags you can use on your message.")
+                                        ),
+                                        new SubcommandData("remove", "Remove the leave message."),
+                                        new SubcommandData("tags", "List of tags you can use on your message."),
+                                        new SubcommandData("test", "Test your message !")
                         ),
                         new SubcommandGroupData("dm", "The bot will send a DM whenever someone joins the server.")
                                 .addSubcommands(
                                         new SubcommandData("set", "Configure the message.")
                                                 .addOption(OptionType.STRING, "message", "The message that will be sent. You can use tags, the list is at /message dm tags.", true),
                                         new SubcommandData("remove", "Remove the message."),
-                                        new SubcommandData("tags", "List of tags you can use on your message.")
+                                        new SubcommandData("tags", "List of tags you can use on your message."),
+                                        new SubcommandData("test", "Test your message !")
                                 )
                 );
     }
@@ -156,6 +160,79 @@ public class MessageCommand implements Command {
         if (method.equals("tags")) {
             if (group.equals("join") || group.equals("dm")) event.reply("You can use tags to customize your message.\n\n%USER% - Pings the user\n%USERNAME% - Displays the username + discriminator of the user\n%SERVERNAME% - Displays the server name\n%MEMBERCOUNT% - Displays the member count\n\nYou can use Markdown to customize it even further.\nRole mentions and emoji usage are also supported (with custom emojis from your server)").setEphemeral(true).queue();
             else event.reply("You can use tags to customize your message.\n\n%USERNAME% - Displays the username + discriminator of the user\n%SERVERNAME% - Displays the server name\n%MEMBERCOUNT% - Displays the member count\n\nYou can use Markdown to customize it even further.\nRole mentions and emoji usage are also supported (with custom emojis from your server)").setEphemeral(true).queue();
+        }
+
+        if (method.equals("test")) {
+            if (group.equals("join")) {
+                try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM joinmessages WHERE guildID = ?")) {
+                    statement.setString(1, event.getGuild().getId());
+
+                    ResultSet result = statement.executeQuery();
+
+                    if (result.next()) {
+                        String message = result.getString(1);
+
+                        String channelID = result.getString(2);
+                        TextChannel channel = event.getGuild().getTextChannelById(channelID);
+
+                        assert channel != null;
+                        channel.sendMessage(message
+                                .replace("%USER%", event.getMember().getAsMention())
+                                .replace("%USERNAME%", event.getUser().getAsTag())
+                                .replace("%SERVERNAME%", event.getGuild().getName())
+                                .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))).queue();
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (group.equals("dm")) {
+                try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM dmmessages WHERE guildID = ?")) {
+                    statement.setString(1, event.getGuild().getId());
+
+                    ResultSet result = statement.executeQuery();
+
+                    if (result.next()) {
+                        String message = result.getString(1);
+
+                        event.getUser().openPrivateChannel().queue(dmChannel -> {
+                            dmChannel.sendMessage(message
+                                    .replace("%USER%", event.getMember().getAsMention())
+                                    .replace("%USERNAME%", event.getUser().getAsTag())
+                                    .replace("%SERVERNAME%", event.getGuild().getName())
+                                    .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))).queue();
+                        });
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (group.equals("leave")) {
+                try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM leavemessages WHERE guildID = ?")) {
+                    statement.setString(1, event.getGuild().getId());
+
+                    ResultSet result = statement.executeQuery();
+
+                    if (result.next()) {
+                        String message = result.getString(1);
+
+                        String channelID = result.getString(2);
+                        TextChannel channel = event.getGuild().getTextChannelById(channelID);
+
+                        assert channel != null;
+                        channel.sendMessage(message
+                                .replace("%USERNAME%", event.getUser().getAsTag())
+                                .replace("%SERVERNAME%", event.getGuild().getName())
+                                .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))).queue();
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            event.reply("Tested successfully.").setEphemeral(true).queue();
         }
     }
 }
