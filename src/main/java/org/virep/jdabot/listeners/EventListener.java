@@ -24,6 +24,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 import net.dv8tion.jda.api.managers.AudioManager;
 import net.dv8tion.jda.api.managers.WebhookManager;
+import net.dv8tion.jda.api.requests.restaction.CacheRestAction;
 import org.jetbrains.annotations.NotNull;
 import org.virep.jdabot.Main;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
@@ -134,6 +135,26 @@ public class EventListener extends ListenerAdapter {
                         .replace("%USERNAME%", event.getUser().getAsTag())
                         .replace("%SERVERNAME%", event.getGuild().getName())
                         .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))).queue();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM dmmessages WHERE guildID = ?")) {
+            statement.setString(1, guild.getId());
+
+            ResultSet result = statement.executeQuery();
+
+            if (result.next()) {
+                String message = result.getString(1);
+
+                event.getMember().getUser().openPrivateChannel().queue(dmChannel -> {
+                    dmChannel.sendMessage(message
+                            .replace("%USER%", event.getMember().getAsMention())
+                            .replace("%USERNAME%", event.getUser().getAsTag())
+                            .replace("%SERVERNAME%", event.getGuild().getName())
+                            .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))).queue();
+                });
             }
         } catch (SQLException e) {
             e.printStackTrace();
