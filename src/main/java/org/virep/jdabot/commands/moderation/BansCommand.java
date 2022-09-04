@@ -18,7 +18,6 @@ import static org.virep.jdabot.utils.Utils.getPages;
 
 public class BansCommand implements Command {
     public static Map<Long, Integer> pageNumber = new HashMap<>();
-    public static ArrayList<Long> authors = new ArrayList<>();
 
     @Override
     public String getName() {
@@ -50,7 +49,6 @@ public class BansCommand implements Command {
 
         guild.retrieveBanList().queue(bans -> {
             pageNumber.put(event.getChannel().getIdLong(), 0);
-            authors.add(event.getUser().getIdLong());
 
             List<List<Guild.Ban>> banPages = getPages(bans, 50);
 
@@ -76,10 +74,10 @@ public class BansCommand implements Command {
 
             event.replyEmbeds(embedBuilder.build())
                     .setActionRow(
-                            Button.primary("button:bans:first", "\u23EA"),
-                            Button.primary("button:bans:previous", "\u2B05"),
-                            Button.primary("button:bans:next", "\u27A1"),
-                            Button.primary("button:bans:last", "\u23E9")
+                            Button.primary("button:bans:first:" + event.getUser().getId(), "\u23EA"),
+                            Button.primary("button:bans:previous:" + event.getUser().getId(), "\u2B05"),
+                            Button.primary("button:bans:next:" + event.getUser().getId(), "\u27A1"),
+                            Button.primary("button:bans:last:" + event.getUser().getId(), "\u23E9")
                     )
                     .queue();
         });

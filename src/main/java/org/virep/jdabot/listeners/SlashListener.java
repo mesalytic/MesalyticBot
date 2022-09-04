@@ -206,16 +206,12 @@ public class SlashListener extends ListenerAdapter {
         Button button = event.getButton();
 
         if (button.getId().startsWith("button:bans")) {
-            ArrayList<Long> authors = BansCommand.authors;
+            String[] labels = button.getId().split(":");
 
-            if (!authors.contains(event.getUser().getIdLong())) {
+            if (labels[3].equals(event.getUser().getId())) {
                 event.reply("You do not have access to interact with this, or the interaction has expired.").setEphemeral(true).queue();
                 return;
             }
-
-            System.out.println("a");
-            String[] labels = button.getId().split(":");
-            System.out.println(labels[2]);
 
             event.getGuild().retrieveBanList().queue(bans -> {
                 Map<Long, Integer> pageNumbers = BansCommand.pageNumber;
