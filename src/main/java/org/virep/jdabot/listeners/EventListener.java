@@ -1,10 +1,17 @@
 package org.virep.jdabot.listeners;
 
+import club.minnced.discord.webhook.WebhookClient;
+import club.minnced.discord.webhook.send.WebhookEmbed;
+import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.audio.hooks.ConnectionStatus;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.entities.emoji.EmojiUnion;
+import net.dv8tion.jda.api.events.DisconnectEvent;
+import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.events.ReconnectedEvent;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
@@ -16,20 +23,33 @@ import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 import net.dv8tion.jda.api.managers.AudioManager;
+import net.dv8tion.jda.api.managers.WebhookManager;
+import org.jetbrains.annotations.NotNull;
 import org.virep.jdabot.Main;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
 
 import javax.annotation.Nonnull;
+import java.awt.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
+import java.time.Instant;
 import java.util.List;
 
 public class EventListener extends ListenerAdapter {
 
+    private final WebhookClient webhook = WebhookClient.withUrl("https://canary.discord.com/api/webhooks/681148219148730389/pUnnf6VbfsnF7y7V8xrYs1xdnEbnRm58T3isOmffAZwBmZgArJFP8v2s5sEdMLodN9cc");
+
     @Override
     public void onShutdown(ShutdownEvent event) {
+        WebhookEmbed embed = new WebhookEmbedBuilder()
+                .setColor(0xff0000)
+                .setDescription("Shutdown Instantiated.")
+                .setTimestamp(Instant.now())
+                .build();
+
+        webhook.send(embed);
+
         JDA jda = event.getJDA();
 
         if (jda.getStatus() != JDA.Status.SHUTTING_DOWN) {
@@ -256,5 +276,38 @@ public class EventListener extends ListenerAdapter {
 
             event.reply("Your roles have successfully been updated.").setEphemeral(true).queue();
         }
+    }
+
+    @Override
+    public void onReady(@NotNull ReadyEvent event) {
+        WebhookEmbed embed = new WebhookEmbedBuilder()
+                .setColor(0x00ff00)
+                .setDescription("Bot has started")
+                .setTimestamp(Instant.now())
+                .build();
+
+        webhook.send(embed);
+    }
+
+    @Override
+    public void onReconnected(@NotNull ReconnectedEvent event) {
+        WebhookEmbed embed = new WebhookEmbedBuilder()
+                .setColor(0xFFA500)
+                .setDescription("Bot has reconnected.")
+                .setTimestamp(Instant.now())
+                .build();
+
+        webhook.send(embed);
+    }
+
+    @Override
+    public void onDisconnect(@NotNull DisconnectEvent event) {
+        WebhookEmbed embed = new WebhookEmbedBuilder()
+                .setColor(0xFF0000)
+                .setDescription("Bot has disconnected.")
+                .setTimestamp(Instant.now())
+                .build();
+
+        webhook.send(embed);
     }
 }

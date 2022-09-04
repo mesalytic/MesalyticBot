@@ -99,5 +99,10 @@
             <artifactId>jlatexmath</artifactId>
             <version>1.0.7</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.MinnDevelopment</groupId>
+            <artifactId>discord-webhooks</artifactId>
+            <version>a5eff5d210</version>
+        </dependency>
     </dependencies>
 </project>
