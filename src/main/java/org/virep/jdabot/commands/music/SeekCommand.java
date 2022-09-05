@@ -87,6 +87,6 @@ public class SeekCommand implements Command {
         }
 
         player.seekTo(lengthToMillis(time));
-        event.replyFormat("\uD83D\uDD50 - Successfully seeked at `%s%`", time).queue();
+        event.reply("\uD83D\uDD50 - Successfully seeked at `" + time + "%`").queue();
     }
 }
