@@ -55,6 +55,7 @@ public class PlayCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        event.deferReply().queue();
         GuildAudioManager manager = AudioManagerController.getGuildAudioManager(event.getGuild());
 
         Guild guild = event.getGuild();

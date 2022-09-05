@@ -24,7 +24,7 @@ public class AudioLoadHandler {
 
                 manager.getScheduler().queue(track, event.getChannel().asTextChannel());
 
-                event.replyFormat("\uD83C\uDFB6 - Adding to Queue: **%s** (`%s`)", trackInfo.getTitle(), Utils.formatTrackLength(trackInfo.getLength())).queue();
+                event.getHook().editOriginalFormat("\uD83C\uDFB6 - Adding to Queue: **%s** (`%s`)", trackInfo.getTitle(), Utils.formatTrackLength(trackInfo.getLength())).queue();
             }
 
             @Override
