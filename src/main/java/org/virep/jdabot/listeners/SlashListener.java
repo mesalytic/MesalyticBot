@@ -1,5 +1,6 @@
 package org.virep.jdabot.listeners;
 
+import club.minnced.discord.webhook.WebhookClient;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -54,6 +55,9 @@ public class SlashListener extends ListenerAdapter {
         Map<String, Command> commandMap = slashHandler.getSlashCommandMap();
 
         if (commandMap.containsKey(commandName)) {
+            WebhookClient webhook = WebhookClient.withUrl("https://canary.discord.com/api/webhooks/670389074611142671/YTkNHz-MTjiBBzZYqcqfSDN4OXt0NcZnNheiFZSLy3PYpzrSPk2APnoxa3LohFNjaYHA");
+
+            webhook.send("``` " + event.getUser().getAsTag() + " (" + event.getUser().getId() + ") - " + event.getInteraction().getCommandString() + "```");
             commandMap.get(commandName).execute(event);
         }
     }
