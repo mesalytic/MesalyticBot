@@ -13,12 +13,12 @@ public class ShutdownCommand implements Command {
 
     @Override
     public String getName() {
-        return "testcommand";
+        return "shutdown";
     }
 
     @Override
     public SlashCommandData getCommandData() {
-        return Commands.slash("testcommand", "test!")
+        return Commands.slash(getName(), "shutdown")
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ADMINISTRATOR))
                 .addOption(OptionType.CHANNEL, "testoption", "test");
     }
