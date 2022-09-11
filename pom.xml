@@ -109,5 +109,25 @@
             <artifactId>logback-classic</artifactId>
             <version>1.2.8</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.Twitter4J.Twitter4J</groupId>
+            <artifactId>twitter4j-core</artifactId>
+            <version>4.0.7</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.Twitter4J.Twitter4J</groupId>
+            <artifactId>twitter4j-async</artifactId>
+            <version>4.0.7</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.Twitter4J.Twitter4J</groupId>
+            <artifactId>twitter4j-stream</artifactId>
+            <version>4.0.7</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.Twitter4J.Twitter4J</groupId>
+            <artifactId>twitter4j-http2-support</artifactId>
+            <version>4.0.7</version>
+        </dependency>
     </dependencies>
 </project>

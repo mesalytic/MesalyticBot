@@ -10,16 +10,24 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.virep.jdabot.database.DatabaseConnector;
 import org.virep.jdabot.listeners.EventListener;
 import org.virep.jdabot.listeners.LogsListener;
+import org.virep.jdabot.external.Notifier;
 import org.virep.jdabot.slashcommandhandler.SlashHandler;
 import org.virep.jdabot.listeners.SlashListener;
 import org.virep.jdabot.utils.Config;
+import org.virep.jdabot.utils.DatabaseUtils;
 
 import java.net.URI;
 import java.sql.Connection;
 public class Main {
+    static Main instance;
+
+    Notifier notifier;
     public static JDA PublicJDA = null;
     public static final Connection connectionDB = DatabaseConnector.openConnection();
     public static void main(String[] args) throws Exception {
+        instance = new Main();
+        instance.notifier = new Notifier();
+
         JDA api = JDABuilder
                 .createDefault(Config.get("TOKEN"))
                 .enableIntents(GatewayIntent.GUILD_MEMBERS,
@@ -40,6 +48,8 @@ public class Main {
 
         slashHandler.addCommands();
 
+        instance.notifier.registerTwitterUser(DatabaseUtils.getAllTwitterNames());
+
         lavalink.setAutoReconnect(true);
         lavalink.addNode(URI.create(Config.get("LAVALINKURI")), Config.get("LAVALINKPWD"));
 
@@ -51,4 +61,16 @@ public class Main {
             1,
             integer -> PublicJDA
     );
+
+    public static Main getInstance() {
+        if (instance == null) {
+            instance = new Main();
+        }
+
+        return instance;
+    }
+
+    public Notifier getNotifier() {
+        return notifier;
+    }
 }
