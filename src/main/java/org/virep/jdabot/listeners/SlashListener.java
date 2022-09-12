@@ -17,9 +17,9 @@ import net.dv8tion.jda.api.utils.FileUpload;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import org.virep.jdabot.Main;
 import org.virep.jdabot.commands.games.TTTCommand;
 import org.virep.jdabot.commands.moderation.BansCommand;
+import org.virep.jdabot.database.Database;
 import org.virep.jdabot.lavaplayer.AudioManagerController;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
 import org.virep.jdabot.slashcommandhandler.Command;
@@ -28,7 +28,6 @@ import org.virep.jdabot.slashcommandhandler.SlashHandler;
 import javax.annotation.Nonnull;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -65,13 +64,11 @@ public class SlashListener extends ListenerAdapter {
     @Override
     public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {
         if (Objects.equals(event.getSelectMenu().getId(), "selectMenu:logs:categoryEvents")) {
-            try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM logs WHERE guildID = ?")) {
-                statement.setString(1, Objects.requireNonNull(event.getGuild()).getId());
+            try {
+                ResultSet logs = Database.executeQuery("SELECT * FROM logs WHERE guildID = " + event.getGuild().getId());
+                ResultSetMetaData resultSetMetaData = logs.getMetaData();
 
-                ResultSet result = statement.executeQuery();
-                ResultSetMetaData resultSetMetaData = result.getMetaData();
-
-                if (result.first()) {
+                if (logs.first()) {
                     FileInputStream in = new FileInputStream("./logs.json");
 
                     JSONTokener tokener = new JSONTokener(in);
@@ -89,7 +86,7 @@ public class SlashListener extends ListenerAdapter {
                     }
 
                     for (int i = 1; i < resultSetMetaData.getColumnCount() - 1; i++) {
-                        String modState = result.getString(i);
+                        String modState = logs.getString(i);
 
                         if (modState.equals("true"))
                             defaultOptions.add("selectMenu:logs:events:" + resultSetMetaData.getColumnName(i));
@@ -113,14 +110,13 @@ public class SlashListener extends ListenerAdapter {
                 e.printStackTrace();
             }
 
+
         }
         if (Objects.equals(event.getSelectMenu().getId(), "selectMenu:logs:events")) {
             HashSet<String> options = new HashSet<>();
 
-            try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM logs WHERE guildID = ?")) {
-                statement.setString(1, Objects.requireNonNull(event.getGuild()).getId());
-
-                ResultSet result = statement.executeQuery();
+            try {
+                ResultSet result = Database.executeQuery("SELECT * FROM logs WHERE guildID = " + event.getGuild().getId());
 
                 if (!result.first()) {
                     event.reply("You must set up a log channel before. Use `/logs channel`").setEphemeral(true).queue();
@@ -144,12 +140,8 @@ public class SlashListener extends ListenerAdapter {
                 sb.append(builtQuery, 0, builtQuery.length() - 2);
                 sb.append(" WHERE guildID = ?");
 
-                try (PreparedStatement updateStatement = Main.connectionDB.prepareStatement(sb.toString())) {
-                    updateStatement.setString(1, event.getGuild().getId());
-                    updateStatement.executeUpdate();
-
-                    event.reply("The (un)selected events have been successfully configured.").setEphemeral(true).queue();
-                }
+                Database.executeQuery(sb.toString());
+                event.reply("The (un)selected events have been successfully configured.").setEphemeral(true).queue();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -222,7 +214,7 @@ public class SlashListener extends ListenerAdapter {
 
                 List<List<Guild.Ban>> banPages = getPages(bans, 50);
 
-                int pageNumber = switch(labels[2]) {
+                int pageNumber = switch (labels[2]) {
                     case "first" -> 0;
                     case "last" -> banPages.size() - 1;
                     case "previous" -> pageNumbers.get(event.getChannel().getIdLong()) - 1;
@@ -233,7 +225,7 @@ public class SlashListener extends ListenerAdapter {
                 EmbedBuilder embedBuilder = new EmbedBuilder()
                         .setAuthor(event.getUser().getAsTag(), null, event.getUser().getAvatarUrl())
                         .setTitle("Ban list for " + event.getGuild().getName())
-                        .setFooter("Page " + (pageNumber + 1) +"/" + banPages.size())
+                        .setFooter("Page " + (pageNumber + 1) + "/" + banPages.size())
                         .setTimestamp(Instant.now());
 
                 List<Guild.Ban> page = banPages.get(pageNumber);

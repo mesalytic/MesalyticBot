@@ -11,9 +11,9 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
-import org.virep.jdabot.Main;
+import org.virep.jdabot.database.Database;
 import org.virep.jdabot.slashcommandhandler.Command;
-import java.sql.PreparedStatement;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -56,37 +56,20 @@ public class LogsCommand implements Command {
         assert guild != null;
 
         if (subcommandName.equals("channel")) {
-            try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM logs WHERE guildID = ?")) {
-
-                statement.setString(1, guild.getId());
-
-                ResultSet result = statement.executeQuery();
+            try {
+                ResultSet result = Database.executeQuery("SELECT * FROM logs WHERE guildID = " + guild.getId());
 
                 OptionMapping channelOption = event.getOption("channel");
                 assert channelOption != null;
 
                 if (result.first()) {
-                    try (PreparedStatement updateStatement = Main.connectionDB.prepareStatement("UPDATE logs SET channelID = ? WHERE guildID = ?")) {
-                        updateStatement.setString(1, channelOption.getAsChannel().getId());
-                        updateStatement.setString(2, event.getGuild().getId());
+                    Database.executeQuery("UPDATE logs SET channelID = " + channelOption.getAsChannel().getId() + " WHERE guildID = " + event.getGuild().getId());
 
-                        updateStatement.executeUpdate();
-
-                        event.reply("Successfully set " + channelOption.getAsChannel().getAsMention() + " as the log channel for this server.").setEphemeral(true).queue();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+                    event.reply("Successfully set " + channelOption.getAsChannel().getAsMention() + " as the log channel for this server.").setEphemeral(true).queue();
                 } else {
-                    try (PreparedStatement updateStatement = Main.connectionDB.prepareStatement("INSERT INTO logs (guildID, channelID) VALUES (?,?)")) {
-                        updateStatement.setString(1, event.getGuild().getId());
-                        updateStatement.setString(2, channelOption.getAsChannel().getId());
+                    Database.executeQuery("INSERT INTO logs (guildID, channelID) VALUES (" + event.getGuild().getId() + "," + channelOption.getAsChannel().getId() + ")");
 
-                        updateStatement.executeUpdate();
-
-                        event.reply("Successfully set " + channelOption.getAsChannel().getAsMention() + " as the log channel for this server.").setEphemeral(true).queue();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+                    event.reply("Successfully set " + channelOption.getAsChannel().getAsMention() + " as the log channel for this server.").setEphemeral(true).queue();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -95,10 +78,8 @@ public class LogsCommand implements Command {
 
         if (subcommandName.equals("events")) {
 
-            try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM logs WHERE guildID = ?")) {
-                statement.setString(1, guild.getId());
-
-                ResultSet result = statement.executeQuery();
+            try {
+                ResultSet result = Database.executeQuery("SELECT * FROM logs WHERE guildID = " + guild.getId());
 
                 if (!result.first()) {
                     event.reply("You must set up a log channel before. Use `/logs channel`").setEphemeral(true).queue();
@@ -118,7 +99,6 @@ public class LogsCommand implements Command {
                                 .setMinValues(1)
                                 .build()
                 ).queue();
-
             } catch (SQLException e) {
                 e.printStackTrace();
             }

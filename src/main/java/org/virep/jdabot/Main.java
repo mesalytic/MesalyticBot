@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
-import org.virep.jdabot.database.DatabaseConnector;
+import org.virep.jdabot.database.Database;
 import org.virep.jdabot.listeners.EventListener;
 import org.virep.jdabot.listeners.LogsListener;
 import org.virep.jdabot.external.Notifier;
@@ -17,13 +17,13 @@ import org.virep.jdabot.utils.Config;
 import org.virep.jdabot.utils.DatabaseUtils;
 
 import java.net.URI;
-import java.sql.Connection;
+
 public class Main {
     static Main instance;
 
     Notifier notifier;
     public static JDA PublicJDA = null;
-    public static final Connection connectionDB = DatabaseConnector.openConnection();
+
     public static void main(String[] args) throws Exception {
         instance = new Main();
         instance.notifier = new Notifier();
@@ -47,6 +47,7 @@ public class Main {
         api.addEventListener(new SlashListener(slashHandler));
 
         slashHandler.addCommands();
+        Database.initializeDataSource();
 
         instance.notifier.registerTwitterUser(DatabaseUtils.getAllTwitterNames());
 

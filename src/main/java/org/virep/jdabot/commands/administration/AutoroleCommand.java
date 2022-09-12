@@ -4,14 +4,14 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
-import org.virep.jdabot.Main;
+import org.virep.jdabot.database.Database;
 import org.virep.jdabot.slashcommandhandler.Command;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
@@ -49,64 +49,35 @@ public class AutoroleCommand implements Command {
         }
 
         if (event.getSubcommandName().equals("add")) {
-
-            try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM autorole WHERE guildID = ?")) {
-                statement.setString(1, Objects.requireNonNull(event.getGuild()).getId());
-
-                ResultSet result = statement.executeQuery();
+            try {
+                ResultSet result = Database.executeQuery("SELECT * FROM autorole WHERE guildID = " + event.getGuild().getId());
 
                 if (result.first()) {
                     // replace role
-                    try(PreparedStatement updateStatement = Main.connectionDB.prepareStatement("""
-                                UPDATE autorole SET roleID = ? WHERE guildID = ?
-                                """)) {
-                        updateStatement.setString(1, Objects.requireNonNull(event.getOption("role")).getAsRole().getId());
-                        updateStatement.setString(2, event.getGuild().getId());
+                    Database.executeQuery("UPDATE autorole SET roleID = " + event.getOption("role", OptionMapping::getAsRole).getId() + " WHERE guildID = " + event.getGuild().getId());
 
-                        updateStatement.executeUpdate();
-                        event.reply("The role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " has been added to the autorole !").setEphemeral(true).queue();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+                    event.reply("The role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " has been added to the autorole !").setEphemeral(true).queue();
                 } else {
                     // add role
-                    try(PreparedStatement updateStatement = Main.connectionDB.prepareStatement("""
-                                INSERT INTO autorole(roleID, guildID)
-                                VALUES (?,?)
-                                """)) {
-                        updateStatement.setString(1, Objects.requireNonNull(event.getOption("role")).getAsRole().getId());
-                        updateStatement.setString(2, event.getGuild().getId());
+                    Database.executeQuery("INSERT INTO autorole(roleID, guildID) VALUES (" + event.getOption("role", OptionMapping::getAsRole).getId() + "," + event.getGuild().getId());
 
-                        updateStatement.executeUpdate();
-                        event.reply("The role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " has been added to the autorole !").setEphemeral(true).queue();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+                    event.reply("The role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " has been added to the autorole !").setEphemeral(true).queue();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         } else {
-            try (PreparedStatement statement = Main.connectionDB.prepareStatement("SELECT * FROM autorole WHERE guildID = ?")) {
-                statement.setString(1, Objects.requireNonNull(event.getGuild()).getId());
-
-                ResultSet result = statement.executeQuery();
+            try {
+                ResultSet result = Database.executeQuery("SELECT * FROM autorole WHERE guildID = " + event.getGuild().getId());
 
                 if (!result.first()) {
                     event.reply("No role has been configured for the autorole.").setEphemeral(true).queue();
                     return;
                 }
 
-                try(PreparedStatement updateStatement = Main.connectionDB.prepareStatement("""
-                                DELETE FROM autorole WHERE guildID = ?
-                                """)) {
-                    updateStatement.setString(1, event.getGuild().getId());
+                Database.executeQuery("DELETE FROM autorole WHERE guildID = " + event.getGuild().getId());
 
-                    updateStatement.executeUpdate();
-                    event.reply("Roles configured for the autorole have been cleared.").setEphemeral(true).queue();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                event.reply("Roles configured for the autorole have been cleared.").setEphemeral(true).queue();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
