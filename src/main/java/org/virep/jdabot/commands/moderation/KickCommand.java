@@ -49,7 +49,7 @@ public class KickCommand implements Command {
             return;
         }
 
-        member.kick("Kicked by " + event.getUser().getAsTag() + " : " + reason).queue();
+        member.kick().reason("Kicked by " + event.getUser().getAsTag() + " : " + reason).queue();
         event.reply("Successfully kicked **" + member.getUser().getAsTag() + "** for the reason: **" + reason + "**").queue();
     }
 }
