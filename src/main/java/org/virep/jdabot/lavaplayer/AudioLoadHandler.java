@@ -5,7 +5,7 @@ import lavalink.client.io.LoadResultHandler;
 import lavalink.client.player.track.AudioPlaylist;
 import lavalink.client.player.track.AudioTrack;
 import lavalink.client.player.track.AudioTrackInfo;
-import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.virep.jdabot.utils.Utils;
 

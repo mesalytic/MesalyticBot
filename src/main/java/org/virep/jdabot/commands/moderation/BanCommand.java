@@ -12,11 +12,11 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.requests.ErrorResponse;
 import org.virep.jdabot.slashcommandhandler.Command;
+import org.virep.jdabot.utils.Utils;
 
 import java.util.EnumSet;
+import java.util.concurrent.TimeUnit;
 
-//TODO: Change ErrorResponse.UNKNOWN_MEMBER to ErrorResponse.UNKNOWN_USER in JDA 5 alpha.19
-//TODO: Change delDays feature to delTime, as Discord API v10 now supports deletion with seconds precision (JDA 5 alpha.19)
 public class BanCommand implements Command {
     @Override
     public String getName() {
@@ -30,7 +30,7 @@ public class BanCommand implements Command {
                 .addOptions(
                         new OptionData(OptionType.USER, "user", "The User to ban.", true),
                         new OptionData(OptionType.STRING, "reason", "The reason of the ban."),
-                        new OptionData(OptionType.INTEGER, "delete-days", "Days to delete messages. (0-7)").setMinValue(0).setMaxValue(7)
+                        new OptionData(OptionType.STRING, "delete", "Amount of time delete messages. (max 7)")
                 );
     }
 
@@ -48,15 +48,13 @@ public class BanCommand implements Command {
         ErrorHandler errorHandler = new ErrorHandler()
                 .handle(EnumSet.of(ErrorResponse.MISSING_PERMISSIONS),
                         (ex) -> event.reply("The specified member cannot be banned, because of permission discrepancy.").setEphemeral(true).queue())
-                .handle(EnumSet.of(ErrorResponse.UNKNOWN_MEMBER),
+                .handle(EnumSet.of(ErrorResponse.UNKNOWN_USER),
                         (ex) -> event.reply("The specified member cannot be banned, as they are no longer in the server.").setEphemeral(true).queue());
 
         Member member = event.getOption("user", OptionMapping::getAsMember);
         String reason = event.getOption("reason") != null ? event.getOption("reason").getAsString() : "Banned by " + event.getUser().getAsTag() + ": No reason provided";
-        int delDays = event.getOption("delete-days") != null ? event.getOption("delete-days").getAsInt() : 0;
+        String delTimeString = event.getOption("delete") != null ? event.getOption("delete", OptionMapping::getAsString) : "0s";
 
-        System.out.println(delDays);
-        
         if (member.getId().equals(event.getMember().getId())) {
             event.reply("You cannot ban yourself.").setEphemeral(true).queue();
             return;
@@ -72,7 +70,7 @@ public class BanCommand implements Command {
             return;
         }
 
-        member.ban(delDays).reason(reason)
+        member.ban(Utils.timeStringToSeconds(delTimeString), TimeUnit.SECONDS).reason(reason)
                 .queue(success -> event.reply("Member **" + member.getUser().getAsTag() + "** has been banned. (Reason: **" + reason + "**)").queue(), errorHandler);
     }
 }

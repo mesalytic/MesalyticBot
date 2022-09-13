@@ -3,7 +3,7 @@ package org.virep.jdabot.lavaplayer;
 import lavalink.client.io.jda.JdaLink;
 import lavalink.client.player.LavalinkPlayer;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import org.virep.jdabot.Main;
 
 public class GuildAudioManager {
