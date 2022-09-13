@@ -77,27 +77,27 @@ public class MessageCommand implements Command {
 
         if (method.equals("set")) {
             try {
-                ResultSet result = Database.executeQuery("SELECT * FROM " + group + "messages WHERE guildID = " + event.getGuild().getId());
+                ResultSet result = Database.executeQuery("SELECT * FROM " + group + "messages WHERE guildID = '" + event.getGuild().getId() + "'");
 
                 if (result.first()) {
                     if (group.equals("dm")) {
-                        Database.executeQuery("UPDATE " + group + "messages SET message = " + event.getOption("message", OptionMapping::getAsString) + "WHERE guildID = " + event.getGuild().getId());
+                        Database.executeQuery("UPDATE " + group + "messages SET message = '" + event.getOption("message", OptionMapping::getAsString) + "' WHERE guildID = '" + event.getGuild().getId() + "'");
                         event.reply("The " + group + " message has been successfully replaced.").queue();
                         return;
                     }
 
-                    Database.executeQuery("UPDATE " + group + "messages SET message = " + event.getOption("message", OptionMapping::getAsString) + ", channelID = " + event.getOption("channel", OptionMapping::getAsChannel).getId() + " WHERE guildID = " + event.getGuild().getId());
+                    Database.executeQuery("UPDATE " + group + "messages SET message = '" + event.getOption("message", OptionMapping::getAsString) + "', channelID = '" + event.getOption("channel", OptionMapping::getAsChannel).getId() + "' WHERE guildID = '" + event.getGuild().getId() + "'");
                     event.reply("The " + group + " message has been successfully replaced.").queue();
                 } else {
                     if (group.equals("dm")) {
 
-                        Database.executeQuery("INSERT INTO " + group + "messages (message, guildID) VALUES (" + event.getOption("message").getAsString() + "," + event.getGuild().getId() + ")");
+                        Database.executeQuery("INSERT INTO " + group + "messages (message, guildID) VALUES ('" + event.getOption("message").getAsString() + "','" + event.getGuild().getId() + "')");
 
                         event.reply("The " + group + " message has been successfully added.").queue();
                         return;
                     }
 
-                    Database.executeQuery("INSERT INTO " + group + "messages (message, channelID, guildID) VALUES (" + event.getOption("message").getAsString() + "," + event.getOption("channel").getAsChannel().getId() + "," + event.getGuild().getId() + ")");
+                    Database.executeQuery("INSERT INTO " + group + "messages (message, channelID, guildID) VALUES ('" + event.getOption("message").getAsString() + "','" + event.getOption("channel").getAsChannel().getId() + "','" + event.getGuild().getId() + "')");
 
                     event.reply("The " + group + " message has been successfully added.").queue();
                 }
@@ -115,7 +115,7 @@ public class MessageCommand implements Command {
                     return;
                 }
 
-                Database.executeQuery("DELETE FROM " + group + "messages WHERE guildID = " + event.getGuild().getId());
+                Database.executeQuery("DELETE FROM " + group + "messages WHERE guildID = '" + event.getGuild().getId() + "'");
 
                 event.reply("The " + group + " message has been successfully removed.").queue();
             } catch (SQLException e) {
@@ -133,7 +133,7 @@ public class MessageCommand implements Command {
         if (method.equals("test")) {
             if (group.equals("join")) {
                 try {
-                    ResultSet result = Database.executeQuery("SELECT * FROM joinmessages WHERE guildID = " + event.getGuild().getId());
+                    ResultSet result = Database.executeQuery("SELECT * FROM joinmessages WHERE guildID = '" + event.getGuild().getId() + "'");
 
                     if (result.next()) {
                         String message = result.getString(1);
@@ -155,7 +155,7 @@ public class MessageCommand implements Command {
 
             if (group.equals("dm")) {
                 try {
-                    ResultSet result = Database.executeQuery("SELECT * FROM dmmessages WHERE guildID = " + event.getGuild().getId());
+                    ResultSet result = Database.executeQuery("SELECT * FROM dmmessages WHERE guildID = '" + event.getGuild().getId() + "'");
 
                     if (result.next()) {
                         String message = result.getString(1);
@@ -175,7 +175,7 @@ public class MessageCommand implements Command {
 
             if (group.equals("leave")) {
                 try {
-                    ResultSet result = Database.executeQuery("SELECT * FROM leavemessages WHERE guildID = " + event.getGuild().getId());
+                    ResultSet result = Database.executeQuery("SELECT * FROM leavemessages WHERE guildID = '" + event.getGuild().getId() + "'");
 
                     if (result.next()) {
                         String message = result.getString(1);

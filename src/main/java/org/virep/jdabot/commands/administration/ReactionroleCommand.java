@@ -68,13 +68,13 @@ public class ReactionroleCommand implements Command {
                 if (emojiType == Emoji.Type.CUSTOM) emoji = fromFormattedEmoji.asCustom().getId();
                 else emoji = fromFormattedEmoji.asUnicode().getAsCodepoints();
 
-                ResultSet result = Database.executeQuery("SELECT * FROM reactionRole WHERE messageID = " + event.getOption("messageid", OptionMapping::getAsString) + " AND emojiID = " + emoji);
+                ResultSet result = Database.executeQuery("SELECT * FROM reactionRole WHERE messageID = '" + event.getOption("messageid", OptionMapping::getAsString) + "' AND emojiID = '" + emoji + "'");
 
                 if (result.first()) {
-                    Database.executeQuery("UPDATE reactionRole SET roleID = " + event.getOption("role", OptionMapping::getAsRole).getId() + " WHERE messageID = " + event.getOption("messageid", OptionMapping::getAsString) + " AND emojiID = " + emoji);
+                    Database.executeQuery("UPDATE reactionRole SET roleID = '" + event.getOption("role", OptionMapping::getAsRole).getId() + "' WHERE messageID = '" + event.getOption("messageid", OptionMapping::getAsString) + "' AND emojiID = '" + emoji + "'");
                     event.reply("The role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " has replaced the already specified role for this emoji, and can now be obtained via the reaction role.").setEphemeral(true).queue();
                 } else {
-                    Database.executeQuery("INSERT INTO reactionRole(messageID, roleID, emojiID) VALUES (" + event.getOption("messageid", OptionMapping::getAsString) + "," + event.getOption("role", OptionMapping::getAsRole).getId() + "," + emoji + ")");
+                    Database.executeQuery("INSERT INTO reactionRole(messageID, roleID, emojiID) VALUES ('" + event.getOption("messageid", OptionMapping::getAsString) + "','" + event.getOption("role", OptionMapping::getAsRole).getId() + "','" + emoji + "')");
 
                     TextChannel textChannel = event.getGuild().getTextChannelById(event.getOption("channel").getAsChannel().getId());
                     textChannel.retrieveMessageById(event.getOption("messageid").getAsString()).queue((message) -> message.addReaction(fromFormattedEmoji).queue());
@@ -93,14 +93,14 @@ public class ReactionroleCommand implements Command {
                 if (emojiType == Emoji.Type.CUSTOM) emoji = fromFormattedEmoji.asCustom().getId();
                 else emoji = fromFormattedEmoji.asUnicode().getAsCodepoints();
 
-                ResultSet result = Database.executeQuery("SELECT * FROM reactionRole WHERE messageID = " + event.getOption("messageid", OptionMapping::getAsString) + " AND emojiID = " + emoji);
+                ResultSet result = Database.executeQuery("SELECT * FROM reactionRole WHERE messageID = '" + event.getOption("messageid", OptionMapping::getAsString) + "' AND emojiID = '" + emoji + "'");
 
                 if (!result.first()) {
                     event.reply("No role has been configured for this emoji in the reaction role.").setEphemeral(true).queue();
                     return;
                 }
 
-                Database.executeQuery("DELETE FROM reactionRole WHERE messageID = " + event.getOption("messageid", OptionMapping::getAsString) + " AND emojiID = " + emoji);
+                Database.executeQuery("DELETE FROM reactionRole WHERE messageID = '" + event.getOption("messageid", OptionMapping::getAsString) + "' AND emojiID = '" + emoji + "'");
 
                 event.reply("THe role configured for this emoji in the reaction role has been cleared.").setEphemeral(true).queue();
             } catch (SQLException e) {

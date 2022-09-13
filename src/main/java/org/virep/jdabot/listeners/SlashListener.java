@@ -70,7 +70,7 @@ public class SlashListener extends ListenerAdapter {
     public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {
         if (Objects.equals(event.getSelectMenu().getId(), "selectMenu:logs:categoryEvents")) {
             try {
-                ResultSet logs = Database.executeQuery("SELECT * FROM logs WHERE guildID = " + event.getGuild().getId());
+                ResultSet logs = Database.executeQuery("SELECT * FROM logs WHERE guildID = '" + event.getGuild().getId() + "'");
                 ResultSetMetaData resultSetMetaData = logs.getMetaData();
 
                 if (logs.first()) {
@@ -121,7 +121,7 @@ public class SlashListener extends ListenerAdapter {
             HashSet<String> options = new HashSet<>();
 
             try {
-                ResultSet result = Database.executeQuery("SELECT * FROM logs WHERE guildID = " + event.getGuild().getId());
+                ResultSet result = Database.executeQuery("SELECT * FROM logs WHERE guildID = '" + event.getGuild().getId() + "'");
 
                 if (!result.first()) {
                     event.reply("You must set up a log channel before. Use `/logs channel`").setEphemeral(true).queue();
@@ -143,7 +143,7 @@ public class SlashListener extends ListenerAdapter {
                 String builtQuery = query.toString();
 
                 sb.append(builtQuery, 0, builtQuery.length() - 2);
-                sb.append(" WHERE guildID = ?");
+                sb.append(" WHERE guildID = '" + event.getGuild().getId() + "'");
 
                 Database.executeQuery(sb.toString());
                 event.reply("The (un)selected events have been successfully configured.").setEphemeral(true).queue();

@@ -103,7 +103,7 @@ public class EventListener extends ListenerAdapter {
         Member member = event.getMember();
 
         try {
-            ResultSet result = Database.executeQuery("SELECT * FROM autorole WHERE guildID = " + guild.getId());
+            ResultSet result = Database.executeQuery("SELECT * FROM autorole WHERE guildID = '" + guild.getId() + "'");
 
             if (result.next()) {
                 String roleID = result.getString(1);
@@ -117,7 +117,7 @@ public class EventListener extends ListenerAdapter {
         }
 
         try {
-            ResultSet result = Database.executeQuery("SELECT * FROM joinmessages WHERE guildID = " + guild.getId());
+            ResultSet result = Database.executeQuery("SELECT * FROM joinmessages WHERE guildID = '" + guild.getId() + "'");
 
             if (result.next()) {
                 String message = result.getString(1);
@@ -137,7 +137,7 @@ public class EventListener extends ListenerAdapter {
         }
 
         try {
-            ResultSet result = Database.executeQuery("SELECT * FROM dmmessages WHERE guildID = " + guild.getId());
+            ResultSet result = Database.executeQuery("SELECT * FROM dmmessages WHERE guildID = '" + guild.getId() + "'");
 
             if (result.next()) {
                 String message = result.getString(1);
@@ -160,7 +160,7 @@ public class EventListener extends ListenerAdapter {
         Guild guild = event.getGuild();
 
         try {
-            ResultSet result = Database.executeQuery("SELECT * FROM leavemessages WHERE guildID = " + guild.getId());
+            ResultSet result = Database.executeQuery("SELECT * FROM leavemessages WHERE guildID = '" + guild.getId() + "'");
 
             if (result.next()) {
                 String message = result.getString(1);
@@ -192,7 +192,7 @@ public class EventListener extends ListenerAdapter {
             if (emojiType == Emoji.Type.CUSTOM) emoji = fromFormattedEmoji.asCustom().getId();
             else emoji = fromFormattedEmoji.asUnicode().getAsCodepoints();
 
-            ResultSet result = Database.executeQuery("SELECT * FROM reactionRole WHERE messageID = " + event.getMessageId() + " AND emojIID = " + emoji);
+            ResultSet result = Database.executeQuery("SELECT * FROM reactionRole WHERE messageID = '" + event.getMessageId() + "' AND emojIID = '" + emoji + "'");
 
             if (result.next()) {
                 String roleID = result.getString(2);
@@ -221,7 +221,7 @@ public class EventListener extends ListenerAdapter {
             if (emojiType == Emoji.Type.CUSTOM) emoji = fromFormattedEmoji.asCustom().getId();
             else emoji = fromFormattedEmoji.asUnicode().getAsCodepoints();
 
-            ResultSet result = Database.executeQuery("SELECT * FROM reactionRole WHERE messageID = " + event.getMessageId() + " AND emojiID = " + emoji);
+            ResultSet result = Database.executeQuery("SELECT * FROM reactionRole WHERE messageID = '" + event.getMessageId() + "' AND emojiID = '" + emoji + "'");
 
             if (result.next()) {
                 String roleID = result.getString(2);

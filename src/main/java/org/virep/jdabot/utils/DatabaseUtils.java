@@ -13,7 +13,7 @@ import java.util.List;
 public class DatabaseUtils {
     public static boolean isEnabled(String logType, String guildID) {
         try {
-            ResultSet result = Database.executeQuery("SELECT * FROM logs WHERE guildID = " + guildID);
+            ResultSet result = Database.executeQuery("SELECT * FROM logs WHERE guildID = '" + guildID + "'");
 
             if (result.first()) {
                 int typeIndex = result.findColumn(logType);
@@ -28,7 +28,7 @@ public class DatabaseUtils {
 
     public static String getLogChannelID(String guildID) {
         try {
-            ResultSet result = Database.executeQuery("SELECT * FROM logs WHERE guildID = " + guildID);
+            ResultSet result = Database.executeQuery("SELECT * FROM logs WHERE guildID = '" + guildID + "'");
             ResultSetMetaData resultSetMetaData = result.getMetaData();
 
             if (result.first()) {
@@ -43,7 +43,7 @@ public class DatabaseUtils {
 
     public String getTwitterWebhookURL(String guildID, String twitterName) {
         try {
-            ResultSet result = Database.executeQuery("SELECT * FROM twitternotifier WHERE guildID = " + guildID + " AND twitterAccount = " + twitterName);
+            ResultSet result = Database.executeQuery("SELECT * FROM twitternotifier WHERE guildID = '" + guildID + "' AND twitterAccount = '" + twitterName + "'");
 
             if (result.first()) {
                 return result.getString("webhookURL");
@@ -58,7 +58,7 @@ public class DatabaseUtils {
         ArrayList<String> webhooksList = new ArrayList<>();
 
         try {
-            ResultSet result = Database.executeQuery("SELECT * FROM twitternotifier WHERE twitterAccount = " + twitterName);
+            ResultSet result = Database.executeQuery("SELECT * FROM twitternotifier WHERE twitterAccount = '" + twitterName + "'");
 
             while (result.next()) {
                 webhooksList.add(result.getString("webhookURL"));
@@ -90,7 +90,7 @@ public class DatabaseUtils {
         ArrayList<String> userNames = new ArrayList<>();
 
         try {
-            ResultSet result = Database.executeQuery("SELECT * FROM twitternotifier WHERE guildID = " + guildID);
+            ResultSet result = Database.executeQuery("SELECT * FROM twitternotifier WHERE guildID = '" + guildID + "'");
 
             while (result.next()) {
                 userNames.add(result.getString("twitterAccount"));
@@ -103,7 +103,7 @@ public class DatabaseUtils {
     }
 
     public static void addTwitterWebhook(String channelID, String guildID, String webhookURL, String twitterName) {
-        Database.executeQuery("INSERT INTO twitternotifier (channelID, guildID, twitterAccount, webhookURL) VALUES (" + channelID + "," + guildID + "," + twitterName + "," + webhookURL + ")");
+        Database.executeQuery("INSERT INTO twitternotifier (channelID, guildID, twitterAccount, webhookURL) VALUES ('" + channelID + "','" + guildID + "','" + twitterName + "','" + webhookURL + "')");
     }
 
     public static void removeTwitterWebhook(String guildID, String twitterName) {
@@ -116,6 +116,6 @@ public class DatabaseUtils {
             });
         });
 
-        Database.executeQuery("DELETE FROM twitternotifier WHERE guildID = " + guildID + " AND twitterAccount = " + twitterName);
+        Database.executeQuery("DELETE FROM twitternotifier WHERE guildID = '" + guildID + "' AND twitterAccount = '" + twitterName + "'");
     }
 }

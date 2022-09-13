@@ -117,7 +117,7 @@ public class InteractionroleCommand implements Command {
 
                         Have fun configuring the Interaction Roles !""").queue(message -> {
 
-                    Database.executeQuery("INSERT INTO interactionrole (channelID, guildId, messageID) VALUES (" + event.getOption("channel", OptionMapping::getAsChannel).getId() + "," + event.getGuild().getId() + "," + message.getId() + ")");
+                    Database.executeQuery("INSERT INTO interactionrole (channelID, guildId, messageID) VALUES ('" + event.getOption("channel", OptionMapping::getAsChannel).getId() + "','" + event.getGuild().getId() + "','" + message.getId() + "')");
 
                     event.reply("Sucessfully set up the message. Here is the messageID that you'll need to configure things up: `" + message.getId() + "`").queue();
                 });
@@ -125,7 +125,7 @@ public class InteractionroleCommand implements Command {
 
             if (subcommandName.equals("edit")) {
                 try {
-                    ResultSet result = Database.executeQuery("SELECT * FROM interactionrole WHERE messageID = " + event.getOption("messageid", OptionMapping::getAsString));
+                    ResultSet result = Database.executeQuery("SELECT * FROM interactionrole WHERE messageID = '" + event.getOption("messageid", OptionMapping::getAsString) + "'");
 
                     if (!result.first()) {
                         event.reply("This message ID is either invalid or does not corresponds to a message linked to Interaction Roles.").setEphemeral(true).queue();
@@ -149,7 +149,7 @@ public class InteractionroleCommand implements Command {
         if (subcommandName.equals("list")) {
             if (event.getSubcommandGroup().equals("button")) {
                 try {
-                    ResultSet result = Database.executeQuery("SELECT * FROM interactionrole_buttons WHERE guildID = " + event.getGuild().getId() + " ORDER BY messageID DESC");
+                    ResultSet result = Database.executeQuery("SELECT * FROM interactionrole_buttons WHERE guildID = '" + event.getGuild().getId() + "' ORDER BY messageID DESC");
 
                     if (!result.first()) {
                         event.reply("You don't have any roles linked.").setEphemeral(true).queue();
@@ -174,7 +174,7 @@ public class InteractionroleCommand implements Command {
 
             if (event.getSubcommandGroup().equals("selectmenu")) {
                 try {
-                    ResultSet result = Database.executeQuery("SELECT * FROM interactionrole_selectmenu WHERE guildID = " + event.getGuild().getId() + " ORDER BY messageID DESC");
+                    ResultSet result = Database.executeQuery("SELECT * FROM interactionrole_selectmenu WHERE guildID = '" + event.getGuild().getId() + "' ORDER BY messageID DESC");
 
                     if (!result.first()) {
                         event.reply("You don't have any roles linked.").setEphemeral(true).queue();
@@ -205,10 +205,10 @@ public class InteractionroleCommand implements Command {
                 String buttonName = event.getOption("name").getAsString();
 
                 try {
-                    ResultSet result = Database.executeQuery("SELECT * FROM interactionrole WHERE messageID = " + messageID);
+                    ResultSet result = Database.executeQuery("SELECT * FROM interactionrole WHERE messageID = '" + messageID + "'");
 
                     if (result.first()) {
-                        ResultSet otherResult = Database.executeQuery("SELECT * FROM interactionrole_buttons WHERE messageID = " + messageID);
+                        ResultSet otherResult = Database.executeQuery("SELECT * FROM interactionrole_buttons WHERE messageID = '" + messageID + "'");
 
                         boolean hasOtherButtons = otherResult.first();
 
@@ -220,7 +220,7 @@ public class InteractionroleCommand implements Command {
                                 return;
                             }
 
-                            Database.executeQuery("INSERT INTO interactionrole_buttons(guildID, messageID, buttonID, roleID) VALUES (" + event.getGuild().getId() + "," + messageID + "," + "interactionrole:" + event.getGuild().getId() + ":" + role.getId() + "," + role.getId() + ")");
+                            Database.executeQuery("INSERT INTO interactionrole_buttons(guildID, messageID, buttonID, roleID) VALUES ('" + event.getGuild().getId() + "','" + messageID + "','" + "interactionrole:" + event.getGuild().getId() + ":" + role.getId() + "','" + role.getId() + "')");
 
                             if (!hasOtherButtons) {
                                 msg.editMessageComponents().setActionRow(
@@ -256,10 +256,10 @@ public class InteractionroleCommand implements Command {
                 String messageID = event.getOption("messageid").getAsString();
 
                 try {
-                    ResultSet result = Database.executeQuery("SELECT * FROM interactionrole WHERE messageID = " + messageID);
+                    ResultSet result = Database.executeQuery("SELECT * FROM interactionrole WHERE messageID = '" + messageID + "'");
 
                     if (result.first()) {
-                        ResultSet smResult = Database.executeQuery("SELECT * FROM interactionrole_selectmenu WHERE messageID = " + messageID);
+                        ResultSet smResult = Database.executeQuery("SELECT * FROM interactionrole_selectmenu WHERE messageID = '" + messageID + "'");
 
                         boolean hasOtherMenus = smResult.first();
 
@@ -271,7 +271,7 @@ public class InteractionroleCommand implements Command {
                                 return;
                             }
 
-                            Database.executeQuery("INSERT INTO interactionrole_selectmenu (messageID, guildID, choiceID, roleID) VALUES (" + messageID + "," + event.getGuild().getId() + "," + "selectmenurole:" + event.getGuild().getId() + ":" + event.getOption("role").getAsRole().getId() + "," + event.getOption("role").getAsRole().getId() + ")");
+                            Database.executeQuery("INSERT INTO interactionrole_selectmenu (messageID, guildID, choiceID, roleID) VALUES ('" + messageID + "','" + event.getGuild().getId() + "','" + "selectmenurole:" + event.getGuild().getId() + ":" + event.getOption("role").getAsRole().getId() + "','" + event.getOption("role").getAsRole().getId() + "')");
 
                             String choiceLabel = event.getOption("name").getAsString();
                             String choiceValue = ("selectmenurole:" + event.getGuild().getId() + ":" + event.getOption("role").getAsRole().getId());
@@ -320,7 +320,7 @@ public class InteractionroleCommand implements Command {
                 Role role = event.getOption("role").getAsRole();
 
                 try {
-                    ResultSet result = Database.executeQuery("SELECT * FROM interactionrole WHERE messageID = " + messageID);
+                    ResultSet result = Database.executeQuery("SELECT * FROM interactionrole WHERE messageID = '" + messageID + "'");
 
                     if (result.first()) {
                         ResultSet otherResult = Database.executeQuery("SELECT * FROM interactionrole_buttons WHERE messageID = ? AND roleID = ?");
@@ -328,7 +328,7 @@ public class InteractionroleCommand implements Command {
                         if (otherResult.first()) {
                             TextChannel channel = event.getGuild().getTextChannelById(result.getString(1));
 
-                            Database.executeQuery("DELETE FROM interactionrole_buttons WHERE messageID = " + messageID + " AND roleID = " + role.getId());
+                            Database.executeQuery("DELETE FROM interactionrole_buttons WHERE messageID = '" + messageID + "' AND roleID = '" + role.getId() + "'");
 
                             channel.retrieveMessageById(messageID).queue(msg -> {
                                 List<Button> buttons = new ArrayList<>();
@@ -358,7 +358,7 @@ public class InteractionroleCommand implements Command {
                 Role role = event.getOption("role").getAsRole();
 
                 try {
-                    ResultSet result = Database.executeQuery("SELECT * FROM interactionrole WHERE messageID = " + messageID);
+                    ResultSet result = Database.executeQuery("SELECT * FROM interactionrole WHERE messageID = '" + messageID + "'");
 
                     if (result.first()) {
                         ResultSet smResult = Database.executeQuery("SELECT * FROM interactionrole_selectmenu WHERE messageID = ? AND roleID = ?");
@@ -366,7 +366,7 @@ public class InteractionroleCommand implements Command {
                         if (smResult.first()) {
                             TextChannel channel = event.getGuild().getTextChannelById(result.getString(1));
 
-                            Database.executeQuery("DELETE FROM interactionrole_selectmenu WHERE messageID = " + messageID + " AND roleID = " + role.getId());
+                            Database.executeQuery("DELETE FROM interactionrole_selectmenu WHERE messageID = '" + messageID + "' AND roleID = '" + role.getId() + "'");
 
                             channel.retrieveMessageById(messageID).queue(msg -> {
                                 ActionRow actionRow = msg.getActionRows().get(0);

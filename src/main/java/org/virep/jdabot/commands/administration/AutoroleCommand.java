@@ -50,16 +50,16 @@ public class AutoroleCommand implements Command {
 
         if (event.getSubcommandName().equals("add")) {
             try {
-                ResultSet result = Database.executeQuery("SELECT * FROM autorole WHERE guildID = " + event.getGuild().getId());
+                ResultSet result = Database.executeQuery("SELECT * FROM autorole WHERE guildID = '" + event.getGuild().getId() + "'");
 
                 if (result.first()) {
                     // replace role
-                    Database.executeQuery("UPDATE autorole SET roleID = " + event.getOption("role", OptionMapping::getAsRole).getId() + " WHERE guildID = " + event.getGuild().getId());
+                    Database.executeQuery("UPDATE autorole SET roleID = '" + event.getOption("role", OptionMapping::getAsRole).getId() + "' WHERE guildID = '" + event.getGuild().getId() + "'");
 
                     event.reply("The role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " has been added to the autorole !").setEphemeral(true).queue();
                 } else {
                     // add role
-                    Database.executeQuery("INSERT INTO autorole(roleID, guildID) VALUES (" + event.getOption("role", OptionMapping::getAsRole).getId() + "," + event.getGuild().getId());
+                    Database.executeQuery("INSERT INTO autorole(roleID, guildID) VALUES ('" + event.getOption("role", OptionMapping::getAsRole).getId() + "','" + event.getGuild().getId());
 
                     event.reply("The role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " has been added to the autorole !").setEphemeral(true).queue();
                 }
@@ -68,14 +68,14 @@ public class AutoroleCommand implements Command {
             }
         } else {
             try {
-                ResultSet result = Database.executeQuery("SELECT * FROM autorole WHERE guildID = " + event.getGuild().getId());
+                ResultSet result = Database.executeQuery("SELECT * FROM autorole WHERE guildID = '" + event.getGuild().getId() + "'");
 
                 if (!result.first()) {
                     event.reply("No role has been configured for the autorole.").setEphemeral(true).queue();
                     return;
                 }
 
-                Database.executeQuery("DELETE FROM autorole WHERE guildID = " + event.getGuild().getId());
+                Database.executeQuery("DELETE FROM autorole WHERE guildID = '" + event.getGuild().getId() + "'");
 
                 event.reply("Roles configured for the autorole have been cleared.").setEphemeral(true).queue();
             } catch (SQLException e) {

@@ -57,17 +57,17 @@ public class LogsCommand implements Command {
 
         if (subcommandName.equals("channel")) {
             try {
-                ResultSet result = Database.executeQuery("SELECT * FROM logs WHERE guildID = " + guild.getId());
+                ResultSet result = Database.executeQuery("SELECT * FROM logs WHERE guildID = '" + guild.getId() + "'");
 
                 OptionMapping channelOption = event.getOption("channel");
                 assert channelOption != null;
 
                 if (result.first()) {
-                    Database.executeQuery("UPDATE logs SET channelID = " + channelOption.getAsChannel().getId() + " WHERE guildID = " + event.getGuild().getId());
+                    Database.executeQuery("UPDATE logs SET channelID = '" + channelOption.getAsChannel().getId() + "' WHERE guildID = '" + event.getGuild().getId() + "'");
 
                     event.reply("Successfully set " + channelOption.getAsChannel().getAsMention() + " as the log channel for this server.").setEphemeral(true).queue();
                 } else {
-                    Database.executeQuery("INSERT INTO logs (guildID, channelID) VALUES (" + event.getGuild().getId() + "," + channelOption.getAsChannel().getId() + ")");
+                    Database.executeQuery("INSERT INTO logs (guildID, channelID) VALUES ('" + event.getGuild().getId() + "','" + channelOption.getAsChannel().getId() + "')");
 
                     event.reply("Successfully set " + channelOption.getAsChannel().getAsMention() + " as the log channel for this server.").setEphemeral(true).queue();
                 }
@@ -79,7 +79,7 @@ public class LogsCommand implements Command {
         if (subcommandName.equals("events")) {
 
             try {
-                ResultSet result = Database.executeQuery("SELECT * FROM logs WHERE guildID = " + guild.getId());
+                ResultSet result = Database.executeQuery("SELECT * FROM logs WHERE guildID = '" + guild.getId() + "'");
 
                 if (!result.first()) {
                     event.reply("You must set up a log channel before. Use `/logs channel`").setEphemeral(true).queue();
