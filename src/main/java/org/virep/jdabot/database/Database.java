@@ -31,7 +31,6 @@ public final class Database {
             Connection connection = dataSource.getConnection();
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
-            connection.close();
             return rs;
         } catch (Exception ex) {
             ex.printStackTrace();
