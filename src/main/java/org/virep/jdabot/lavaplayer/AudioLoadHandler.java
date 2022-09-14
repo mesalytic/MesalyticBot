@@ -32,7 +32,7 @@ public class AudioLoadHandler {
                 for (AudioTrack track : playlist.getTracks()) {
                     manager.getScheduler().queue(track, event.getChannel().asTextChannel());
                 }
-                event.replyFormat("\uD83C\uDFB6 - Adding Playlist to Queue: **%s**", playlist.getName()).queue();
+                event.getHook().editOriginalFormat("\uD83C\uDFB6 - Adding Playlist to Queue: **%s**", playlist.getName()).queue();
             }
 
             @Override
@@ -40,17 +40,17 @@ public class AudioLoadHandler {
                 AudioTrack track = tracks.get(0);
                 manager.getScheduler().queue(track, event.getChannel().asTextChannel());
 
-                event.replyFormat("\uD83C\uDFB6 - Adding to Queue: **%s** (`%s`)", track.getInfo().getTitle(), Utils.formatTrackLength(track.getInfo().getLength())).queue();
+                event.getHook().editOriginalFormat("\uD83C\uDFB6 - Adding to Queue: **%s** (`%s`)", track.getInfo().getTitle(), Utils.formatTrackLength(track.getInfo().getLength())).queue();
             }
 
             @Override
             public void noMatches() {
-                event.replyFormat("\u274C - No matches found for `%s`.", trackURL.replace("ytsearch:", "").replace("scsearch:", "").replace("spsearch:", "").replace("ytmsearch:", "")).queue();
+                event.getHook().editOriginalFormat("\u274C - No matches found for `%s`.", trackURL.replace("ytsearch:", "").replace("scsearch:", "").replace("spsearch:", "").replace("ytmsearch:", "")).queue();
             }
 
             @Override
             public void loadFailed(FriendlyException exception) {
-                event.replyFormat("\u274C - An error occured while loading the song : `%s`", exception.getMessage()).queue();
+                event.getHook().editOriginalFormat("\u274C - An error occured while loading the song : `%s`", exception.getMessage()).queue();
             }
         });
     }

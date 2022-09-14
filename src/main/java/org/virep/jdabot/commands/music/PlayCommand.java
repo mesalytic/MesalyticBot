@@ -74,12 +74,12 @@ public class PlayCommand implements Command {
         String result = "";
 
         if (urlOption == null && searchOption == null && fileOption == null) {
-            event.reply("\u274C - You must select at least an option.").setEphemeral(true).queue();
+            event.getHook().editOriginal("\u274C - You must select at least an option.").queue();
             return;
         }
 
         if (urlOption != null && searchOption != null) {
-            event.reply("\u274C - You must select only one option. (either `search` or `url`).").setEphemeral(true).queue();
+            event.getHook().editOriginal("\u274C - You must select only one option. (either `search` or `url`).").queue();
             return;
         }
 
@@ -88,7 +88,7 @@ public class PlayCommand implements Command {
                 new URL(urlOption.getAsString());
                 result = urlOption.getAsString();
             } catch (MalformedURLException e) {
-                event.reply("\u274C - You must specify a valid URL.").setEphemeral(true).queue();
+                event.getHook().editOriginal("\u274C - You must specify a valid URL.").queue();
                 return;
             }
         }
@@ -109,7 +109,7 @@ public class PlayCommand implements Command {
         }
 
         if (memberVoiceState.getChannel() == null) {
-            event.reply("\u274C - You are not in a voice channel!").setEphemeral(true).queue();
+            event.getHook().editOriginal("\u274C - You are not in a voice channel!").queue();
             return;
         }
 
