@@ -28,6 +28,8 @@ import org.virep.jdabot.slashcommandhandler.SlashHandler;
 import javax.annotation.Nonnull;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -69,11 +71,13 @@ public class SlashListener extends ListenerAdapter {
     @Override
     public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {
         if (Objects.equals(event.getSelectMenu().getId(), "selectMenu:logs:categoryEvents")) {
-            try {
-                ResultSet logs = Database.executeQuery("SELECT * FROM logs WHERE guildID = '" + event.getGuild().getId() + "'");
-                ResultSetMetaData resultSetMetaData = logs.getMetaData();
+            try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM logs WHERE guildID = ?")) {
+                statement.setString(1, event.getGuild().getId());
 
-                if (logs.first()) {
+                ResultSet result = statement.executeQuery();
+                ResultSetMetaData resultSetMetaData = result.getMetaData();
+
+                if (result.first()) {
                     FileInputStream in = new FileInputStream("./logs.json");
 
                     JSONTokener tokener = new JSONTokener(in);
@@ -91,7 +95,7 @@ public class SlashListener extends ListenerAdapter {
                     }
 
                     for (int i = 1; i < resultSetMetaData.getColumnCount() - 1; i++) {
-                        String modState = logs.getString(i);
+                        String modState = result.getString(i);
 
                         if (modState.equals("true"))
                             defaultOptions.add("selectMenu:logs:events:" + resultSetMetaData.getColumnName(i));
@@ -111,20 +115,23 @@ public class SlashListener extends ListenerAdapter {
                             )
                     ).queue();
                 }
-            } catch (SQLException | FileNotFoundException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
             }
-
-
         }
         if (Objects.equals(event.getSelectMenu().getId(), "selectMenu:logs:events")) {
             HashSet<String> options = new HashSet<>();
 
-            try {
-                ResultSet result = Database.executeQuery("SELECT * FROM logs WHERE guildID = '" + event.getGuild().getId() + "'");
+            try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM logs WHERE guildID = ?")) {
+                statement.setString(1, event.getGuild().getId());
+
+                ResultSet result = statement.executeQuery();
 
                 if (!result.first()) {
                     event.reply("You must set up a log channel before. Use `/logs channel`").setEphemeral(true).queue();
+                    connection.close();
                     return;
                 }
 
@@ -143,10 +150,17 @@ public class SlashListener extends ListenerAdapter {
                 String builtQuery = query.toString();
 
                 sb.append(builtQuery, 0, builtQuery.length() - 2);
-                sb.append(" WHERE guildID = '" + event.getGuild().getId() + "'");
+                sb.append(" WHERE guildID = ?");
 
-                Database.executeQuery(sb.toString());
-                event.reply("The (un)selected events have been successfully configured.").setEphemeral(true).queue();
+                try (PreparedStatement statement2 = connection.prepareStatement(sb.toString())) {
+                    statement2.setString(1, event.getGuild().getId());
+
+                    statement2.executeUpdate();
+
+                    event.reply("The (un)selected events have been successfully configured.").setEphemeral(true).queue();
+                }
+
+                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

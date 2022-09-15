@@ -13,6 +13,8 @@ import net.dv8tion.jda.api.interactions.commands.build.*;
 import org.virep.jdabot.database.Database;
 import org.virep.jdabot.slashcommandhandler.Command;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
@@ -59,50 +61,71 @@ public class ReactionroleCommand implements Command {
             return;
         }
 
+        EmojiUnion fromFormattedEmoji = Emoji.fromFormatted(event.getOption("emoji").getAsString());
+        Emoji.Type emojiType = fromFormattedEmoji.getType();
+
+        String emoji;
+        if (emojiType == Emoji.Type.CUSTOM) emoji = fromFormattedEmoji.asCustom().getId();
+        else emoji = fromFormattedEmoji.asUnicode().getAsCodepoints();
+
         if (event.getSubcommandName().equals("add")) {
-            try {
-                EmojiUnion fromFormattedEmoji = Emoji.fromFormatted(event.getOption("emoji").getAsString());
-                Emoji.Type emojiType = fromFormattedEmoji.getType();
+            try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM reactionRole WHERE messageID = ? AND emojiID = ?")) {
+                statement.setString(1, event.getOption("messageid", OptionMapping::getAsString));
+                statement.setString(2, emoji);
 
-                String emoji;
-                if (emojiType == Emoji.Type.CUSTOM) emoji = fromFormattedEmoji.asCustom().getId();
-                else emoji = fromFormattedEmoji.asUnicode().getAsCodepoints();
-
-                ResultSet result = Database.executeQuery("SELECT * FROM reactionRole WHERE messageID = '" + event.getOption("messageid", OptionMapping::getAsString) + "' AND emojiID = '" + emoji + "'");
+                ResultSet result = statement.executeQuery();
 
                 if (result.first()) {
-                    Database.executeQuery("UPDATE reactionRole SET roleID = '" + event.getOption("role", OptionMapping::getAsRole).getId() + "' WHERE messageID = '" + event.getOption("messageid", OptionMapping::getAsString) + "' AND emojiID = '" + emoji + "'");
-                    event.reply("The role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " has replaced the already specified role for this emoji, and can now be obtained via the reaction role.").setEphemeral(true).queue();
+                    try (PreparedStatement statement1 = connection.prepareStatement("UPDATE reactionRole SET roleID = ? WHERE messageID = ? and emojiID = ?")) {
+                        statement1.setString(1, event.getOption("role", OptionMapping::getAsRole).getId());
+                        statement1.setString(2, event.getOption("messageid", OptionMapping::getAsString));
+                        statement1.setString(3, emoji);
+
+                        statement1.executeUpdate();
+
+                        event.reply("The role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " has replaced the already specified role for this emoji, and can now be obtained via the reaction role.").setEphemeral(true).queue();
+                    }
                 } else {
-                    Database.executeQuery("INSERT INTO reactionRole(messageID, roleID, emojiID) VALUES ('" + event.getOption("messageid", OptionMapping::getAsString) + "','" + event.getOption("role", OptionMapping::getAsRole).getId() + "','" + emoji + "')");
+                    try (PreparedStatement statement1 = connection.prepareStatement("INSERT INTO reactionRole (messageID, roleID, emojiID) VALUES (?,?,?)")) {
+                        statement1.setString(1, event.getOption("messageid", OptionMapping::getAsString));
+                        statement1.setString(2, event.getOption("role", OptionMapping::getAsRole).getId());
+                        statement1.setString(3, emoji);
 
-                    TextChannel textChannel = event.getGuild().getTextChannelById(event.getOption("channel").getAsChannel().getId());
-                    textChannel.retrieveMessageById(event.getOption("messageid").getAsString()).queue((message) -> message.addReaction(fromFormattedEmoji).queue());
+                        statement1.executeUpdate();
 
-                    event.reply("The role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " can now be obtained via the reaction role !").setEphemeral(true).queue();
+                        TextChannel textChannel = event.getGuild().getTextChannelById(event.getOption("channel").getAsChannel().getId());
+                        textChannel.retrieveMessageById(event.getOption("messageid").getAsString()).queue((message) -> message.addReaction(fromFormattedEmoji).queue());
+
+                        event.reply("The role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " can now be obtained via the reaction role !").setEphemeral(true).queue();
+                    }
                 }
+
+                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         } else {
-            try {
-                EmojiUnion fromFormattedEmoji = Emoji.fromFormatted(event.getOption("emoji").getAsString());
-                Emoji.Type emojiType = fromFormattedEmoji.getType();
+            try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM reactionRole WHERE messageID = ? AND emojiID = ?")) {
+                statement.setString(1, event.getOption("messageid", OptionMapping::getAsString));
+                statement.setString(2, emoji);
 
-                String emoji;
-                if (emojiType == Emoji.Type.CUSTOM) emoji = fromFormattedEmoji.asCustom().getId();
-                else emoji = fromFormattedEmoji.asUnicode().getAsCodepoints();
-
-                ResultSet result = Database.executeQuery("SELECT * FROM reactionRole WHERE messageID = '" + event.getOption("messageid", OptionMapping::getAsString) + "' AND emojiID = '" + emoji + "'");
+                ResultSet result = statement.executeQuery();
 
                 if (!result.first()) {
                     event.reply("No role has been configured for this emoji in the reaction role.").setEphemeral(true).queue();
+                    connection.close();
                     return;
                 }
 
-                Database.executeQuery("DELETE FROM reactionRole WHERE messageID = '" + event.getOption("messageid", OptionMapping::getAsString) + "' AND emojiID = '" + emoji + "'");
+                try (PreparedStatement statement1 = connection.prepareStatement("DELETE FROM reactionRole WHERE messageID = ? AND emojiID = ?")) {
+                    statement1.setString(1, event.getOption("messageid", OptionMapping::getAsString));
+                    statement1.setString(2, emoji);
 
-                event.reply("THe role configured for this emoji in the reaction role has been cleared.").setEphemeral(true).queue();
+                    statement1.executeUpdate();
+
+                    event.reply("THe role configured for this emoji in the reaction role has been cleared.").setEphemeral(true).queue();
+                }
+                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

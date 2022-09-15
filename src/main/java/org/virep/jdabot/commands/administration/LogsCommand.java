@@ -14,6 +14,8 @@ import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import org.virep.jdabot.database.Database;
 import org.virep.jdabot.slashcommandhandler.Command;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -56,33 +58,47 @@ public class LogsCommand implements Command {
         assert guild != null;
 
         if (subcommandName.equals("channel")) {
-            try {
-                ResultSet result = Database.executeQuery("SELECT * FROM logs WHERE guildID = '" + guild.getId() + "'");
+            OptionMapping channelOption = event.getOption("channel");
 
-                OptionMapping channelOption = event.getOption("channel");
-                assert channelOption != null;
+            try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM logs WHERE guildID = ?")) {
+                statement.setString(1, guild.getId());
+
+                ResultSet result = statement.executeQuery();
 
                 if (result.first()) {
-                    Database.executeQuery("UPDATE logs SET channelID = '" + channelOption.getAsChannel().getId() + "' WHERE guildID = '" + event.getGuild().getId() + "'");
+                    try (PreparedStatement statement1 = connection.prepareStatement("UPDATE logs SET channelID = ? WHERE guildID = ?")) {
+                        statement1.setString(1, channelOption.getAsChannel().getId());
+                        statement1.setString(2, event.getGuild().getId());
 
-                    event.reply("Successfully set " + channelOption.getAsChannel().getAsMention() + " as the log channel for this server.").setEphemeral(true).queue();
+                        statement1.executeUpdate();
+
+                        event.reply("Successfully set " + channelOption.getAsChannel().getAsMention() + " as the log channel for this server.").setEphemeral(true).queue();
+                    }
                 } else {
-                    Database.executeQuery("INSERT INTO logs (guildID, channelID) VALUES ('" + event.getGuild().getId() + "','" + channelOption.getAsChannel().getId() + "')");
+                    try (PreparedStatement statement1 = connection.prepareStatement("INSERT INTO logs (guildID, channelID) VALUES (?,?)")) {
+                        statement1.setString(1, event.getGuild().getId());
+                        statement1.setString(2, channelOption.getAsChannel().getId());
 
-                    event.reply("Successfully set " + channelOption.getAsChannel().getAsMention() + " as the log channel for this server.").setEphemeral(true).queue();
+                        statement1.executeUpdate();
+
+                        event.reply("Successfully set " + channelOption.getAsChannel().getAsMention() + " as the log channel for this server.").setEphemeral(true).queue();
+                    }
                 }
+                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
 
         if (subcommandName.equals("events")) {
+            try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM logs WHERE guildID = ?")) {
+                statement.setString(1, event.getGuild().getId());
 
-            try {
-                ResultSet result = Database.executeQuery("SELECT * FROM logs WHERE guildID = '" + guild.getId() + "'");
+                ResultSet result = statement.executeQuery();
 
                 if (!result.first()) {
                     event.reply("You must set up a log channel before. Use `/logs channel`").setEphemeral(true).queue();
+                    connection.close();
                     return;
                 }
 
@@ -99,6 +115,8 @@ public class LogsCommand implements Command {
                                 .setMinValues(1)
                                 .build()
                 ).queue();
+
+                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

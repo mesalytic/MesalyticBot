@@ -11,6 +11,8 @@ import net.dv8tion.jda.api.interactions.commands.build.*;
 import org.virep.jdabot.database.Database;
 import org.virep.jdabot.slashcommandhandler.Command;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -76,48 +78,83 @@ public class MessageCommand implements Command {
         String method = event.getSubcommandName();
 
         if (method.equals("set")) {
-            try {
-                ResultSet result = Database.executeQuery("SELECT * FROM " + group + "messages WHERE guildID = '" + event.getGuild().getId() + "'");
+            try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + group + "messages WHERE guildID = ?")) {
+                statement.setString(1, event.getGuild().getId());
+
+                ResultSet result = statement.executeQuery();
 
                 if (result.first()) {
                     if (group.equals("dm")) {
-                        Database.executeQuery("UPDATE " + group + "messages SET message = '" + event.getOption("message", OptionMapping::getAsString) + "' WHERE guildID = '" + event.getGuild().getId() + "'");
-                        event.reply("The " + group + " message has been successfully replaced.").queue();
-                        return;
-                    }
+                        try (PreparedStatement statement1 = connection.prepareStatement("UPDATE " + group + "messages SET message = ? WHERE guildID = ?")) {
+                            statement1.setString(1, event.getOption("message", OptionMapping::getAsString));
+                            statement1.setString(2, event.getGuild().getId());
 
-                    Database.executeQuery("UPDATE " + group + "messages SET message = '" + event.getOption("message", OptionMapping::getAsString) + "', channelID = '" + event.getOption("channel", OptionMapping::getAsChannel).getId() + "' WHERE guildID = '" + event.getGuild().getId() + "'");
-                    event.reply("The " + group + " message has been successfully replaced.").queue();
+                            statement1.executeUpdate();
+
+                            event.reply("The " + group + " message has been successfully replaced.").queue();
+                        }
+                    } else {
+                        try (PreparedStatement statement1 = connection.prepareStatement("UPDATE " + group + "messages SET message = ?, channelID = ? WHERE guildID = ?")) {
+                            statement1.setString(1, event.getOption("message", OptionMapping::getAsString));
+                            statement1.setString(2, event.getOption("channel", OptionMapping::getAsChannel).getId());
+                            statement1.setString(3, event.getGuild().getId());
+
+                            statement1.executeUpdate();
+
+                            event.reply("The " + group + " message has been successfully replaced.").queue();
+                        }
+                    }
                 } else {
                     if (group.equals("dm")) {
+                        try (PreparedStatement statement1 = connection.prepareStatement("INSERT INTO " + group + "messages (message, guildID) VALUES (?,?)")) {
+                            statement1.setString(1, event.getOption("message", OptionMapping::getAsString));
+                            statement1.setString(2, event.getGuild().getId());
 
-                        Database.executeQuery("INSERT INTO " + group + "messages (message, guildID) VALUES ('" + event.getOption("message").getAsString() + "','" + event.getGuild().getId() + "')");
+                            statement1.executeUpdate();
 
-                        event.reply("The " + group + " message has been successfully added.").queue();
-                        return;
+                            connection.close();
+
+                            event.reply("The " + group + " message has been successfully added.").queue();
+                            return;
+                        }
+                    } else {
+                        try (PreparedStatement statement1 = connection.prepareStatement("INSERT INTO " + group + "messages (message, channelID, guildID) VALUES (?,?,?)")) {
+                            statement1.setString(1, event.getOption("message", OptionMapping::getAsString));
+                            statement1.setString(2, event.getOption("channel", OptionMapping::getAsChannel).getId());
+                            statement1.setString(3, event.getGuild().getId());
+
+                            statement1.executeUpdate();
+
+                            event.reply("The " + group + " message has been successfully added.").queue();
+                        }
                     }
-
-                    Database.executeQuery("INSERT INTO " + group + "messages (message, channelID, guildID) VALUES ('" + event.getOption("message").getAsString() + "','" + event.getOption("channel").getAsChannel().getId() + "','" + event.getGuild().getId() + "')");
-
-                    event.reply("The " + group + " message has been successfully added.").queue();
                 }
+                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
 
         if (method.equals("remove")) {
-            try {
-                ResultSet result = Database.executeQuery("SELECT * FROM " + group + "messages WHERE guildID = ?");
+
+            try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + group + "messages WHERE guildID = ?")) {
+                statement.setString(1, event.getGuild().getId());
+
+                ResultSet result = statement.executeQuery();
 
                 if (!result.first()) {
                     event.reply("You don't have a " + group + " message set up. Set it up using `/message " + group + " set`").setEphemeral(true).queue();
                     return;
                 }
 
-                Database.executeQuery("DELETE FROM " + group + "messages WHERE guildID = '" + event.getGuild().getId() + "'");
+                try (PreparedStatement statement1 = connection.prepareStatement("DELETE FROM " + group + "messages WHERE guildID = ?")) {
+                    statement1.setString(1, event.getGuild().getId());
 
-                event.reply("The " + group + " message has been successfully removed.").queue();
+                    statement1.executeUpdate();
+
+                    event.reply("The " + group + " message has been successfully removed.").queue();
+                }
+                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -132,8 +169,10 @@ public class MessageCommand implements Command {
 
         if (method.equals("test")) {
             if (group.equals("join")) {
-                try {
-                    ResultSet result = Database.executeQuery("SELECT * FROM joinmessages WHERE guildID = '" + event.getGuild().getId() + "'");
+                try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM joinmessages WHERE guildID = ?")) {
+                    statement.setString(1, event.getGuild().getId());
+
+                    ResultSet result = statement.executeQuery();
 
                     if (result.next()) {
                         String message = result.getString(1);
@@ -148,14 +187,18 @@ public class MessageCommand implements Command {
                                 .replace("%SERVERNAME%", event.getGuild().getName())
                                 .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))).queue();
                     }
+
+                    connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
 
             if (group.equals("dm")) {
-                try {
-                    ResultSet result = Database.executeQuery("SELECT * FROM dmmessages WHERE guildID = '" + event.getGuild().getId() + "'");
+                try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM dmmessages WHERE guildID = ?")) {
+                    statement.setString(1, event.getGuild().getId());
+
+                    ResultSet result = statement.executeQuery();
 
                     if (result.next()) {
                         String message = result.getString(1);
@@ -168,14 +211,18 @@ public class MessageCommand implements Command {
                                     .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))).queue();
                         });
                     }
+
+                    connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
 
             if (group.equals("leave")) {
-                try {
-                    ResultSet result = Database.executeQuery("SELECT * FROM leavemessages WHERE guildID = '" + event.getGuild().getId() + "'");
+                try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM leavemessages WHERE guildID = ?")) {
+                    statement.setString(1, event.getGuild().getId());
+
+                    ResultSet result = statement.executeQuery();
 
                     if (result.next()) {
                         String message = result.getString(1);
@@ -189,6 +236,8 @@ public class MessageCommand implements Command {
                                 .replace("%SERVERNAME%", event.getGuild().getName())
                                 .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))).queue();
                     }
+
+                    connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

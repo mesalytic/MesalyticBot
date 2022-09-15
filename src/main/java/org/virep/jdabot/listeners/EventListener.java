@@ -32,6 +32,8 @@ import org.virep.jdabot.database.Database;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
 
 import javax.annotation.Nonnull;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
@@ -102,8 +104,14 @@ public class EventListener extends ListenerAdapter {
         Guild guild = event.getGuild();
         Member member = event.getMember();
 
-        try {
-            ResultSet result = Database.executeQuery("SELECT * FROM autorole WHERE guildID = '" + guild.getId() + "'");
+        try (Connection connection = Database.getConnection();
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM autorole WHERE guildID = ?");
+             PreparedStatement statement2 = connection.prepareStatement("SELECT * FROM joinmessages WHERE guildID = ?")) {
+            statement.setString(1, guild.getId());
+            statement2.setString(1, guild.getId());
+
+            ResultSet result = statement.executeQuery();
+            ResultSet resultJoin = statement2.executeQuery();
 
             if (result.next()) {
                 String roleID = result.getString(1);
@@ -112,14 +120,8 @@ public class EventListener extends ListenerAdapter {
                 assert role != null;
                 guild.addRoleToMember(member, role).queue();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
-        try {
-            ResultSet result = Database.executeQuery("SELECT * FROM joinmessages WHERE guildID = '" + guild.getId() + "'");
-
-            if (result.next()) {
+            if (resultJoin.next()) {
                 String message = result.getString(1);
 
                 String channelID = result.getString(2);
@@ -135,32 +137,16 @@ public class EventListener extends ListenerAdapter {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        try {
-            ResultSet result = Database.executeQuery("SELECT * FROM dmmessages WHERE guildID = '" + guild.getId() + "'");
-
-            if (result.next()) {
-                String message = result.getString(1);
-
-                event.getMember().getUser().openPrivateChannel().queue(dmChannel -> {
-                    dmChannel.sendMessage(message
-                            .replace("%USER%", event.getMember().getAsMention())
-                            .replace("%USERNAME%", event.getUser().getAsTag())
-                            .replace("%SERVERNAME%", event.getGuild().getName())
-                            .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))).queue();
-                });
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
     public void onGuildMemberRemove(GuildMemberRemoveEvent event) {
         Guild guild = event.getGuild();
 
-        try {
-            ResultSet result = Database.executeQuery("SELECT * FROM leavemessages WHERE guildID = '" + guild.getId() + "'");
+        try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM leavemessages WHERE guildID = ?")) {
+            statement.setString(1, guild.getId());
+
+            ResultSet result = statement.executeQuery();
 
             if (result.next()) {
                 String message = result.getString(1);
@@ -174,6 +160,7 @@ public class EventListener extends ListenerAdapter {
                         .replace("%SERVERNAME%", event.getGuild().getName())
                         .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))).queue();
             }
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -181,18 +168,21 @@ public class EventListener extends ListenerAdapter {
 
     @Override
     public void onMessageReactionAdd(@Nonnull MessageReactionAddEvent event) {
-        try {
-            Guild guild = event.getGuild();
-            Member member = event.getMember();
+        Guild guild = event.getGuild();
+        Member member = event.getMember();
 
-            EmojiUnion fromFormattedEmoji = event.getEmoji();
-            Emoji.Type emojiType = fromFormattedEmoji.getType();
+        EmojiUnion fromFormattedEmoji = event.getEmoji();
+        Emoji.Type emojiType = fromFormattedEmoji.getType();
 
-            String emoji;
-            if (emojiType == Emoji.Type.CUSTOM) emoji = fromFormattedEmoji.asCustom().getId();
-            else emoji = fromFormattedEmoji.asUnicode().getAsCodepoints();
+        String emoji;
+        if (emojiType == Emoji.Type.CUSTOM) emoji = fromFormattedEmoji.asCustom().getId();
+        else emoji = fromFormattedEmoji.asUnicode().getAsCodepoints();
 
-            ResultSet result = Database.executeQuery("SELECT * FROM reactionRole WHERE messageID = '" + event.getMessageId() + "' AND emojIID = '" + emoji + "'");
+        try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM reactionRole WHERE messageID = ? AND emojiID = ?")) {
+            statement.setString(1, event.getMessageId());
+            statement.setString(2, emoji);
+
+            ResultSet result = statement.executeQuery();
 
             if (result.next()) {
                 String roleID = result.getString(2);
@@ -203,6 +193,8 @@ public class EventListener extends ListenerAdapter {
 
                 event.getGuild().addRoleToMember(member, role).queue();
             }
+
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -210,18 +202,21 @@ public class EventListener extends ListenerAdapter {
 
     @Override
     public void onMessageReactionRemove(@Nonnull MessageReactionRemoveEvent event) {
-        try {
-            Guild guild = event.getGuild();
-            User member = event.getUser();
+        Guild guild = event.getGuild();
+        User member = event.getUser();
 
-            EmojiUnion fromFormattedEmoji = event.getEmoji();
-            Emoji.Type emojiType = fromFormattedEmoji.getType();
+        EmojiUnion fromFormattedEmoji = event.getEmoji();
+        Emoji.Type emojiType = fromFormattedEmoji.getType();
 
-            String emoji;
-            if (emojiType == Emoji.Type.CUSTOM) emoji = fromFormattedEmoji.asCustom().getId();
-            else emoji = fromFormattedEmoji.asUnicode().getAsCodepoints();
+        String emoji;
+        if (emojiType == Emoji.Type.CUSTOM) emoji = fromFormattedEmoji.asCustom().getId();
+        else emoji = fromFormattedEmoji.asUnicode().getAsCodepoints();
 
-            ResultSet result = Database.executeQuery("SELECT * FROM reactionRole WHERE messageID = '" + event.getMessageId() + "' AND emojiID = '" + emoji + "'");
+        try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM reactionRole WHERE messageID = ? AND emojiID = ?")) {
+            statement.setString(1, event.getMessageId());
+            statement.setString(2, emoji);
+
+            ResultSet result = statement.executeQuery();
 
             if (result.next()) {
                 String roleID = result.getString(2);
@@ -232,6 +227,8 @@ public class EventListener extends ListenerAdapter {
 
                 event.getGuild().removeRoleFromMember(member, role).queue();
             }
+
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
