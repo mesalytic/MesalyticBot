@@ -30,6 +30,7 @@ import net.dv8tion.jda.api.managers.AudioManager;
 import org.jetbrains.annotations.NotNull;
 import org.virep.jdabot.database.Database;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
+import org.virep.jdabot.utils.Config;
 
 import javax.annotation.Nonnull;
 import java.sql.Connection;
@@ -41,7 +42,7 @@ import java.util.List;
 
 public class EventListener extends ListenerAdapter {
 
-    private final WebhookClient webhook = WebhookClient.withUrl("https://canary.discord.com/api/webhooks/681148219148730389/pUnnf6VbfsnF7y7V8xrYs1xdnEbnRm58T3isOmffAZwBmZgArJFP8v2s5sEdMLodN9cc");
+    private final WebhookClient webhook = WebhookClient.withUrl(Config.get("DISCORD_CMD_WEBHOOKURL"));
 
     @Override
     public void onShutdown(ShutdownEvent event) {

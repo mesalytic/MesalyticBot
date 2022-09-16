@@ -24,6 +24,7 @@ import org.virep.jdabot.lavaplayer.AudioManagerController;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
 import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.slashcommandhandler.SlashHandler;
+import org.virep.jdabot.utils.Config;
 
 import javax.annotation.Nonnull;
 import java.io.FileInputStream;
@@ -61,7 +62,7 @@ public class SlashListener extends ListenerAdapter {
         Map<String, Command> commandMap = slashHandler.getSlashCommandMap();
 
         if (commandMap.containsKey(commandName)) {
-            WebhookClient webhook = WebhookClient.withUrl("https://canary.discord.com/api/webhooks/670389074611142671/YTkNHz-MTjiBBzZYqcqfSDN4OXt0NcZnNheiFZSLy3PYpzrSPk2APnoxa3LohFNjaYHA");
+            WebhookClient webhook = WebhookClient.withUrl(Config.get("DISCORD_CMD_WEBHOOKURL"));
 
             webhook.send("``` " + event.getUser().getAsTag() + " (" + event.getUser().getId() + ") - " + event.getInteraction().getCommandString() + "```");
             commandMap.get(commandName).execute(event);
