@@ -13,6 +13,7 @@ import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.virep.jdabot.slashcommandhandler.Command;
+import org.virep.jdabot.utils.ErrorManager;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -71,7 +72,7 @@ public class MemeCommand implements Command {
 
             event.replyEmbeds(embed).queue();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            ErrorManager.handle(e, event);
         }
     }
 }

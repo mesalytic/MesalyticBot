@@ -21,6 +21,7 @@ import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
 import org.scilab.forge.jlatexmath.TeXIcon;
 import org.virep.jdabot.slashcommandhandler.Command;
+import org.virep.jdabot.utils.ErrorManager;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -123,7 +124,7 @@ public class MathCommand implements Command {
 
                 event.getHook().editOriginalAttachments(file).queue();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                ErrorManager.handle(e, event);
             }
         }
         else

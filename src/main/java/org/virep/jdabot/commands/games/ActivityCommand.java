@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.virep.jdabot.slashcommandhandler.Command;
+import org.virep.jdabot.utils.ErrorManager;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -67,7 +68,7 @@ public class ActivityCommand implements Command {
             jsonObject.put("target_application_id", event.getOption("application").getAsString());
             jsonObject.put("target_type", "2");
         } catch (JSONException e) {
-            e.printStackTrace();
+            ErrorManager.handle(e, event);
         }
 
         RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
@@ -127,7 +128,7 @@ public class ActivityCommand implements Command {
 
             event.replyEmbeds(embed).queue();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            ErrorManager.handle(e, event);
         }
     }
 }

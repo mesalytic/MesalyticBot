@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.*;
 import org.virep.jdabot.database.Database;
 import org.virep.jdabot.slashcommandhandler.Command;
+import org.virep.jdabot.utils.ErrorManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -102,7 +103,7 @@ public class ReactionroleCommand implements Command {
 
                 connection.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                ErrorManager.handle(e, event);
             }
         } else {
             try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM reactionRole WHERE messageID = ? AND emojiID = ?")) {
@@ -127,7 +128,7 @@ public class ReactionroleCommand implements Command {
                 }
                 connection.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                ErrorManager.handle(e, event);
             }
         }
     }

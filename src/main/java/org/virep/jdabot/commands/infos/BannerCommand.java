@@ -15,6 +15,7 @@ import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.virep.jdabot.slashcommandhandler.Command;
+import org.virep.jdabot.utils.ErrorManager;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -92,7 +93,7 @@ public class BannerCommand implements Command {
             event.replyEmbeds(embedBuilder.build()).queue();
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            ErrorManager.handle(e, event);
         }
     }
 }

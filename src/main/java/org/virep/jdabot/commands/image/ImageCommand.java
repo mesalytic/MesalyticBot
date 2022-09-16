@@ -13,6 +13,7 @@ import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.virep.jdabot.slashcommandhandler.Command;
+import org.virep.jdabot.utils.ErrorManager;
 
 import java.io.*;
 import java.util.concurrent.TimeUnit;
@@ -188,7 +189,7 @@ public class ImageCommand implements Command {
 
             event.getHook().editOriginalAttachments(file).queue();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            ErrorManager.handle(e, event);
         }
     }
 }

@@ -13,6 +13,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import org.json.JSONObject;
 import org.virep.jdabot.slashcommandhandler.Command;
+import org.virep.jdabot.utils.ErrorManager;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -107,7 +108,7 @@ public class InteractCommand implements Command {
 
             event.replyEmbeds(embed).queue();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            ErrorManager.handle(e, event);
         }
     }
 }

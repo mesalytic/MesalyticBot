@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.virep.jdabot.database.Database;
 import org.virep.jdabot.slashcommandhandler.Command;
+import org.virep.jdabot.utils.ErrorManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -77,7 +78,7 @@ public class AutoroleCommand implements Command {
                 }
                 connection.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                ErrorManager.handle(e, event);
             }
         } else {
             try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM autorole WHERE guildID = ?")) {
@@ -99,7 +100,7 @@ public class AutoroleCommand implements Command {
                 }
                 connection.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                ErrorManager.handle(e, event);
             }
         }
     }

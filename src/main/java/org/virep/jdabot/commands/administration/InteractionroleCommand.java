@@ -20,6 +20,7 @@ import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 import org.virep.jdabot.database.Database;
 import org.virep.jdabot.slashcommandhandler.Command;
+import org.virep.jdabot.utils.ErrorManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -129,7 +130,7 @@ public class InteractionroleCommand implements Command {
 
                                 event.reply("Sucessfully set up the message. Here is the messageID that you'll need to configure things up: `" + message.getId() + "`").queue();
                             } catch (SQLException e) {
-                                e.printStackTrace();
+                                ErrorManager.handle(e, event);
                             }
                 });
             }
@@ -155,7 +156,7 @@ public class InteractionroleCommand implements Command {
                         event.reply("The message has been successfully edited!").queue();
                     });
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    ErrorManager.handle(e, event);
                 }
             }
         }
@@ -187,7 +188,7 @@ public class InteractionroleCommand implements Command {
 
                     connection.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    ErrorManager.handle(e, event);
                 }
             }
 
@@ -217,7 +218,7 @@ public class InteractionroleCommand implements Command {
 
                     connection.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    ErrorManager.handle(e, event);
                 }
             }
         }
@@ -250,7 +251,7 @@ public class InteractionroleCommand implements Command {
                                     try {
                                         connection.close();
                                     } catch (SQLException e) {
-                                        e.printStackTrace();
+                                        ErrorManager.handle(e, event);
                                     }
 
                                     return;
@@ -286,13 +287,13 @@ public class InteractionroleCommand implements Command {
                                         event.reply("Sucessfully added the button for the " + role.getAsMention() + " role.").queue();
                                     }
                                 } catch (SQLException e) {
-                                    e.printStackTrace();
+                                    ErrorManager.handle(e, event);
                                 }
                             });
                         }
                     }
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    ErrorManager.handle(e, event);
                 }
             }
 
@@ -321,7 +322,7 @@ public class InteractionroleCommand implements Command {
                                     try {
                                         connection.close();
                                     } catch (SQLException e) {
-                                        e.printStackTrace();
+                                        ErrorManager.handle(e, event);
                                     }
 
                                     return;
@@ -369,13 +370,13 @@ public class InteractionroleCommand implements Command {
                                         event.reply("Successfuly updated the selection menu!").queue();
                                     }
                                 } catch (SQLException e) {
-                                    e.printStackTrace();
+                                    ErrorManager.handle(e, event);
                                 }
                             });
                         }
                     }
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    ErrorManager.handle(e, event);
                 }
             }
         }
@@ -427,7 +428,7 @@ public class InteractionroleCommand implements Command {
                     }
                     connection.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    ErrorManager.handle(e, event);
                 }
             }
 
@@ -485,7 +486,7 @@ public class InteractionroleCommand implements Command {
                     }
                     connection.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    ErrorManager.handle(e, event);
                 }
             }
         }
