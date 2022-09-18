@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class Utils {
     private static final long SECOND = 1000;
@@ -173,5 +174,12 @@ public class Utils {
             pages.add(list.subList(pageNum * pageSize, Math.min(++pageNum * pageSize, list.size())));
 
         return pages;
+    }
+
+    public static String getRandomColor() {
+        Random obj = new Random();
+        int rand_num = obj.nextInt(0xffffff + 1);
+
+        return String.format("%06x", rand_num);
     }
 }
