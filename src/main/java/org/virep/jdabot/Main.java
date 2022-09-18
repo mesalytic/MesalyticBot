@@ -28,8 +28,10 @@ public class Main {
         instance = new Main();
         instance.notifier = new Notifier();
 
+        String devStatus = System.getProperty("dev");
+
         JDA api = JDABuilder
-                .createDefault(Config.get("TOKEN"))
+                .createDefault(Config.get(Boolean.parseBoolean(devStatus) ? "TOKENBETA" : "TOKEN"))
                 .enableIntents(GatewayIntent.GUILD_MEMBERS,
                         GatewayIntent.GUILD_MESSAGES,
                         GatewayIntent.MESSAGE_CONTENT,
