@@ -38,6 +38,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
 
 public class EventListener extends ListenerAdapter {
@@ -79,24 +80,39 @@ public class EventListener extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent event) {
         if (event.getAuthor().isBot()) return;
 
-        Message message = event.getMessage();
-        String content = message.getContentRaw();
+        try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM afk WHERE userID = ?")) {
+            statement.setString(1, event.getAuthor().getId());
 
-        if (content.equals("jda!shutdown")) {
-            JDA jda = event.getJDA();
+            ResultSet result = statement.executeQuery();
 
-            if (jda.getStatus() != JDA.Status.SHUTTING_DOWN) {
-                jda.getGuilds().forEach(g -> {
-                    g.getAudioManager().closeAudioConnection();
+            if (result.first()) {
+                try (PreparedStatement deleteStatement = connection.prepareStatement("DELETE FROM afk WHERE userID = ?")) {
+                    deleteStatement.setString(1, event.getAuthor().getId());
 
-                    GuildAudioManager gam = new GuildAudioManager(g);
-                    gam.getPlayer().getLink().destroy();
-                });
+                    deleteStatement.executeUpdate();
 
-                event.getMessage().reply("Shutdown en cours").queue();
-
-                jda.shutdown();
+                    event.getMessage().reply(event.getAuthor().getAsMention() + ", your AFK status has been removed.").queue();
+                }
             }
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (event.getMessage().getMentions().getUsers().isEmpty()) return;
+        User mentionedUser = event.getMessage().getMentions().getUsers().get(0);
+
+        try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM afk WHERE userID = ?")) {
+            statement.setString(1, mentionedUser.getId());
+
+            ResultSet result = statement.executeQuery();
+
+            if (result.first()) {
+                event.getMessage().reply("**" + mentionedUser.getAsTag() + "** is AFK right now. Reason: " + result.getString("message")).setAllowedMentions(Collections.emptyList()).queue();
+            }
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
