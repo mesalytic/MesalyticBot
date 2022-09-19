@@ -116,7 +116,7 @@ public class PlayCommand implements Command {
         if (!selfVoiceState.inAudioChannel()) {
             manager.openConnection((VoiceChannel) memberVoiceState.getChannel());
         } else if (Objects.requireNonNull(selfVoiceState.getChannel()).getIdLong() != memberVoiceState.getChannel().getIdLong()) {
-            event.reply("\u274C - You are not in the same channel as me!").setEphemeral(true).queue();
+            event.getHook().editOriginal("\u274C - You are not in the same channel as me!").queue();
             return;
         }
 
