@@ -7,7 +7,6 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.audio.hooks.ConnectionStatus;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -28,6 +27,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.jetbrains.annotations.NotNull;
+import org.virep.jdabot.commands.general.RemindCommand;
 import org.virep.jdabot.database.Database;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
 import org.virep.jdabot.utils.Config;
@@ -40,6 +40,10 @@ import java.sql.SQLException;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import static org.virep.jdabot.utils.Utils.timeStringToSeconds;
 
 public class EventListener extends ListenerAdapter {
 
@@ -308,6 +312,53 @@ public class EventListener extends ListenerAdapter {
                 .build();
 
         webhook.send(embed);
+
+        JDA jda = event.getJDA();
+
+        try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM remind")) {
+            ResultSet result = statement.executeQuery();
+
+            //System.out.println(result.next());
+
+            while (result.next()) {
+                System.out.println("test !");
+                String remindName = result.getString("name");
+                String userID = result.getString("userID");
+                long timestamp = result.getLong("timestamp");
+
+                User user = jda.getUserById(userID);
+
+                System.out.println((timestamp - Instant.now().getEpochSecond()) * 1000L);
+                TimerTask task = new TimerTask() {
+                    @Override
+                    public void run() {
+                        user.openPrivateChannel().queue(dm -> {
+                            dm.sendMessage("\uD83D\uDD59 - " + remindName).queue();
+
+                            try (Connection connection1 = Database.getConnection(); PreparedStatement removeStatement = connection1.prepareStatement("DELETE FROM remind WHERE userID = ? AND name = ?")) {
+                                removeStatement.setString(1, userID);
+                                removeStatement.setString(2, remindName);
+
+                                removeStatement.executeUpdate();
+                                connection1.close();
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                        });
+                    }
+                };
+
+                Timer timer = new Timer(timestamp + "-" + userID);
+
+                timer.schedule(task, (timestamp - Instant.now().getEpochSecond()) * 1000L);
+
+                RemindCommand.timers.put(timestamp + "-" + userID, timer);
+            }
+
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
