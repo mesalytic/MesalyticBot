@@ -318,8 +318,6 @@ public class EventListener extends ListenerAdapter {
         try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM remind")) {
             ResultSet result = statement.executeQuery();
 
-            //System.out.println(result.next());
-
             while (result.next()) {
                 System.out.println("test !");
                 String remindName = result.getString("name");
@@ -328,7 +326,21 @@ public class EventListener extends ListenerAdapter {
 
                 User user = jda.getUserById(userID);
 
-                System.out.println((timestamp - Instant.now().getEpochSecond()) * 1000L);
+                if ((timestamp - Instant.now().getEpochSecond()) * 1000L < 0) {
+                    user.openPrivateChannel().queue(dm -> {
+                        dm.sendMessage("\uD83D\uDD59 - " + remindName).queue();
+
+                        try (PreparedStatement removeStatement = connection.prepareStatement("DELETE FROM remind WHERE userID = ? AND name = ?")) {
+                            removeStatement.setString(1, userID);
+                            removeStatement.setString(2, remindName);
+
+                            removeStatement.executeUpdate();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                }
+
                 TimerTask task = new TimerTask() {
                     @Override
                     public void run() {
