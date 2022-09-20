@@ -28,6 +28,8 @@ public class Main {
         instance = new Main();
         instance.notifier = new Notifier();
 
+        Database.initializeDataSource();
+
         String devStatus = System.getProperty("dev");
 
         JDA api = JDABuilder
@@ -49,7 +51,6 @@ public class Main {
         api.addEventListener(new SlashListener(slashHandler));
 
         slashHandler.addCommands();
-        Database.initializeDataSource();
 
         instance.notifier.registerTwitterUser(DatabaseUtils.getAllTwitterNames());
 
