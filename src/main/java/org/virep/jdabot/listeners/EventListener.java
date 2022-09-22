@@ -319,7 +319,6 @@ public class EventListener extends ListenerAdapter {
             ResultSet result = statement.executeQuery();
 
             while (result.next()) {
-                System.out.println("test !");
                 String remindName = result.getString("name");
                 String userID = result.getString("userID");
                 long timestamp = result.getLong("timestamp");

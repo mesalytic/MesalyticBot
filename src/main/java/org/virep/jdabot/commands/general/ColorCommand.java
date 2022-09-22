@@ -43,8 +43,6 @@ public class ColorCommand implements Command {
         event.deferReply().queue();
         String hexCode = event.getOption("color") != null ? event.getOption("color", OptionMapping::getAsString) : getRandomColor();
 
-        System.out.println(hexCode);
-
         OkHttpClient client = new OkHttpClient.Builder()
                 .readTimeout(30, TimeUnit.SECONDS)
                 .build();
@@ -59,8 +57,6 @@ public class ColorCommand implements Command {
             assert res.body() != null;
 
             JSONObject jsonObject = new JSONObject(Objects.requireNonNull(res.body()).string());
-
-            System.out.println(jsonObject);
 
             boolean success = jsonObject.getBoolean("success");
 

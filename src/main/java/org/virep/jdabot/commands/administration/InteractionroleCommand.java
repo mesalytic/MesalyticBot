@@ -468,8 +468,6 @@ public class InteractionroleCommand implements Command {
                                                 selectOptions.add(option);
                                         });
 
-                                        System.out.println("cc");
-
                                         if (selectOptions.isEmpty()) msg.editMessageComponents().setComponents().queue();
                                         else {
                                             SelectMenu newMenu = SelectMenu.create("selectmenurole:" + event.getGuild().getId()).addOptions(selectOptions).setMaxValues(selectOptions.size()).build();

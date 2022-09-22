@@ -102,8 +102,6 @@ public class SlashListener extends ListenerAdapter {
                             defaultOptions.add("selectMenu:logs:events:" + resultSetMetaData.getColumnName(i));
                     }
 
-                    moduleOptions.forEach(mo -> System.out.println(mo.getLabel()));
-
                     event.editComponents().setComponents(
                             ActionRow.of(event.getSelectMenu().createCopy().setDefaultOptions(Collections.singleton(event.getSelectedOptions().get(0))).build()),
                             ActionRow.of(
