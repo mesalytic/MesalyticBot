@@ -4,18 +4,24 @@ import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.send.WebhookEmbed;
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.virep.jdabot.utils.Config;
 import org.virep.jdabot.utils.DatabaseUtils;
+import org.virep.jdabot.utils.ErrorManager;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
 
 import java.awt.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Notifier {
+    private final static Logger log = LoggerFactory.getLogger(Notifier.class);
     private final Twitter twitterClient;
     private final Map<String, TwitterStream> registeredTwitterUsers = new HashMap<>();
 
@@ -30,6 +36,8 @@ public class Notifier {
                 .setDebugEnabled(true);
 
         twitterClient = new TwitterFactory(configurationBuilder.build()).getInstance();
+
+        log.info("Configured Notifier");
     }
 
     public void registerTwitterUser(List<String> twitterUsers) {
@@ -37,6 +45,7 @@ public class Notifier {
     }
 
     public boolean registerTwitterUser(String twitterUser) {
+        log.info(String.format("Registering %s", twitterUser));
         if (getTwitterClient() == null) return false;
 
         twitterUser = twitterUser.toLowerCase();
@@ -57,7 +66,7 @@ public class Notifier {
         TwitterStream twitterStream = new TwitterStreamFactory(getTwitterClient().getConfiguration()).getInstance().addListener(new StatusListener() {
             @Override
             public void onStatus(Status status) {
-                System.out.println("spotted tweet from " + status.getUser().getScreenName());
+                log.debug("spotted tweet from " + status.getUser().getScreenName());
 
                 WebhookMessageBuilder webhookMessageBuilder = new WebhookMessageBuilder();
 
@@ -107,7 +116,7 @@ public class Notifier {
 
             @Override
             public void onException(Exception ex) {
-                ex.printStackTrace();
+                ErrorManager.handleNoEvent(ex);
             }
         }).filter(filterQuery);
 

@@ -4,12 +4,16 @@ import lavalink.client.io.jda.JdaLink;
 import lavalink.client.player.LavalinkPlayer;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.virep.jdabot.Main;
 
 public class GuildAudioManager {
     private final JdaLink link;
     private final LavalinkPlayer player;
     private final TrackScheduler scheduler;
+
+    private static final Logger log = LoggerFactory.getLogger(GuildAudioManager.class);
 
     public GuildAudioManager(Guild guild) {
         this.link = Main.lavalink.getLink(guild);
@@ -20,10 +24,13 @@ public class GuildAudioManager {
     }
 
     public void openConnection(VoiceChannel voiceChannel) {
+        log.debug(String.format("connection open for vc: %s", voiceChannel.getId()));
         this.link.connect(voiceChannel);
     }
 
     protected void destroyConnection() {
+        log.debug("connection destroyed");
+
         scheduler.queue.clear();
         player.stopTrack();
         player.removeListener(scheduler);

@@ -7,6 +7,8 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.virep.jdabot.database.Database;
 import org.virep.jdabot.listeners.EventListener;
 import org.virep.jdabot.listeners.LogsListener;
@@ -23,6 +25,8 @@ public class Main {
 
     Notifier notifier;
     public static JDA PublicJDA = null;
+
+    private static final Logger log = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws Exception {
         instance = new Main();
@@ -46,18 +50,23 @@ public class Main {
                 .setChunkingFilter(ChunkingFilter.ALL)
                 .enableCache(CacheFlag.VOICE_STATE).build().awaitReady();
 
+
+
         SlashHandler slashHandler = new SlashHandler(api);
 
         api.addEventListener(new SlashListener(slashHandler));
 
         slashHandler.addCommands();
+        log.info("Slash Commands registered");
 
         instance.notifier.registerTwitterUser(DatabaseUtils.getAllTwitterNames());
+        log.info("Twitter Notifiers set up");
 
         lavalink.setAutoReconnect(true);
         lavalink.addNode(URI.create(Config.get("LAVALINKURI")), Config.get("LAVALINKPWD"));
 
         PublicJDA = api;
+        log.info("Lavalink Connected");
     }
 
     public static final JdaLavalink lavalink = new JdaLavalink(

@@ -17,6 +17,8 @@ import net.dv8tion.jda.api.utils.FileUpload;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.virep.jdabot.commands.games.TTTCommand;
 import org.virep.jdabot.commands.moderation.BansCommand;
 import org.virep.jdabot.database.Database;
@@ -25,6 +27,7 @@ import org.virep.jdabot.lavaplayer.GuildAudioManager;
 import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.slashcommandhandler.SlashHandler;
 import org.virep.jdabot.utils.Config;
+import org.virep.jdabot.utils.ErrorManager;
 
 import javax.annotation.Nonnull;
 import java.io.FileInputStream;
@@ -48,6 +51,8 @@ import static org.virep.jdabot.utils.Utils.getPages;
 public class SlashListener extends ListenerAdapter {
     private final SlashHandler slashHandler;
 
+    private final static Logger log = LoggerFactory.getLogger(SlashListener.class);
+
     public SlashListener(SlashHandler slashHandler) {
         this.slashHandler = slashHandler;
     }
@@ -65,6 +70,7 @@ public class SlashListener extends ListenerAdapter {
             WebhookClient webhook = WebhookClient.withUrl(Config.get("DISCORD_CMD_WEBHOOKURL"));
 
             webhook.send("``` " + event.getUser().getAsTag() + " (" + event.getUser().getId() + ") - " + event.getInteraction().getCommandString() + "```");
+            log.debug(String.format("command executed by %s : %s", event.getUser().getAsTag(), event.getInteraction().getCommandString()));
             commandMap.get(commandName).execute(event);
         }
     }
@@ -114,10 +120,8 @@ public class SlashListener extends ListenerAdapter {
                             )
                     ).queue();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
+            } catch (SQLException | FileNotFoundException e) {
+                ErrorManager.handleNoEvent(e);
             }
         }
         if (Objects.equals(event.getSelectMenu().getId(), "selectMenu:logs:events")) {
@@ -161,7 +165,7 @@ public class SlashListener extends ListenerAdapter {
 
                 connection.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                ErrorManager.handleNoEvent(e);
             }
         }
 

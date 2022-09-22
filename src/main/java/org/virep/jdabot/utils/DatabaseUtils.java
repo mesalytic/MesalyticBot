@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DatabaseUtils {
@@ -29,7 +30,7 @@ public class DatabaseUtils {
             connection.close();
             return isEnabled;
         } catch (SQLException e) {
-            e.printStackTrace();
+            ErrorManager.handleNoEvent(e);
             return false;
         }
     }
@@ -50,7 +51,7 @@ public class DatabaseUtils {
             }
             return channelID;
         } catch (SQLException e) {
-            e.printStackTrace();
+            ErrorManager.handleNoEvent(e);
             return null;
         }
     }
@@ -71,7 +72,7 @@ public class DatabaseUtils {
             connection.close();
             return webhookURL;
         } catch (SQLException e) {
-            e.printStackTrace();
+            ErrorManager.handleNoEvent(e);
             return null;
         }
     }
@@ -90,7 +91,8 @@ public class DatabaseUtils {
             connection.close();
             return webhooksList;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            ErrorManager.handleNoEvent(e);
+            return Collections.emptyList();
         }
     }
 
@@ -108,7 +110,8 @@ public class DatabaseUtils {
 
             return userNames;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            ErrorManager.handleNoEvent(e);
+            return Collections.emptyList();
         }
     }
 
@@ -128,7 +131,8 @@ public class DatabaseUtils {
 
             return userNames;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            ErrorManager.handleNoEvent(e);
+            return Collections.emptyList();
         }
     }
 
@@ -143,7 +147,7 @@ public class DatabaseUtils {
 
             connection.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            ErrorManager.handleNoEvent(e);
         }
     }
 
@@ -165,7 +169,7 @@ public class DatabaseUtils {
 
             connection.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            ErrorManager.handleNoEvent(e);
         }
     }
 }

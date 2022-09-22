@@ -27,12 +27,17 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.virep.jdabot.commands.general.RemindCommand;
 import org.virep.jdabot.database.Database;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
 import org.virep.jdabot.utils.Config;
+import org.virep.jdabot.utils.ErrorManager;
 
 import javax.annotation.Nonnull;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -47,10 +52,13 @@ import static org.virep.jdabot.utils.Utils.timeStringToSeconds;
 
 public class EventListener extends ListenerAdapter {
 
+    private static final Logger log = LoggerFactory.getLogger(EventListener.class);
+
     private final WebhookClient webhook = WebhookClient.withUrl(Config.get("DISCORD_CMD_WEBHOOKURL"));
 
     @Override
     public void onShutdown(ShutdownEvent event) {
+        log.info("Shutdown instantiated...");
         WebhookEmbed embed = new WebhookEmbedBuilder()
                 .setColor(0xff0000)
                 .setDescription("Shutdown Instantiated.")
@@ -76,7 +84,7 @@ public class EventListener extends ListenerAdapter {
             jda.shutdown();
         }
 
-        System.out.println("Shutdown !");
+        log.info("Successfully shutdown.");
         System.exit(0);
     }
 
@@ -100,7 +108,7 @@ public class EventListener extends ListenerAdapter {
             }
             connection.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            ErrorManager.handleNoEvent(e);
         }
 
         if (event.getMessage().getMentions().getUsers().isEmpty()) return;
@@ -116,7 +124,7 @@ public class EventListener extends ListenerAdapter {
             }
             connection.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            ErrorManager.handleNoEvent(e);
         }
     }
 
@@ -156,7 +164,7 @@ public class EventListener extends ListenerAdapter {
                         .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))).queue();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            ErrorManager.handleNoEvent(e);
         }
     }
 
@@ -183,7 +191,7 @@ public class EventListener extends ListenerAdapter {
             }
             connection.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            ErrorManager.handleNoEvent(e);
         }
     }
 
@@ -217,7 +225,7 @@ public class EventListener extends ListenerAdapter {
 
             connection.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            ErrorManager.handleNoEvent(e);
         }
     }
 
@@ -251,7 +259,7 @@ public class EventListener extends ListenerAdapter {
 
             connection.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            ErrorManager.handleNoEvent(e);
         }
     }
 
@@ -305,6 +313,8 @@ public class EventListener extends ListenerAdapter {
 
     @Override
     public void onReady(@NotNull ReadyEvent event) {
+        log.info("Bot has successfully started !");
+
         WebhookEmbed embed = new WebhookEmbedBuilder()
                 .setColor(0x00ff00)
                 .setDescription("Bot has started")
@@ -336,7 +346,7 @@ public class EventListener extends ListenerAdapter {
                             removeStatement.executeUpdate();
                             connection1.close();
                         } catch (SQLException e) {
-                            e.printStackTrace();
+                            ErrorManager.handleNoEvent(e);
                         }
                     });
                 } else {
@@ -353,7 +363,7 @@ public class EventListener extends ListenerAdapter {
                                     removeStatement.executeUpdate();
                                     connection1.close();
                                 } catch (SQLException e) {
-                                    e.printStackTrace();
+                                    ErrorManager.handleNoEvent(e);
                                 }
                             });
                         }
@@ -368,12 +378,13 @@ public class EventListener extends ListenerAdapter {
                 connection.close();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            ErrorManager.handleNoEvent(e);
         }
     }
 
     @Override
     public void onReconnected(@NotNull ReconnectedEvent event) {
+        log.info("Bot has successfully reconnected.");
         WebhookEmbed embed = new WebhookEmbedBuilder()
                 .setColor(0xFFA500)
                 .setDescription("Bot has reconnected.")
@@ -385,6 +396,8 @@ public class EventListener extends ListenerAdapter {
 
     @Override
     public void onDisconnect(@NotNull DisconnectEvent event) {
+        log.warn("Bot has disconnected.");
+
         WebhookEmbed embed = new WebhookEmbedBuilder()
                 .setColor(0xFF0000)
                 .setDescription("Bot has disconnected.")

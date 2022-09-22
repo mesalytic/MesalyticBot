@@ -2,8 +2,13 @@ package org.virep.jdabot.database;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.virep.jdabot.utils.Config;
+import org.virep.jdabot.utils.ErrorManager;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +17,8 @@ import java.sql.Statement;
 
 public final class Database {
     static HikariDataSource dataSource;
+
+    private final static Logger log = LoggerFactory.getLogger(Database.class);
 
     public static void initializeDataSource() {
         try {
@@ -31,11 +38,11 @@ public final class Database {
             hikariConfig.addDataSourceProperty("useUnicode","true");
             hikariConfig.addDataSourceProperty("characterEncoding","utf8");
 
-            System.out.printf("Pool size %d", hikariConfig.getMaximumPoolSize());
+            log.info(String.format("Connected to HikariCP ! Pool size: %d", hikariConfig.getMaximumPoolSize()));
 
             dataSource = new HikariDataSource(hikariConfig);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            ErrorManager.handleNoEvent(ex);
         }
     }
 
