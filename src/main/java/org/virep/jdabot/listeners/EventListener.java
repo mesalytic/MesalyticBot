@@ -330,44 +330,44 @@ public class EventListener extends ListenerAdapter {
                     user.openPrivateChannel().queue(dm -> {
                         dm.sendMessage("\uD83D\uDD59 - " + remindName).queue();
 
-                        try (PreparedStatement removeStatement = connection.prepareStatement("DELETE FROM remind WHERE userID = ? AND name = ?")) {
+                        try (Connection connection1 = Database.getConnection(); PreparedStatement removeStatement = connection1.prepareStatement("DELETE FROM remind WHERE userID = ? AND name = ?")) {
                             removeStatement.setString(1, userID);
                             removeStatement.setString(2, remindName);
 
                             removeStatement.executeUpdate();
+                            connection1.close();
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
                     });
+                } else {
+                    TimerTask task = new TimerTask() {
+                        @Override
+                        public void run() {
+                            user.openPrivateChannel().queue(dm -> {
+                                dm.sendMessage("\uD83D\uDD59 - " + remindName).queue();
+
+                                try (Connection connection1 = Database.getConnection(); PreparedStatement removeStatement = connection1.prepareStatement("DELETE FROM remind WHERE userID = ? AND name = ?")) {
+                                    removeStatement.setString(1, userID);
+                                    removeStatement.setString(2, remindName);
+
+                                    removeStatement.executeUpdate();
+                                    connection1.close();
+                                } catch (SQLException e) {
+                                    e.printStackTrace();
+                                }
+                            });
+                        }
+                    };
+
+                    Timer timer = new Timer(timestamp + "-" + userID);
+
+                    timer.schedule(task, (timestamp - Instant.now().getEpochSecond()) * 1000L);
+
+                    RemindCommand.timers.put(timestamp + "-" + userID, timer);
                 }
-
-                TimerTask task = new TimerTask() {
-                    @Override
-                    public void run() {
-                        user.openPrivateChannel().queue(dm -> {
-                            dm.sendMessage("\uD83D\uDD59 - " + remindName).queue();
-
-                            try (Connection connection1 = Database.getConnection(); PreparedStatement removeStatement = connection1.prepareStatement("DELETE FROM remind WHERE userID = ? AND name = ?")) {
-                                removeStatement.setString(1, userID);
-                                removeStatement.setString(2, remindName);
-
-                                removeStatement.executeUpdate();
-                                connection1.close();
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                            }
-                        });
-                    }
-                };
-
-                Timer timer = new Timer(timestamp + "-" + userID);
-
-                timer.schedule(task, (timestamp - Instant.now().getEpochSecond()) * 1000L);
-
-                RemindCommand.timers.put(timestamp + "-" + userID, timer);
+                connection.close();
             }
-
-            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
