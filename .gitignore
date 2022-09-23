@@ -45,8 +45,7 @@ bin/
 
 Lavalink.jar
 application.yml
-/lavalink/logs/spring.log
-/logs/spring.log
+/logs
 src/main/java/org/virep/jdabot/devcommands/
 .idea/artifacts/
 /.idea/inspectionProfiles/
