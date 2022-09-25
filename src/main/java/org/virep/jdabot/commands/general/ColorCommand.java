@@ -18,6 +18,8 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.virep.jdabot.utils.Utils.getRandomColor;
 
@@ -41,7 +43,10 @@ public class ColorCommand implements Command {
     @Override
     public void execute(SlashCommandInteractionEvent event) {
         event.deferReply().queue();
-        String hexCode = event.getOption("color") != null ? event.getOption("color", OptionMapping::getAsString) : getRandomColor();
+        String hexCode = event.getOption("color") != null ? event.getOption("color", OptionMapping::getAsString).replace("#", "") : getRandomColor();
+
+        Pattern color = Pattern.compile("[0-9A-Fa-f]+$");
+        Matcher matcher = color.matcher(hexCode);
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .readTimeout(30, TimeUnit.SECONDS)
@@ -49,7 +54,7 @@ public class ColorCommand implements Command {
 
         try {
             Request request = new Request.Builder()
-                    .url("https://api.mesavirep.xyz/color?input=" + hexCode.replace("#", ""))
+                    .url("https://api.mesavirep.xyz/color?input=" + (matcher.matches() ? String.format("%06x", Integer.parseInt(hexCode, 16)) : hexCode))
                     .build();
 
             Response res = client.newCall(request).execute();
