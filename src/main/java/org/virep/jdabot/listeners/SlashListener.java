@@ -30,8 +30,10 @@ import org.virep.jdabot.utils.Config;
 import org.virep.jdabot.utils.ErrorManager;
 
 import javax.annotation.Nonnull;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -85,7 +87,7 @@ public class SlashListener extends ListenerAdapter {
                 ResultSetMetaData resultSetMetaData = result.getMetaData();
 
                 if (result.first()) {
-                    FileInputStream in = new FileInputStream("./logs.json");
+                    InputStream in = SlashListener.class.getResourceAsStream("/logs.json");
 
                     JSONTokener tokener = new JSONTokener(in);
                     JSONObject logsObject = new JSONObject(tokener);
@@ -120,7 +122,7 @@ public class SlashListener extends ListenerAdapter {
                             )
                     ).queue();
                 }
-            } catch (SQLException | FileNotFoundException e) {
+            } catch (SQLException e) {
                 ErrorManager.handleNoEvent(e);
             }
         }

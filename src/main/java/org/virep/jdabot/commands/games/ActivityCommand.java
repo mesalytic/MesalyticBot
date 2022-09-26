@@ -17,6 +17,7 @@ import org.virep.jdabot.utils.ErrorManager;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class ActivityCommand implements Command {
     @Override
@@ -81,7 +82,7 @@ public class ActivityCommand implements Command {
                     .addHeader("Authorization", event.getJDA().getToken())
                     .build();
 
-            FileInputStream in = new FileInputStream("./activities.json");
+            InputStream in = ActivityCommand.class.getResourceAsStream("/activities.json");
 
             JSONTokener tokener = new JSONTokener(in);
             JSONObject activitiesObject = new JSONObject(tokener);
