@@ -29,6 +29,7 @@ public class ReactionroleCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Configure roles that are given when clicking on a reaction.")
+                .setGuildOnly(true)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MANAGE_SERVER))
                 .addSubcommands(
                         new SubcommandData("add", "Add roles to the reaction role.")

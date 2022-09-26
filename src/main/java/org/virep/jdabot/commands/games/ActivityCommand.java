@@ -27,6 +27,7 @@ public class ActivityCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Launch a voice channel activity.")
+                .setGuildOnly(true)
                 .addOptions(new OptionData(OptionType.STRING, "application", "Choose the activity you want !", true)
                         .addChoices(
                                 new Choice("Watch Together", "880218394199220334"),

@@ -19,7 +19,8 @@ public class StopCommand implements Command {
 
     @Override
     public SlashCommandData getCommandData() {
-        return Commands.slash(getName(), "Stops the currently played music.");
+        return Commands.slash(getName(), "Stops the currently played music.")
+                .setGuildOnly(true);
     }
 
     @Override

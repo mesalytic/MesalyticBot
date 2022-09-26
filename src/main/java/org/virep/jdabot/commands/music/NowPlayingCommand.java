@@ -27,7 +27,8 @@ public class NowPlayingCommand implements Command {
 
     @Override
     public SlashCommandData getCommandData() {
-        return Commands.slash(getName(), "Display informations about the currently playing music.");
+        return Commands.slash(getName(), "Display informations about the currently playing music.")
+                .setGuildOnly(true);
     }
 
     @Override

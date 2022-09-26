@@ -26,6 +26,7 @@ public class MessageCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Lets you configure join and leave messages.")
+                .setGuildOnly(true)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MANAGE_SERVER))
                 .addSubcommandGroups(
                         new SubcommandGroupData("join", "The bot will send a message whenever someone joins the server.")

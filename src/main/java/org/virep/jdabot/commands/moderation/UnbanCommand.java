@@ -26,6 +26,7 @@ public class UnbanCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Unban a user.")
+                .setGuildOnly(true)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.BAN_MEMBERS))
                 .addOptions(
                         new OptionData(OptionType.STRING, "user", "The user to unban. (User tag or user ID)", true),

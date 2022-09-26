@@ -19,6 +19,7 @@ public class ShutdownCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "shutdown")
+                .setGuildOnly(true)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ADMINISTRATOR))
                 .addOption(OptionType.CHANNEL, "testoption", "test");
     }

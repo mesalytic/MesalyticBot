@@ -32,6 +32,7 @@ public class MuteCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Timeout or un-timeout someone")
+                .setGuildOnly(true)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.KICK_MEMBERS))
                 .addSubcommands(
                         new SubcommandData("set", "Timeout a guild member")

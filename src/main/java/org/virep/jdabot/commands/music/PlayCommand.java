@@ -31,6 +31,7 @@ public class PlayCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Play music on any voice channel.")
+                .setGuildOnly(true)
                 .addSubcommands(
                         new SubcommandData("youtube", "Play YouTube songs!")
                                 .addOption(OptionType.STRING, "url", "YouTube Video or Playlist URL")

@@ -38,6 +38,7 @@ public class InteractionroleCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Configure roles that can be given for specific actions.")
+                .setGuildOnly(true)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MANAGE_SERVER))
                 .addSubcommandGroups(
                         new SubcommandGroupData("button", "Configure buttons interactions that'll give roles.")

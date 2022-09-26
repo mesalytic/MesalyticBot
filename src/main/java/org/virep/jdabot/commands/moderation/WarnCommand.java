@@ -38,6 +38,7 @@ public class WarnCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Warn people")
+                .setGuildOnly(true)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MODERATE_MEMBERS))
                 .addSubcommandGroups(
                         new SubcommandGroupData("config", "Configure warns")

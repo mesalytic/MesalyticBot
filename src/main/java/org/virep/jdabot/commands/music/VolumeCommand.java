@@ -25,6 +25,7 @@ public class VolumeCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Changes volume for the current queue.")
+                .setGuildOnly(true)
                 .addOptions(
                         new OptionData(OptionType.INTEGER, "value", "Volume value", true)
                 );

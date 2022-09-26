@@ -22,7 +22,8 @@ public class ClearQueueCommand implements Command {
 
     @Override
     public SlashCommandData getCommandData() {
-        return Commands.slash(getName(), "Clears the current queue.");
+        return Commands.slash(getName(), "Clears the current queue.")
+                .setGuildOnly(true);
     }
 
     @Override

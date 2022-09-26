@@ -23,7 +23,8 @@ public class SkipCommand implements Command {
 
     @Override
     public SlashCommandData getCommandData() {
-        return Commands.slash(getName(), "Skips the currently playing music.");
+        return Commands.slash(getName(), "Skips the currently playing music.")
+                .setGuildOnly(true);
     }
 
     @Override

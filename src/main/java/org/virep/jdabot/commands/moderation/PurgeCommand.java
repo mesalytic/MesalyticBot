@@ -26,6 +26,7 @@ public class PurgeCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Bulk delete messages in the channel. You can specify a channel.")
+                .setGuildOnly(true)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MESSAGE_MANAGE))
                 .addSubcommands(
                         new SubcommandData("any", "Delete any message")

@@ -21,7 +21,8 @@ public class JoinCommand implements Command {
 
     @Override
     public SlashCommandData getCommandData() {
-        return Commands.slash(getName(), "Join channel to play music.");
+        return Commands.slash(getName(), "Join channel to play music.")
+                .setGuildOnly(true);
     }
 
     @Override

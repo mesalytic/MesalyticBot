@@ -2,6 +2,7 @@ package org.virep.jdabot.commands.infos;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -26,6 +27,7 @@ public class InfoCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Displays info about a user or the server.")
+                .setGuildOnly(true)
                 .addSubcommands(
                         new SubcommandData("user", "Info about a user.")
                                 .addOption(OptionType.USER, "user", "The user you want to see info about."),

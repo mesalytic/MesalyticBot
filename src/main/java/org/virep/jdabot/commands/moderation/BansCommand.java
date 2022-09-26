@@ -27,6 +27,7 @@ public class BansCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "bans")
+                .setGuildOnly(true)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.BAN_MEMBERS))
                 .addSubcommands(
                         new SubcommandData("list", "List banned members.")

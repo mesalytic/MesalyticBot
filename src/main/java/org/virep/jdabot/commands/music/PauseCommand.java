@@ -22,7 +22,8 @@ public class PauseCommand implements Command {
 
     @Override
     public SlashCommandData getCommandData() {
-        return Commands.slash(getName(), "Pauses the currently playing music.");
+        return Commands.slash(getName(), "Pauses the currently playing music.")
+                .setGuildOnly(true);
     }
 
     @Override

@@ -22,7 +22,8 @@ public class ShuffleCommand implements Command {
 
     @Override
     public SlashCommandData getCommandData() {
-        return Commands.slash(getName(), "Shuffles the queue");
+        return Commands.slash(getName(), "Shuffles the queue")
+                .setGuildOnly(true);
     }
 
     @Override

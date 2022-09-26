@@ -26,6 +26,7 @@ public class BanCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Ban a user.")
+                .setGuildOnly(true)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.BAN_MEMBERS))
                 .addOptions(
                         new OptionData(OptionType.USER, "user", "The User to ban.", true),

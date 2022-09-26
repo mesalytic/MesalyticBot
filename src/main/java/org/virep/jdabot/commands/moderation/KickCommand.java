@@ -22,6 +22,7 @@ public class KickCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Kick someone.")
+                .setGuildOnly(true)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.KICK_MEMBERS))
                 .addOptions(
                         new OptionData(OptionType.USER, "member", "the member you want to kick", true),

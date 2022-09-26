@@ -27,6 +27,7 @@ public class SlowmodeCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Configure the slowmode for a specific channel.")
+                .setGuildOnly(true)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MANAGE_CHANNEL))
                 .addSubcommands(
                         new SubcommandData("set", "Configure the slowmode duration.")

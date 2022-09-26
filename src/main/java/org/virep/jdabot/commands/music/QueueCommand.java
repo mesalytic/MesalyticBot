@@ -26,7 +26,8 @@ public class QueueCommand implements Command {
 
     @Override
     public SlashCommandData getCommandData() {
-        return Commands.slash(getName(), "Returns the current music queue.");
+        return Commands.slash(getName(), "Returns the current music queue.")
+                .setGuildOnly(true);
     }
 
     @Override

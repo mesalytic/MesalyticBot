@@ -22,7 +22,8 @@ public class LoopingCommand implements Command {
 
     @Override
     public SlashCommandData getCommandData() {
-        return Commands.slash(getName(), "Loops the currently playing music.");
+        return Commands.slash(getName(), "Loops the currently playing music.")
+                .setGuildOnly(true);
     }
 
     @Override

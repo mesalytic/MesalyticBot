@@ -26,9 +26,11 @@ public class SeekCommand implements Command {
 
     @Override
     public SlashCommandData getCommandData() {
-        return Commands.slash(getName(), "Change the position of the currently playing music.").addOptions(
-                new OptionData(OptionType.STRING, "time", "Time to seek to. (format H:M:S or M:S)", true)
-        );
+        return Commands.slash(getName(), "Change the position of the currently playing music.")
+                .setGuildOnly(true)
+                .addOptions(
+                        new OptionData(OptionType.STRING, "time", "Time to seek to. (format H:M:S or M:S)", true)
+                );
     }
 
     @Override

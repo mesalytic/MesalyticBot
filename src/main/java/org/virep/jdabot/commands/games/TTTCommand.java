@@ -26,6 +26,7 @@ public class TTTCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Play TicTacToe with your friends!")
+                .setGuildOnly(true)
                 .addOption(OptionType.USER, "opponent", "The member you want to play against");
     }
 
