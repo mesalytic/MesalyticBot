@@ -87,6 +87,11 @@ public class WarnCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        if (!event.getMember().hasPermission(Permission.MODERATE_MEMBERS)) {
+            event.reply("You do not have permission to use this command.").setEphemeral(true).queue();
+            return;
+        }
+
         String group = event.getSubcommandGroup();
         String subcommand = event.getSubcommandName();
 
