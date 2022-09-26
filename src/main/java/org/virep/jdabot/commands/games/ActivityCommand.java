@@ -94,7 +94,7 @@ public class ActivityCommand implements Command {
 
             JSONObject activityObject = activitiesObject.getJSONObject(event.getOption("application").getAsString());
 
-            if (event.getGuild().getBoostTier().getKey() != activityObject.getInt("boostLevel")) {
+            if (event.getGuild().getBoostTier().getKey() < activityObject.getInt("boostLevel")) {
                 event.reply("You must be at least Boost Level 1 to start this event.").setEphemeral(true).queue();
                 return;
             }
