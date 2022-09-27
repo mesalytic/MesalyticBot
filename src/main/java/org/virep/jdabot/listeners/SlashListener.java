@@ -59,6 +59,8 @@ public class SlashListener extends ListenerAdapter {
         this.slashHandler = slashHandler;
     }
 
+    private final WebhookClient webhook = WebhookClient.withUrl(Config.get("DISCORD_CMD_WEBHOOKURL"));
+
     @Override
     public void onSlashCommandInteraction(@Nonnull SlashCommandInteractionEvent event) {
         if (event.getGuild() == null) {
@@ -69,8 +71,6 @@ public class SlashListener extends ListenerAdapter {
         Map<String, Command> commandMap = slashHandler.getSlashCommandMap();
 
         if (commandMap.containsKey(commandName)) {
-            WebhookClient webhook = WebhookClient.withUrl(Config.get("DISCORD_CMD_WEBHOOKURL"));
-
             webhook.send("``` " + event.getUser().getAsTag() + " (" + event.getUser().getId() + ") - " + event.getInteraction().getCommandString() + "```");
             log.debug(String.format("command executed by %s : %s", event.getUser().getAsTag(), event.getInteraction().getCommandString()));
             commandMap.get(commandName).execute(event);

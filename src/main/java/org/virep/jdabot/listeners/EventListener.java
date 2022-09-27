@@ -54,7 +54,7 @@ public class EventListener extends ListenerAdapter {
 
     private static final Logger log = LoggerFactory.getLogger(EventListener.class);
 
-    private final WebhookClient webhook = WebhookClient.withUrl(Config.get("DISCORD_CMD_WEBHOOKURL"));
+    private final WebhookClient webhook = WebhookClient.withUrl(Config.get("DISCORD_STATUS_WEBHOOKURL"));
 
     @Override
     public void onShutdown(ShutdownEvent event) {
