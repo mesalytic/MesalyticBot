@@ -3,6 +3,8 @@ package org.virep.jdabot;
 import lavalink.client.io.jda.JdaLavalink;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Activity.ActivityType;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
@@ -43,6 +45,7 @@ public class Main {
                         GatewayIntent.MESSAGE_CONTENT,
                         GatewayIntent.GUILD_MESSAGE_REACTIONS,
                         GatewayIntent.GUILD_VOICE_STATES)
+                .setActivity(Activity.of(ActivityType.PLAYING, "We Are Back"))
                 .addEventListeners(lavalink, new EventListener(), new LogsListener())
                 .setBulkDeleteSplittingEnabled(false)
                 .setVoiceDispatchInterceptor(lavalink.getVoiceInterceptor())
