@@ -66,6 +66,25 @@ public class TrackScheduler extends PlayerEventListenerAdapter {
 
     }
 
+    public void nextTrack(int count) {
+        AudioTrack track = null;
+
+        for (int i = 0; i < count; i++) {
+            track = queue.poll();
+        }
+
+        if (track == null) {
+            timeout = ScheduleHandler.registerUniqueJob(new VoiceTimeoutJob(guild));
+
+            if (player.getPlayingTrack() != null) {
+                player.stopTrack();
+            }
+
+            return;
+        }
+        player.playTrack(track);
+    }
+
     @Override
     public void onTrackStart(IPlayer player, AudioTrack track) {
         channel.sendMessageFormat("\u25B6 - Now playing : **%s** (`%s`)", track.getInfo().getTitle(), Utils.formatTrackLength(track.getInfo().getLength())).queue();

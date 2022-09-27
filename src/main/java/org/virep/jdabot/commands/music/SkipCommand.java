@@ -3,8 +3,10 @@ package org.virep.jdabot.commands.music;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.virep.jdabot.lavaplayer.AudioManagerController;
 import org.virep.jdabot.lavaplayer.GuildAudioManager;
@@ -13,8 +15,6 @@ import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.util.Objects;
 
-//TODO: Add support for skipping to a specific music (index queue)
-// Due to Discord limitations, it needs to be in a seperate file (options w or w/o)
 public class SkipCommand implements Command {
     @Override
     public String getName() {
@@ -24,7 +24,10 @@ public class SkipCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Skips the currently playing music.")
-                .setGuildOnly(true);
+                .setGuildOnly(true)
+                .addOptions(
+                        new OptionData(OptionType.INTEGER, "index", "Index of the music.").setMinValue(1)
+                );
     }
 
     @Override
@@ -62,8 +65,12 @@ public class SkipCommand implements Command {
             return;
         }
 
-        scheduler.nextTrack();
+        if (event.getOption("index") != null) {
+            scheduler.nextTrack(event.getOption("index", OptionMapping::getAsInt));
+        } else {
+            scheduler.nextTrack();
+        }
 
-        event.reply("\u23E9 - Skipped current music !").queue();
+        event.reply("\u23E9 - Skipped !").queue();
     }
 }
