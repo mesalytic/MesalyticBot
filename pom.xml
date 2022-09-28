@@ -55,9 +55,19 @@
             <version>5.2.2</version>
         </dependency>
         <dependency>
+            <groupId>com.github.chocololat</groupId>
+            <artifactId>Lavalink-Client</artifactId>
+            <version>b4e9d6ba06</version>
+        </dependency>
+        <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
             <version>0.10.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.Topis-Lavalink-Plugins</groupId>
+            <artifactId>Topis-Source-Managers</artifactId>
+            <version>2.0.6</version>
         </dependency>
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
