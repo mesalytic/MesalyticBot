@@ -12,9 +12,16 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virep.jdabot.database.Database;
-import org.virep.jdabot.listeners.EventListener;
+import org.virep.jdabot.listeners.AfkListener;
+import org.virep.jdabot.listeners.AutoroleListener;
+import org.virep.jdabot.listeners.ButtonInteractionListener;
+import org.virep.jdabot.listeners.GatewayEventListener;
+import org.virep.jdabot.listeners.GuildMessageListener;
+import org.virep.jdabot.listeners.InteractionRoleListener;
 import org.virep.jdabot.listeners.LogsListener;
 import org.virep.jdabot.external.Notifier;
+import org.virep.jdabot.listeners.ReactionRoleListener;
+import org.virep.jdabot.listeners.SelectMenuInteractionListener;
 import org.virep.jdabot.slashcommandhandler.SlashHandler;
 import org.virep.jdabot.listeners.SlashListener;
 import org.virep.jdabot.utils.Config;
@@ -46,7 +53,16 @@ public class Main {
                         GatewayIntent.GUILD_MESSAGE_REACTIONS,
                         GatewayIntent.GUILD_VOICE_STATES)
                 .setActivity(Activity.of(ActivityType.PLAYING, "We Are Back"))
-                .addEventListeners(lavalink, new EventListener(), new LogsListener())
+                .addEventListeners(lavalink,
+                        new LogsListener(),
+                        new GatewayEventListener(),
+                        new InteractionRoleListener(),
+                        new GuildMessageListener(),
+                        new AutoroleListener(),
+                        new ReactionRoleListener(),
+                        new AfkListener(),
+                        new SelectMenuInteractionListener(),
+                        new ButtonInteractionListener())
                 .setBulkDeleteSplittingEnabled(false)
                 .setVoiceDispatchInterceptor(lavalink.getVoiceInterceptor())
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
