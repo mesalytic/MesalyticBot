@@ -70,13 +70,13 @@ public class RemindCommand implements Command {
 
                 statement.executeUpdate();
 
-                event.reply("Sucessfully set a reminder for: " + MarkdownSanitizer.sanitize(content) + " (<t:" + (Instant.now().getEpochSecond() + timeStringToSeconds(when)) + ":R>)").queue();
+                event.reply("\u2705 - Sucessfully set a reminder for: " + MarkdownSanitizer.sanitize(content) + " (<t:" + (Instant.now().getEpochSecond() + timeStringToSeconds(when)) + ":R>)").queue();
 
                 TimerTask task = new TimerTask() {
                     @Override
                     public void run() {
                         event.getUser().openPrivateChannel().queue(dm -> {
-                            dm.sendMessage("\uD83D\uDD59 - " + content).queue();
+                            dm.sendMessage("\uD83D\uDD59 - Reminder for : **" + content + "**").queue();
 
                             try (Connection connection1 = Database.getConnection(); PreparedStatement removeStatement = connection1.prepareStatement("DELETE FROM remind WHERE userID = ? AND name = ?")) {
                                 removeStatement.setString(1, event.getUser().getId());
@@ -128,7 +128,7 @@ public class RemindCommand implements Command {
                 }
 
                 if (sb.isEmpty()) {
-                    event.reply("You do not have reminders set.").setEphemeral(true).queue();
+                    event.reply("\u274C - You do not have reminders set.").setEphemeral(true).queue();
                     connection.close();
                     return;
                 }
@@ -153,7 +153,7 @@ public class RemindCommand implements Command {
                 result.beforeFirst();
 
                 if (index > resultSize) {
-                    event.reply("The number you specified is over the number of reminders you have.").setEphemeral(true).queue();
+                    event.reply("\u274C - The number you specified is over the number of reminders you have.").setEphemeral(true).queue();
                     connection.close();
                     return;
                 }
@@ -173,7 +173,7 @@ public class RemindCommand implements Command {
 
                         deleteStatement.executeQuery();
 
-                        event.reply("Successfully deleted this reminder: `" + MarkdownSanitizer.sanitize(result.getString("name")) + "`").setAllowedMentions(Collections.emptyList()).queue();
+                        event.reply("\u2705 - Successfully deleted this reminder: `" + MarkdownSanitizer.sanitize(result.getString("name")) + "`").setAllowedMentions(Collections.emptyList()).queue();
                     }
                 }
                 connection.close();

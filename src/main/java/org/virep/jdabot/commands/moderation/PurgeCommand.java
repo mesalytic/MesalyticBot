@@ -56,7 +56,7 @@ public class PurgeCommand implements Command {
     @Override
     public void execute(SlashCommandInteractionEvent event) {
         if (!Objects.requireNonNull(event.getMember()).hasPermission(Permission.MESSAGE_MANAGE)) {
-            event.reply("You do not have permission to use this command.").setEphemeral(true).queue();
+            event.reply("\u274C - You do not have permission to use this command.").setEphemeral(true).queue();
             return;
         }
 
@@ -73,7 +73,7 @@ public class PurgeCommand implements Command {
                     .thenAccept(list -> {
                         channel.purgeMessages(list);
 
-                        event.reply("**" + amount + " messages have been deleted !").queue();
+                        event.reply("\u2705 - **" + amount + " messages have been deleted !").queue();
                     });
         }
 
@@ -86,7 +86,7 @@ public class PurgeCommand implements Command {
 
                         channel.purgeMessages(sortedList);
 
-                        event.getHook().editOriginal("**" + amount + " messages have been deleted !").queue();
+                        event.getHook().editOriginal("\u2705 - **" + amount + " messages have been deleted !").queue();
                     });
         }
 
@@ -103,7 +103,7 @@ public class PurgeCommand implements Command {
 
                         channel.purgeMessages(sortedList);
 
-                        event.getHook().editOriginal("**" + amount + " messages have been deleted !").queue();
+                        event.getHook().editOriginal("\u2705 - **" + amount + " messages have been deleted !").queue();
                     });
         }
     }

@@ -38,7 +38,7 @@ public class KickCommand implements Command {
     @Override
     public void execute(SlashCommandInteractionEvent event) {
         if (!event.getMember().hasPermission(Permission.KICK_MEMBERS)) {
-            event.reply("You do not have permission to use this command.").setEphemeral(true).queue();
+            event.reply("\u274C - You do not have permission to use this command.").setEphemeral(true).queue();
             return;
         }
 
@@ -46,11 +46,11 @@ public class KickCommand implements Command {
         String reason = event.getOption("reason") != null ? Objects.requireNonNull(event.getOption("reason")).getAsString() : "No reason.";
 
         if (member == null) {
-            event.reply("Somehow this user is not on the server.").setEphemeral(true).queue();
+            event.reply("\u274C - Somehow this user is not on the server.").setEphemeral(true).queue();
             return;
         }
 
         member.kick().reason("Kicked by " + event.getUser().getAsTag() + " : " + reason).queue();
-        event.reply("Successfully kicked **" + member.getUser().getAsTag() + "** for the reason: **" + reason + "**").queue();
+        event.reply("\u2705 - Successfully kicked **" + member.getUser().getAsTag() + "** for the reason: **" + reason + "**").queue();
     }
 }

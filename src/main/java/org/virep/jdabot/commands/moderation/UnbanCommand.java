@@ -42,7 +42,7 @@ public class UnbanCommand implements Command {
     @Override
     public void execute(SlashCommandInteractionEvent event) {
         if (!event.getMember().hasPermission(Permission.BAN_MEMBERS)) {
-            event.reply("You do not have permission to use this command.").setEphemeral(true).queue();
+            event.reply("\u274C - You do not have permission to use this command.").setEphemeral(true).queue();
             return;
         }
 
@@ -63,9 +63,9 @@ public class UnbanCommand implements Command {
                     UserSnowflake userID = UserSnowflake.fromId(banObject.getUser().getId());
 
                     guild.unban(userID).reason("Unbanned by " + event.getUser().getAsTag() + ": " + (reason != null ? reason : "No reason provided")).queue();
-                    event.reply("The user `" + banObject.getUser().getAsTag() + "` has been unbanned.").queue();
+                    event.reply("\u2705 - The user `" + banObject.getUser().getAsTag() + "` has been unbanned.").queue();
                 } else {
-                    event.reply("This user is not banned or not valid.").setEphemeral(true).queue();
+                    event.reply("\u274C - This user is not banned or not valid.").setEphemeral(true).queue();
                 }
             });
         } else if ((user.length() >= 17 && user.length() <= 20) && Helpers.isNumeric(user)) {
@@ -76,13 +76,13 @@ public class UnbanCommand implements Command {
                     Guild.Ban banObject = ban.get();
 
                     guild.unban(UserSnowflake.fromId(user)).reason("Unbanned by " + event.getUser().getAsTag() + ": " + (reason != null ? reason : "No reason provided")).queue();
-                    event.reply("The user `" + banObject.getUser().getAsTag() + "` has been unbanned.").queue();
+                    event.reply("\u2705 - The user `" + banObject.getUser().getAsTag() + "` has been unbanned.").queue();
                 } else {
-                    event.reply("This user is not banned or not valid.").setEphemeral(true).queue();
+                    event.reply("\u274C - This user is not banned or not valid.").setEphemeral(true).queue();
                 }
             });
         } else {
-            event.reply("Please specify a user TAG (username#0101) or a user ID.").setEphemeral(true).queue();
+            event.reply("\u274C - Please specify a user TAG (username#0101) or a user ID.").setEphemeral(true).queue();
         }
     }
 }

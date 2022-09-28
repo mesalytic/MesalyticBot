@@ -24,6 +24,8 @@ public class PingCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
-        event.reply("pong!").queue();
+        event.getJDA().getRestPing().queue(ping -> {
+            event.replyFormat("**Pong !**\nGateway: %dms | REST: %dms", event.getJDA().getGatewayPing(), ping.intValue()).queue();
+        });
     }
 }

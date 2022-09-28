@@ -49,7 +49,7 @@ public class LogsCommand implements Command {
 
         assert member != null;
         if (!member.hasPermission(Permission.MANAGE_SERVER)) {
-            event.reply("You do not have permission to use this command.").setEphemeral(true).queue();
+            event.reply("\u274C - You do not have permission to use this command.").setEphemeral(true).queue();
             return;
         }
 
@@ -74,7 +74,7 @@ public class LogsCommand implements Command {
 
                         statement1.executeUpdate();
 
-                        event.reply("Successfully set " + channelOption.getAsChannel().getAsMention() + " as the log channel for this server.").setEphemeral(true).queue();
+                        event.reply("\u2705 - Successfully set " + channelOption.getAsChannel().getAsMention() + " as the log channel for this server.").setEphemeral(true).queue();
                     }
                 } else {
                     try (PreparedStatement statement1 = connection.prepareStatement("INSERT INTO logs (guildID, channelID) VALUES (?,?)")) {
@@ -83,7 +83,7 @@ public class LogsCommand implements Command {
 
                         statement1.executeUpdate();
 
-                        event.reply("Successfully set " + channelOption.getAsChannel().getAsMention() + " as the log channel for this server.").setEphemeral(true).queue();
+                        event.reply("\u2705 - Successfully set " + channelOption.getAsChannel().getAsMention() + " as the log channel for this server.").setEphemeral(true).queue();
                     }
                 }
                 connection.close();
@@ -99,7 +99,7 @@ public class LogsCommand implements Command {
                 ResultSet result = statement.executeQuery();
 
                 if (!result.first()) {
-                    event.reply("You must set up a log channel before. Use `/logs channel`").setEphemeral(true).queue();
+                    event.reply("\u274C - You must set up a log channel before. Use `/logs channel`").setEphemeral(true).queue();
                     connection.close();
                     return;
                 }

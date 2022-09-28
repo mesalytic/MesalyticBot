@@ -72,7 +72,7 @@ public class BannerCommand implements Command {
 
             if (!color) {
                 if (jsonObject.get("link") == null) {
-                    event.reply("This user does not have a banner. Try using the `/banner color:true` parameter.").queue();
+                    event.reply("\u274C - This user does not have a banner. Try using the `/banner color:true` parameter.").queue();
                     return;
                 }
                 embedBuilder.setTitle("**" + user.getAsTag() + "**'s banner is:");
@@ -80,7 +80,7 @@ public class BannerCommand implements Command {
                 embedBuilder.setImage(jsonObject.getString("link") + "?size=2048");
             } else {
                 if (jsonObject.getString("color") == null) {
-                    event.reply("This user does not have a banner color.").queue();
+                    event.reply("\u274C - This user does not have a banner color.").queue();
                     return;
                 }
                 embedBuilder.setTitle("**" + user.getAsTag() + "**'s banner color is: " + jsonObject.getString("color"));

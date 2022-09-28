@@ -67,7 +67,7 @@ public class AfkCommand implements Command {
                     }
                 }
 
-                event.reply("Your AFK status has been updated to : " + message).setAllowedMentions(Collections.emptyList()).queue();
+                event.reply("\u2705 - Your AFK status has been updated to : " + message).setAllowedMentions(Collections.emptyList()).queue();
                 connection.close();
             } catch (SQLException e) {
                 ErrorManager.handle(e, event);
@@ -81,7 +81,7 @@ public class AfkCommand implements Command {
                 ResultSet result = statement.executeQuery();
 
                 if (!result.first()) {
-                    event.reply("You currently do not have an AFK status set up.").setEphemeral(true).queue();
+                    event.reply("\u274C - You currently do not have an AFK status set up.").setEphemeral(true).queue();
                     connection.close();
                     return;
                 }
@@ -90,7 +90,7 @@ public class AfkCommand implements Command {
                     removeStatement.setString(1, event.getUser().getId());
 
                     statement.executeUpdate();
-                    event.reply("Your AFK status has been removed.").queue();
+                    event.reply("\u2705 - Your AFK status has been removed.").queue();
                 }
                 connection.close();
             } catch (SQLException e) {

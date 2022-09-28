@@ -44,7 +44,7 @@ public class StatsCommand implements Command {
                 .addField("Users", String.valueOf(event.getJDA().getUsers().size()), true)
                 .addField("Uptime", formatUptime(mxBean.getUptime()), true)
                 .addBlankField(true)
-                .addField("Made with", "JDA", true)
+                .addField("Made with", "JDA 5.0.0", true)
                 .build();
 
         event.replyEmbeds(embed).queue();

@@ -59,7 +59,7 @@ public class ReactionroleCommand implements Command {
 
         assert member != null;
         if (!member.hasPermission(Permission.MANAGE_SERVER)) {
-            event.reply("You do not have permission to use this command.").setEphemeral(true).queue();
+            event.reply("\u274C - You do not have permission to use this command.").setEphemeral(true).queue();
             return;
         }
 
@@ -85,7 +85,7 @@ public class ReactionroleCommand implements Command {
 
                         statement1.executeUpdate();
 
-                        event.reply("The role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " has replaced the already specified role for this emoji, and can now be obtained via the reaction role.").setEphemeral(true).queue();
+                        event.reply("\u2705 -  role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " has replaced the already specified role for this emoji, and can now be obtained via the reaction role.").setEphemeral(true).queue();
                     }
                 } else {
                     try (PreparedStatement statement1 = connection.prepareStatement("INSERT INTO reactionRole (messageID, roleID, emojiID) VALUES (?,?,?)")) {
@@ -98,7 +98,7 @@ public class ReactionroleCommand implements Command {
                         TextChannel textChannel = event.getGuild().getTextChannelById(event.getOption("channel").getAsChannel().getId());
                         textChannel.retrieveMessageById(event.getOption("messageid").getAsString()).queue((message) -> message.addReaction(fromFormattedEmoji).queue());
 
-                        event.reply("The role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " can now be obtained via the reaction role !").setEphemeral(true).queue();
+                        event.reply("\u2705 - The role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " can now be obtained via the reaction role !").setEphemeral(true).queue();
                     }
                 }
 
@@ -114,7 +114,7 @@ public class ReactionroleCommand implements Command {
                 ResultSet result = statement.executeQuery();
 
                 if (!result.first()) {
-                    event.reply("No role has been configured for this emoji in the reaction role.").setEphemeral(true).queue();
+                    event.reply("\u274C - No role has been configured for this emoji in the reaction role.").setEphemeral(true).queue();
                     connection.close();
                     return;
                 }
@@ -125,7 +125,7 @@ public class ReactionroleCommand implements Command {
 
                     statement1.executeUpdate();
 
-                    event.reply("THe role configured for this emoji in the reaction role has been cleared.").setEphemeral(true).queue();
+                    event.reply("\u2705 - The role configured for this emoji in the reaction role has been cleared.").setEphemeral(true).queue();
                 }
                 connection.close();
             } catch (SQLException e) {

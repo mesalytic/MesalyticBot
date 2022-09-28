@@ -38,27 +38,27 @@ public class TTTCommand implements Command {
     @Override
     public void execute(SlashCommandInteractionEvent event) {
         if (event.getOption("opponent") == null) {
-            event.reply("You must ping someone! `/tictactoe opponent`").setEphemeral(true).queue();
+            event.reply("\u274C - You must ping someone! `/tictactoe opponent`").setEphemeral(true).queue();
             return;
         }
 
         if (Objects.requireNonNull(event.getOption("opponent")).getAsUser() == event.getUser()) {
-            event.reply("You cannot play against yourself!").setEphemeral(true).queue();
+            event.reply("\u274C - You cannot play against yourself!").setEphemeral(true).queue();
             return;
         }
 
         if (Objects.requireNonNull(event.getOption("opponent")).getAsUser().isBot()) {
-            event.reply("You cannot play against a bot!").setEphemeral(true).queue();
+            event.reply("\u274C - You cannot play against a bot!").setEphemeral(true).queue();
             return;
         }
 
-        if (boards.containsKey(event.getChannel().getIdLong())) event.reply("A game is already currently running.").setEphemeral(true).queue();
+        if (boards.containsKey(event.getChannel().getIdLong())) event.reply("\u274C - A game is already currently running.").setEphemeral(true).queue();
         else {
             players.put(event.getChannel().getIdLong(), new long[]{Objects.requireNonNull(event.getMember()).getIdLong(), Objects.requireNonNull(event.getOption("opponent")).getAsUser().getIdLong() });
 
             User opponent = Objects.requireNonNull(event.getOption("opponent")).getAsUser();
 
-            event.reply(opponent.getAsMention() + ", would you like to play tictactoe against " + Objects.requireNonNull(event.getMember()).getAsMention() + " ?")
+            event.reply("<a:hourglass:800978295562174492> - " + opponent.getAsMention() + ", would you like to play tictactoe against " + Objects.requireNonNull(event.getMember()).getAsMention() + " ?")
                     .addActionRow(
                             Button.primary("tictactoeAccept", "Accept"),
                             Button.danger("tictactoeRefuse", "Refuse")

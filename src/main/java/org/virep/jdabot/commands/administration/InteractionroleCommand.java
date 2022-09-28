@@ -41,12 +41,12 @@ public class InteractionroleCommand implements Command {
                 .setGuildOnly(true)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MANAGE_SERVER))
                 .addSubcommandGroups(
-                        new SubcommandGroupData("button", "Configure buttons interactions that'll give roles.")
+                        new SubcommandGroupData("button", "Configure buttons interactions that will give roles when interacting.")
                                 .addSubcommands(
                                         new SubcommandData("set", "Set buttons to the specified message.")
                                                 .addOptions(
                                                         new OptionData(OptionType.STRING, "messageid", "The ID of the message that the button will be added.", true),
-                                                        new OptionData(OptionType.ROLE, "role", "The role that'll be given.", true),
+                                                        new OptionData(OptionType.ROLE, "role", "The role that will be given when interacting with the button.", true),
                                                         new OptionData(OptionType.STRING, "name", "The name for the button.", true)
                                                 ),
                                         new SubcommandData("remove", "Remove buttons from the specified message.")
@@ -56,7 +56,7 @@ public class InteractionroleCommand implements Command {
                                                 ),
                                         new SubcommandData("list", "List roles that corresponds to interaction buttons.")
                                 ),
-                        new SubcommandGroupData("selectmenu", "Configure selection menus that'll give roles.")
+                        new SubcommandGroupData("selectmenu", "Configure selection menus that will give roles when interacting.")
                                 .addSubcommands(
                                         new SubcommandData("set", "Set select menus to the specified message.")
                                                 .addOptions(
@@ -94,7 +94,7 @@ public class InteractionroleCommand implements Command {
     @Override
     public void execute(SlashCommandInteractionEvent event) {
         if (!event.getMember().hasPermission(Permission.MANAGE_SERVER)) {
-            event.reply("You do not have permission to use this command.").setEphemeral(true).queue();
+            event.reply("\u274C - You do not have permission to use this command.").setEphemeral(true).queue();
             return;
         }
 
@@ -129,7 +129,7 @@ public class InteractionroleCommand implements Command {
 
                                 connection.close();
 
-                                event.reply("Sucessfully set up the message. Here is the messageID that you'll need to configure things up: `" + message.getId() + "`").queue();
+                                event.reply("\u2705 - Sucessfully set up the message. Here is the messageID that you'll need to configure things up: `" + message.getId() + "`").queue();
                             } catch (SQLException e) {
                                 ErrorManager.handle(e, event);
                             }
@@ -143,7 +143,7 @@ public class InteractionroleCommand implements Command {
                     ResultSet result = statement.executeQuery();
 
                     if (!result.first()) {
-                        event.reply("This message ID is either invalid or does not corresponds to a message linked to Interaction Roles.").setEphemeral(true).queue();
+                        event.reply("\u274C - This message ID is either invalid or does not corresponds to a message linked to Interaction Roles.").setEphemeral(true).queue();
                         connection.close();
                         return;
                     }
@@ -154,7 +154,7 @@ public class InteractionroleCommand implements Command {
                     channel.retrieveMessageById(event.getOption("messageid").getAsString()).queue(msg -> {
                         msg.editMessage(event.getOption("text").getAsString()).queue();
 
-                        event.reply("The message has been successfully edited!").queue();
+                        event.reply("\u2705 - The message has been successfully edited!").queue();
                     });
                 } catch (SQLException e) {
                     ErrorManager.handle(e, event);
@@ -170,7 +170,7 @@ public class InteractionroleCommand implements Command {
                     ResultSet result = statement.executeQuery();
 
                     if (!result.first()) {
-                        event.reply("You don't have any roles linked.").setEphemeral(true).queue();
+                        event.reply("\u274C - You don't have any roles linked.").setEphemeral(true).queue();
                         connection.close();
                         return;
                     }
@@ -200,7 +200,7 @@ public class InteractionroleCommand implements Command {
                     ResultSet result = statement.executeQuery();
 
                     if (!result.first()) {
-                        event.reply("You don't have any roles linked.").setEphemeral(true).queue();
+                        event.reply("\u274C - You don't have any roles linked.").setEphemeral(true).queue();
                         connection.close();
                         return;
                     }
@@ -247,7 +247,7 @@ public class InteractionroleCommand implements Command {
 
                             channel.retrieveMessageById(messageID).queue(msg -> {
                                 if (!msg.getActionRows().isEmpty() && msg.getActionRows().get(0).getComponents().get(0).getType().equals(Component.Type.SELECT_MENU)) {
-                                    event.reply("Only one Component Row is supposed to be on a message. Please create a new message or remove the configured selection menu.").setEphemeral(true).queue();
+                                    event.reply("\u274C - Only one Component Row is supposed to be on a message. Please create a new message or remove the configured selection menu.").setEphemeral(true).queue();
 
                                     try {
                                         connection.close();
@@ -271,10 +271,10 @@ public class InteractionroleCommand implements Command {
                                                 Button.primary("interactionrole:" + event.getGuild().getId() + ":" + role.getId(), buttonName)
                                         ).queue();
 
-                                        event.reply("Sucessfully added the button for the " + role.getAsMention() + " role.").queue();
+                                        event.reply("\u2705 - Sucessfully added the button for the " + role.getAsMention() + " role.").queue();
                                     } else {
                                         if (msg.getButtons().size() >= 5) {
-                                            event.reply("You cannot put more than 5 buttons on a message. Please create a new message or remove a button.").setEphemeral(true).queue();
+                                            event.reply("\u274C - You cannot put more than 5 buttons on a message. Please create a new message or remove a button.").setEphemeral(true).queue();
                                             connection.close();
                                             return;
                                         }
@@ -285,7 +285,7 @@ public class InteractionroleCommand implements Command {
                                         buttons.add(Button.primary("interactionrole:" + event.getGuild().getId() + ":" + role.getId(), buttonName));
 
                                         msg.editMessageComponents().setActionRow(buttons).queue();
-                                        event.reply("Sucessfully added the button for the " + role.getAsMention() + " role.").queue();
+                                        event.reply("\u2705 - Sucessfully added the button for the " + role.getAsMention() + " role.").queue();
                                     }
                                 } catch (SQLException e) {
                                     ErrorManager.handle(e, event);
@@ -318,7 +318,7 @@ public class InteractionroleCommand implements Command {
 
                             channel.retrieveMessageById(messageID).queue(msg -> {
                                 if (!msg.getActionRows().isEmpty() && msg.getActionRows().get(0).getComponents().get(0).getType().equals(Component.Type.BUTTON)) {
-                                    event.reply("Only one Component Row is supposed to be on a message. Please create a new message or remove the configured button.").setEphemeral(true).queue();
+                                    event.reply("\u274C - Only one Component Row is supposed to be on a message. Please create a new message or remove the configured button.").setEphemeral(true).queue();
 
                                     try {
                                         connection.close();
@@ -358,7 +358,7 @@ public class InteractionroleCommand implements Command {
                                                         .build()
                                         ).queue();
 
-                                        event.reply("Sucessfully created selection menu!").queue();
+                                        event.reply("\u2705 - The Selection Menu has been successfully created!").queue();
                                     } else {
                                         ActionRow actionRow = msg.getActionRows().get(0);
                                         SelectMenu selectMenu = (SelectMenu) actionRow.getComponents().get(0);
@@ -368,7 +368,7 @@ public class InteractionroleCommand implements Command {
 
                                         msg.editMessageComponents().setActionRow(builder.build()).queue();
 
-                                        event.reply("Successfuly updated the selection menu!").queue();
+                                        event.reply("\u2705 - The Selection Menu has been successfully updated!").queue();
                                     }
                                 } catch (SQLException e) {
                                     ErrorManager.handle(e, event);
@@ -419,13 +419,13 @@ public class InteractionroleCommand implements Command {
                                         if (buttons.isEmpty()) msg.editMessageComponents().setComponents().queue();
                                         else msg.editMessageComponents().setComponents(ActionRow.of(buttons)).queue();
 
-                                        event.reply("Successfully removed the button.").queue();
+                                        event.reply("\u2705 - The button has successfully been removed.").queue();
                                     });
                                 }
                             }
                         }
                     } else {
-                        event.reply("This message is not from an InteractionRole enabled channel.").setEphemeral(true).queue();
+                        event.reply("\u274C - This message is not from an InteractionRole enabled channel.").setEphemeral(true).queue();
                     }
                     connection.close();
                 } catch (SQLException e) {
@@ -475,13 +475,13 @@ public class InteractionroleCommand implements Command {
                                             msg.editMessageComponents().setActionRow(newMenu).queue();
                                         }
 
-                                        event.reply("Successfully removed selection from the select menu!").queue();
+                                        event.reply("\u2705 - The selection has been successfully removed from the Selection Menu !").queue();
                                     });
                                 }
                             }
                         }
                     } else {
-                        event.reply("This message is not from an InteractionRole enabled channel.").setEphemeral(true).queue();
+                        event.reply("\u274C - This message is not from an InteractionRole enabled channel.").setEphemeral(true).queue();
                     }
                     connection.close();
                 } catch (SQLException e) {

@@ -32,7 +32,7 @@ public class AutoroleCommand implements Command {
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MANAGE_SERVER))
                 .addSubcommands(
                         new SubcommandData("add", "Add a role to autorole")
-                                .addOption(OptionType.ROLE, "role", "Role that will be given automatically to new members.", true),
+                                .addOption(OptionType.ROLE, "role", "The role that will be given automatically to new members.", true),
                         new SubcommandData("remove", "Removes any role that has been configured from autorole")
                 );
     }
@@ -48,7 +48,7 @@ public class AutoroleCommand implements Command {
 
         assert member != null;
         if (!member.hasPermission(Permission.MANAGE_SERVER)) {
-            event.reply("You do not have permission to use this command.").setEphemeral(true).queue();
+            event.reply("\u274C - You do not have permission to use this command.").setEphemeral(true).queue();
             return;
         }
 
@@ -65,7 +65,7 @@ public class AutoroleCommand implements Command {
 
                         updateStatement.executeUpdate();
 
-                        event.reply("The role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " has been added to the autorole !").setEphemeral(true).queue();
+                        event.reply("\u2705 - The role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " has been added to the autorole !").setEphemeral(true).queue();
                     }
                 } else {
                     try (PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO autorole (roleID, guildID) VALUES (?,?)")) {
@@ -74,7 +74,7 @@ public class AutoroleCommand implements Command {
 
                         insertStatement.executeUpdate();
 
-                        event.reply("The role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " has been added to the autorole !").setEphemeral(true).queue();
+                        event.reply("\u2705 - The role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " has been added to the autorole !").setEphemeral(true).queue();
                     }
                 }
                 connection.close();
@@ -88,7 +88,7 @@ public class AutoroleCommand implements Command {
                 ResultSet result = statement.executeQuery();
 
                 if (!result.first()) {
-                    event.reply("No role has been configured for the autorole.").setEphemeral(true).queue();
+                    event.reply("\u274C - No role has been configured for the autorole.").setEphemeral(true).queue();
                     return;
                 }
 
@@ -97,7 +97,7 @@ public class AutoroleCommand implements Command {
 
                     insertStatement.executeUpdate();
 
-                    event.reply("Roles configured for the autorole have been cleared.").setEphemeral(true).queue();
+                    event.reply("\u2705 - Roles configured for the autorole have been cleared.").setEphemeral(true).queue();
                 }
                 connection.close();
             } catch (SQLException e) {

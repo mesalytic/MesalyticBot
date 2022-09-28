@@ -39,13 +39,13 @@ public class RandomCommand implements Command {
         if (subcommandName.equals("coinflip")) {
             String[] sides = {"heads", "tails"};
 
-            event.replyFormat("It landed on...** %s **!", sides[(int) Math.floor(Math.random() * sides.length)]).queue();
+            event.replyFormat("\uD83E\uDE99 - It landed on...** %s **!", sides[(int) Math.floor(Math.random() * sides.length)]).queue();
         }
 
         if (subcommandName.equals("dice")) {
             int maxValue = event.getOption("maxvalue") != null ? Objects.requireNonNull(event.getOption("maxvalue")).getAsInt() : 6;
 
-            event.replyFormat("The dice returned...** %d **!", (int)randomInt(maxValue)).queue();
+            event.replyFormat("\uD83C\uDFB2 - The dice returned...** %d **!", (int)randomInt(maxValue)).queue();
         }
     }
 

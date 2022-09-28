@@ -72,7 +72,7 @@ public class MessageCommand implements Command {
 
         assert member != null;
         if (!member.hasPermission(Permission.MANAGE_SERVER)) {
-            event.reply("You do not have permission to use this command.").setEphemeral(true).queue();
+            event.reply("\u274C - You do not have permission to use this command.").setEphemeral(true).queue();
             return;
         }
 
@@ -93,7 +93,7 @@ public class MessageCommand implements Command {
 
                             statement1.executeUpdate();
 
-                            event.reply("The " + group + " message has been successfully replaced.").queue();
+                            event.reply("\u2705 - The " + group + " message has been successfully replaced.").queue();
                         }
                     } else {
                         try (PreparedStatement statement1 = connection.prepareStatement("UPDATE " + group + "messages SET message = ?, channelID = ? WHERE guildID = ?")) {
@@ -103,7 +103,7 @@ public class MessageCommand implements Command {
 
                             statement1.executeUpdate();
 
-                            event.reply("The " + group + " message has been successfully replaced.").queue();
+                            event.reply("\u2705 - The " + group + " message has been successfully replaced.").queue();
                         }
                     }
                 } else {
@@ -116,7 +116,7 @@ public class MessageCommand implements Command {
 
                             connection.close();
 
-                            event.reply("The " + group + " message has been successfully added.").queue();
+                            event.reply("\u2705 - The " + group + " message has been successfully added.").queue();
                             return;
                         }
                     } else {
@@ -127,7 +127,7 @@ public class MessageCommand implements Command {
 
                             statement1.executeUpdate();
 
-                            event.reply("The " + group + " message has been successfully added.").queue();
+                            event.reply("\u2705 - The " + group + " message has been successfully added.").queue();
                         }
                     }
                 }
@@ -145,7 +145,7 @@ public class MessageCommand implements Command {
                 ResultSet result = statement.executeQuery();
 
                 if (!result.first()) {
-                    event.reply("You don't have a " + group + " message set up. Set it up using `/message " + group + " set`").setEphemeral(true).queue();
+                    event.reply("\u274C - You don't have a " + group + " message set up. Set it up using `/message " + group + " set`").setEphemeral(true).queue();
                     return;
                 }
 
@@ -154,7 +154,7 @@ public class MessageCommand implements Command {
 
                     statement1.executeUpdate();
 
-                    event.reply("The " + group + " message has been successfully removed.").queue();
+                    event.reply("\u2705 - The " + group + " message has been successfully removed.").queue();
                 }
                 connection.close();
             } catch (SQLException e) {
@@ -245,7 +245,7 @@ public class MessageCommand implements Command {
                 }
             }
 
-            event.reply("Tested successfully.").setEphemeral(true).queue();
+            event.reply("\u2705 - The message has successfully been tested.").setEphemeral(true).queue();
         }
     }
 }

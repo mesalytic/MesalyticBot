@@ -57,7 +57,7 @@ public class ActivityCommand implements Command {
     public void execute(SlashCommandInteractionEvent event) {
 
         if (!event.getMember().getVoiceState().inAudioChannel()) {
-            event.reply("You must be in a voice channel.").setEphemeral(true).queue();
+            event.reply("\u274C - You must be in a voice channel.").setEphemeral(true).queue();
             return;
         }
 
@@ -88,14 +88,14 @@ public class ActivityCommand implements Command {
             JSONObject activitiesObject = new JSONObject(tokener);
 
             if (!activitiesObject.has(event.getOption("application").getAsString())) {
-                event.reply("This activity somehow doesn't exist, please report the error.").queue();
+                event.reply("\u274C - This activity somehow doesn't exist, please report the error.").queue();
                 return;
             }
 
             JSONObject activityObject = activitiesObject.getJSONObject(event.getOption("application").getAsString());
 
             if (event.getGuild().getBoostTier().getKey() < activityObject.getInt("boostLevel")) {
-                event.reply("You must be at least Boost Level 1 to start this event.").setEphemeral(true).queue();
+                event.reply("\u274C - You must be at least Boost Level 1 to start this event.").setEphemeral(true).queue();
                 return;
             }
 

@@ -43,35 +43,35 @@ public class BanCommand implements Command {
     @Override
     public void execute(SlashCommandInteractionEvent event) {
         if (!event.getMember().hasPermission(Permission.BAN_MEMBERS)) {
-            event.reply("You do not have permission to use this command.").setEphemeral(true).queue();
+            event.reply("\u274C - You do not have permission to use this command.").setEphemeral(true).queue();
             return;
         }
         ErrorHandler errorHandler = new ErrorHandler()
                 .handle(EnumSet.of(ErrorResponse.MISSING_PERMISSIONS),
-                        (ex) -> event.reply("The specified member cannot be banned, because of permission discrepancy.").setEphemeral(true).queue())
+                        (ex) -> event.reply("\u274C - The specified member cannot be banned, because of permission discrepancy.").setEphemeral(true).queue())
                 .handle(EnumSet.of(ErrorResponse.UNKNOWN_USER),
-                        (ex) -> event.reply("The specified member cannot be banned, as they are no longer in the server.").setEphemeral(true).queue());
+                        (ex) -> event.reply("\u274C - The specified member cannot be banned, as they are no longer in the server.").setEphemeral(true).queue());
 
         Member member = event.getOption("user", OptionMapping::getAsMember);
         String reason = event.getOption("reason") != null ? event.getOption("reason").getAsString() : "Banned by " + event.getUser().getAsTag() + ": No reason provided";
         String delTimeString = event.getOption("delete") != null ? event.getOption("delete", OptionMapping::getAsString) : "0s";
 
         if (member.getId().equals(event.getMember().getId())) {
-            event.reply("You cannot ban yourself.").setEphemeral(true).queue();
+            event.reply("\u274C - You cannot ban yourself.").setEphemeral(true).queue();
             return;
         }
         
         if (member.isOwner()) {
-            event.reply("The specified member cannot be banned, because they are the server owner.").setEphemeral(true).queue();
+            event.reply("\u274C - The specified member cannot be banned, because they are the server owner.").setEphemeral(true).queue();
             return;
         }
 
         if (!event.getMember().canInteract(member)) {
-            event.reply("The specified member cannot be banned, because of the member has a higher permission position.").setEphemeral(true).queue();
+            event.reply("\u274C - The specified member cannot be banned, because of the member has a higher permission position.").setEphemeral(true).queue();
             return;
         }
 
         member.ban(Utils.timeStringToSeconds(delTimeString), TimeUnit.SECONDS).reason(reason)
-                .queue(success -> event.reply("Member **" + member.getUser().getAsTag() + "** has been banned. (Reason: **" + reason + "**)").queue(), errorHandler);
+                .queue(success -> event.reply("The member **" + member.getUser().getAsTag() + "** has been banned. (Reason: **" + reason + "**)").queue(), errorHandler);
     }
 }

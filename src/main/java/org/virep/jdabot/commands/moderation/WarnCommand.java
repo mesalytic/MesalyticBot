@@ -94,7 +94,7 @@ public class WarnCommand implements Command {
     @Override
     public void execute(SlashCommandInteractionEvent event) {
         if (!event.getMember().hasPermission(Permission.MODERATE_MEMBERS)) {
-            event.reply("You do not have permission to use this command.").setEphemeral(true).queue();
+            event.reply("\u274C - You do not have permission to use this command.").setEphemeral(true).queue();
             return;
         }
 
@@ -103,11 +103,11 @@ public class WarnCommand implements Command {
 
         ErrorHandler errorHandler = new ErrorHandler()
                 .handle(EnumSet.of(ErrorResponse.MISSING_PERMISSIONS),
-                        (ex) -> event.getChannel().sendMessage("The warn event could not happen because of permission discrepancy.").queue())
+                        (ex) -> event.getChannel().sendMessage("\u274C - The warn event could not happen because of permission discrepancy.").queue())
                 .handle(EnumSet.of(ErrorResponse.UNKNOWN_USER),
-                        (ex) -> event.getChannel().sendMessage("The warn event could not happen because the member already left the server.").queue())
+                        (ex) -> event.getChannel().sendMessage("\u274C - The warn event could not happen because the member already left the server.").queue())
                 .handle(EnumSet.of(ErrorResponse.UNKNOWN_MEMBER),
-                        (ex) -> event.getChannel().sendMessage("The warn event could not happen because the member already left the server.").queue());
+                        (ex) -> event.getChannel().sendMessage("\u274C - The warn event could not happen because the member already left the server.").queue());
 
         if (group != null && group.equals("config")) {
             try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM warn_config WHERE guildID = ?")) {
@@ -122,7 +122,7 @@ public class WarnCommand implements Command {
                             int timeout = Utils.timeStringToSeconds(event.getOption("duration", OptionMapping::getAsString));
 
                             if (timeout > Member.MAX_TIME_OUT_LENGTH * 86400) {
-                                event.reply("The time duration you specified is above 28 days (2419200 seconds), please specify a lower time duration.").setEphemeral(true).queue();
+                                event.reply("\u274C - The time duration you specified is above 28 days (2419200 seconds), please specify a lower time duration.").setEphemeral(true).queue();
                                 connection.close();
                                 return;
                             }
@@ -134,7 +134,7 @@ public class WarnCommand implements Command {
 
                                 updateStatement.executeUpdate();
 
-                                event.reply("Members will now be timed-out if they have **" + amount + "** warns for **" + event.getOption("duration", OptionMapping::getAsString) + "**").queue();
+                                event.reply("\u2705 - Members will now be timed-out if they have **" + amount + "** warns for **" + event.getOption("duration", OptionMapping::getAsString) + "**").queue();
                             }
                             break;
                         }
@@ -147,7 +147,7 @@ public class WarnCommand implements Command {
 
                                 updateStatement.executeUpdate();
 
-                                event.reply("Members will now be kicked if they have **" + amount + "** warns").queue();
+                                event.reply("\u2705 - Members will now be kicked if they have **" + amount + "** warns").queue();
                             }
                             break;
                         }
@@ -160,7 +160,7 @@ public class WarnCommand implements Command {
 
                                 updateStatement.executeUpdate();
 
-                                event.reply("Members will now be banned if they have **" + amount + "** warns").queue();
+                                event.reply("\u2705 - Members will now be banned if they have **" + amount + "** warns").queue();
                             }
                             break;
                         }
@@ -172,7 +172,7 @@ public class WarnCommand implements Command {
 
                                 updateStatement.executeUpdate();
 
-                                event.reply("Warns will now be logged in " + channel.getAsMention()).queue();
+                                event.reply("\u2705 - Warns will now be logged in " + channel.getAsMention()).queue();
                             }
                         }
                     }
@@ -187,13 +187,13 @@ public class WarnCommand implements Command {
 
                     switch (subcommand) {
                         case "timeout" ->
-                                insertString = "Members will now be timed-out if they have **" + timeoutAmount + "** warns for **" + event.getOption("timeout_duration", OptionMapping::getAsString) + "**";
+                                insertString = "\u2705 - Members will now be timed-out if they have **" + timeoutAmount + "** warns for **" + event.getOption("timeout_duration", OptionMapping::getAsString) + "**";
                         case "kick" ->
-                                insertString = "Members will now be kicked if they have **" + kickAmount + "** warns";
+                                insertString = "\u2705 - Members will now be kicked if they have **" + kickAmount + "** warns";
                         case "ban" ->
-                                insertString = "Members will now be banned if they have **" + banAmount + "** warns";
+                                insertString = "\u2705 - Members will now be banned if they have **" + banAmount + "** warns";
                         case "channel" ->
-                                insertString = "Warns will now be logged in " + event.getOption("channel", OptionMapping::getAsChannel).getAsMention();
+                                insertString = "\u2705 - Warns will now be logged in " + event.getOption("channel", OptionMapping::getAsChannel).getAsMention();
                     }
 
                     try (PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO warn_config (guildID, channelID, timeout, timeout_duration, kick, ban) VALUES (?,?,?,?,?,?)")) {
@@ -311,7 +311,7 @@ public class WarnCommand implements Command {
                     }
                 }
 
-                event.reply("**" + member.getUser().getAsTag() + "** has been warned for the following reason : **" + reason + "**").queue();
+                event.reply("\u2705 - **" + member.getUser().getAsTag() + "** has been warned for the following reason : **" + reason + "**").queue();
 
                 try (PreparedStatement insertReasonStatement = connection.prepareStatement("INSERT INTO warn_reasons (guildID, userID, reason, timestamp) VALUES (?,?,?,?)")) {
                     insertReasonStatement.setString(1, event.getGuild().getId());
@@ -336,7 +336,7 @@ public class WarnCommand implements Command {
                 ResultSet result = statement.executeQuery();
 
                 if (!result.first()) {
-                    event.reply("This user has no warns.").setEphemeral(true).queue();
+                    event.reply("\u274C - This user has no warns.").setEphemeral(true).queue();
                     connection.close();
                     return;
                 }
@@ -385,7 +385,7 @@ public class WarnCommand implements Command {
                 ResultSet amountResult = amountStatement.executeQuery();
 
                 if (!result.first()) {
-                    event.reply("This member has no warns.").setEphemeral(true).queue();
+                    event.reply("\u274C - This member has no warns.").setEphemeral(true).queue();
                     connection.close();
                     return;
                 }
@@ -396,7 +396,7 @@ public class WarnCommand implements Command {
                 result.beforeFirst();
 
                 if (index > resultSize) {
-                    event.reply("The number you specified is over the number of warns this member has.").setEphemeral(true).queue();
+                    event.reply("\u274C - The number you specified is over the number of warns this member has.").setEphemeral(true).queue();
                     connection.close();
                     return;
                 }
@@ -417,7 +417,7 @@ public class WarnCommand implements Command {
                     deleteReasonStatement.executeUpdate();
                     updateAmountStatement.executeUpdate();
 
-                    event.reply("The warn has been successfully removed.").queue();
+                    event.reply("\u2705 - The warn has been successfully removed.").queue();
                 }
                 connection.close();
             } catch (SQLException e) {

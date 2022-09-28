@@ -52,24 +52,24 @@ public class TwitterCommand implements Command {
     @Override
     public void execute(SlashCommandInteractionEvent event) {
         if (!event.getMember().hasPermission(Permission.MANAGE_SERVER)) {
-            event.reply("You do not have permission to use this command.").setEphemeral(true).queue();
+            event.reply("\u274C - You do not have permission to use this command.").setEphemeral(true).queue();
             return;
         }
 
         ErrorHandler errorHandler = new ErrorHandler()
                 .handle(EnumSet.of(ErrorResponse.MISSING_PERMISSIONS),
-                        (ex) -> event.reply("The webhook could not be created because of permission discrepancy.").setEphemeral(true).queue())
+                        (ex) -> event.reply("\u274C - The webhook could not be created because of permission discrepancy.").setEphemeral(true).queue())
                 .handle(EnumSet.of(ErrorResponse.MISSING_ACCESS),
-                        (ex) -> event.reply("The webhook could not be created because the channel is not viewable.").setEphemeral(true).queue())
+                        (ex) -> event.reply("\u274C - The webhook could not be created because the channel is not viewable.").setEphemeral(true).queue())
                 .handle(EnumSet.of(ErrorResponse.MAX_WEBHOOKS),
-                        (ex) -> event.reply("The webhook could not be created, as this channel has reached the maximum webhook limit.").setEphemeral(true).queue());
+                        (ex) -> event.reply("\u274C - The webhook could not be created, as this channel has reached the maximum webhook limit.").setEphemeral(true).queue());
 
         if (event.getSubcommandName().equals("remove")) {
             String twitterUser = event.getOption("account", OptionMapping::getAsString);
 
             DatabaseUtils.removeTwitterWebhook(event.getGuild().getId(), twitterUser);
 
-            event.reply("Twitter Notifier deleted for " + twitterUser).queue();
+            event.reply("\u2705 - The Twitter Notifier for **" + twitterUser + "** has been deleted.").queue();
 
             if (Main.getInstance().getNotifier().isTwitterRegistered(twitterUser)) {
                 Main.getInstance().getNotifier().unregisterTwitterUser(twitterUser);
@@ -81,14 +81,14 @@ public class TwitterCommand implements Command {
             String twitterUser = event.getOption("account", OptionMapping::getAsString);
 
             if (channel.getType() != ChannelType.TEXT) {
-                event.reply("Please specify a TEXT channel.").setEphemeral(true).queue();
+                event.reply("\u274C - You need to specify a text channel.").setEphemeral(true).queue();
                 return;
             }
 
             channel.asTextChannel().createWebhook("Twitter Notifier (" + twitterUser + ")").queue(webhook -> {
                 DatabaseUtils.addTwitterWebhook(channel.getId(), event.getGuild().getId(), webhook.getUrl(), twitterUser);
 
-                event.reply("Twitter Notifier created for " + twitterUser).queue();
+                event.reply("\u2705 - The Twitter Notifier for **" + twitterUser + "** has been successfully created.").queue();
 
                 if (Main.getInstance().getNotifier().isTwitterRegistered(twitterUser)) {
                     Main.getInstance().getNotifier().registerTwitterUser(twitterUser);

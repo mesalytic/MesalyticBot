@@ -57,7 +57,7 @@ public class MuteCommand implements Command {
     @Override
     public void execute(SlashCommandInteractionEvent event) {
         if (!Objects.requireNonNull(event.getMember()).hasPermission(Permission.KICK_MEMBERS)) {
-            event.reply("You do not have permission to use this command.").setEphemeral(true).queue();
+            event.reply("\u274C - You do not have permission to use this command.").setEphemeral(true).queue();
             return;
         }
 
@@ -66,9 +66,9 @@ public class MuteCommand implements Command {
 
         ErrorHandler errorHandler = new ErrorHandler()
                 .handle(EnumSet.of(ErrorResponse.MISSING_PERMISSIONS),
-                        (ex) -> event.reply("The specified member cannot be timed out, because of permission discrepancy.").setEphemeral(true).queue())
+                        (ex) -> event.reply("\u274C - The specified member cannot be timed out, because of permission discrepancy.").setEphemeral(true).queue())
                 .handle(EnumSet.of(ErrorResponse.UNKNOWN_MEMBER),
-                        (ex) -> event.reply("The specified member cannot be timed out, as they are no longer in the server.").setEphemeral(true).queue());
+                        (ex) -> event.reply("\u274C - The specified member cannot be timed out, as they are no longer in the server.").setEphemeral(true).queue());
 
         OptionMapping reasonMapping = event.getOption("reason");
 
@@ -80,17 +80,17 @@ public class MuteCommand implements Command {
             int duration = timeStringToSeconds(durationMapping.getAsString());
 
             if (duration == -1) {
-                event.reply("The duration you specified is invalid. Example: `1d 3h 30m 13s`").setEphemeral(true).queue();
+                event.reply("\u274C - The duration you specified is invalid. Example: `1d 3h 30m 13s`").setEphemeral(true).queue();
                 return;
             }
 
             member.timeoutFor(duration, TimeUnit.SECONDS).reason("Muted by " + event.getUser().getAsTag() + ": " + (reasonMapping != null ? reasonMapping.getAsString() : "No reason specified."))
-                    .queue(success -> event.reply("Member **" + member.getUser().getAsTag() + "** has been timed out for **" + secondsToSeperatedTime(duration) + "** !").queue(), errorHandler);
+                    .queue(success -> event.reply("\u2705 - Member **" + member.getUser().getAsTag() + "** has been timed out for **" + secondsToSeperatedTime(duration) + "** !").queue(), errorHandler);
         } else {
 
             if (member.isTimedOut()) {
                 member.removeTimeout().reason("Unmuted by " + event.getUser().getAsTag() + ": " + (reasonMapping != null ? reasonMapping.getAsString() : "No reason specified."))
-                        .queue(success -> event.reply("Member **" + member.getUser().getAsTag() + "** has been un-timed out. !").queue(), errorHandler);
+                        .queue(success -> event.reply("\u2705 - Member **" + member.getUser().getAsTag() + "** has been un-timed out. !").queue(), errorHandler);
             }
         }
     }

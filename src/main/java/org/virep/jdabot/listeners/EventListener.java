@@ -337,7 +337,7 @@ public class EventListener extends ListenerAdapter {
 
                 if ((timestamp - Instant.now().getEpochSecond()) * 1000L < 0) {
                     user.openPrivateChannel().queue(dm -> {
-                        dm.sendMessage("\uD83D\uDD59 - " + remindName).queue();
+                        dm.sendMessage("\uD83D\uDD59 - Reminder for: **" + remindName + "**").queue();
 
                         try (Connection connection1 = Database.getConnection(); PreparedStatement removeStatement = connection1.prepareStatement("DELETE FROM remind WHERE userID = ? AND name = ?")) {
                             removeStatement.setString(1, userID);
