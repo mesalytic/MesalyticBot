@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virep.jdabot.commands.general.RemindCommand;
 import org.virep.jdabot.database.Database;
-import org.virep.jdabot.lavaplayer.GuildAudioManager;
 import org.virep.jdabot.utils.Config;
 import org.virep.jdabot.utils.ErrorManager;
 
@@ -48,17 +47,6 @@ public class GatewayEventListener extends ListenerAdapter {
         JDA jda = event.getJDA();
 
         if (jda.getStatus() != JDA.Status.SHUTTING_DOWN) {
-            jda.getGuilds().forEach(g -> {
-                AudioManager manager = g.getAudioManager();
-                manager.getConnectionStatus();
-                if (manager.getConnectionStatus() == ConnectionStatus.CONNECTED) {
-                    g.getAudioManager().closeAudioConnection();
-
-                    GuildAudioManager gam = new GuildAudioManager(g);
-                    gam.getPlayer().getLink().destroy();
-
-                }
-            });
             jda.shutdown();
         }
 

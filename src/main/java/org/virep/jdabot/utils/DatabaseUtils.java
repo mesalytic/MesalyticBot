@@ -152,7 +152,7 @@ public class DatabaseUtils {
     }
 
     public static void removeTwitterWebhook(String guildID, String twitterName) {
-        Guild guild = Main.PublicJDA.getGuildById(guildID);
+        Guild guild = Main.jda.getGuildById(guildID);
 
 
         guild.retrieveWebhooks().queue(webhooks -> {

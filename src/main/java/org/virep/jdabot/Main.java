@@ -33,17 +33,20 @@ public class Main {
     static Main instance;
 
     Notifier notifier;
+    public static JDA jda;
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws Exception {
         instance = new Main();
         instance.notifier = new Notifier();
 
+
+
         Database.initializeDataSource();
 
         String devStatus = System.getProperty("dev");
 
-        JDA api = JDABuilder
+        jda = JDABuilder
                 .createDefault(Config.get(Boolean.parseBoolean(devStatus) ? "TOKENBETA" : "TOKEN"))
                 .enableIntents(GatewayIntent.GUILD_MEMBERS,
                         GatewayIntent.GUILD_MESSAGES,
@@ -67,9 +70,9 @@ public class Main {
 
 
 
-        SlashHandler slashHandler = new SlashHandler(api);
+        SlashHandler slashHandler = new SlashHandler(jda);
 
-        api.addEventListener(new SlashListener(slashHandler));
+        jda.addEventListener(new SlashListener(slashHandler));
 
         slashHandler.addCommands();
         log.info("Slash Commands registered");
