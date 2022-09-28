@@ -33,8 +33,6 @@ public class Main {
     static Main instance;
 
     Notifier notifier;
-    public static JDA PublicJDA = null;
-
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws Exception {
@@ -53,8 +51,7 @@ public class Main {
                         GatewayIntent.GUILD_MESSAGE_REACTIONS,
                         GatewayIntent.GUILD_VOICE_STATES)
                 .setActivity(Activity.of(ActivityType.PLAYING, "We Are Back"))
-                .addEventListeners(lavalink,
-                        new LogsListener(),
+                .addEventListeners(new LogsListener(),
                         new GatewayEventListener(),
                         new InteractionRoleListener(),
                         new GuildMessageListener(),
@@ -64,7 +61,6 @@ public class Main {
                         new SelectMenuInteractionListener(),
                         new ButtonInteractionListener())
                 .setBulkDeleteSplittingEnabled(false)
-                .setVoiceDispatchInterceptor(lavalink.getVoiceInterceptor())
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .setChunkingFilter(ChunkingFilter.ALL)
                 .enableCache(CacheFlag.VOICE_STATE).build().awaitReady();
@@ -80,19 +76,7 @@ public class Main {
 
         instance.notifier.registerTwitterUser(DatabaseUtils.getAllTwitterNames());
         log.info("Twitter Notifiers set up");
-
-        lavalink.setAutoReconnect(true);
-        lavalink.addNode(URI.create(Config.get("LAVALINKURI")), Config.get("LAVALINKPWD"));
-
-        PublicJDA = api;
-        log.info("Lavalink Connected");
     }
-
-    public static final JdaLavalink lavalink = new JdaLavalink(
-            "816407992505073725",
-            1,
-            integer -> PublicJDA
-    );
 
     public static Main getInstance() {
         if (instance == null) {
