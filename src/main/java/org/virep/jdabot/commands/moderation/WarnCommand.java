@@ -217,6 +217,26 @@ public class WarnCommand implements Command {
             Member member = event.getOption("user", OptionMapping::getAsMember);
             String reason = event.getOption("reason") != null ? event.getOption("reason", OptionMapping::getAsString) : "No reason specified";
 
+            if (member.isOwner()) {
+                event.reply("\u274C - You cannot warn the owner of this server.").setEphemeral(true).queue();
+                return;
+            }
+
+            if (member.getId().equals(event.getMember().getId())) {
+                event.reply("\u274C - You cannot warn yourself.").setEphemeral(true).queue();
+                return;
+            }
+
+            if (member.getUser().isBot()) {
+                event.reply("\u274C - You cannot warn a bot user.").setEphemeral(true).queue();
+                return;
+            }
+
+            if (member.hasPermission(Permission.MODERATE_MEMBERS)) {
+                event.reply("\u274C - You cannot warn this user because they are a moderator.").setEphemeral(true).queue();
+                return;
+            }
+
             try (Connection connection = Database.getConnection();
                  PreparedStatement amountStatement = connection.prepareStatement("SELECT * FROM warn_amount WHERE guildID = ? AND userID = ?");
                  PreparedStatement configStatement = connection.prepareStatement("SELECT * FROM warn_config WHERE guildID = ?")) {
