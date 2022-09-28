@@ -2,11 +2,19 @@ package org.virep.jdabot.lavaplayer;
 
 import lavalink.client.player.IPlayer;
 import lavalink.client.player.LavalinkPlayer;
+import lavalink.client.player.event.PlayerEvent;
 import lavalink.client.player.event.PlayerEventListenerAdapter;
+import lavalink.client.player.event.PlayerPauseEvent;
+import lavalink.client.player.event.PlayerResumeEvent;
+import lavalink.client.player.event.TrackEndEvent;
+import lavalink.client.player.event.TrackExceptionEvent;
+import lavalink.client.player.event.TrackStartEvent;
+import lavalink.client.player.event.TrackStuckEvent;
 import lavalink.client.player.track.AudioTrack;
 import lavalink.client.player.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import org.virep.jdabot.utils.ErrorManager;
 import org.virep.jdabot.utils.Utils;
 import org.virep.jdabot.schedulers.ScheduleHandler;
 import org.virep.jdabot.schedulers.jobs.VoiceTimeoutJob;
@@ -85,6 +93,7 @@ public class TrackScheduler extends PlayerEventListenerAdapter {
         player.playTrack(track);
     }
 
+
     @Override
     public void onTrackStart(IPlayer player, AudioTrack track) {
         channel.sendMessageFormat("\u25B6 - Now playing : **%s** (`%s`)", track.getInfo().getTitle(), Utils.formatTrackLength(track.getInfo().getLength())).queue();
@@ -100,6 +109,22 @@ public class TrackScheduler extends PlayerEventListenerAdapter {
                 queue.offer(track);
             }
             nextTrack();
+        }
+    }
+
+
+
+    @Override
+    public void onEvent(PlayerEvent event) {
+        if (event instanceof TrackExceptionEvent) {
+            Throwable exception = ((TrackExceptionEvent) event).getException();
+
+            ErrorManager.handleNoEvent(exception);
+            channel.sendMessage("An error has occured while playing the music : `" + exception.getMessage() + "`").queue();
+        } else if (event instanceof TrackStuckEvent) {
+
+            channel.sendMessage("The music got somehow stuck.").queue();
+            System.out.println(((TrackStuckEvent) event).getTrack().getInfo().getTitle());
         }
     }
 
