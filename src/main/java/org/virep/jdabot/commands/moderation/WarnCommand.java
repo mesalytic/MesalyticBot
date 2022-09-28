@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.unions.GuildChannelUnion;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.exceptions.ErrorHandler;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -15,6 +16,9 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandGroupData;
+import net.dv8tion.jda.api.requests.ErrorResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.virep.jdabot.database.Database;
 import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.utils.ErrorManager;
@@ -26,10 +30,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
+import java.util.EnumSet;
 import java.util.concurrent.TimeUnit;
 
 
 public class WarnCommand implements Command {
+    private static final Logger log = LoggerFactory.getLogger(WarnCommand.class);
     @Override
     public String getName() {
         return "warn";
@@ -94,6 +100,14 @@ public class WarnCommand implements Command {
 
         String group = event.getSubcommandGroup();
         String subcommand = event.getSubcommandName();
+
+        ErrorHandler errorHandler = new ErrorHandler()
+                .handle(EnumSet.of(ErrorResponse.MISSING_PERMISSIONS),
+                        (ex) -> event.getChannel().sendMessage("The warn event could not happen because of permission discrepancy.").queue())
+                .handle(EnumSet.of(ErrorResponse.UNKNOWN_USER),
+                        (ex) -> event.getChannel().sendMessage("The warn event could not happen because the member already left the server.").queue())
+                .handle(EnumSet.of(ErrorResponse.UNKNOWN_MEMBER),
+                        (ex) -> event.getChannel().sendMessage("The warn event could not happen because the member already left the server.").queue());
 
         if (group != null && group.equals("config")) {
             try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM warn_config WHERE guildID = ?")) {
@@ -228,11 +242,11 @@ public class WarnCommand implements Command {
                             int amount = amountResult.getInt("amount");
 
                             if (amount + 1 >= configResult.getInt("ban"))
-                                member.ban(0, TimeUnit.SECONDS).reason("Automatic ban due to warns : " + reason);
+                                member.ban(0, TimeUnit.SECONDS).reason("Automatic ban due to warns : " + reason).queue(success -> log.info("banned due to warn"), errorHandler);
                             else if (amount + 1 >= configResult.getInt("kick"))
-                                member.kick().reason("Automatic kick due to warns : " + reason);
+                                member.kick().reason("Automatic kick due to warns : " + reason).queue(success -> log.info("kicked due to warn"), errorHandler);
                             else if (amount + 1 >= configResult.getInt("timeout"))
-                                member.timeoutFor(configResult.getInt("timeout_duration"), TimeUnit.SECONDS).reason("Automatic timeout due to warns : " + reason);
+                                member.timeoutFor(configResult.getInt("timeout_duration"), TimeUnit.SECONDS).reason("Automatic timeout due to warns : " + reason).queue(success -> log.info("timed out due to warn"), errorHandler);
 
                             if (configResult.getString("channelID") != null) {
                                 TextChannel channel = event.getGuild().getTextChannelById(configResult.getString("channelID"));
