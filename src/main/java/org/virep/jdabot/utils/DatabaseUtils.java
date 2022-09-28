@@ -161,7 +161,7 @@ public class DatabaseUtils {
             });
         });
 
-        try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("DELETE FROM twitterNotifier WHERE guildID = ? AND twitterAccount = ?")) {
+        try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("DELETE FROM twitternotifier WHERE guildID = ? AND twitterAccount = ?")) {
             statement.setString(1, guildID);
             statement.setString(2, twitterName);
 
