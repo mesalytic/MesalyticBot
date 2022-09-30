@@ -54,7 +54,7 @@ public class ColorCommand implements Command {
 
         try {
             Request request = new Request.Builder()
-                    .url("https://api.mesavirep.xyz/color?input=" + (matcher.matches() ? String.format("%06x", Integer.parseInt(hexCode, 16)) : hexCode))
+                    .url("https://api.mesavirep.xyz/v1color?input=" + (matcher.matches() ? String.format("%06x", Integer.parseInt(hexCode, 16)) : hexCode))
                     .build();
 
             Response res = client.newCall(request).execute();
