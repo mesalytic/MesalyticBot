@@ -54,7 +54,8 @@ public class Main {
                         GatewayIntent.GUILD_MESSAGE_REACTIONS,
                         GatewayIntent.GUILD_VOICE_STATES)
                 .setActivity(Activity.of(ActivityType.PLAYING, "We Are Back"))
-                .addEventListeners(new LogsListener(),
+                .addEventListeners(lavalink,
+                        new LogsListener(),
                         new GatewayEventListener(),
                         new InteractionRoleListener(),
                         new GuildMessageListener(),
@@ -64,11 +65,10 @@ public class Main {
                         new SelectMenuInteractionListener(),
                         new ButtonInteractionListener())
                 .setBulkDeleteSplittingEnabled(false)
+                .setVoiceDispatchInterceptor(lavalink.getVoiceInterceptor())
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .setChunkingFilter(ChunkingFilter.ALL)
                 .enableCache(CacheFlag.VOICE_STATE).build().awaitReady();
-
-
 
         SlashHandler slashHandler = new SlashHandler(jda);
 
@@ -79,7 +79,16 @@ public class Main {
 
         instance.notifier.registerTwitterUser(DatabaseUtils.getAllTwitterNames());
         log.info("Twitter Notifiers set up");
+
+        lavalink.setAutoReconnect(true);
+        lavalink.addNode(URI.create(Config.get("LAVALINKURI")), Config.get("LAVALINKPWD"));
     }
+
+    public static final JdaLavalink lavalink = new JdaLavalink(
+            "816407992505073725",
+            1,
+            integer -> jda
+    );
 
     public static Main getInstance() {
         if (instance == null) {

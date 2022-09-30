@@ -9,6 +9,8 @@ import net.dv8tion.jda.api.utils.AttachedFile;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.virep.jdabot.commands.games.TTTCommand;
 import org.virep.jdabot.commands.moderation.BansCommand;
+import org.virep.jdabot.music.AudioManagerController;
+import org.virep.jdabot.music.GuildAudioManager;
 
 import javax.annotation.Nonnull;
 import java.time.Instant;
@@ -70,6 +72,29 @@ public class ButtonInteractionListener extends ListenerAdapter {
 
                 event.editMessageEmbeds(embedBuilder.build()).queue();
             });
+        }
+
+        if ("queueFull".equals(button.getId())) {
+            GuildAudioManager guildAudioManager = AudioManagerController.getGuildAudioManager(event.getGuild());
+
+            StringBuilder queueBuilder = new StringBuilder();
+            AtomicInteger counter = new AtomicInteger();
+
+            guildAudioManager.getScheduler().queue.forEach(audioTrack -> {
+                counter.getAndIncrement();
+                queueBuilder
+                        .append("\n")
+                        .append("[")
+                        .append(counter.get())
+                        .append("] ")
+                        .append(audioTrack.getInfo().getTitle())
+                        .append(" - ")
+                        .append(audioTrack.getInfo().getAuthor());
+            });
+
+            FileUpload file = AttachedFile.fromData(queueBuilder.toString().getBytes(), "queue.txt");
+
+            event.replyFiles(file).setEphemeral(true).queue();
         }
 
         if ("tictactoeAccept".equals(button.getId())) {
