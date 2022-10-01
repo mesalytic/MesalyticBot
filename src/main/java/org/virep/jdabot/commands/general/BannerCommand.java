@@ -1,4 +1,4 @@
-package org.virep.jdabot.commands.infos;
+package org.virep.jdabot.commands.general;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
@@ -32,8 +32,8 @@ public class BannerCommand implements Command {
 
     @Override
     public SlashCommandData getCommandData() {
-        return Commands.slash(getName(), "Get the banner of a user (either global or guild-specific).")
-                .setDescriptionLocalization(DiscordLocale.FRENCH, "Récupèrer la bannière de quelqu'un (globale ou serveur).")
+        return Commands.slash(getName(), "Get the banner of a user.")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Récupèrer la bannière de quelqu'un.")
                 .addOptions(
                         new OptionData(OptionType.USER, "user", "The user you want to see the banner")
                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Le membre auquel vous voulez voir la bannière"),
