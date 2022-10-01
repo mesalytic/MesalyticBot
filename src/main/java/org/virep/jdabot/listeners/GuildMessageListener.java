@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import org.virep.jdabot.database.Database;
 import org.virep.jdabot.utils.ErrorManager;
 
@@ -38,7 +39,8 @@ public class GuildMessageListener extends ListenerAdapter {
                         .replace("%USER%", event.getMember().getAsMention())
                         .replace("%USERNAME%", event.getUser().getAsTag())
                         .replace("%SERVERNAME%", event.getGuild().getName())
-                        .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))).queue();
+                        .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))
+                ).addActionRow(Button.secondary("sentfromguild", "Sent from " + guild.getName()).asDisabled()).queue();
             }
         } catch (SQLException e) {
             ErrorManager.handleNoEvent(e);

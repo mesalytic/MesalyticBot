@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.*;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import org.virep.jdabot.database.Database;
 import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.utils.ErrorManager;
@@ -236,7 +237,8 @@ public class MessageCommand implements Command {
                                     .replace("%USER%", event.getMember().getAsMention())
                                     .replace("%USERNAME%", event.getUser().getAsTag())
                                     .replace("%SERVERNAME%", event.getGuild().getName())
-                                    .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))).queue();
+                                    .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))
+                            ).addActionRow(Button.secondary("sentfromguild", "Sent from " + event.getGuild().getName()).asDisabled()).queue();
                         });
                     }
 
