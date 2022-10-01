@@ -47,7 +47,8 @@ public class ActivityCommand implements Command {
                                 new Choice("SpellCast (Boost Level 1)", "852509694341283871"),
                                 new Choice("Checkers In The Park (Boost Level 1)", "832013003968348200"),
                                 new Choice("Blazing 8s (Boost Level 1)", "832025144389533716"),
-                                new Choice("Land-io (Boost Level 1)", "903769130790969345")
+                                new Choice("Land-io (Boost Level 1)", "903769130790969345"),
+                                new Choice("Bash Out (Boost Level 1)", "1006584476094177371")
                 ));
     }
 
