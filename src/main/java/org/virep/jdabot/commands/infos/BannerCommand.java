@@ -3,6 +3,7 @@ package org.virep.jdabot.commands.infos;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -32,9 +33,12 @@ public class BannerCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Get the banner of a user (either global or guild-specific).")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Récupèrer la bannière de quelqu'un (globale ou serveur).")
                 .addOptions(
-                        new OptionData(OptionType.USER, "user", "The user you want to see the banner"),
+                        new OptionData(OptionType.USER, "user", "The user you want to see the banner")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le membre auquel vous voulez voir la bannière"),
                         new OptionData(OptionType.BOOLEAN, "color", "Shows the color of the banner.")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Montre la couleur par défaut de la bannière.")
                 );
     }
 

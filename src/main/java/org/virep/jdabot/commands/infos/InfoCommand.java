@@ -5,9 +5,11 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.virep.jdabot.slashcommandhandler.Command;
@@ -27,11 +29,17 @@ public class InfoCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Displays info about a user or the server.")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Affiche des informations à propos d'un membre ou du serveur.")
                 .setGuildOnly(true)
                 .addSubcommands(
                         new SubcommandData("user", "Info about a user.")
-                                .addOption(OptionType.USER, "user", "The user you want to see info about."),
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Affiche les informations à propos d'un membre.")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "The user you want to see info about.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le membre auquel vous voulez avoir des informations.")
+                                ),
                         new SubcommandData("server", "Info about the server")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Affiche les informations à propos du serveur.")
                 );
     }
 

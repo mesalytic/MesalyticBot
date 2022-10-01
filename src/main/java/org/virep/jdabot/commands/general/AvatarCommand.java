@@ -3,9 +3,11 @@ package org.virep.jdabot.commands.general;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.virep.jdabot.slashcommandhandler.Command;
 
@@ -18,8 +20,13 @@ public class AvatarCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Displays the avatar for the specified user.")
-                .addOption(OptionType.USER, "user", "The user to display.")
-                .addOption(OptionType.BOOLEAN, "guild", "Display guild profile picture");
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Affiche votre avatar ou celui d'un membre")
+                .addOptions(
+                        new OptionData(OptionType.USER, "user", "The user to display.")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le membre a afficher l'avatar"),
+                        new OptionData(OptionType.BOOLEAN, "guild", "Display guild profile picture")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Afficher l'avatar serveur.")
+                );
     }
 
     @Override

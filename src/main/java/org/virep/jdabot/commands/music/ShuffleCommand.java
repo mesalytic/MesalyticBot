@@ -4,6 +4,7 @@ package org.virep.jdabot.commands.music;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.virep.jdabot.music.AudioManagerController;
@@ -23,6 +24,7 @@ public class ShuffleCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Shuffles the queue")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Mélange la file actuelle.")
                 .setGuildOnly(true);
     }
 

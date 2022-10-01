@@ -1,9 +1,11 @@
 package org.virep.jdabot.commands.general;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.utils.MarkdownSanitizer;
@@ -29,10 +31,16 @@ public class AfkCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Let people know you're AFK when they ping you.")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Informez les gens que vous êtes AFK quand ils vous mentionnent.")
                 .addSubcommands(
                         new SubcommandData("set", "Set your AFK status.")
-                                .addOption(OptionType.STRING, "message", "Your AFK message.", true),
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Mettez votre statut AFK.")
+                                .addOptions(
+                                        new OptionData(OptionType.STRING, "message", "Your AFK message.", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le message du statut AFK.")
+                                ),
                         new SubcommandData("remove", "Remove your AFK status.")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Retire le statut AFK.")
                 );
     }
 

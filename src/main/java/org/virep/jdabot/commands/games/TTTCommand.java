@@ -4,8 +4,10 @@ import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import org.virep.jdabot.slashcommandhandler.Command;
@@ -26,8 +28,12 @@ public class TTTCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Play TicTacToe with your friends!")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Jouez au Morpion avec vos amis !")
                 .setGuildOnly(true)
-                .addOption(OptionType.USER, "opponent", "The member you want to play against");
+                .addOptions(
+                        new OptionData(OptionType.USER, "opponent", "The member you want to play against")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le membre que vous voulez jouez contre.")
+                );
     }
 
     @Override

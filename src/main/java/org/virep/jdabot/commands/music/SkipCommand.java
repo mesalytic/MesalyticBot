@@ -3,6 +3,7 @@ package org.virep.jdabot.commands.music;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -24,9 +25,12 @@ public class SkipCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Skips the currently playing music.")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Passe la musique actuelle.")
                 .setGuildOnly(true)
                 .addOptions(
-                        new OptionData(OptionType.INTEGER, "index", "Index of the music.").setMinValue(1)
+                        new OptionData(OptionType.INTEGER, "index", "Index of the music.")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Index de la musique à jouer")
+                                .setMinValue(1)
                 );
     }
 

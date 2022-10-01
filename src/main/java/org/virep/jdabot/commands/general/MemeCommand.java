@@ -3,9 +3,11 @@ package org.virep.jdabot.commands.general;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -27,7 +29,11 @@ public class MemeCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Returns a random meme from Reddit.")
-                .addOption(OptionType.STRING, "subreddit", "The subreddit you want to see memes from.");
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Envoie un meme aléatoire venant de Reddit.")
+                .addOptions(
+                        new OptionData(OptionType.STRING, "subreddit", "The subreddit you want to see memes from.")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le subreddit auquel vous voulez voir des memes")
+                );
     }
 
     @Override

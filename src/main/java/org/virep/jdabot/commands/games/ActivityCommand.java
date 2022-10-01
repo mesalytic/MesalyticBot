@@ -3,6 +3,7 @@ package org.virep.jdabot.commands.games;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.Command.Choice;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -28,8 +29,10 @@ public class ActivityCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Launch a voice channel activity.")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Lance une activité dans un salon vocal.")
                 .setGuildOnly(true)
                 .addOptions(new OptionData(OptionType.STRING, "application", "Choose the activity you want !", true)
+                        .setDescriptionLocalization(DiscordLocale.FRENCH, "Choisissez l'activité que vous voulez !")
                         .addChoices(
                                 new Choice("Watch Together", "880218394199220334"),
                                 new Choice("Sketch Heads", "902271654783242291"),

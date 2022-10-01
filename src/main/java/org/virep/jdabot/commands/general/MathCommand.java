@@ -3,8 +3,10 @@ package org.virep.jdabot.commands.general;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
@@ -43,12 +45,22 @@ public class MathCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Interact with mathematical expressions.")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Interagissez avec des expressions mathématiques")
                 .addSubcommands(
-                        new SubcommandData("solve", "solve equations")
-                                .addOption(OptionType.STRING, "equation", "the equation to solve", true),
-                        new SubcommandData("parse", "parse equations")
-                                .addOption(OptionType.STRING, "equation", "the equation to solve", true),
+                        new SubcommandData("solve", "Solve equations")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Résolvez des équations.")
+                                .addOptions(
+                                        new OptionData(OptionType.STRING, "equation", "The equation to solve. Use /math list to see the functions/operators.", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "L'équation a résoudre. Utilisez /math list pour la liste des fonctions/signes.")
+                                ),
+                        new SubcommandData("parse", "Parse equations to LaTeX formatted images")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Retranscrire une équation en une image LaTeX.")
+                                .addOptions(
+                                        new OptionData(OptionType.STRING, "equation", "The equation to parse", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "L'équation a retranscrire")
+                                ),
                         new SubcommandData("list", "List of built-in functions and operators")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Liste des fonctions/signes disponibles")
                 );
     }
 

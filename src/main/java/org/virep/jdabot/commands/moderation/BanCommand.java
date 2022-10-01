@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.exceptions.ErrorHandler;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -26,12 +27,16 @@ public class BanCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Ban a user.")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Bannir un membre.")
                 .setGuildOnly(true)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.BAN_MEMBERS))
                 .addOptions(
-                        new OptionData(OptionType.USER, "user", "The User to ban.", true),
-                        new OptionData(OptionType.STRING, "reason", "The reason of the ban."),
-                        new OptionData(OptionType.STRING, "delete", "Amount of time delete messages. (max 7)")
+                        new OptionData(OptionType.USER, "user", "The User to ban.", true)
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le membre a bannir."),
+                        new OptionData(OptionType.STRING, "reason", "The reason of the ban.")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "La raison du bannissement."),
+                        new OptionData(OptionType.STRING, "delete", "Amount of time delete messages. (between 0 seconds - 7 days)")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le temps de suppression des messages. (entre 0 secondes - 7 jours)")
                 );
     }
 

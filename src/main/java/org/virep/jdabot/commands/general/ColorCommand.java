@@ -3,9 +3,11 @@ package org.virep.jdabot.commands.general;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -32,7 +34,11 @@ public class ColorCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Get informations about a color (specific or random)")
-                .addOption(OptionType.STRING, "color", "Specify a specific color (name or hex code)");
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Affiche les informations a propos d'une couleur (spécifique ou aléatoire)")
+                .addOptions(
+                        new OptionData(OptionType.STRING, "color", "Specify a specific color (name or hex code)")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Spécifier une couleur (nom ou code hexadécimal)")
+                );
     }
 
     @Override

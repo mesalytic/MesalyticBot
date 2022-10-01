@@ -4,10 +4,12 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
@@ -29,12 +31,18 @@ public class LogsCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Lets you configure the logging system.")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Configure le système de logs.")
                 .setGuildOnly(true)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MANAGE_SERVER))
                 .addSubcommands(
-                        new SubcommandData("events", "Select the events you want to be logged."),
+                        new SubcommandData("events", "Select the events you want to be logged.")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Selectionner les évenements que vous voulez log."),
                         new SubcommandData("channel", "Configure the log channel.")
-                                .addOption(OptionType.CHANNEL, "channel", "The log channel", true)
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Configure le salon de log.")
+                                .addOptions(
+                                        new OptionData(OptionType.CHANNEL, "channel", "The log channel", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le salon de log.")
+                                )
                 );
     }
 

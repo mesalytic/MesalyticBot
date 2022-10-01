@@ -3,6 +3,7 @@ package org.virep.jdabot.commands.music;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.virep.jdabot.music.AudioManagerController;
@@ -22,6 +23,7 @@ public class ClearQueueCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Clears the current queue.")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Vide la file actuelle.")
                 .setGuildOnly(true);
     }
 

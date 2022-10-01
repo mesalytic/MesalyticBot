@@ -1,6 +1,7 @@
 package org.virep.jdabot.commands.general;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -35,16 +36,25 @@ public class RemindCommand implements Command {
 
     @Override
     public SlashCommandData getCommandData() {
-        return Commands.slash(getName(), "Remind you about stuff")
+        return Commands.slash(getName(), "Lets you configure reminders.")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Permets de configurer des rappels.")
                 .addSubcommands(
                         new SubcommandData("set", "Set a reminder")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Configurer un rappel.")
                                 .addOptions(
-                                        new OptionData(OptionType.STRING, "content", "Content to remind about", true),
+                                        new OptionData(OptionType.STRING, "content", "Content to remind about", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "L'évènement à rappeler."),
                                         new OptionData(OptionType.STRING, "when", "When to remind about", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Au bout de combien de temps faut-il envoyer le rappel?")
                                 ),
                         new SubcommandData("remove", "Remove a reminder")
-                                .addOption(OptionType.INTEGER, "index", "The index of the reminder", true),
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Retire un rappel.")
+                                .addOptions(
+                                        new OptionData(OptionType.INTEGER, "index", "The index of the reminder", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "La position du rappel.")
+                                ),
                         new SubcommandData("list", "Lists your reminders.")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Liste vos rappels.")
                 );
     }
 

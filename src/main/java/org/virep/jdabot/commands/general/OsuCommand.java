@@ -2,6 +2,7 @@ package org.virep.jdabot.commands.general;
 
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -32,14 +33,18 @@ public class OsuCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Gets stats from Osu!")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Obtenez des stats venant d'osu!")
                 .addOptions(
-                        new OptionData(OptionType.STRING, "username", "The username of the profile", true),
-                        new OptionData(OptionType.STRING, "mode", "The game mode.", true).addChoices(
-                                new net.dv8tion.jda.api.interactions.commands.Command.Choice("Standard", "osu"),
-                                new net.dv8tion.jda.api.interactions.commands.Command.Choice("Taiko", "taiko"),
-                                new net.dv8tion.jda.api.interactions.commands.Command.Choice("Mania", "mania"),
-                                new net.dv8tion.jda.api.interactions.commands.Command.Choice("Catch The Beat", "ctb")
-                        )
+                        new OptionData(OptionType.STRING, "username", "The username of the profile", true)
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le nom d'utilisateur du profil"),
+                        new OptionData(OptionType.STRING, "mode", "The game mode.", true)
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le mode de jeu")
+                                .addChoices(
+                                    new net.dv8tion.jda.api.interactions.commands.Command.Choice("Standard", "osu"),
+                                    new net.dv8tion.jda.api.interactions.commands.Command.Choice("Taiko", "taiko"),
+                                    new net.dv8tion.jda.api.interactions.commands.Command.Choice("Mania", "mania"),
+                                    new net.dv8tion.jda.api.interactions.commands.Command.Choice("Catch The Beat", "ctb")
+                                )
                 );
     }
 

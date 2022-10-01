@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.unions.GuildChannelUnion;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.exceptions.ErrorHandler;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -28,19 +29,26 @@ public class TwitterCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Receive Twitter notifications !")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Recevez des notifications Twitter !")
                 .setGuildOnly(true)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MANAGE_SERVER))
                 .addSubcommands(
                         new SubcommandData("add", "Add a Twitter account to Twitter Notifier")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Ajoute un compte Twitter aux Notifications Twitter")
                                 .addOptions(
-                                        new OptionData(OptionType.CHANNEL, "channel", "The channel to receive notifications.", true),
+                                        new OptionData(OptionType.CHANNEL, "channel", "The channel to receive notifications.", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le salon qui recevra les notifications."),
                                         new OptionData(OptionType.STRING, "account", "The account that should be retrieved.", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le compte Twitter qui doit être ajouté.")
                                 ),
                         new SubcommandData("remove", "Remove an account from Twitter Notifier")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Retire un compte des Notifications Twitter")
                                 .addOptions(
                                         new OptionData(OptionType.STRING, "account", "The account that should be removed.", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le compte Twitter qui doit être retiré.")
                                 ),
                         new SubcommandData("list", "List all accounts configured in the server for Twitter Notifier.")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Liste les comptes configurés aux Notifications Twitter sur le serveur.")
                 );
     }
 

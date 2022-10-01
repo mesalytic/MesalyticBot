@@ -4,6 +4,7 @@ import lavalink.client.player.LavalinkPlayer;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -26,9 +27,11 @@ public class SeekCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Change the position of the currently playing music.")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Permets d'avancer ou de reculer dans une musique.")
                 .setGuildOnly(true)
                 .addOptions(
                         new OptionData(OptionType.STRING, "time", "Time to seek to. (format H:M:S or M:S)", true)
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Temps à avancer (format H:M:S ou M:S)")
                 );
     }
 

@@ -4,6 +4,7 @@ import lavalink.client.player.LavalinkPlayer;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -24,9 +25,13 @@ public class VolumeCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Changes volume for the current queue.")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Change le volume de la musique pour la file actuelle.")
                 .setGuildOnly(true)
                 .addOptions(
                         new OptionData(OptionType.INTEGER, "value", "Volume value", true)
+                                .setMinValue(0)
+                                .setMaxValue(100)
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Volume a modifier (entre 0 et 100)")
                 );
     }
 

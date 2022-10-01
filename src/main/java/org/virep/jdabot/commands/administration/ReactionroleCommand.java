@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.entities.emoji.EmojiUnion;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -29,21 +30,31 @@ public class ReactionroleCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Configure roles that are given when clicking on a reaction.")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Configure des rôles qui sont donnés lors d'un clic sur une réaction")
                 .setGuildOnly(true)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MANAGE_SERVER))
                 .addSubcommands(
                         new SubcommandData("add", "Add roles to the reaction role.")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Ajoute des rôles pour le Reaction Role")
                                 .addOptions(
-                                        new OptionData(OptionType.STRING, "messageid", "The ID of the message that users will interact on.", true),
-                                        new OptionData(OptionType.CHANNEL, "channel", "The channel that contains the message.", true),
-                                        new OptionData(OptionType.ROLE, "role", "The role that users will obtain.", true),
+                                        new OptionData(OptionType.STRING, "messageid", "The ID of the message that users will interact on.", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "L'ID du message auquel les membres vont intéragir"),
+                                        new OptionData(OptionType.CHANNEL, "channel", "The channel that contains the message.", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le salon qui contient le message"),
+                                        new OptionData(OptionType.ROLE, "role", "The role that users will obtain.", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le rôle que les membres vont obtenir."),
                                         new OptionData(OptionType.STRING, "emoji", "The emoji that users will interact with.", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "L'emoji que les membres vont intéragir avec.")
                                 ),
                         new SubcommandData("remove", "Removes roles from the reaction role.")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Retire un rôle du Reaction Role")
                                 .addOptions(
-                                        new OptionData(OptionType.STRING, "messageid", "The ID of the message that users will interact on.", true),
-                                        new OptionData(OptionType.CHANNEL, "channel", "The channel that contains the message.", true),
+                                        new OptionData(OptionType.STRING, "messageid", "The ID of the message that users will interact on.", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "L'ID du message auquel les membres vont intéragir"),
+                                        new OptionData(OptionType.CHANNEL, "channel", "The channel that contains the message.", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le salon qui contient le message"),
                                         new OptionData(OptionType.STRING, "emoji", "The emoji that users will interact with.", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "L'emoji que les membres intéragissent avec.")
                                 )
                 );
     }

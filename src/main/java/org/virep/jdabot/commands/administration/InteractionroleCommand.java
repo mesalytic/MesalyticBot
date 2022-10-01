@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.entities.channel.unions.GuildChannelUnion;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.entities.emoji.EmojiUnion;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -38,49 +39,78 @@ public class InteractionroleCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Configure roles that can be given for specific actions.")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Configure des rôles qui peuvent être données après une intéraction.")
                 .setGuildOnly(true)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MANAGE_SERVER))
                 .addSubcommandGroups(
                         new SubcommandGroupData("button", "Configure buttons interactions that will give roles when interacting.")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Configure des intéractions boutons qui donneront des rôles")
                                 .addSubcommands(
                                         new SubcommandData("set", "Set buttons to the specified message.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Configure des boutons pour le message spécifié")
                                                 .addOptions(
-                                                        new OptionData(OptionType.STRING, "messageid", "The ID of the message that the button will be added.", true),
-                                                        new OptionData(OptionType.ROLE, "role", "The role that will be given when interacting with the button.", true),
+                                                        new OptionData(OptionType.STRING, "messageid", "The ID of the message that the button will be added.", true)
+                                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "L'ID du message auquel le bouton sera ajouté."),
+                                                        new OptionData(OptionType.ROLE, "role", "The role that will be given when interacting with the button.", true)
+                                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le rôle qui sera donné après avoir intéragi avec le bouton"),
                                                         new OptionData(OptionType.STRING, "name", "The name for the button.", true)
+                                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le nom du bouton")
                                                 ),
                                         new SubcommandData("remove", "Remove buttons from the specified message.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Retire des boutons du message spécifié")
                                                 .addOptions(
-                                                        new OptionData(OptionType.STRING, "messageid", "The ID of the message that the button will be removed.", true),
+                                                        new OptionData(OptionType.STRING, "messageid", "The ID of the message that the button will be removed.", true)
+                                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "L'ID du message auquel le bouton sera retiré."),
                                                         new OptionData(OptionType.ROLE, "role", "The role that corresponds to the button.", true)
+                                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le rôle qui corresponds au bouton retiré.")
                                                 ),
                                         new SubcommandData("list", "List roles that corresponds to interaction buttons.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Liste les rôles qui correspondent a toutes les intéractions boutons")
                                 ),
                         new SubcommandGroupData("selectmenu", "Configure selection menus that will give roles when interacting.")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Configure des menus de selections qui donneront des rôles")
                                 .addSubcommands(
                                         new SubcommandData("set", "Set select menus to the specified message.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Ajoute des menus de sélections a un message.")
                                                 .addOptions(
-                                                        new OptionData(OptionType.STRING, "messageid", "The ID of the message that the select menu will be added or updated.", true),
-                                                        new OptionData(OptionType.ROLE, "role", "The role that will be added to the select menu", true),
-                                                        new OptionData(OptionType.STRING, "name", "Name of the select option", true),
-                                                        new OptionData(OptionType.STRING, "description", "Description of the select option"),
+                                                        new OptionData(OptionType.STRING, "messageid", "The ID of the message that the select menu will be added or updated.", true)
+                                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "L'ID du message auquel le menu de sélection sera ajouté ou mis a jour."),
+                                                        new OptionData(OptionType.ROLE, "role", "The role that will be added to the select menu", true)
+                                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le rôle qui sera ajouté au menu de sélection"),
+                                                        new OptionData(OptionType.STRING, "name", "Name of the select option", true)
+                                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Nom de l'option de sélection"),
+                                                        new OptionData(OptionType.STRING, "description", "Description of the select option")
+                                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Description de l'option de sélection"),
                                                         new OptionData(OptionType.STRING, "emoji", "Emoji of the select option")
+                                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Emoji de l'option de sélection")
                                                 ),
                                         new SubcommandData("remove", "Remove selection menu or roles from the select menu from the specified message.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Retire le menu de sélection ou une option lié au message")
                                                 .addOptions(
-                                                        new OptionData(OptionType.STRING, "messageid", "The ID of the message that the select menu will be removed or updated.", true),
+                                                        new OptionData(OptionType.STRING, "messageid", "The ID of the message that the select menu will be removed or updated.", true)
+                                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "L'ID du message auquel le menu de sélection ou l'option sera retiré"),
                                                         new OptionData(OptionType.ROLE, "role", "The role that will be removed from the select menu", true)
+                                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le rôle qui sera retiré du menu de sélection")
                                                 ),
                                         new SubcommandData("list", "List roles that are configured on a selection menu.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "List les rôles qui sont configurés a un menu de sélection")
                                 ),
                         new SubcommandGroupData("message", "Configure messages for Interaction Roles")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Configure des messages pour l'Interaction Role")
                                 .addSubcommands(
                                         new SubcommandData("create", "Create a message on the specified channel.")
-                                                .addOption(OptionType.CHANNEL, "channel", "Channel used for the interaction roles.", true),
-                                        new SubcommandData("edit", "Edit a message from the specified channel.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Créé un message dans le salon spécifié.")
                                                 .addOptions(
-                                                        new OptionData(OptionType.STRING, "messageid", "The ID of the message that you want to edit.", true),
+                                                        new OptionData(OptionType.CHANNEL, "channel", "Channel used for the interaction roles.", true)
+                                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Salon utilisé pour envoyer le message.")
+                                                ),
+                                        new SubcommandData("edit", "Edit a message from the specified channel.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Modifie un message dans un salon spécifié.")
+                                                .addOptions(
+                                                        new OptionData(OptionType.STRING, "messageid", "The ID of the message that you want to edit.", true)
+                                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "L'ID du message que vous voulez modifier."),
                                                         new OptionData(OptionType.STRING, "text", "The content of the edited message.", true)
+                                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le contenu du message a modifier")
                                                 )
                                 )
                 );

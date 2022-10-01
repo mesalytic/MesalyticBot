@@ -1,8 +1,10 @@
 package org.virep.jdabot.commands.general;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -20,9 +22,14 @@ public class RandomCommand implements Command {
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Returns random values for a specific theme.")
                 .addSubcommands(
-                        new SubcommandData("coinflip", "Heads or tails ?"),
+                        new SubcommandData("coinflip", "Heads or tails ?")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Pile ou face ?"),
                         new SubcommandData("dice", "Returns a random number.")
-                                .addOption(OptionType.INTEGER, "maxvalue", "The maximum possible number it will return.")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Donne un chiffre aléatoire")
+                                .addOptions(
+                                        new OptionData(OptionType.INTEGER, "maxvalue", "The maximum possible number it will return.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le chiffre maximum qui puisse être donné.")
+                                )
                 );
     }
 

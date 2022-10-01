@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.unions.GuildChannelUnion;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.exceptions.ErrorHandler;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -48,40 +49,61 @@ public class WarnCommand implements Command {
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MODERATE_MEMBERS))
                 .addSubcommandGroups(
                         new SubcommandGroupData("config", "Configure warns")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Configure le système d'avertissements.")
                                 .addSubcommands(
                                         new SubcommandData("timeout", "Configure the amount of warn needed for a timeout.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Configure le nombre d'avertissement nécéssaires pour une mise en sourdine.")
                                                 .addOptions(
-                                                        new OptionData(OptionType.INTEGER, "timeout_amount", "Warn amount needed for the event to happen.", true).setMinValue(0),
-                                                        new OptionData(OptionType.STRING, "duration", "Timeout duration", true)
+                                                        new OptionData(OptionType.INTEGER, "timeout_amount", "Warn amount needed for a timeout.", true)
+                                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Nombre d'avertissement nécéssaire pour une mise en sourdine.")
+                                                                .setMinValue(0),
+                                                        new OptionData(OptionType.STRING, "duration", "Timeout duration (max 28d)", true)
+                                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Durée de la mise en sourdine (max 28 jours)")
                                                 ),
                                         new SubcommandData("kick", "Configure the amount of warn needed for a kick.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Configure le nombre d'avertissement nécéssaire pour une exclusion.")
                                                 .addOptions(
-                                                        new OptionData(OptionType.INTEGER, "kick_amount", "Warn amount needed for the event to happen.", true).setMinValue(0)
+                                                        new OptionData(OptionType.INTEGER, "kick_amount", "Warn amount needed for a kick.", true)
+                                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Nombre d'avertissement nécéssaire pour une exclusion.")
+                                                                .setMinValue(0)
                                                 ),
                                         new SubcommandData("ban", "Configure the amount of warn needed for a ban.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Configure le nombre d'avertissement nécéssaire pour un bannissement.")
                                                 .addOptions(
-                                                        new OptionData(OptionType.INTEGER, "ban_amount", "Warn amount needed for the event to happen.", true).setMinValue(0)
+                                                        new OptionData(OptionType.INTEGER, "ban_amount", "Warn amount needed for a ban.", true)
+                                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Nombre d'avertissement nécéssaire pour un bannissement.")
+                                                                .setMinValue(0)
                                                 ),
                                         new SubcommandData("channel", "Configure the channel where warns will be logged")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Configure le salon auquel les avertissements seront envoyés.")
                                                 .addOptions(
                                                         new OptionData(OptionType.CHANNEL, "channel", "Channel where warns will be logged", true)
+                                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le salon auquel les avertissements seront envoyés.")
                                                 )
                                 )
                 )
                 .addSubcommands(
                         new SubcommandData("set", "Set a warn to someone")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Donne un avertissement a quelqu'un.")
                                 .addOptions(
-                                        new OptionData(OptionType.USER, "user", "The user to warn.", true),
+                                        new OptionData(OptionType.USER, "user", "The user to warn.", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le membre a avertir."),
                                         new OptionData(OptionType.STRING, "reason", "The reason for the warn.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "La raison de l'avertissement.")
                                 ),
                         new SubcommandData("list", "List all warns from a user")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Liste tous les avertissement d'un membre.")
                                 .addOptions(
                                         new OptionData(OptionType.USER, "user", "The user to view the warns", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le membre à voir les avertissements.")
                                 ),
                         new SubcommandData("remove", "Remove a specific warn from a user")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Retire un avertissement à un membre.")
                                 .addOptions(
-                                        new OptionData(OptionType.USER, "user", "The user to remove the warn", true),
+                                        new OptionData(OptionType.USER, "user", "The user to remove the warn", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le membre auquel l'avertissement sera retiré."),
                                         new OptionData(OptionType.INTEGER, "index", "The index of the warn to remove", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "L'index de l'avertissement à retirer.")
                                 )
                 );
     }

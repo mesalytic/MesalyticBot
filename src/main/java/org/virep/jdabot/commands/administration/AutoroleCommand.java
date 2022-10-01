@@ -3,10 +3,12 @@ package org.virep.jdabot.commands.administration;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.virep.jdabot.database.Database;
@@ -30,10 +32,16 @@ public class AutoroleCommand implements Command {
         return Commands.slash(getName(), "Configure roles that are automatically given to new members.")
                 .setGuildOnly(true)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MANAGE_SERVER))
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Configure des rôles qui seront donnés automatiquement a l'arrivée de membres.")
                 .addSubcommands(
                         new SubcommandData("add", "Add a role to autorole")
-                                .addOption(OptionType.ROLE, "role", "The role that will be given automatically to new members.", true),
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Ajoute un rôle a l'autorole")
+                                .addOptions(
+                                        new OptionData(OptionType.ROLE, "role", "The role that will be given automatically to new members.", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le role qui sera donné automatiquement aux nouveaux membres.")
+                                ),
                         new SubcommandData("remove", "Removes any role that has been configured from autorole")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Retire les rôles qui ont été configurés pour l'autorole.")
                 );
     }
 

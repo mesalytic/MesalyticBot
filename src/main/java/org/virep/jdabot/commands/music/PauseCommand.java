@@ -4,6 +4,7 @@ import lavalink.client.player.LavalinkPlayer;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.virep.jdabot.music.AudioManagerController;
@@ -21,6 +22,7 @@ public class PauseCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Pauses the currently playing music.")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Mets la musique en pause.")
                 .setGuildOnly(true);
     }
 

@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.unions.GuildChannelUnion;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -31,12 +32,19 @@ public class SlowmodeCommand implements Command {
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MANAGE_CHANNEL))
                 .addSubcommands(
                         new SubcommandData("set", "Configure the slowmode duration.")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Configure la durée du slowmode.")
                                 .addOptions(
-                                        new OptionData(OptionType.STRING, "duration", "The slowmode duration. Default is 0 seconds.", true),
+                                        new OptionData(OptionType.STRING, "duration", "The slowmode duration. Default is 0 seconds.", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "La durée du slowmode. (defaut: 0 secondes)"),
                                         new OptionData(OptionType.CHANNEL, "channel", "The channel to configure. Default is interaction channel.", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le salon a mettre sous slowmode. (defaut: ce salon)")
                                 ),
                         new SubcommandData("off", "Disables the slowmode for that specific channel.")
-                                .addOption(OptionType.CHANNEL, "channel", "The channel that has the slowmode.", true)
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Désactive le slowmode.")
+                                .addOptions(
+                                        new OptionData(OptionType.CHANNEL, "channel", "The channel that has the slowmode.", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le salon qui est sous slowmode.")
+                                )
                 );
 
     }

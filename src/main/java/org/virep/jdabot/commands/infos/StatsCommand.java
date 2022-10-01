@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
@@ -23,7 +24,8 @@ public class StatsCommand implements Command {
 
     @Override
     public SlashCommandData getCommandData() {
-        return Commands.slash(getName(), "Retrieve stats about the bot.");
+        return Commands.slash(getName(), "Retrieve stats about the bot.")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Affiche les statistiques à propos du bot");
     }
 
     @Override

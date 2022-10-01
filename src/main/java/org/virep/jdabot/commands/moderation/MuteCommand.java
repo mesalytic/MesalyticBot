@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.exceptions.ErrorHandler;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -32,19 +33,27 @@ public class MuteCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Timeout or un-timeout someone")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Mettre en sourdine un membre.")
                 .setGuildOnly(true)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.KICK_MEMBERS))
                 .addSubcommands(
                         new SubcommandData("set", "Timeout a guild member")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Mettre en sourdine un membre.")
                                 .addOptions(
-                                        new OptionData(OptionType.USER, "member", "The member to timeout", true),
-                                        new OptionData(OptionType.STRING, "duration", "The duration of the timeout.", true),
+                                        new OptionData(OptionType.USER, "member", "The member to timeout", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le membre à mettre en sourdine"),
+                                        new OptionData(OptionType.STRING, "duration", "The duration of the timeout.", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "La durée de la mise en sourdine (maximum 28 jours)"),
                                         new OptionData(OptionType.STRING, "reason", "The reason of the timeout.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "La raison de la mise en sourdine.")
                                 ),
                         new SubcommandData("remove", "Remove a timeout from a guild member")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Retirer une mise en sourdine à un membre.")
                                 .addOptions(
-                                        new OptionData(OptionType.USER, "member", "The member to remove the timeout.", true),
+                                        new OptionData(OptionType.USER, "member", "The member to remove the timeout.", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le membre à retirer la mise en sourdine"),
                                         new OptionData(OptionType.STRING, "reason", "Reason for the timeout removal.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "La raison du retrait de la mise en sourdine.")
                                 )
                 );
     }

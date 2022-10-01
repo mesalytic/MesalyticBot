@@ -3,6 +3,7 @@ package org.virep.jdabot.commands.moderation;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -22,11 +23,14 @@ public class KickCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Kick someone.")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Exclure un membre.")
                 .setGuildOnly(true)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.KICK_MEMBERS))
                 .addOptions(
-                        new OptionData(OptionType.USER, "member", "the member you want to kick", true),
+                        new OptionData(OptionType.USER, "member", "the member you want to kick", true)
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le membre que vous souhaitez exclure."),
                         new OptionData(OptionType.STRING, "reason", "The reason of the kick.")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "La raison de l'exclusion.")
                 );
     }
 

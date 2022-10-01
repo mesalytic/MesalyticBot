@@ -3,8 +3,10 @@ package org.virep.jdabot.commands.general;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import okhttp3.OkHttpClient;
@@ -28,32 +30,81 @@ public class InteractCommand implements Command {
 
     @Override
     public SlashCommandData getCommandData() {
-        return Commands.slash(getName(), "Interact with others")
+        return Commands.slash(getName(), "Interact with others !")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Interagis avec les autres !")
                 .addSubcommands(
                         new SubcommandData("cuddle", "Cuddle someone.")
-                                .addOption(OptionType.USER, "user", "The user you want to interact with."),
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Caline quelqu'un.")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "The user you want to interact with.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le membre avec qui vous voulez intéragir")
+                                ),
                         new SubcommandData("slap", "Slap someone.")
-                                .addOption(OptionType.USER, "user", "The user you want to interact with."),
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Donne une claque a quelqu'un.")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "The user you want to interact with.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le membre avec qui vous voulez intéragir")
+                                ),
                         new SubcommandData("pat", "Pat someone.")
-                                .addOption(OptionType.USER, "user", "The user you want to interact with."),
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Caresse quelqu'un sur la tête.")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "The user you want to interact with.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le membre avec qui vous voulez intéragir")
+                                ),
                         new SubcommandData("feed", "Feed someone.")
-                                .addOption(OptionType.USER, "user", "The user you want to interact with."),
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Nourris quelqu'un.")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "The user you want to interact with.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le membre avec qui vous voulez intéragir")
+                                ),
                         new SubcommandData("hug", "Give a hug to someone.")
-                                .addOption(OptionType.USER, "user", "The user you want to interact with."),
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Fait un calin à quelqu'un.")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "The user you want to interact with.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le membre avec qui vous voulez intéragir")
+                                ),
                         new SubcommandData("kiss", "Give a kiss to someone.")
-                                .addOption(OptionType.USER, "user", "The user you want to interact with."),
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Embrasse quelqu'un.")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "The user you want to interact with.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le membre avec qui vous voulez intéragir")
+                                ),
                         new SubcommandData("tickle", "Tickle someone.")
-                                .addOption(OptionType.USER, "user", "The user you want to interact with."),
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Chatouille quelqu'un.")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "The user you want to interact with.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le membre avec qui vous voulez intéragir")
+                                ),
                         new SubcommandData("bite", "Bite someone.")
-                                .addOption(OptionType.USER, "user", "The user you want to interact with."),
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Mords quelqu'un.")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "The user you want to interact with.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le membre avec qui vous voulez intéragir")
+                                ),
                         new SubcommandData("blush", "Blush at someone.")
-                                .addOption(OptionType.USER, "user", "The user you want to interact with."),
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Rougis à quelqu'un.")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "The user you want to interact with.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le membre avec qui vous voulez intéragir")
+                                ),
                         new SubcommandData("lick", "Lick someone.")
-                                .addOption(OptionType.USER, "user", "The user you want to interact with."),
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Lèche quelqu'un.")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "The user you want to interact with.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le membre avec qui vous voulez intéragir")
+                                ),
                         new SubcommandData("poke", "Poke someone.")
-                                .addOption(OptionType.USER, "user", "The user you want to interact with."),
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Donne un petit coup à quelqu'un.")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "The user you want to interact with.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le membre avec qui vous voulez intéragir")
+                                ),
                         new SubcommandData("smile", "Smile at someone.")
-                                .addOption(OptionType.USER, "user", "The user you want to interact with.")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Souris à quelqu'un.")
+                                .addOptions(
+                                        new OptionData(OptionType.USER, "user", "The user you want to interact with.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le membre avec qui vous voulez intéragir")
+                                )
                 );
     }
 

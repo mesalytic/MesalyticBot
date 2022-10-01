@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.UserSnowflake;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -26,11 +27,14 @@ public class UnbanCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Unban a user.")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Débannir un utilisateur.")
                 .setGuildOnly(true)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.BAN_MEMBERS))
                 .addOptions(
-                        new OptionData(OptionType.STRING, "user", "The user to unban. (User tag or user ID)", true),
+                        new OptionData(OptionType.STRING, "user", "The user to unban. (User tag or user ID)", true)
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "L'utilisateur à débannir. (tag ou ID)"),
                         new OptionData(OptionType.STRING, "reason", "The reason of the unban")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "La raison du débannissement")
                 );
     }
 

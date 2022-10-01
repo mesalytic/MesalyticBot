@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -30,20 +31,33 @@ public class PurgeCommand implements Command {
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MESSAGE_MANAGE))
                 .addSubcommands(
                         new SubcommandData("any", "Delete any message")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Supprimer n'importe quel message.")
                                 .addOptions(
-                                        new OptionData(OptionType.INTEGER, "amount", "The amount of messages to delete (max 100)", true).setMaxValue(100),
+                                        new OptionData(OptionType.INTEGER, "amount", "The amount of messages to delete (max 100)", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le nombre de message a supprimer (max 100)")
+                                                .setMaxValue(100),
                                         new OptionData(OptionType.CHANNEL, "channel", "The channel where to delete the messages.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le salon dans lequel il faut supprimer les messages.")
                                 ),
                         new SubcommandData("bots", "Delete messages from bots (from the latest 500 messages).")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Supprime les messages venant de bots (sur les derniers 500 messages)")
                                 .addOptions(
-                                        new OptionData(OptionType.INTEGER, "amount", "The amount of messages to delete (max 100)", true).setMaxValue(100),
+                                        new OptionData(OptionType.INTEGER, "amount", "The amount of messages to delete (max 100)", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le nombre de message a supprimer (max 100)")
+                                                .setMaxValue(100),
                                         new OptionData(OptionType.CHANNEL, "channel", "The channel where to delete the messages.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le salon dans lequel il faut supprimer les messages.")
                                 ),
                         new SubcommandData("user", "Delete messages from specific user (from the latest 500 messages).")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Supprime les messages venant d'un membre (sur les derniers 500 messages)")
                                 .addOptions(
-                                        new OptionData(OptionType.INTEGER, "amount", "The amount of messages to delete (max 100)", true).setMaxValue(100),
-                                        new OptionData(OptionType.USER, "user", "The author of the messages", true),
+                                        new OptionData(OptionType.INTEGER, "amount", "The amount of messages to delete (max 100)", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le nombre de message a supprimer (max 100)")
+                                                .setMaxValue(100),
+                                        new OptionData(OptionType.USER, "user", "The author of the messages", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "L'auteur des messages."),
                                         new OptionData(OptionType.CHANNEL, "channel", "The channel where to delete the messages.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le salon dans lequel il faut supprimer les messages.")
                                 )
                 );
     }

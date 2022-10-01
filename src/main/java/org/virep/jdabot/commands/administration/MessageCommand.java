@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -26,36 +27,61 @@ public class MessageCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Lets you configure join and leave messages.")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Configure les messages de bienvenue et de départs.")
                 .setGuildOnly(true)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MANAGE_SERVER))
                 .addSubcommandGroups(
                         new SubcommandGroupData("join", "The bot will send a message whenever someone joins the server.")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le bot enverra un message lorsque quelqu'un rejoindra le serveur.")
                                 .addSubcommands(
-                                        new SubcommandData("set", "Configure the join message.").addOptions(
-                                                new OptionData(OptionType.CHANNEL, "channel", "The channel where the message will be sent.", true),
-                                                new OptionData(OptionType.STRING, "message", "The message that will be sent. You can use tags, the list is at /message join tags.", true)
-                                        ),
-                                        new SubcommandData("remove", "Remove the join message."),
-                                        new SubcommandData("tags", "List of tags you can use on your message."),
-                                        new SubcommandData("test", "Test your message !")
+                                        new SubcommandData("set", "Configure the join message.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Configure le message de bienvenue.")
+                                                .addOptions(
+                                                    new OptionData(OptionType.CHANNEL, "channel", "The channel where the message will be sent.", true)
+                                                            .setDescriptionLocalization(DiscordLocale.FRENCH, "Le salon auquel le message sera envoyé."),
+                                                    new OptionData(OptionType.STRING, "message", "The message that will be sent. You can use tags, the list is at /message join tags.", true)
+                                                            .setDescriptionLocalization(DiscordLocale.FRENCH, "Le message qui sera envoyé. Vous pouvez utiliser des tags (/message join tags)")
+                                                ),
+                                        new SubcommandData("remove", "Remove the join message.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Retire le message de bienvenue."),
+                                        new SubcommandData("tags", "List of tags you can use on your message.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Liste des tags que vous pouvez utiliser sur votre message."),
+                                        new SubcommandData("test", "Tests the join message.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Test le message de bienvenue.")
                                 ),
                         new SubcommandGroupData("leave", "The bot will send a message whenever someone leaves the server.")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le bot enverra un message lorsque quelqu'un quittera le serveur.")
                                 .addSubcommands(
-                                        new SubcommandData("set", "Configure the leave message.").addOptions(
-                                                new OptionData(OptionType.CHANNEL, "channel", "The channel where the message will be sent.", true),
-                                                new OptionData(OptionType.STRING, "message", "The message that will be sent. You can use tags, the list is at /message leave tags.", true)
-                                        ),
-                                        new SubcommandData("remove", "Remove the leave message."),
-                                        new SubcommandData("tags", "List of tags you can use on your message."),
+                                        new SubcommandData("set", "Configure the leave message.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Configure le message de départ.")
+                                                .addOptions(
+                                                    new OptionData(OptionType.CHANNEL, "channel", "The channel where the message will be sent.", true)
+                                                            .setDescriptionLocalization(DiscordLocale.FRENCH, "Le salon auquel le message sera envoyé."),
+                                                    new OptionData(OptionType.STRING, "message", "The message that will be sent. You can use tags, the list is at /message leave tags.", true)
+                                                            .setDescriptionLocalization(DiscordLocale.FRENCH, "Le message qui sera envoyé. Vous pouvez utiliser des tags (/message leave tags)")
+                                                ),
+                                        new SubcommandData("remove", "Remove the leave message.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Retire le message de départ"),
+                                        new SubcommandData("tags", "List of tags you can use on your message.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Liste des tags que vous pouvez utiliser sur votre message."),
                                         new SubcommandData("test", "Test your message !")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Test le message de départ.")
                                 ),
                         new SubcommandGroupData("dm", "The bot will send a DM whenever someone joins the server.")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le bot enverra un message privé au membre qui aura rejoins le serveur.")
                                 .addSubcommands(
                                         new SubcommandData("set", "Configure the message.")
-                                                .addOption(OptionType.STRING, "message", "The message that will be sent. You can use tags, the list is at /message dm tags.", true),
-                                        new SubcommandData("remove", "Remove the message."),
-                                        new SubcommandData("tags", "List of tags you can use on your message."),
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Configure le message privé.")
+                                                .addOptions(
+                                                        new OptionData(OptionType.STRING, "message", "The message that will be sent. You can use tags, the list is at /message dm tags.", true)
+                                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le message qui sera envoyé. Vous pouvez utiliser des tags (/message dm tags)")
+                                                ),
+                                        new SubcommandData("remove", "Remove the message.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Retire le message privé."),
+                                        new SubcommandData("tags", "List of tags you can use on your message.")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Liste des tags que vous pouvez utiliser sur votre message."),
                                         new SubcommandData("test", "Test your message !")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Test le message privé.")
                                 )
                 );
     }

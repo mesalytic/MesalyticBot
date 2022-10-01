@@ -5,9 +5,11 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Message.Attachment;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.managers.AudioManager;
@@ -39,17 +41,35 @@ public class PlayCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Play music on any voice channel.")
+                .setDescriptionLocalization(DiscordLocale.FRENCH, "Joue de la musique sur n'importe quel salon vocal.")
                 .setGuildOnly(true)
                 .addSubcommands(
                         new SubcommandData("search", "Search for any songs!")
-                                .addOption(OptionType.STRING, "search", "Search string", true),
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Cherche pour n'importe quel musique !")
+                                .addOptions(
+                                        new OptionData(OptionType.STRING, "search", "The song or artist to search.", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "La musique ou artiste a rechercher")
+                                ),
                         new SubcommandData("soundcloud", "Play SoundCloud songs!")
-                                .addOption(OptionType.STRING, "url", "SoundCloud Track or Playlist URL")
-                                .addOption(OptionType.STRING, "search", "Search string"),
-                        new SubcommandData("url", "Play URLs that are not from Spotify/YouTube/SoundCloud")
-                                .addOption(OptionType.STRING, "url", "URL string", true),
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Joue de la musique à partir de SoundCloud !")
+                                .addOptions(
+                                        new OptionData(OptionType.STRING, "url", "SoundCloud Track or Playlist URL")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Lien de musique ou playlist SoundCloud"),
+                                        new OptionData(OptionType.STRING, "search", "Search string")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "La musique ou artiste a rechercher.")
+                                ),
+                        new SubcommandData("url", "Play URLs from random sources.")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Lire de la musique à partir d'un lien")
+                                .addOptions(
+                                        new OptionData(OptionType.STRING, "url", "URL string", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Lien à jouer")
+                                ),
                         new SubcommandData("file", "Play the audio files you attach !")
-                                .addOption(OptionType.ATTACHMENT, "file", "Audio File", true)
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Joue les fichiers attachés a la commande.")
+                                .addOptions(
+                                        new OptionData(OptionType.ATTACHMENT, "file", "Audio file", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Fichier audio à jouer")
+                                )
                 );
     }
 
