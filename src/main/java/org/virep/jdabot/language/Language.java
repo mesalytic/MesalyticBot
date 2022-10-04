@@ -48,6 +48,7 @@ public class Language {
 
         JSONObject langObject = jsonObject.getJSONObject(getLanguage(guild));
 
-        return langObject.getString(keyString);
+        if (langObject.has(keyString)) return langObject.getString(keyString);
+        else return keyString;
     }
 }
