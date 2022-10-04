@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.virep.jdabot.database.Database;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.utils.ErrorManager;
 
@@ -67,6 +68,8 @@ public class LangCommand implements Command {
                     insertStatement.executeUpdate();
                 }
             }
+
+            Language.langs.put(event.getGuild().getId(), lang);
 
             event.reply(lang.equals("fr") ? "\u2705 - La langue a bien été mise en Français !" : "\u2705 - Language has been successfully set to English !").queue();
 

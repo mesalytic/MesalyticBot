@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virep.jdabot.database.Database;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.listeners.AfkListener;
 import org.virep.jdabot.listeners.AutoroleListener;
 import org.virep.jdabot.listeners.ButtonInteractionListener;
@@ -69,6 +70,8 @@ public class Main {
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .setChunkingFilter(ChunkingFilter.ALL)
                 .enableCache(CacheFlag.VOICE_STATE).build().awaitReady();
+
+        Language.getLanguages();
 
         SlashHandler slashHandler = new SlashHandler(jda);
 
