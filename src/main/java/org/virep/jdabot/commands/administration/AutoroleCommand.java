@@ -1,6 +1,7 @@
 package org.virep.jdabot.commands.administration;
 
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
@@ -12,6 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.virep.jdabot.database.Database;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.utils.ErrorManager;
 
@@ -53,36 +55,37 @@ public class AutoroleCommand implements Command {
     @Override
     public void execute(SlashCommandInteractionEvent event) {
         Member member = event.getMember();
+        Guild guild = event.getGuild();
 
         assert member != null;
         if (!member.hasPermission(Permission.MANAGE_SERVER)) {
-            event.reply("\u274C - You do not have permission to use this command.").setEphemeral(true).queue();
+            event.reply(Language.getString("NO_PERMISSION", guild)).setEphemeral(true).queue();
             return;
         }
 
         if (event.getSubcommandName().equals("add")) {
             try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM autorole WHERE guildID = ?")) {
-                statement.setString(1, event.getGuild().getId());
+                statement.setString(1, guild.getId());
 
                 ResultSet result = statement.executeQuery();
 
                 if (result.first()) {
                     try (PreparedStatement updateStatement = connection.prepareStatement("UPDATE autorole SET roleID = ? WHERE guildID = ?")) {
                         updateStatement.setString(1, event.getOption("role", OptionMapping::getAsRole).getId());
-                        updateStatement.setString(2, event.getGuild().getId());
+                        updateStatement.setString(2, guild.getId());
 
                         updateStatement.executeUpdate();
 
-                        event.reply("\u2705 - The role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " has been added to the autorole !").setEphemeral(true).queue();
+                        event.reply(Language.getString("AUTOROLE_ADD_UPDATE_SUCCESS", guild).replace("%ROLEMENTION", event.getOption("role", OptionMapping::getAsRole).getAsMention())).setEphemeral(true).queue();
                     }
                 } else {
                     try (PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO autorole (roleID, guildID) VALUES (?,?)")) {
                         insertStatement.setString(1, event.getOption("role", OptionMapping::getAsRole).getId());
-                        insertStatement.setString(2, event.getGuild().getId());
+                        insertStatement.setString(2, guild.getId());
 
                         insertStatement.executeUpdate();
 
-                        event.reply("\u2705 - The role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " has been added to the autorole !").setEphemeral(true).queue();
+                        event.reply(Language.getString("AUTOROLE_ADD_UPDATE_SUCCESS", guild).replace("%ROLEMENTION", event.getOption("role", OptionMapping::getAsRole).getAsMention())).setEphemeral(true).queue();
                     }
                 }
                 connection.close();
@@ -91,21 +94,21 @@ public class AutoroleCommand implements Command {
             }
         } else {
             try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM autorole WHERE guildID = ?")) {
-                statement.setString(1, event.getGuild().getId());
+                statement.setString(1, guild.getId());
 
                 ResultSet result = statement.executeQuery();
 
                 if (!result.first()) {
-                    event.reply("\u274C - No role has been configured for the autorole.").setEphemeral(true).queue();
+                    event.reply(Language.getString("AUTOROLE_REMOVE_NOROLE", guild)).setEphemeral(true).queue();
                     return;
                 }
 
                 try (PreparedStatement insertStatement = connection.prepareStatement("DELETE FROM autorole WHERE guildID = ?")) {
-                    insertStatement.setString(1, event.getGuild().getId());
+                    insertStatement.setString(1, guild.getId());
 
                     insertStatement.executeUpdate();
 
-                    event.reply("\u2705 - Roles configured for the autorole have been cleared.").setEphemeral(true).queue();
+                    event.reply(Language.getString("AUTOROLE_REMOVE_CLEARED", guild)).setEphemeral(true).queue();
                 }
                 connection.close();
             } catch (SQLException e) {

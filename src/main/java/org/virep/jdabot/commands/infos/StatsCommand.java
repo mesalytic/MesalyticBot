@@ -1,6 +1,7 @@
 package org.virep.jdabot.commands.infos;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -8,6 +9,7 @@ import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.lang.management.ManagementFactory;
@@ -35,18 +37,20 @@ public class StatsCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        Guild guild = event.getGuild();
+
         RuntimeMXBean mxBean = ManagementFactory.getRuntimeMXBean();
 
         SelfUser selfUser = event.getJDA().getSelfUser();
 
         MessageEmbed embed = new EmbedBuilder()
                 .setAuthor(selfUser.getName(), null, selfUser.getAvatarUrl())
-                .addField("Creator", Objects.requireNonNull(event.getJDA().getUserById("604779545018761237")).getAsTag(), true)
-                .addField("Servers", String.valueOf(event.getJDA().getGuilds().size()), true)
-                .addField("Users", String.valueOf(event.getJDA().getUsers().size()), true)
-                .addField("Uptime", formatUptime(mxBean.getUptime()), true)
+                .addField(Language.getString("STATS_CREATOR", guild), Objects.requireNonNull(event.getJDA().getUserById("604779545018761237")).getAsTag(), true)
+                .addField(Language.getString("STATS_SERVERS", guild), String.valueOf(event.getJDA().getGuilds().size()), true)
+                .addField(Language.getString("STATS_USERS", guild), String.valueOf(event.getJDA().getUsers().size()), true)
+                .addField(Language.getString("STATS_UPTIME", guild), formatUptime(mxBean.getUptime()), true)
                 .addBlankField(true)
-                .addField("Made with", "JDA 5.0.0", true)
+                .addField(Language.getString("STATS_MADEWITH", guild), "Java (JDA 5.0.0 alpha 20)", true)
                 .build();
 
         event.replyEmbeds(embed).queue();

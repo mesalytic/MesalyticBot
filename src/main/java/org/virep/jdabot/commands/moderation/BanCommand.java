@@ -1,6 +1,7 @@
 package org.virep.jdabot.commands.moderation;
 
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.exceptions.ErrorHandler;
@@ -12,6 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.requests.ErrorResponse;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.utils.Utils;
 
@@ -47,36 +49,38 @@ public class BanCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        Guild guild = event.getGuild();
+
         if (!event.getMember().hasPermission(Permission.BAN_MEMBERS)) {
-            event.reply("\u274C - You do not have permission to use this command.").setEphemeral(true).queue();
+            event.reply(Language.getString("NO_PERMISSION", guild)).setEphemeral(true).queue();
             return;
         }
         ErrorHandler errorHandler = new ErrorHandler()
                 .handle(EnumSet.of(ErrorResponse.MISSING_PERMISSIONS),
-                        (ex) -> event.reply("\u274C - The specified member cannot be banned, because of permission discrepancy.").setEphemeral(true).queue())
+                        (ex) -> event.reply(Language.getString("ERRORHANDLER_MISSINGPERMISSIONS", guild)).setEphemeral(true).queue())
                 .handle(EnumSet.of(ErrorResponse.UNKNOWN_USER),
-                        (ex) -> event.reply("\u274C - The specified member cannot be banned, as they are no longer in the server.").setEphemeral(true).queue());
+                        (ex) -> event.reply(Language.getString("ERRORHANDLER_UNKNOWNUSER", guild)).setEphemeral(true).queue());
 
         Member member = event.getOption("user", OptionMapping::getAsMember);
-        String reason = event.getOption("reason") != null ? event.getOption("reason").getAsString() : "Banned by " + event.getUser().getAsTag() + ": No reason provided";
+        String reason = event.getOption("reason") != null ? event.getOption("reason").getAsString() : Language.getString("BAN_NOREASON", guild).replace("%USERTAG%", event.getUser().getAsTag());
         String delTimeString = event.getOption("delete") != null ? event.getOption("delete", OptionMapping::getAsString) : "0s";
 
         if (member.getId().equals(event.getMember().getId())) {
-            event.reply("\u274C - You cannot ban yourself.").setEphemeral(true).queue();
+            event.reply(Language.getString("BAN_YOURSELF", guild)).setEphemeral(true).queue();
             return;
         }
         
         if (member.isOwner()) {
-            event.reply("\u274C - The specified member cannot be banned, because they are the server owner.").setEphemeral(true).queue();
+            event.reply(Language.getString("BAN_OWNER", guild)).setEphemeral(true).queue();
             return;
         }
 
         if (!event.getMember().canInteract(member)) {
-            event.reply("\u274C - The specified member cannot be banned, because of the member has a higher permission position.").setEphemeral(true).queue();
+            event.reply(Language.getString("BAN_MODERATOR", guild)).setEphemeral(true).queue();
             return;
         }
 
         member.ban(Utils.timeStringToSeconds(delTimeString), TimeUnit.SECONDS).reason(reason)
-                .queue(success -> event.reply("The member **" + member.getUser().getAsTag() + "** has been banned. (Reason: **" + reason + "**)").queue(), errorHandler);
+                .queue(success -> event.reply(Language.getString("BAN_BANNED", guild).replace("%USERTAG%", member.getUser().getAsTag()).replace("%REASON%", reason)).queue(), errorHandler);
     }
 }

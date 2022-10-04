@@ -1,16 +1,20 @@
 package org.virep.jdabot.listeners;
 
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
+import org.virep.jdabot.language.Language;
 
 import java.util.List;
 
 public class InteractionRoleListener extends ListenerAdapter {
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
+        Guild guild = event.getGuild();
+
         String buttonID = event.getButton().getId();
 
         if (buttonID.startsWith("interactionrole")) {
@@ -18,14 +22,14 @@ public class InteractionRoleListener extends ListenerAdapter {
 
             String roleID = args[2];
 
-            Role role = event.getGuild().getRoleById(roleID);
+            Role role = guild.getRoleById(roleID);
 
             if (event.getMember().getRoles().contains(role)) {
-                event.getGuild().removeRoleFromMember(event.getUser(), role).queue();
-                event.reply("The role has successfully been removed !").setEphemeral(true).queue();
+                guild.removeRoleFromMember(event.getUser(), role).queue();
+                event.reply(Language.getString("INTERACTIONROLELISTENER_REMOVED", guild)).setEphemeral(true).queue();
             } else {
-                event.getGuild().addRoleToMember(event.getUser(), role).queue();
-                event.reply("You successfully got the role !").setEphemeral(true).queue();
+                guild.addRoleToMember(event.getUser(), role).queue();
+                event.reply(Language.getString("INTERACTIONROLELISTENER_ADDED", guild)).setEphemeral(true).queue();
             }
 
 
@@ -34,6 +38,7 @@ public class InteractionRoleListener extends ListenerAdapter {
 
     @Override
     public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {
+        Guild guild = event.getGuild();
 
         String selectMenuID = event.getSelectMenu().getId();
         List<SelectOption> selectedOptions = event.getSelectedOptions();
@@ -44,16 +49,16 @@ public class InteractionRoleListener extends ListenerAdapter {
                 String[] args = option.getValue().split(":");
                 String roleID = args[2];
 
-                Role role = event.getGuild().getRoleById(roleID);
+                Role role = guild.getRoleById(roleID);
 
                 if (selectedOptions.contains(option)) {
-                    event.getGuild().addRoleToMember(event.getUser(), role).queue();
+                    guild.addRoleToMember(event.getUser(), role).queue();
                 } else {
-                    event.getGuild().removeRoleFromMember(event.getUser(), role).queue();
+                    guild.removeRoleFromMember(event.getUser(), role).queue();
                 }
             });
 
-            event.reply("Your roles have successfully been updated.").setEphemeral(true).queue();
+            event.reply(Language.getString("INTERACTIONROLELISTENER_UPDATED", guild)).setEphemeral(true).queue();
         }
     }
 }

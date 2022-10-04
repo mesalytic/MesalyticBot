@@ -13,7 +13,9 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
+import org.apache.commons.codec.language.bm.Lang;
 import org.virep.jdabot.database.Database;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.utils.ErrorManager;
 
@@ -54,18 +56,17 @@ public class LogsCommand implements Command {
     @Override
     public void execute(SlashCommandInteractionEvent event) {
         Member member = event.getMember();
+        Guild guild = event.getGuild();
+        
 
         assert member != null;
         if (!member.hasPermission(Permission.MANAGE_SERVER)) {
-            event.reply("\u274C - You do not have permission to use this command.").setEphemeral(true).queue();
+            event.reply(Language.getString("NO_PERMISSION", guild)).setEphemeral(true).queue();
             return;
         }
 
         String subcommandName = event.getSubcommandName();
         assert subcommandName != null;
-
-        Guild guild = event.getGuild();
-        assert guild != null;
 
         if (subcommandName.equals("channel")) {
             OptionMapping channelOption = event.getOption("channel");
@@ -78,20 +79,20 @@ public class LogsCommand implements Command {
                 if (result.first()) {
                     try (PreparedStatement statement1 = connection.prepareStatement("UPDATE logs SET channelID = ? WHERE guildID = ?")) {
                         statement1.setString(1, channelOption.getAsChannel().getId());
-                        statement1.setString(2, event.getGuild().getId());
+                        statement1.setString(2, guild.getId());
 
                         statement1.executeUpdate();
 
-                        event.reply("\u2705 - Successfully set " + channelOption.getAsChannel().getAsMention() + " as the log channel for this server.").setEphemeral(true).queue();
+                        event.reply(Language.getString("LOGS_CHANNEL_SUCCESS", guild).replace("%CHANNELMENTION%", channelOption.getAsChannel().getAsMention())).setEphemeral(true).queue();
                     }
                 } else {
                     try (PreparedStatement statement1 = connection.prepareStatement("INSERT INTO logs (guildID, channelID) VALUES (?,?)")) {
-                        statement1.setString(1, event.getGuild().getId());
+                        statement1.setString(1, guild.getId());
                         statement1.setString(2, channelOption.getAsChannel().getId());
 
                         statement1.executeUpdate();
 
-                        event.reply("\u2705 - Successfully set " + channelOption.getAsChannel().getAsMention() + " as the log channel for this server.").setEphemeral(true).queue();
+                        event.reply(Language.getString("LOGS_CHANNEL_SUCCESS", guild).replace("%CHANNELMENTION%", channelOption.getAsChannel().getAsMention())).setEphemeral(true).queue();
                     }
                 }
                 connection.close();
@@ -102,26 +103,26 @@ public class LogsCommand implements Command {
 
         if (subcommandName.equals("events")) {
             try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM logs WHERE guildID = ?")) {
-                statement.setString(1, event.getGuild().getId());
+                statement.setString(1, guild.getId());
 
                 ResultSet result = statement.executeQuery();
 
                 if (!result.first()) {
-                    event.reply("\u274C - You must set up a log channel before. Use `/logs channel`").setEphemeral(true).queue();
+                    event.reply(Language.getString("LOGS_EVENTS_NOCHANNEL", guild)).setEphemeral(true).queue();
                     connection.close();
                     return;
                 }
 
-                event.reply("Using this menu you can select what type of events you want to log.").addActionRow(
+                event.reply(Language.getString("LOGS_EVENT_REPLY", guild)).addActionRow(
                         SelectMenu.create("selectMenu:logs:categoryEvents")
-                                .addOption("Channel Related Events", "selectMenu:logs:categoryEvents:channel")
-                                .addOption("Emoji Related Events", "selectMenu:logs:categoryEvents:emoji")
-                                .addOption("Ban Related Events", "selectMenu:logs:categoryEvents:ban")
-                                .addOption("Member Related Events", "selectMenu:logs:categoryEvents:guildmember")
-                                .addOption("Voice Related Events", "selectMenu:logs:categoryEvents:voice")
-                                .addOption("Message Related Events", "selectMenu:logs:categoryEvents:message")
-                                .addOption("Role Related Events", "selectMenu:logs:categoryEvents:role")
-                                .setPlaceholder("Use this selection menu to toggle specific logging modules.")
+                                .addOption(Language.getString("LOGS_EVENT_OPTIONS_CHANNEL", guild), "selectMenu:logs:categoryEvents:channel")
+                                .addOption(Language.getString("LOGS_EVENT_OPTIONS_EMOJI", guild), "selectMenu:logs:categoryEvents:emoji")
+                                .addOption(Language.getString("LOGS_EVENT_OPTIONS_BAN", guild), "selectMenu:logs:categoryEvents:ban")
+                                .addOption(Language.getString("LOGS_EVENT_OPTIONS_MEMBER", guild), "selectMenu:logs:categoryEvents:guildmember")
+                                .addOption(Language.getString("LOGS_EVENT_OPTIONS_VOICE", guild), "selectMenu:logs:categoryEvents:voice")
+                                .addOption(Language.getString("LOGS_EVENT_OPTIONS_MESSAGE", guild), "selectMenu:logs:categoryEvents:message")
+                                .addOption(Language.getString("LOGS_EVENT_OPTIONS_ROLE", guild), "selectMenu:logs:categoryEvents:role")
+                                .setPlaceholder(Language.getString("LOGS_EVENT_OPTIONS_PLACEHOLDER", guild))
                                 .setMinValues(1)
                                 .build()
                 ).queue();

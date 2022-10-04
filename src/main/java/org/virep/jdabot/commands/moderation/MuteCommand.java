@@ -1,6 +1,7 @@
 package org.virep.jdabot.commands.moderation;
 
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -14,6 +15,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.ErrorResponse;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.time.Duration;
@@ -65,8 +67,10 @@ public class MuteCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        Guild guild = event.getGuild();
+
         if (!Objects.requireNonNull(event.getMember()).hasPermission(Permission.KICK_MEMBERS)) {
-            event.reply("\u274C - You do not have permission to use this command.").setEphemeral(true).queue();
+            event.reply(Language.getString("NO_PERMISSION", guild)).setEphemeral(true).queue();
             return;
         }
 
@@ -75,9 +79,9 @@ public class MuteCommand implements Command {
 
         ErrorHandler errorHandler = new ErrorHandler()
                 .handle(EnumSet.of(ErrorResponse.MISSING_PERMISSIONS),
-                        (ex) -> event.reply("\u274C - The specified member cannot be timed out, because of permission discrepancy.").setEphemeral(true).queue())
+                        (ex) -> event.reply(Language.getString("ERRORHANDLER_MISSINGPERMISSIONS", guild)).setEphemeral(true).queue())
                 .handle(EnumSet.of(ErrorResponse.UNKNOWN_MEMBER),
-                        (ex) -> event.reply("\u274C - The specified member cannot be timed out, as they are no longer in the server.").setEphemeral(true).queue());
+                        (ex) -> event.reply(Language.getString("ERORRHANDLER_UNKNOWNUSER", guild)).setEphemeral(true).queue());
 
         OptionMapping reasonMapping = event.getOption("reason");
 
@@ -89,17 +93,17 @@ public class MuteCommand implements Command {
             int duration = timeStringToSeconds(durationMapping.getAsString());
 
             if (duration == -1) {
-                event.reply("\u274C - The duration you specified is invalid. Example: `1d 3h 30m 13s`").setEphemeral(true).queue();
+                event.reply(Language.getString("MUTE_INVALIDDURATION", guild)).setEphemeral(true).queue();
                 return;
             }
 
-            member.timeoutFor(duration, TimeUnit.SECONDS).reason("Muted by " + event.getUser().getAsTag() + ": " + (reasonMapping != null ? reasonMapping.getAsString() : "No reason specified."))
-                    .queue(success -> event.reply("\u2705 - Member **" + member.getUser().getAsTag() + "** has been timed out for **" + secondsToSeperatedTime(duration) + "** !").queue(), errorHandler);
+            member.timeoutFor(duration, TimeUnit.SECONDS).reason(Language.getString("MUTE_MUTEDBY", guild).replace("%USERTAG%", event.getUser().getAsTag()).replace("%REASON%", (reasonMapping != null ? reasonMapping.getAsString() : Language.getString("MUTE_NOREASON", guild))))
+                    .queue(success -> event.reply(Language.getString("MUTE_MUTED", guild).replace("%USERTAG%", member.getUser().getAsTag()).replace("%DURATION%", secondsToSeperatedTime(duration))).queue(), errorHandler);
         } else {
 
             if (member.isTimedOut()) {
-                member.removeTimeout().reason("Unmuted by " + event.getUser().getAsTag() + ": " + (reasonMapping != null ? reasonMapping.getAsString() : "No reason specified."))
-                        .queue(success -> event.reply("\u2705 - Member **" + member.getUser().getAsTag() + "** has been un-timed out. !").queue(), errorHandler);
+                member.removeTimeout().reason(Language.getString("MUTE_UNMUTEDBY", guild).replace("%USERTAG%", event.getUser().getAsTag()).replace("%REASON%", (reasonMapping != null ? reasonMapping.getAsString() : Language.getString("MUTE_NOREASON", guild))))
+                        .queue(success -> event.reply(Language.getString("MUTE_UNMUTED", guild).replace("%USERTAG%", member.getUser().getAsTag())).queue(), errorHandler);
             }
         }
     }

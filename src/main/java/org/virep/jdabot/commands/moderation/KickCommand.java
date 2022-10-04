@@ -1,6 +1,7 @@
 package org.virep.jdabot.commands.moderation;
 
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
@@ -10,6 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.util.Objects;
@@ -41,20 +43,22 @@ public class KickCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        Guild guild = event.getGuild();
+
         if (!event.getMember().hasPermission(Permission.KICK_MEMBERS)) {
-            event.reply("\u274C - You do not have permission to use this command.").setEphemeral(true).queue();
+            event.reply(Language.getString("NO_PERMISSION", guild)).setEphemeral(true).queue();
             return;
         }
 
         Member member = Objects.requireNonNull(event.getOption("member")).getAsMember();
-        String reason = event.getOption("reason") != null ? Objects.requireNonNull(event.getOption("reason")).getAsString() : "No reason.";
+        String reason = event.getOption("reason") != null ? Objects.requireNonNull(event.getOption("reason")).getAsString() : Language.getString("KICK_NOREASON", guild);
 
         if (member == null) {
-            event.reply("\u274C - Somehow this user is not on the server.").setEphemeral(true).queue();
+            event.reply(Language.getString("KICK_NOTINSERVER", guild)).setEphemeral(true).queue();
             return;
         }
 
-        member.kick().reason("Kicked by " + event.getUser().getAsTag() + " : " + reason).queue();
-        event.reply("\u2705 - Successfully kicked **" + member.getUser().getAsTag() + "** for the reason: **" + reason + "**").queue();
+        member.kick().reason(Language.getString("KICK_KICKEDBY", guild).replace("%USERTAG%", event.getUser().getAsTag()).replace("%REASON%", reason)).queue();
+        event.reply(Language.getString("KICK_KICKED", guild).replace("%USERTAG%", member.getUser().getAsTag()).replace("%REASON%", reason)).queue();
     }
 }

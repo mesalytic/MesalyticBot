@@ -1,5 +1,6 @@
 package org.virep.jdabot.commands.general;
 
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -8,6 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.util.Objects;
@@ -40,19 +42,21 @@ public class RandomCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        Guild guild = event.getGuild();
+
         String subcommandName = event.getSubcommandName();
 
         assert subcommandName != null;
         if (subcommandName.equals("coinflip")) {
             String[] sides = {"heads", "tails"};
 
-            event.replyFormat("\uD83E\uDE99 - It landed on...** %s **!", sides[(int) Math.floor(Math.random() * sides.length)]).queue();
+            event.reply(Language.getString("RANDOM_COINFLIP", guild).replace("%SIDE%", sides[(int) Math.floor(Math.random() * sides.length)])).queue();
         }
 
         if (subcommandName.equals("dice")) {
             int maxValue = event.getOption("maxvalue") != null ? Objects.requireNonNull(event.getOption("maxvalue")).getAsInt() : 6;
 
-            event.replyFormat("\uD83C\uDFB2 - The dice returned...** %d **!", (int)randomInt(maxValue)).queue();
+            event.reply(Language.getString("RANDOM_DICE", guild).replace("%DICE%", String.valueOf((int)randomInt(maxValue)))).queue();
         }
     }
 

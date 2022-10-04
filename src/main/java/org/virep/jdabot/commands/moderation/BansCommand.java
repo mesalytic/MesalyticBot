@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.time.Instant;
@@ -43,12 +44,12 @@ public class BansCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        Guild guild = event.getGuild();
+
         if (!event.getMember().hasPermission(Permission.BAN_MEMBERS)) {
-            event.reply("\u274C - You do not have permission to use this command.").setEphemeral(true).queue();
+            event.reply(Language.getString("NO_PERMISSION", guild)).setEphemeral(true).queue();
             return;
         }
-
-        Guild guild = event.getGuild();
 
         guild.retrieveBanList().queue(bans -> {
             pageNumber.put(event.getChannel().getIdLong(), 0);
@@ -57,7 +58,7 @@ public class BansCommand implements Command {
 
             EmbedBuilder embedBuilder = new EmbedBuilder()
                     .setAuthor(event.getUser().getAsTag(), null, event.getUser().getAvatarUrl())
-                    .setTitle("Ban list for " + event.getGuild().getName())
+                    .setTitle(Language.getString("BANS_EMBEDTITLE", guild).replace("%GUILDNAME%", event.getGuild().getName()))
                     .setFooter("Page " + (pageNumber.get(event.getChannel().getIdLong())  + 1) +"/" + banPages.size())
                     .setTimestamp(Instant.now());
 
@@ -69,7 +70,7 @@ public class BansCommand implements Command {
                         .append("**")
                         .append(ban.getUser().getAsTag())
                         .append("** - ")
-                        .append(ban.getReason() != null ? ban.getReason() : "No reason")
+                        .append(ban.getReason() != null ? ban.getReason() : Language.getString("BANS_NOREASON", guild))
                         .append("\n");
             });
 

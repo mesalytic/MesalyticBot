@@ -14,6 +14,7 @@ import lavalink.client.player.track.AudioTrack;
 import lavalink.client.player.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.utils.ErrorManager;
 import org.virep.jdabot.utils.Utils;
 import org.virep.jdabot.schedulers.ScheduleHandler;
@@ -96,7 +97,7 @@ public class TrackScheduler extends PlayerEventListenerAdapter {
 
     @Override
     public void onTrackStart(IPlayer player, AudioTrack track) {
-        channel.sendMessageFormat("\u25B6 - Now playing : **%s** (`%s`)", track.getInfo().getTitle(), Utils.formatTrackLength(track.getInfo().getLength())).queue();
+        channel.sendMessageFormat(Language.getString("TS_PLAYING", this.guild).replace("%TITLE%", track.getInfo().getTitle()).replace("%DURATION%", Utils.formatTrackLength(track.getInfo().getLength()))).queue();
         if (timeout != null) {
             timeout.cancel(true);
         }
@@ -120,10 +121,10 @@ public class TrackScheduler extends PlayerEventListenerAdapter {
             Throwable exception = ((TrackExceptionEvent) event).getException();
 
             ErrorManager.handleNoEvent(exception);
-            channel.sendMessage("An error has occured while playing the music : `" + exception.getMessage() + "`").queue();
+            channel.sendMessage(Language.getString("TS_ERROR", this.guild).replace("%MESSAGE%", exception.getMessage())).queue();
         } else if (event instanceof TrackStuckEvent) {
 
-            channel.sendMessage("The music got somehow stuck.").queue();
+            channel.sendMessage(Language.getString("TS_STUCK", this.guild)).queue();
             System.out.println(((TrackStuckEvent) event).getTrack().getInfo().getTitle());
         }
     }

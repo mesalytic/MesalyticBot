@@ -1,9 +1,11 @@
 package org.virep.jdabot.listeners;
 
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.virep.jdabot.database.Database;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.utils.ErrorManager;
 
 import java.sql.Connection;
@@ -17,6 +19,8 @@ public class AfkListener extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent event) {
         if (event.getAuthor().isBot()) return;
 
+        Guild guild = event.getGuild();
+
         try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM afk WHERE userID = ?")) {
             statement.setString(1, event.getAuthor().getId());
 
@@ -28,7 +32,7 @@ public class AfkListener extends ListenerAdapter {
 
                     deleteStatement.executeUpdate();
 
-                    event.getMessage().reply(event.getAuthor().getAsMention() + ", your AFK status has been removed.").queue();
+                    event.getMessage().reply(Language.getString("AFKLISTENER_REMOVED", guild).replace("%USERMENTION%", event.getAuthor().getAsMention())).queue();
                 }
             }
             connection.close();
@@ -45,7 +49,7 @@ public class AfkListener extends ListenerAdapter {
             ResultSet result = statement.executeQuery();
 
             if (result.first()) {
-                event.getMessage().reply("**" + mentionedUser.getAsTag() + "** is AFK right now. Reason: " + result.getString("message")).setAllowedMentions(Collections.emptyList()).queue();
+                event.getMessage().reply(Language.getString("AFKLISTENER_AFK", guild).replace("%USERTAG%", mentionedUser.getAsTag()).replace("", result.getString("message"))).setAllowedMentions(Collections.emptyList()).queue();
             }
             connection.close();
         } catch (SQLException e) {

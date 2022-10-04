@@ -1,6 +1,7 @@
 package org.virep.jdabot.commands.moderation;
 
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -13,6 +14,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.util.List;
@@ -69,8 +71,10 @@ public class PurgeCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        Guild guild = event.getGuild();
+
         if (!Objects.requireNonNull(event.getMember()).hasPermission(Permission.MESSAGE_MANAGE)) {
-            event.reply("\u274C - You do not have permission to use this command.").setEphemeral(true).queue();
+            event.reply(Language.getString("NO_PERMISSION" ,guild)).setEphemeral(true).queue();
             return;
         }
 
@@ -87,12 +91,12 @@ public class PurgeCommand implements Command {
                     .thenAccept(list -> {
                         channel.purgeMessages(list);
 
-                        event.reply("\u2705 - **" + amount + " messages have been deleted !").queue();
+                        event.reply(Language.getString("PURGE_PURGED", guild).replace("%AMOUNT%", String.valueOf(amount))).queue();
                     });
         }
 
         if (event.getSubcommandName().equals("bots")) {
-            event.reply("Loading messages, please wait...").queue();
+            event.reply(Language.getString("PURGE_LOADING", guild)).queue();
 
             channel.getIterableHistory().takeAsync(500)
                     .thenAccept(list -> {
@@ -100,7 +104,7 @@ public class PurgeCommand implements Command {
 
                         channel.purgeMessages(sortedList);
 
-                        event.getHook().editOriginal("\u2705 - **" + amount + " messages have been deleted !").queue();
+                        event.getHook().editOriginal(Language.getString("PURGE_PURGED", guild).replace("%AMOUNT%", String.valueOf(amount))).queue();
                     });
         }
 
@@ -109,7 +113,7 @@ public class PurgeCommand implements Command {
 
             assert userOption != null;
             User user = userOption.getAsUser();
-            event.reply("Loading messages, please wait...").queue();
+            event.reply(Language.getString("PURGE_LOADING", guild)).queue();
 
             channel.getIterableHistory().takeAsync(500)
                     .thenAccept(list -> {
@@ -117,7 +121,7 @@ public class PurgeCommand implements Command {
 
                         channel.purgeMessages(sortedList);
 
-                        event.getHook().editOriginal("\u2705 - **" + amount + " messages have been deleted !").queue();
+                        event.getHook().editOriginal(Language.getString("PURGE_PURGED", guild).replace("%AMOUNT%", String.valueOf(amount))).queue();
                     });
         }
     }

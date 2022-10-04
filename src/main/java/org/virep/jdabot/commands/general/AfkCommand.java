@@ -1,5 +1,6 @@
 package org.virep.jdabot.commands.general;
 
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -13,6 +14,7 @@ import net.dv8tion.jda.api.utils.MarkdownUtil;
 import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 import net.dv8tion.jda.internal.utils.Helpers;
 import org.virep.jdabot.database.Database;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.utils.ErrorManager;
 
@@ -51,6 +53,8 @@ public class AfkCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        Guild guild = event.getGuild();
+
         if (event.getSubcommandName().equals("set")) {
             String message = event.getOption("message", OptionMapping::getAsString);
 
@@ -75,7 +79,7 @@ public class AfkCommand implements Command {
                     }
                 }
 
-                event.reply("\u2705 - Your AFK status has been updated to : " + message).setAllowedMentions(Collections.emptyList()).queue();
+                event.reply(Language.getString("AFK_SET_SUCCESS", guild).replace("%MESSAGE%", message)).setAllowedMentions(Collections.emptyList()).queue();
                 connection.close();
             } catch (SQLException e) {
                 ErrorManager.handle(e, event);
@@ -89,7 +93,7 @@ public class AfkCommand implements Command {
                 ResultSet result = statement.executeQuery();
 
                 if (!result.first()) {
-                    event.reply("\u274C - You currently do not have an AFK status set up.").setEphemeral(true).queue();
+                    event.reply(Language.getString("AFK_REMOVE_NOSTATUS", guild)).setEphemeral(true).queue();
                     connection.close();
                     return;
                 }
@@ -98,7 +102,7 @@ public class AfkCommand implements Command {
                     removeStatement.setString(1, event.getUser().getId());
 
                     statement.executeUpdate();
-                    event.reply("\u2705 - Your AFK status has been removed.").queue();
+                    event.reply(Language.getString("AFK_REMOVE_REMOVED", guild)).queue();
                 }
                 connection.close();
             } catch (SQLException e) {

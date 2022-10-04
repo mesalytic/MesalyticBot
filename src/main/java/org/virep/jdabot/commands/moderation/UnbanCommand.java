@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.internal.utils.Helpers;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.util.Optional;
@@ -45,12 +46,12 @@ public class UnbanCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        Guild guild = event.getGuild();
+        
         if (!event.getMember().hasPermission(Permission.BAN_MEMBERS)) {
-            event.reply("\u274C - You do not have permission to use this command.").setEphemeral(true).queue();
+            event.reply(Language.getString("NO_PERMISSION", guild)).setEphemeral(true).queue();
             return;
         }
-
-        Guild guild = event.getGuild();
 
         String user = event.getOption("user", OptionMapping::getAsString);
         String reason = event.getOption("reason", OptionMapping::getAsString);
@@ -66,10 +67,10 @@ public class UnbanCommand implements Command {
                     Guild.Ban banObject = ban.get();
                     UserSnowflake userID = UserSnowflake.fromId(banObject.getUser().getId());
 
-                    guild.unban(userID).reason("Unbanned by " + event.getUser().getAsTag() + ": " + (reason != null ? reason : "No reason provided")).queue();
-                    event.reply("\u2705 - The user `" + banObject.getUser().getAsTag() + "` has been unbanned.").queue();
+                    guild.unban(userID).reason(Language.getString("UNBAN_UNBANNEDBY", guild).replace("%USERTAG%", event.getUser().getAsTag()).replace("%REASON%", (reason != null ? reason : Language.getString("UNBAN_NOREASON", guild)))).queue();
+                    event.reply(Language.getString("UNBAN_UNBANNED", guild).replace("%USERTAG%", banObject.getUser().getAsTag())).queue();
                 } else {
-                    event.reply("\u274C - This user is not banned or not valid.").setEphemeral(true).queue();
+                    event.reply(Language.getString("UNBAN_NOTVALID", guild)).setEphemeral(true).queue();
                 }
             });
         } else if ((user.length() >= 17 && user.length() <= 20) && Helpers.isNumeric(user)) {
@@ -79,14 +80,14 @@ public class UnbanCommand implements Command {
                 if (ban.isPresent()) {
                     Guild.Ban banObject = ban.get();
 
-                    guild.unban(UserSnowflake.fromId(user)).reason("Unbanned by " + event.getUser().getAsTag() + ": " + (reason != null ? reason : "No reason provided")).queue();
-                    event.reply("\u2705 - The user `" + banObject.getUser().getAsTag() + "` has been unbanned.").queue();
+                    guild.unban(UserSnowflake.fromId(user)).reason(Language.getString("UNBAN_UNBANNEDBY", guild).replace("%USERTAG%", event.getUser().getAsTag()).replace("%REASON%", (reason != null ? reason : Language.getString("UNBAN_NOREASON", guild)))).queue();
+                    event.reply(Language.getString("UNBAN_UNBANNED", guild).replace("%USERTAG%", banObject.getUser().getAsTag())).queue();
                 } else {
-                    event.reply("\u274C - This user is not banned or not valid.").setEphemeral(true).queue();
+                    event.reply(Language.getString("UNBAN_NOTVALID", guild)).setEphemeral(true).queue();
                 }
             });
         } else {
-            event.reply("\u274C - Please specify a user TAG (username#0101) or a user ID.").setEphemeral(true).queue();
+            event.reply(Language.getString("UNBAN_NOTUSER", guild)).setEphemeral(true).queue();
         }
     }
 }

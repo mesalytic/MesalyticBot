@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.util.EnumSet;
@@ -50,6 +51,8 @@ public class InfoCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        Guild guild = event.getGuild();
+
         if (Objects.equals(event.getSubcommandName(), "user")) {
             OptionMapping memberOption = event.getOption("user");
             Member member = memberOption != null ? memberOption.getAsMember() : event.getMember();
@@ -75,18 +78,18 @@ public class InfoCommand implements Command {
                     .setAuthor(member.getUser().getAsTag(), null, member.getUser().getAvatarUrl())
                     .setThumbnail(member.getUser().getAvatarUrl())
                     .addField("ID", member.getId(), true)
-                    .addField("Type", member.getUser().isBot() ? "Bot" : "User", true)
-                    .addField("Nickname", member.getNickname() != null ? member.getNickname() : "N/A", true)
-                    .addField("Nitro Boost Status", member.isBoosting() ? "<t:" + Objects.requireNonNull(member.getTimeBoosted()).toInstant().getEpochSecond() + ":F> (<t:" + member.getTimeBoosted().toInstant().getEpochSecond() + ":R>)" : "None", true)
-                    .addField("Account Created", "<t:" + member.getTimeCreated().toInstant().getEpochSecond() + ":F> (<t:" + member.getTimeCreated().toInstant().getEpochSecond() + ":R>)", false)
-                    .addField("Joined server", "<t:" + member.getTimeJoined().toInstant().getEpochSecond() + ":F> (<t:" + member.getTimeJoined().toInstant().getEpochSecond() + ":R>)", false)
-                    .addField("Badges", flags.isEmpty() ? "None" : badgesToEmote(flagString), false)
-                    .addField("Roles [" + roles.size() + "]", !roles.isEmpty() ? roleString.length() > 1024 ? roleString.substring(0, 1017) + "[...]" : roleString : "None", false)
+                    .addField("Type", member.getUser().isBot() ? "Bot" : Language.getString("INFO_USEREMBED_TYPE_USER", guild), true)
+                    .addField(Language.getString("INFO_USEREMBED_NICKNAME", guild), member.getNickname() != null ? member.getNickname() : Language.getString("INFO_NONE", guild), true)
+                    .addField(Language.getString("INFO_USEREMBED_NITRO", guild), member.isBoosting() ? "<t:" + Objects.requireNonNull(member.getTimeBoosted()).toInstant().getEpochSecond() + ":F> (<t:" + member.getTimeBoosted().toInstant().getEpochSecond() + ":R>)" : Language.getString("INFO_NONE", guild), true)
+                    .addField(Language.getString("INFO_USEREMBED_CREATED", guild), "<t:" + member.getTimeCreated().toInstant().getEpochSecond() + ":F> (<t:" + member.getTimeCreated().toInstant().getEpochSecond() + ":R>)", false)
+                    .addField(Language.getString("INFO_USEREMBED_JOINED", guild), "<t:" + member.getTimeJoined().toInstant().getEpochSecond() + ":F> (<t:" + member.getTimeJoined().toInstant().getEpochSecond() + ":R>)", false)
+                    .addField("Badges", flags.isEmpty() ? Language.getString("INFO_NONE", guild) : badgesToEmote(flagString), false)
+                    .addField("Roles [" + roles.size() + "]", !roles.isEmpty() ? roleString.length() > 1024 ? roleString.substring(0, 1017) + "[...]" : roleString : Language.getString("INFO_NONE", guild), false)
                     .build();
 
             event.replyEmbeds(embed).queue();
         } else {
-            Guild guild = event.getGuild();
+
             assert guild != null;
 
             List<Role> roles = guild.getRoles();
@@ -108,15 +111,15 @@ public class InfoCommand implements Command {
                     .setTitle(guild.getName())
                     .setImage(guild.getBannerUrl())
                     .setThumbnail(guild.getIconUrl())
-                    .addField("Server ID", guild.getId(), true)
-                    .addField("Owner", Objects.requireNonNull(guild.getOwner()).getUser().getAsTag(), true)
-                    .addField("Member Count", String.valueOf(guild.getMemberCount()), true)
+                    .addField(Language.getString("INFO_SERVEREMBED_SERVERID", guild), guild.getId(), true)
+                    .addField(Language.getString("INFO_SERVEREMBED_OWNER", guild), Objects.requireNonNull(guild.getOwner()).getUser().getAsTag(), true)
+                    .addField(Language.getString("INFO_SERVEREMBED_MEMBERCOUNT", guild), String.valueOf(guild.getMemberCount()), true)
                     .addField("Boosts", guild.getBoostCount() + " boosts (Level " + guild.getBoostTier().getKey() + ")", true)
-                    .addField("Preferred Locale", guild.getLocale().getLanguageName(), true)
-                    .addField("Channel Count", String.valueOf(guild.getChannels().size()), true)
-                    .addField("Joined on", "<t:" + Objects.requireNonNull(event.getMember()).getTimeJoined().toInstant().getEpochSecond() + ":F> (<t:" + guild.getTimeCreated().toInstant().getEpochSecond() + ":R>", false)
-                    .addField("Created On", "<t:" + guild.getTimeCreated().toInstant().getEpochSecond() + ":F> (<t:" + guild.getTimeCreated().toInstant().getEpochSecond() + ":R>)", false)
-                    .addField("Roles [" + roles.size() + "]", !roles.isEmpty() ? roleString.length() > 1024 ? roleString.substring(0, 1017) + "[...]" : roleString : "None", false)
+                    .addField(Language.getString("INFO_SERVEREMBED_COUNT", guild), guild.getLocale().getLanguageName(), true)
+                    .addField(Language.getString("INFO_SERVEREMBED_CHANNELCOUNT", guild), String.valueOf(guild.getChannels().size()), true)
+                    .addField(Language.getString("INFO_SERVEREMBED_JOINED", guild), "<t:" + Objects.requireNonNull(event.getMember()).getTimeJoined().toInstant().getEpochSecond() + ":F> (<t:" + guild.getTimeCreated().toInstant().getEpochSecond() + ":R>", false)
+                    .addField(Language.getString("INFO_SERVEREMBED_CREATED", guild), "<t:" + guild.getTimeCreated().toInstant().getEpochSecond() + ":F> (<t:" + guild.getTimeCreated().toInstant().getEpochSecond() + ":R>)", false)
+                    .addField("Roles [" + roles.size() + "]", !roles.isEmpty() ? roleString.length() > 1024 ? roleString.substring(0, 1017) + "[...]" : roleString : Language.getString("INFO_NONE", guild), false)
                     .addField("Emojis [" + guild.getEmojis().size() + "]", emojiString + "[...]", false)
                     .build();
 

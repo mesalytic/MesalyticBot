@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.music.AudioManagerController;
 import org.virep.jdabot.music.GuildAudioManager;
 import org.virep.jdabot.slashcommandhandler.Command;
@@ -39,14 +40,14 @@ public class JoinCommand implements Command {
 
         assert voiceState != null;
         if (voiceState.getChannel() == null) {
-            event.reply("\u274C - You are not in a voice channel!").setEphemeral(true).queue();
+            event.reply(Language.getString("MUSIC_NOVOICECHANNEL", guild)).setEphemeral(true).queue();
             return;
         }
         assert guild != null;
         final GuildVoiceState selfVoiceState = guild.getSelfMember().getVoiceState();
 
         if (selfVoiceState != null && selfVoiceState.inAudioChannel()) {
-            event.reply("\u274C - I'm already in a voice channel!").setEphemeral(true).queue();
+            event.reply(Language.getString("JOIN_ALREADYJOINED", guild)).setEphemeral(true).queue();
             return;
         }
         VoiceChannel voiceChannel = guild.getVoiceChannelById(voiceState.getChannel().getIdLong());
@@ -54,6 +55,6 @@ public class JoinCommand implements Command {
         assert voiceChannel != null;
         manager.openConnection(voiceChannel);
 
-        event.replyFormat("\u2705 - Joined `%s !`", voiceChannel.getName()).queue();
+        event.reply(Language.getString("JOIN_JOINED", guild).replace("%CHANNELNAME%", voiceChannel.getName())).queue();
     }
 }

@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.music.AudioManagerController;
 import org.virep.jdabot.music.GuildAudioManager;
 import org.virep.jdabot.slashcommandhandler.Command;
@@ -47,27 +48,27 @@ public class ResumeCommand implements Command {
         assert selfVoiceState != null;
 
         if (memberVoiceState.getChannel() == null) {
-            event.reply("\u274C - You are not in a voice channel!").setEphemeral(true).queue();
+            event.reply(Language.getString("MUSIC_NOVOICECHANNEL", guild)).setEphemeral(true).queue();
             return;
         }
 
         if (!selfVoiceState.inAudioChannel()) {
-            event.reply("\u274C - I'm currently not playing any music!").setEphemeral(true).queue();
+            event.reply(Language.getString("MUSIC_NOMUSIC", guild)).setEphemeral(true).queue();
             return;
         }
 
         if (Objects.requireNonNull(selfVoiceState.getChannel()).getIdLong() != memberVoiceState.getChannel().getIdLong()) {
-            event.reply("\u274C - You are not in the same channel as me!").setEphemeral(true).queue();
+            event.reply(Language.getString("MUSIC_NOTSAMEVC", guild)).setEphemeral(true).queue();
             return;
         }
 
         if (!player.isPaused()) {
-            event.reply("\u274C - The music is already playing !").setEphemeral(true).queue();
+            event.reply(Language.getString("RESUME_ALREADYPLAYING", guild)).setEphemeral(true).queue();
             return;
         }
 
         player.setPaused(false);
 
-        event.reply("\u25B6 - The music has been resumed.").queue();
+        event.reply(Language.getString("RESUME_RESUMED", guild)).queue();
     }
 }

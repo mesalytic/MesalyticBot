@@ -1,6 +1,7 @@
 package org.virep.jdabot.commands.general;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
@@ -22,6 +23,7 @@ import org.json.JSONObject;
 import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
 import org.scilab.forge.jlatexmath.TeXIcon;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.utils.ErrorManager;
 
@@ -71,10 +73,12 @@ public class MathCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        Guild guild = event.getGuild();
+
         if (Objects.equals(event.getSubcommandName(), "list")) {
             MessageEmbed embed = new EmbedBuilder()
-                    .setDescription("This menu is about the supported operators and functions for this command.\n\nSelect the content you want to see !")
-                    .setTitle("Supported Operators & Functions")
+                    .setDescription(Language.getString("MATH_LIST_EMBEDDESCRIPTION", guild))
+                    .setTitle(Language.getString("MATH_LIST_EMBEDTITLE", guild))
                     .setColor(11868671)
                     .setTimestamp(Instant.now())
                     .build();
@@ -83,8 +87,8 @@ public class MathCommand implements Command {
                     SelectMenu.create("selectMenu:math")
                             .setMinValues(1)
                             .setPlaceholder("Main Menu")
-                            .addOption("Operators", "selectMenu:math:operators")
-                            .addOption("Functions", "selectMenu:math:functions")
+                            .addOption(Language.getString("MATH_LIST_OPTION_OPERATORS", guild), "selectMenu:math:operators")
+                            .addOption(Language.getString("MATH_LIST_OPTION_FUNCTIONS", guild), "selectMenu:math:functions")
                             .build()
             ).queue();
         } else if (Objects.equals(event.getSubcommandName(), "parse")) {
@@ -147,9 +151,9 @@ public class MathCommand implements Command {
                 Expression expression = new ExpressionBuilder(equation).build();
                 double result = expression.evaluate();
 
-                event.reply("The result for that expression is: **" + result + "**").queue();
+                event.reply(Language.getString("MATH_SOLVE_SOLVED", guild).replace("%RESULT%", String.valueOf(result))).queue();
             } catch (UnknownFunctionOrVariableException | ArithmeticException e) {
-                event.reply("The expression you specified is not valid.\n`" + e.getMessage() + "`\n\nIt must contains number, and supported operators and functions.\nPlease check the `/math list` command.").queue();
+                event.reply(Language.getString("MATH_SOLVE_ERROR", guild).replace("%MESSAGE%", e.getMessage())).queue();
             }
 
         }

@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.utils.AttachedFile;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.virep.jdabot.commands.games.TTTCommand;
 import org.virep.jdabot.commands.moderation.BansCommand;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.music.AudioManagerController;
 import org.virep.jdabot.music.GuildAudioManager;
 
@@ -24,17 +25,18 @@ import static org.virep.jdabot.utils.Utils.getPages;
 public class ButtonInteractionListener extends ListenerAdapter {
     @Override
     public void onButtonInteraction(@Nonnull ButtonInteractionEvent event) {
+        Guild guild = event.getGuild();
         Button button = event.getButton();
 
         if (button.getId().startsWith("button:bans")) {
             String[] labels = button.getId().split(":");
 
             if (labels[3].equals(event.getUser().getId())) {
-                event.reply("You do not have access to interact with this, or the interaction has expired.").setEphemeral(true).queue();
+                event.reply(Language.getString("BUTTONLISTENER_NOACCESS", guild)).setEphemeral(true).queue();
                 return;
             }
 
-            event.getGuild().retrieveBanList().queue(bans -> {
+            guild.retrieveBanList().queue(bans -> {
                 Map<Long, Integer> pageNumbers = BansCommand.pageNumber;
 
                 List<List<Guild.Ban>> banPages = getPages(bans, 50);
@@ -49,7 +51,7 @@ public class ButtonInteractionListener extends ListenerAdapter {
 
                 EmbedBuilder embedBuilder = new EmbedBuilder()
                         .setAuthor(event.getUser().getAsTag(), null, event.getUser().getAvatarUrl())
-                        .setTitle("Ban list for " + event.getGuild().getName())
+                        .setTitle("Ban list for " + guild.getName())
                         .setFooter("Page " + (pageNumber + 1) + "/" + banPages.size())
                         .setTimestamp(Instant.now());
 
@@ -75,7 +77,7 @@ public class ButtonInteractionListener extends ListenerAdapter {
         }
 
         if ("queueFull".equals(button.getId())) {
-            GuildAudioManager guildAudioManager = AudioManagerController.getGuildAudioManager(event.getGuild());
+            GuildAudioManager guildAudioManager = AudioManagerController.getGuildAudioManager(guild);
 
             StringBuilder queueBuilder = new StringBuilder();
             AtomicInteger counter = new AtomicInteger();
@@ -99,7 +101,7 @@ public class ButtonInteractionListener extends ListenerAdapter {
 
         if ("tictactoeAccept".equals(button.getId())) {
             if (Objects.requireNonNull(event.getMember()).getIdLong() != TTTCommand.players.get(event.getChannel().getIdLong())[1]) {
-                event.reply("You are not part of the game, you can't interact!").setEphemeral(true).queue();
+                event.reply(Language.getString("BUTTONLISTENER_NOTINGAME", guild)).setEphemeral(true).queue();
                 return;
             }
             event.getMessage().delete().queue();
@@ -110,7 +112,7 @@ public class ButtonInteractionListener extends ListenerAdapter {
 
         if ("tictactoeRefuse".equals(button.getId())) {
             if (Objects.requireNonNull(event.getMember()).getIdLong() != TTTCommand.players.get(event.getChannel().getIdLong())[1]) {
-                event.reply("You are not part of the game, you can't interact!").setEphemeral(true).queue();
+                event.reply(Language.getString("BUTTONLISTENER_NOTINGAME", guild)).setEphemeral(true).queue();
                 return;
             }
 
@@ -130,7 +132,7 @@ public class ButtonInteractionListener extends ListenerAdapter {
             long playerTwoID = TTTCommand.players.get(event.getChannel().getIdLong())[1];
 
             if (Objects.requireNonNull(event.getMember()).getIdLong() != playerOneID && event.getMember().getIdLong() != playerTwoID) {
-                event.reply("You are not part of the game!").setEphemeral(true).queue();
+                event.reply(Language.getString("BUTTONLISTENER_NOTINGAME", guild)).setEphemeral(true).queue();
                 return;
             }
 
@@ -138,70 +140,70 @@ public class ButtonInteractionListener extends ListenerAdapter {
             long[] playersArray = TTTCommand.players.get(event.getChannel().getIdLong());
 
             if (TTTCommand.playersTurn.get(event.getChannel().getIdLong()) != event.getMember().getIdLong()) {
-                event.reply("It's not your turn!").setEphemeral(true).queue();
+                event.reply(Language.getString("BUTTONLISTENER_NOTYOURTURN", guild)).setEphemeral(true).queue();
                 return;
             }
 
             switch (button.getId()) {
                 case "tictactoeButton1" -> {
                     if (board[0][0] != 0) {
-                        event.reply("That spot has already been played!").setEphemeral(true).queue();
+                        event.reply(Language.getString("BUTTONLISTENER_ALRPLAYED", guild)).setEphemeral(true).queue();
                         return;
                     }
                     board[0][0] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
                 }
                 case "tictactoeButton2" -> {
                     if (board[0][1] != 0) {
-                        event.reply("That spot has already been played!").setEphemeral(true).queue();
+                        event.reply(Language.getString("BUTTONLISTENER_ALRPLAYED", guild)).setEphemeral(true).queue();
                         return;
                     }
                     board[0][1] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
                 }
                 case "tictactoeButton3" -> {
                     if (board[0][2] != 0) {
-                        event.reply("That spot has already been played!").setEphemeral(true).queue();
+                        event.reply(Language.getString("BUTTONLISTENER_ALRPLAYED", guild)).setEphemeral(true).queue();
                         return;
                     }
                     board[0][2] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
                 }
                 case "tictactoeButton4" -> {
                     if (board[1][0] != 0) {
-                        event.reply("That spot has already been played!").setEphemeral(true).queue();
+                        event.reply(Language.getString("BUTTONLISTENER_ALRPLAYED", guild)).setEphemeral(true).queue();
                         return;
                     }
                     board[1][0] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
                 }
                 case "tictactoeButton5" -> {
                     if (board[1][1] != 0) {
-                        event.reply("That spot has already been played!").setEphemeral(true).queue();
+                        event.reply(Language.getString("BUTTONLISTENER_ALRPLAYED", guild)).setEphemeral(true).queue();
                         return;
                     }
                     board[1][1] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
                 }
                 case "tictactoeButton6" -> {
                     if (board[1][2] != 0) {
-                        event.reply("That spot has already been played!").setEphemeral(true).queue();
+                        event.reply(Language.getString("BUTTONLISTENER_ALRPLAYED", guild)).setEphemeral(true).queue();
                         return;
                     }
                     board[1][2] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
                 }
                 case "tictactoeButton7" -> {
                     if (board[2][0] != 0) {
-                        event.reply("That spot has already been played!").setEphemeral(true).queue();
+                        event.reply(Language.getString("BUTTONLISTENER_ALRPLAYED", guild)).setEphemeral(true).queue();
                         return;
                     }
                     board[2][0] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
                 }
                 case "tictactoeButton8" -> {
                     if (board[2][1] != 0) {
-                        event.reply("That spot has already been played!").setEphemeral(true).queue();
+                        event.reply(Language.getString("BUTTONLISTENER_ALRPLAYED", guild)).setEphemeral(true).queue();
                         return;
                     }
                     board[2][1] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;
                 }
                 case "tictactoeButton9" -> {
                     if (board[2][2] != 0) {
-                        event.reply("That spot has already been played!").setEphemeral(true).queue();
+                        event.reply(Language.getString("BUTTONLISTENER_ALRPLAYED", guild)).setEphemeral(true).queue();
                         return;
                     }
                     board[2][2] = TTTCommand.playersTurn.get(event.getChannel().getIdLong()) == playersArray[0] ? 1 : 2;

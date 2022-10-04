@@ -17,6 +17,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONObject;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.music.AudioLoadHandler;
 import org.virep.jdabot.music.AudioManagerController;
 import org.virep.jdabot.music.GuildAudioManager;
@@ -99,12 +100,12 @@ public class PlayCommand implements Command {
         String result = "";
 
         if (urlOption == null && searchOption == null && fileOption == null) {
-            event.getHook().editOriginal("\u274C - You must select at least an option.").queue();
+            event.getHook().editOriginal(Language.getString("PLAY_NOOPTION", guild)).queue();
             return;
         }
 
         if (urlOption != null && searchOption != null) {
-            event.getHook().editOriginal("\u274C - You must select only one option. (either `search` or `url`).").queue();
+            event.getHook().editOriginal(Language.getString("PLAY_ONEOPTION", guild)).queue();
             return;
         }
 
@@ -134,7 +135,7 @@ public class PlayCommand implements Command {
                     new URL(urlOption.getAsString());
                     result = urlOption.getAsString();
                 } catch (MalformedURLException e) {
-                    event.getHook().editOriginal("\u274C - You must specify a valid URL.").queue();
+                    event.getHook().editOriginal(Language.getString("PLAY_NOTVALIDURL", guild)).queue();
                     return;
                 }
             }
@@ -153,14 +154,14 @@ public class PlayCommand implements Command {
         }
 
         if (memberVoiceState.getChannel() == null) {
-            event.getHook().editOriginal("\u274C - You are not in a voice channel!").queue();
+            event.getHook().editOriginal(Language.getString("MUSIC_NOVOICECHANNEL", guild)).queue();
             return;
         }
 
         if (!selfVoiceState.inAudioChannel()) {
             manager.openConnection((VoiceChannel) memberVoiceState.getChannel());
         } else if (Objects.requireNonNull(selfVoiceState.getChannel()).getIdLong() != memberVoiceState.getChannel().getIdLong()) {
-            event.getHook().editOriginal("\u274C - You are not in the same channel as me!").queue();
+            event.getHook().editOriginal(Language.getString("MUSIC_NOTSAMEVC", guild)).queue();
             return;
         }
 

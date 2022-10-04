@@ -2,6 +2,7 @@ package org.virep.jdabot.commands.moderation;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -21,6 +22,7 @@ import net.dv8tion.jda.api.requests.ErrorResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virep.jdabot.database.Database;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.utils.ErrorManager;
 import org.virep.jdabot.utils.Utils;
@@ -115,8 +117,10 @@ public class WarnCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        Guild guild = event.getGuild();
+
         if (!event.getMember().hasPermission(Permission.MODERATE_MEMBERS)) {
-            event.reply("\u274C - You do not have permission to use this command.").setEphemeral(true).queue();
+            event.reply(Language.getString("NO_PERMISSION", guild)).setEphemeral(true).queue();
             return;
         }
 
@@ -125,15 +129,15 @@ public class WarnCommand implements Command {
 
         ErrorHandler errorHandler = new ErrorHandler()
                 .handle(EnumSet.of(ErrorResponse.MISSING_PERMISSIONS),
-                        (ex) -> event.getChannel().sendMessage("\u274C - The warn event could not happen because of permission discrepancy.").queue())
+                        (ex) -> event.getChannel().sendMessage(Language.getString("ERRORHANDLER_MISSINGPERMISSIONS", guild)).queue())
                 .handle(EnumSet.of(ErrorResponse.UNKNOWN_USER),
-                        (ex) -> event.getChannel().sendMessage("\u274C - The warn event could not happen because the member already left the server.").queue())
+                        (ex) -> event.getChannel().sendMessage(Language.getString("ERRORHANDLER_UNKNOWNUSER", guild)).queue())
                 .handle(EnumSet.of(ErrorResponse.UNKNOWN_MEMBER),
-                        (ex) -> event.getChannel().sendMessage("\u274C - The warn event could not happen because the member already left the server.").queue());
+                        (ex) -> event.getChannel().sendMessage(Language.getString("ERRORHANDLER_UNKNOWNUSER", guild)).queue());
 
         if (group != null && group.equals("config")) {
             try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM warn_config WHERE guildID = ?")) {
-                statement.setString(1, event.getGuild().getId());
+                statement.setString(1, guild.getId());
 
                 ResultSet result = statement.executeQuery();
 
@@ -144,7 +148,7 @@ public class WarnCommand implements Command {
                             int timeout = Utils.timeStringToSeconds(event.getOption("duration", OptionMapping::getAsString));
 
                             if (timeout > Member.MAX_TIME_OUT_LENGTH * 86400) {
-                                event.reply("\u274C - The time duration you specified is above 28 days (2419200 seconds), please specify a lower time duration.").setEphemeral(true).queue();
+                                event.reply(Language.getString("WARN_MAXTIMEOUT", guild)).setEphemeral(true).queue();
                                 connection.close();
                                 return;
                             }
@@ -152,11 +156,11 @@ public class WarnCommand implements Command {
                             try (PreparedStatement updateStatement = connection.prepareStatement("UPDATE warn_config SET timeout = ?, timeout_duration = ? WHERE guildID = ?")) {
                                 updateStatement.setInt(1, amount);
                                 updateStatement.setInt(2, timeout);
-                                updateStatement.setString(3, event.getGuild().getId());
+                                updateStatement.setString(3, guild.getId());
 
                                 updateStatement.executeUpdate();
 
-                                event.reply("\u2705 - Members will now be timed-out if they have **" + amount + "** warns for **" + event.getOption("duration", OptionMapping::getAsString) + "**").queue();
+                                event.reply(Language.getString("WARN_CONFIG_TIMEOUT", guild).replace("%AMOUNT%", String.valueOf(amount)).replace("%DURATION%", event.getOption("duration", OptionMapping::getAsString))).queue();
                             }
                             break;
                         }
@@ -165,11 +169,11 @@ public class WarnCommand implements Command {
 
                             try (PreparedStatement updateStatement = connection.prepareStatement("UPDATE warn_config SET " + subcommand + " = ? WHERE guildID = ?")) {
                                 updateStatement.setInt(1, amount);
-                                updateStatement.setString(2, event.getGuild().getId());
+                                updateStatement.setString(2, guild.getId());
 
                                 updateStatement.executeUpdate();
 
-                                event.reply("\u2705 - Members will now be kicked if they have **" + amount + "** warns").queue();
+                                event.reply(Language.getString("WARN_CONFIG_KICK", guild).replace("%AMOUNT%", String.valueOf(amount))).queue();
                             }
                             break;
                         }
@@ -178,11 +182,11 @@ public class WarnCommand implements Command {
 
                             try (PreparedStatement updateStatement = connection.prepareStatement("UPDATE warn_config SET " + subcommand + " = ? WHERE guildID = ?")) {
                                 updateStatement.setInt(1, amount);
-                                updateStatement.setString(2, event.getGuild().getId());
+                                updateStatement.setString(2, guild.getId());
 
                                 updateStatement.executeUpdate();
 
-                                event.reply("\u2705 - Members will now be banned if they have **" + amount + "** warns").queue();
+                                event.reply(Language.getString("WARN_CONFIG_BAN", guild).replace("%AMOUNT%", String.valueOf(amount))).queue();
                             }
                             break;
                         }
@@ -190,11 +194,11 @@ public class WarnCommand implements Command {
                             GuildChannelUnion channel = event.getOption("channel", OptionMapping::getAsChannel);
                             try (PreparedStatement updateStatement = connection.prepareStatement("UPDATE warn_config SET channelID = ? WHERE guildID = ?")) {
                                 updateStatement.setString(1, channel.getId());
-                                updateStatement.setString(2, event.getGuild().getId());
+                                updateStatement.setString(2, guild.getId());
 
                                 updateStatement.executeUpdate();
 
-                                event.reply("\u2705 - Warns will now be logged in " + channel.getAsMention()).queue();
+                                event.reply(Language.getString("WARN_CONFIG_CHANNEL", guild).replace("%CHANNELMENTION%", channel.getAsMention())).queue();
                             }
                         }
                     }
@@ -209,17 +213,17 @@ public class WarnCommand implements Command {
 
                     switch (subcommand) {
                         case "timeout" ->
-                                insertString = "\u2705 - Members will now be timed-out if they have **" + timeoutAmount + "** warns for **" + event.getOption("timeout_duration", OptionMapping::getAsString) + "**";
+                                insertString = Language.getString("WARN_CONFIG_TIMEOUT", guild).replace("%AMOUNT%", String.valueOf(timeoutAmount)).replace("%DURATION%", String.valueOf(timeoutDuration));
                         case "kick" ->
-                                insertString = "\u2705 - Members will now be kicked if they have **" + kickAmount + "** warns";
+                                insertString = Language.getString("WARN_CONFIG_KICK", guild).replace("%AMOUNT%", String.valueOf(kickAmount));
                         case "ban" ->
-                                insertString = "\u2705 - Members will now be banned if they have **" + banAmount + "** warns";
+                                insertString = Language.getString("WARN_CONFIG_BAN", guild).replace("%AMOUNT%", String.valueOf(banAmount));
                         case "channel" ->
-                                insertString = "\u2705 - Warns will now be logged in " + event.getOption("channel", OptionMapping::getAsChannel).getAsMention();
+                                insertString = Language.getString("WARN_CONFIG_CHANNEL", guild).replace("%CHANNELMENTION%", event.getOption("channel", OptionMapping::getAsChannel).getAsMention());
                     }
 
                     try (PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO warn_config (guildID, channelID, timeout, timeout_duration, kick, ban) VALUES (?,?,?,?,?,?)")) {
-                        insertStatement.setString(1, event.getGuild().getId());
+                        insertStatement.setString(1, guild.getId());
                         insertStatement.setString(2, channelID);
                         insertStatement.setInt(3, timeoutAmount);
                         insertStatement.setInt(4, timeoutDuration);
@@ -240,22 +244,22 @@ public class WarnCommand implements Command {
             String reason = event.getOption("reason") != null ? event.getOption("reason", OptionMapping::getAsString) : "No reason specified";
 
             if (member.isOwner()) {
-                event.reply("\u274C - You cannot warn the owner of this server.").setEphemeral(true).queue();
+                event.reply(Language.getString("WARN_OWNER", guild)).setEphemeral(true).queue();
                 return;
             }
 
             if (member.getId().equals(event.getMember().getId())) {
-                event.reply("\u274C - You cannot warn yourself.").setEphemeral(true).queue();
+                event.reply(Language.getString("WARN_YOURSELF", guild)).setEphemeral(true).queue();
                 return;
             }
 
             if (member.getUser().isBot()) {
-                event.reply("\u274C - You cannot warn a bot user.").setEphemeral(true).queue();
+                event.reply(Language.getString("WARN_BOT", guild)).setEphemeral(true).queue();
                 return;
             }
 
             if (member.hasPermission(Permission.MODERATE_MEMBERS)) {
-                event.reply("\u274C - You cannot warn this user because they are a moderator.").setEphemeral(true).queue();
+                event.reply(Language.getString("WARN_MODERATOR", guild)).setEphemeral(true).queue();
                 return;
             }
 
@@ -263,10 +267,10 @@ public class WarnCommand implements Command {
                  PreparedStatement amountStatement = connection.prepareStatement("SELECT * FROM warn_amount WHERE guildID = ? AND userID = ?");
                  PreparedStatement configStatement = connection.prepareStatement("SELECT * FROM warn_config WHERE guildID = ?")) {
 
-                amountStatement.setString(1, event.getGuild().getId());
+                amountStatement.setString(1, guild.getId());
                 amountStatement.setString(2, member.getId());
 
-                configStatement.setString(1, event.getGuild().getId());
+                configStatement.setString(1, guild.getId());
 
                 ResultSet amountResult = amountStatement.executeQuery();
                 ResultSet configResult = configStatement.executeQuery();
@@ -274,7 +278,7 @@ public class WarnCommand implements Command {
                 if (amountResult.first()) {
                     try (PreparedStatement amountUpdateStatement = connection.prepareStatement("UPDATE warn_amount SET amount = ? WHERE guildID = ? AND userID = ?")) {
                         amountUpdateStatement.setInt(1, (amountResult.getInt("amount") + 1));
-                        amountUpdateStatement.setString(2, event.getGuild().getId());
+                        amountUpdateStatement.setString(2, guild.getId());
                         amountUpdateStatement.setString(3, member.getId());
 
 
@@ -284,23 +288,23 @@ public class WarnCommand implements Command {
                             int amount = amountResult.getInt("amount");
 
                             if (amount + 1 >= configResult.getInt("ban"))
-                                member.ban(0, TimeUnit.SECONDS).reason("Automatic ban due to warns : " + reason).queue(success -> log.info("banned due to warn"), errorHandler);
+                                member.ban(0, TimeUnit.SECONDS).reason(Language.getString("WARN_AUTOBAN", guild).replace("%REASON%", reason)).queue(success -> log.info("banned due to warn"), errorHandler);
                             else if (amount + 1 >= configResult.getInt("kick"))
-                                member.kick().reason("Automatic kick due to warns : " + reason).queue(success -> log.info("kicked due to warn"), errorHandler);
+                                member.kick().reason(Language.getString("WARN_AUTOKICK", guild).replace("%REASON%", reason)).queue(success -> log.info("kicked due to warn"), errorHandler);
                             else if (amount + 1 >= configResult.getInt("timeout"))
-                                member.timeoutFor(configResult.getInt("timeout_duration"), TimeUnit.SECONDS).reason("Automatic timeout due to warns : " + reason).queue(success -> log.info("timed out due to warn"), errorHandler);
+                                member.timeoutFor(configResult.getInt("timeout_duration"), TimeUnit.SECONDS).reason(Language.getString("WARN_AUTOTIMEOUT", guild).replace("%REASON%", reason)).queue(success -> log.info("timed out due to warn"), errorHandler);
 
                             if (configResult.getString("channelID") != null) {
-                                TextChannel channel = event.getGuild().getTextChannelById(configResult.getString("channelID"));
+                                TextChannel channel = guild.getTextChannelById(configResult.getString("channelID"));
 
                                 MessageEmbed embed = new EmbedBuilder()
                                         .setTimestamp(Instant.now())
                                         .setColor(Color.RED)
-                                        .setTitle("Warn #" + (amount + 1))
+                                        .setTitle(Language.getString("WARN_EMBEDTITLE", guild).replace("%AMOUNT%", String.valueOf((amount + 1))))
                                         .setAuthor(member.getUser().getAsTag(), null, member.getUser().getAvatarUrl())
-                                        .addField("User warned: ", member.getUser().getAsTag(), true)
-                                        .addField("Warned by : ", event.getUser().getAsTag(), true)
-                                        .addField("Reason", reason, true)
+                                        .addField(Language.getString("WARN_EMBEDWARNED", guild), member.getUser().getAsTag(), true)
+                                        .addField(Language.getString("WARN_EMBEDWARNEDBY", guild), event.getUser().getAsTag(), true)
+                                        .addField(Language.getString("WARN_EMBEDREASON", guild), reason, true)
                                         .build();
 
                                 channel.sendMessageEmbeds(embed).queue();
@@ -309,23 +313,23 @@ public class WarnCommand implements Command {
                     }
                 } else {
                     if (configResult.first() && configResult.getString("channelID") != null) {
-                        TextChannel channel = event.getGuild().getTextChannelById(configResult.getString("channelID"));
+                        TextChannel channel = guild.getTextChannelById(configResult.getString("channelID"));
 
                         MessageEmbed embed = new EmbedBuilder()
                                 .setTimestamp(Instant.now())
                                 .setColor(Color.RED)
-                                .setTitle("Warn #1")
+                                .setTitle(Language.getString("WARN_EMBEDTITLE", guild).replace("%AMOUNT%", String.valueOf(1)))
                                 .setAuthor(member.getUser().getAsTag(), null, member.getUser().getAvatarUrl())
-                                .addField("User warned: ", member.getUser().getAsTag(), true)
-                                .addField("Warned by : ", event.getUser().getAsTag(), true)
-                                .addField("Reason", reason, true)
+                                .addField(Language.getString("WARN_EMBEDWARNED", guild), member.getUser().getAsTag(), true)
+                                .addField(Language.getString("WARN_EMBEDWARNEDBY", guild), event.getUser().getAsTag(), true)
+                                .addField(Language.getString("WARN_EMBEDREASON", guild), reason, true)
                                 .build();
 
                         channel.sendMessageEmbeds(embed).queue();
                     }
 
                     try (PreparedStatement amountInsertStatement = connection.prepareStatement("INSERT INTO warn_amount (guildID, userID, amount) VALUES (?,?,?)")) {
-                        amountInsertStatement.setString(1, event.getGuild().getId());
+                        amountInsertStatement.setString(1, guild.getId());
                         amountInsertStatement.setString(2, member.getId());
                         amountInsertStatement.setInt(3, 1);
 
@@ -333,10 +337,10 @@ public class WarnCommand implements Command {
                     }
                 }
 
-                event.reply("\u2705 - **" + member.getUser().getAsTag() + "** has been warned for the following reason : **" + reason + "**").queue();
+                event.reply(Language.getString("WARN_WARNED", guild).replace("%USERTAG%", member.getUser().getAsTag()).replace("%REASON%", reason)).queue();
 
                 try (PreparedStatement insertReasonStatement = connection.prepareStatement("INSERT INTO warn_reasons (guildID, userID, reason, timestamp) VALUES (?,?,?,?)")) {
-                    insertReasonStatement.setString(1, event.getGuild().getId());
+                    insertReasonStatement.setString(1, guild.getId());
                     insertReasonStatement.setString(2, member.getId());
                     insertReasonStatement.setString(3, reason);
                     insertReasonStatement.setInt(4, (int) Instant.now().getEpochSecond());
@@ -352,20 +356,20 @@ public class WarnCommand implements Command {
 
             try (Connection connection = Database.getConnection();
                  PreparedStatement statement = connection.prepareStatement("SELECT * FROM warn_reasons WHERE guildID = ? AND userID = ? ORDER BY timestamp ASC")) {
-                statement.setString(1, event.getGuild().getId());
+                statement.setString(1, guild.getId());
                 statement.setString(2, member.getId());
 
                 ResultSet result = statement.executeQuery();
 
                 if (!result.first()) {
-                    event.reply("\u274C - This user has no warns.").setEphemeral(true).queue();
+                    event.reply(Language.getString("WARN_LIST_NOWARNS", guild)).setEphemeral(true).queue();
                     connection.close();
                     return;
                 }
 
                 EmbedBuilder embedBuilder = new EmbedBuilder()
                         .setAuthor(event.getUser().getAsTag(), null, event.getUser().getAvatarUrl())
-                        .setTitle("Warn list for " + member.getUser().getAsTag())
+                        .setTitle(Language.getString("WARN_LIST_EMBEDTITLE", guild).replace("%USERTAG%", member.getUser().getAsTag()))
                         .setTimestamp(Instant.now());
 
                 StringBuilder embedDescription = new StringBuilder();
@@ -397,17 +401,17 @@ public class WarnCommand implements Command {
             try (Connection connection = Database.getConnection();
                  PreparedStatement statement = connection.prepareStatement("SELECT * FROM warn_reasons WHERE guildID = ? AND userID = ?");
                  PreparedStatement amountStatement = connection.prepareStatement("SELECT * FROM warn_amount WHERE guildID = ? AND userID = ?")) {
-                statement.setString(1, event.getGuild().getId());
+                statement.setString(1, guild.getId());
                 statement.setString(2, member.getId());
 
-                amountStatement.setString(1, event.getGuild().getId());
+                amountStatement.setString(1, guild.getId());
                 amountStatement.setString(2, member.getId());
 
                 ResultSet result = statement.executeQuery();
                 ResultSet amountResult = amountStatement.executeQuery();
 
                 if (!result.first()) {
-                    event.reply("\u274C - This member has no warns.").setEphemeral(true).queue();
+                    event.reply(Language.getString("WARN_LIST_NOWARNS", guild)).setEphemeral(true).queue();
                     connection.close();
                     return;
                 }
@@ -418,7 +422,7 @@ public class WarnCommand implements Command {
                 result.beforeFirst();
 
                 if (index > resultSize) {
-                    event.reply("\u274C - The number you specified is over the number of warns this member has.").setEphemeral(true).queue();
+                    event.reply(Language.getString("WARN_LIST_OUTINDEX", guild)).setEphemeral(true).queue();
                     connection.close();
                     return;
                 }
@@ -428,18 +432,18 @@ public class WarnCommand implements Command {
 
                 try (PreparedStatement deleteReasonStatement = connection.prepareStatement("DELETE FROM warn_reasons WHERE guildID = ? AND userID = ? AND reason = ?");
                      PreparedStatement updateAmountStatement = connection.prepareStatement("UPDATE warn_amount SET amount = ? WHERE guildID = ? AND userID = ?")) {
-                    deleteReasonStatement.setString(1, event.getGuild().getId());
+                    deleteReasonStatement.setString(1, guild.getId());
                     deleteReasonStatement.setString(2, member.getId());
                     deleteReasonStatement.setString(3, result.getString("reason"));
 
                     updateAmountStatement.setInt(1, amountResult.getInt("amount") - 1);
-                    updateAmountStatement.setString(2, event.getGuild().getId());
+                    updateAmountStatement.setString(2, guild.getId());
                     updateAmountStatement.setString(3, member.getId());
 
                     deleteReasonStatement.executeUpdate();
                     updateAmountStatement.executeUpdate();
 
-                    event.reply("\u2705 - The warn has been successfully removed.").queue();
+                    event.reply(Language.getString("WARN_REMOVE_REMOVED", guild)).queue();
                 }
                 connection.close();
             } catch (SQLException e) {

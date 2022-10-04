@@ -1,6 +1,7 @@
 package org.virep.jdabot.listeners;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -11,6 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.virep.jdabot.database.Database;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.utils.ErrorManager;
 
 import java.io.InputStream;
@@ -29,9 +31,11 @@ import java.util.Objects;
 public class SelectMenuInteractionListener extends ListenerAdapter {
     @Override
     public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {
+        Guild guild = event.getGuild();
+
         if (Objects.equals(event.getSelectMenu().getId(), "selectMenu:logs:categoryEvents")) {
             try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM logs WHERE guildID = ?")) {
-                statement.setString(1, event.getGuild().getId());
+                statement.setString(1, guild.getId());
 
                 ResultSet result = statement.executeQuery();
                 ResultSetMetaData resultSetMetaData = result.getMetaData();
@@ -80,12 +84,12 @@ public class SelectMenuInteractionListener extends ListenerAdapter {
             HashSet<String> options = new HashSet<>();
 
             try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM logs WHERE guildID = ?")) {
-                statement.setString(1, event.getGuild().getId());
+                statement.setString(1, guild.getId());
 
                 ResultSet result = statement.executeQuery();
 
                 if (!result.first()) {
-                    event.reply("You must set up a log channel before. Use `/logs channel`").setEphemeral(true).queue();
+                    event.reply(Language.getString("SELECTMENULISTENER_LOGS_NOCHANNEL", guild)).setEphemeral(true).queue();
                     connection.close();
                     return;
                 }
@@ -108,11 +112,11 @@ public class SelectMenuInteractionListener extends ListenerAdapter {
                 sb.append(" WHERE guildID = ?");
 
                 try (PreparedStatement statement2 = connection.prepareStatement(sb.toString())) {
-                    statement2.setString(1, event.getGuild().getId());
+                    statement2.setString(1, guild.getId());
 
                     statement2.executeUpdate();
 
-                    event.reply("The (un)selected events have been successfully configured.").setEphemeral(true).queue();
+                    event.reply(Language.getString("SELECTMENULISTENER_LOGS_CONFIGURED", guild)).setEphemeral(true).queue();
                 }
 
                 connection.close();
@@ -130,40 +134,12 @@ public class SelectMenuInteractionListener extends ListenerAdapter {
 
             if (label.equals("Operators")) {
                 embedBuilder
-                        .setDescription("""
-                                __**Addition**__: `2 + 2`
-                                __**Substraction**__: `2 - 2`
-                                __**Multiplication**__: `2 * 2`
-                                __**Division**__: `2 / 2`
-                                __**Exponentation**__: `2 ^ 2`
-                                __**Unary Minus/Plus (Sign Operators)**__: `+2 - (-2)`
-                                __**Modulo**__: `2 % 2`
-                                """)
-                        .setTitle("Supported Operators");
+                        .setDescription(Language.getString("SELECTMENULISTENER_MATH_OPERATORS", guild))
+                        .setTitle(Language.getString("SELECTMENULISTENER_MATH_OPTITLE", guild));
             } else {
                 embedBuilder
-                        .setDescription("""
-                                __**Absolute Value**__: `abs(x)`
-                                __**Arc Cosine**__: `acos(x)`
-                                __**Arc Sine**__: `asin(x)`
-                                __**Arc Tangent**__: `atan(x)`
-                                __**Cosine**__: `cos(x)`
-                                __**Cubic Root**__: `cbrt(x)`
-                                __**Euler's Number Raised to the power (e^x)**__: `exp(x)`
-                                __**Hyperbolic Cosine**__: `cosh(x)`
-                                __**Hyperbolic Sine**__: `sinh(x)`
-                                __**Hyperbolic Tangent**__: `tanh(x)`
-                                __**Logarithm (base 10)**__: `log1O(x)`
-                                __**Logarithm (base 2)**__: `log2(x)`
-                                __**Logarithmus Naturalis (base e)**__: `log(x, y)`
-                                __**Nearest Upper Integer**__: `ceil(x)`
-                                __**Nearest Lower Integer**__: `floor(x)`
-                                __**Signum Function**__: `signum(x)`
-                                __**Sine**__: `sin(x)`
-                                __**Square Root**__: `sqrt(x)`
-                                __**Tangent**__: `tan(x)`
-                                """)
-                        .setTitle("Supported Operators");
+                        .setDescription(Language.getString("SELECTMENULISTENER_MATH_FUNCTIONS", guild))
+                        .setTitle(Language.getString("SELECTMENULISTENER_MATH_FNTITLE", guild));
             }
 
             MessageEmbed embed = embedBuilder.build();

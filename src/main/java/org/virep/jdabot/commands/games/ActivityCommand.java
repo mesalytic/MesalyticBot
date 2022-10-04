@@ -1,6 +1,7 @@
 package org.virep.jdabot.commands.games;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
@@ -13,6 +14,7 @@ import okhttp3.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.utils.ErrorManager;
 
@@ -59,9 +61,10 @@ public class ActivityCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        Guild guild = event.getGuild();
 
         if (!event.getMember().getVoiceState().inAudioChannel()) {
-            event.reply("\u274C - You must be in a voice channel.").setEphemeral(true).queue();
+            event.reply(Language.getString("NOVOICECHANNEL", guild)).setEphemeral(true).queue();
             return;
         }
 
@@ -92,14 +95,14 @@ public class ActivityCommand implements Command {
             JSONObject activitiesObject = new JSONObject(tokener);
 
             if (!activitiesObject.has(event.getOption("application").getAsString())) {
-                event.reply("\u274C - This activity somehow doesn't exist, please report the error.").queue();
+                event.reply(Language.getString("ACTIVITY_NOEXIST", guild)).queue();
                 return;
             }
 
             JSONObject activityObject = activitiesObject.getJSONObject(event.getOption("application").getAsString());
 
-            if (event.getGuild().getBoostTier().getKey() < activityObject.getInt("boostLevel")) {
-                event.reply("\u274C - You must be at least Boost Level 1 to start this event.").setEphemeral(true).queue();
+            if (guild.getBoostTier().getKey() < activityObject.getInt("boostLevel")) {
+                event.reply(Language.getString("ACTIVITY_BOOSTREQUIRED", guild)).setEphemeral(true).queue();
                 return;
             }
 
@@ -114,15 +117,17 @@ public class ActivityCommand implements Command {
             String inviteCode = jsonBody.getString("code");
             String description = applicationJsonObject.get("description") +
                     "\n\n" +
-                    "Required Nitro Boost Level: " +
+                    Language.getString("ACTIVITY_EMBED_REQUIRED", guild) +
                     activityObject.get("boostLevel") +
                     "\n" +
-                    "Max Participants: " +
-                    (activityObject.get("maxParticipants").equals(-1) ? "Unlimited": activityObject.get("maxParticipants")) +
+                    Language.getString("ACTIVITY_EMBED_MAX", guild) +
+                    (activityObject.get("maxParticipants").equals(-1) ? Language.getString("ACTIVITY_EMBED_MAX_UNLIMITED", guild): activityObject.get("maxParticipants")) +
                     "\n\n" +
-                    "__**You must be on PC.**__" +
+                    Language.getString("ACTIVITY_EMBED_PC", guild) +
                     "\n" +
-                    "[Click here to access the activity !](https://discord.gg/" +
+                    "[" +
+                    Language.getString("ACTIVITY_EMBED_ACCESS", guild) +
+                    "](https://discord.gg/" +
                     inviteCode +
                     ")";
 

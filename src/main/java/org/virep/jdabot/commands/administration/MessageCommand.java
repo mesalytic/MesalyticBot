@@ -1,6 +1,7 @@
 package org.virep.jdabot.commands.administration;
 
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -11,6 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.*;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import org.virep.jdabot.database.Database;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.utils.ErrorManager;
 
@@ -96,10 +98,11 @@ public class MessageCommand implements Command {
     public void execute(SlashCommandInteractionEvent event) {
 
         Member member = event.getMember();
+        Guild guild = event.getGuild();
 
         assert member != null;
         if (!member.hasPermission(Permission.MANAGE_SERVER)) {
-            event.reply("\u274C - You do not have permission to use this command.").setEphemeral(true).queue();
+            event.reply(Language.getString("NO_PERMISSION", guild)).setEphemeral(true).queue();
             return;
         }
 
@@ -108,7 +111,7 @@ public class MessageCommand implements Command {
 
         if (method.equals("set")) {
             try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + group + "messages WHERE guildID = ?")) {
-                statement.setString(1, event.getGuild().getId());
+                statement.setString(1, guild.getId());
 
                 ResultSet result = statement.executeQuery();
 
@@ -116,45 +119,45 @@ public class MessageCommand implements Command {
                     if (group.equals("dm")) {
                         try (PreparedStatement statement1 = connection.prepareStatement("UPDATE " + group + "messages SET message = ? WHERE guildID = ?")) {
                             statement1.setString(1, event.getOption("message", OptionMapping::getAsString));
-                            statement1.setString(2, event.getGuild().getId());
+                            statement1.setString(2, guild.getId());
 
                             statement1.executeUpdate();
 
-                            event.reply("\u2705 - The " + group + " message has been successfully replaced.").queue();
+                            event.reply(Language.getString("MESSAGE_SET_REPLACED", guild).replace("%GROUP%", group)).queue();
                         }
                     } else {
                         try (PreparedStatement statement1 = connection.prepareStatement("UPDATE " + group + "messages SET message = ?, channelID = ? WHERE guildID = ?")) {
                             statement1.setString(1, event.getOption("message", OptionMapping::getAsString));
                             statement1.setString(2, event.getOption("channel", OptionMapping::getAsChannel).getId());
-                            statement1.setString(3, event.getGuild().getId());
+                            statement1.setString(3, guild.getId());
 
                             statement1.executeUpdate();
 
-                            event.reply("\u2705 - The " + group + " message has been successfully replaced.").queue();
+                            event.reply(Language.getString("MESSAGE_SET_REPLACED", guild).replace("%GROUP%", group)).queue();
                         }
                     }
                 } else {
                     if (group.equals("dm")) {
                         try (PreparedStatement statement1 = connection.prepareStatement("INSERT INTO " + group + "messages (message, guildID) VALUES (?,?)")) {
                             statement1.setString(1, event.getOption("message", OptionMapping::getAsString));
-                            statement1.setString(2, event.getGuild().getId());
+                            statement1.setString(2, guild.getId());
 
                             statement1.executeUpdate();
 
                             connection.close();
 
-                            event.reply("\u2705 - The " + group + " message has been successfully added.").queue();
+                            event.reply(Language.getString("MESSAGE_SET_ADDED", guild).replace("%GROUP%", group)).queue();
                             return;
                         }
                     } else {
                         try (PreparedStatement statement1 = connection.prepareStatement("INSERT INTO " + group + "messages (message, channelID, guildID) VALUES (?,?,?)")) {
                             statement1.setString(1, event.getOption("message", OptionMapping::getAsString));
                             statement1.setString(2, event.getOption("channel", OptionMapping::getAsChannel).getId());
-                            statement1.setString(3, event.getGuild().getId());
+                            statement1.setString(3, guild.getId());
 
                             statement1.executeUpdate();
 
-                            event.reply("\u2705 - The " + group + " message has been successfully added.").queue();
+                            event.reply(Language.getString("MESSAGE_SET_ADDED", guild).replace("%GROUP%", group)).queue();
                         }
                     }
                 }
@@ -167,21 +170,22 @@ public class MessageCommand implements Command {
         if (method.equals("remove")) {
 
             try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + group + "messages WHERE guildID = ?")) {
-                statement.setString(1, event.getGuild().getId());
+                statement.setString(1, guild.getId());
 
                 ResultSet result = statement.executeQuery();
 
                 if (!result.first()) {
-                    event.reply("\u274C - You don't have a " + group + " message set up. Set it up using `/message " + group + " set`").setEphemeral(true).queue();
+                    event.reply(Language.getString("MESSAGE_REMOVE_NOMESSAGE", guild).replaceAll("%GROUP%", group)).setEphemeral(true).queue();
+                    connection.close();
                     return;
                 }
 
                 try (PreparedStatement statement1 = connection.prepareStatement("DELETE FROM " + group + "messages WHERE guildID = ?")) {
-                    statement1.setString(1, event.getGuild().getId());
+                    statement1.setString(1, guild.getId());
 
                     statement1.executeUpdate();
 
-                    event.reply("\u2705 - The " + group + " message has been successfully removed.").queue();
+                    event.reply(Language.getString("MESSAGE_REMOVE_REMOVED", guild).replaceAll("%GROUP%", group)).queue();
                 }
                 connection.close();
             } catch (SQLException e) {
@@ -191,15 +195,15 @@ public class MessageCommand implements Command {
 
         if (method.equals("tags")) {
             if (group.equals("join") || group.equals("dm"))
-                event.reply("You can use tags to customize your message.\n\n%USER% - Pings the user\n%USERNAME% - Displays the username + discriminator of the user\n%SERVERNAME% - Displays the server name\n%MEMBERCOUNT% - Displays the member count\n\nYou can use Markdown to customize it even further.\nRole mentions and emoji usage are also supported (with custom emojis from your server)").setEphemeral(true).queue();
+                event.reply(Language.getString("MESSAGE_TAGS1", guild)).setEphemeral(true).queue();
             else
-                event.reply("You can use tags to customize your message.\n\n%USERNAME% - Displays the username + discriminator of the user\n%SERVERNAME% - Displays the server name\n%MEMBERCOUNT% - Displays the member count\n\nYou can use Markdown to customize it even further.\nRole mentions and emoji usage are also supported (with custom emojis from your server)").setEphemeral(true).queue();
+                event.reply(Language.getString("MESSAGE_TAGS2", guild)).setEphemeral(true).queue();
         }
 
         if (method.equals("test")) {
             if (group.equals("join")) {
                 try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM joinmessages WHERE guildID = ?")) {
-                    statement.setString(1, event.getGuild().getId());
+                    statement.setString(1, guild.getId());
 
                     ResultSet result = statement.executeQuery();
 
@@ -207,14 +211,14 @@ public class MessageCommand implements Command {
                         String message = result.getString(1);
 
                         String channelID = result.getString(2);
-                        TextChannel channel = event.getGuild().getTextChannelById(channelID);
+                        TextChannel channel = guild.getTextChannelById(channelID);
 
                         assert channel != null;
                         channel.sendMessage(message
                                 .replace("%USER%", event.getMember().getAsMention())
                                 .replace("%USERNAME%", event.getUser().getAsTag())
-                                .replace("%SERVERNAME%", event.getGuild().getName())
-                                .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))).queue();
+                                .replace("%SERVERNAME%", guild.getName())
+                                .replace("%MEMBERCOUNT%", String.valueOf(guild.getMemberCount()))).queue();
                     }
 
                     connection.close();
@@ -225,7 +229,7 @@ public class MessageCommand implements Command {
 
             if (group.equals("dm")) {
                 try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM dmmessages WHERE guildID = ?")) {
-                    statement.setString(1, event.getGuild().getId());
+                    statement.setString(1, guild.getId());
 
                     ResultSet result = statement.executeQuery();
 
@@ -236,9 +240,9 @@ public class MessageCommand implements Command {
                             dmChannel.sendMessage(message
                                     .replace("%USER%", event.getMember().getAsMention())
                                     .replace("%USERNAME%", event.getUser().getAsTag())
-                                    .replace("%SERVERNAME%", event.getGuild().getName())
-                                    .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))
-                            ).addActionRow(Button.secondary("sentfromguild", "Sent from " + event.getGuild().getName()).asDisabled()).queue();
+                                    .replace("%SERVERNAME%", guild.getName())
+                                    .replace("%MEMBERCOUNT%", String.valueOf(guild.getMemberCount()))
+                            ).addActionRow(Button.secondary("sentfromguild", "Sent from " + guild.getName()).asDisabled()).queue();
                         });
                     }
 
@@ -250,7 +254,7 @@ public class MessageCommand implements Command {
 
             if (group.equals("leave")) {
                 try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM leavemessages WHERE guildID = ?")) {
-                    statement.setString(1, event.getGuild().getId());
+                    statement.setString(1, guild.getId());
 
                     ResultSet result = statement.executeQuery();
 
@@ -258,13 +262,13 @@ public class MessageCommand implements Command {
                         String message = result.getString(1);
 
                         String channelID = result.getString(2);
-                        TextChannel channel = event.getGuild().getTextChannelById(channelID);
+                        TextChannel channel = guild.getTextChannelById(channelID);
 
                         assert channel != null;
                         channel.sendMessage(message
                                 .replace("%USERNAME%", event.getUser().getAsTag())
-                                .replace("%SERVERNAME%", event.getGuild().getName())
-                                .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))).queue();
+                                .replace("%SERVERNAME%", guild.getName())
+                                .replace("%MEMBERCOUNT%", String.valueOf(guild.getMemberCount()))).queue();
                     }
 
                     connection.close();
@@ -273,7 +277,7 @@ public class MessageCommand implements Command {
                 }
             }
 
-            event.reply("\u2705 - The message has successfully been tested.").setEphemeral(true).queue();
+            event.reply(Language.getString("MESSAGE_TEST_SUCCESS", guild)).setEphemeral(true).queue();
         }
     }
 }

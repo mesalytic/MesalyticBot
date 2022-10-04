@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.music.AudioManagerController;
 import org.virep.jdabot.music.GuildAudioManager;
 import org.virep.jdabot.music.TrackScheduler;
@@ -48,26 +49,26 @@ public class ClearQueueCommand implements Command {
         assert selfVoiceState != null;
 
         if (memberVoiceState.getChannel() == null) {
-            event.reply("\u274C - You must be in a voice channel!").setEphemeral(true).queue();
+            event.reply(Language.getString("MUSIC_NOVOICECHANNEL", guild)).setEphemeral(true).queue();
             return;
         }
 
         if (!selfVoiceState.inAudioChannel()) {
-            event.reply("\u274C - I'm currently not playing any music!").setEphemeral(true).queue();
+            event.reply(Language.getString("MUSIC_NOMUSIC", guild)).setEphemeral(true).queue();
             return;
         }
 
         if (Objects.requireNonNull(selfVoiceState.getChannel()).getIdLong() != memberVoiceState.getChannel().getIdLong()) {
-            event.reply("\u274C - You are not in the same channel as me!").setEphemeral(true).queue();
+            event.reply(Language.getString("MUSIC_NOTSAMEVC", guild)).setEphemeral(true).queue();
             return;
         }
 
         if (trackScheduler.queue.isEmpty()) {
-            event.reply("\u274C - Nothing is in the queue right now.").setEphemeral(true).queue();
+            event.reply(Language.getString("CLEARQUEUE_NOQUEUE", guild)).setEphemeral(true).queue();
             return;
         }
 
         trackScheduler.queue.clear();
-        event.reply("\u2705 - The queue has been cleared.").queue();
+        event.reply(Language.getString("CLEARQUEUE_CLEARED", guild)).queue();
     }
 }

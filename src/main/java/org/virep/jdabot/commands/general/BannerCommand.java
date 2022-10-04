@@ -1,6 +1,7 @@
 package org.virep.jdabot.commands.general;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
@@ -15,6 +16,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.utils.ErrorManager;
 
@@ -49,6 +51,8 @@ public class BannerCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        Guild guild = event.getGuild();
+
         OptionMapping userMapping = event.getOption("user");
         OptionMapping colorMapping = event.getOption("color");
 
@@ -76,20 +80,20 @@ public class BannerCommand implements Command {
 
             if (!color) {
                 if (jsonObject.get("link") == null) {
-                    event.reply("\u274C - This user does not have a banner. Try using the `/banner color:true` parameter.").queue();
+                    event.reply(Language.getString("BANNER_NOBANNER", guild)).queue();
                     return;
                 }
-                embedBuilder.setTitle("**" + user.getAsTag() + "**'s banner is:");
-                embedBuilder.setDescription("[Link to the banner](" + jsonObject.getString("link") + "?size=2048" + ")");
+                embedBuilder.setTitle(Language.getString("BANNER_BANNERTITLE", guild).replace("%USERTAG%", user.getAsTag()));
+                embedBuilder.setDescription(Language.getString("BANNER_BANNERLINK", guild).replace("%BANNERLINK%", jsonObject.getString("link")));
                 embedBuilder.setImage(jsonObject.getString("link") + "?size=2048");
             } else {
                 if (jsonObject.getString("color") == null) {
-                    event.reply("\u274C - This user does not have a banner color.").queue();
+                    event.reply(Language.getString("BANNER_NOCOLOR", guild)).queue();
                     return;
                 }
-                embedBuilder.setTitle("**" + user.getAsTag() + "**'s banner color is: " + jsonObject.getString("color"));
+                embedBuilder.setTitle(Language.getString("BANNER_COLORTITLE", guild).replace("%USERTAG%", user.getAsTag()).replace("%COLORSTRING%", jsonObject.getString("color")));
                 embedBuilder.setColor(Integer.parseInt(jsonObject.getString("color").substring(1), 16));
-                embedBuilder.setDescription("[Link to the banner](https://singlecolorimage.com/get/" + jsonObject.getString("color").substring(1) + "/1100x440)");
+                embedBuilder.setDescription(Language.getString("BANNER_COLORLINK", guild).replace("%COLOR%", jsonObject.getString("color").substring(1)));
                 embedBuilder.setImage("https://singlecolorimage.com/get/" + jsonObject.getString("color").substring(1) + "/1100x440");
 
             }

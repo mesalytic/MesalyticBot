@@ -1,5 +1,6 @@
 package org.virep.jdabot.commands.games;
 
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -10,6 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.util.*;
@@ -43,31 +45,33 @@ public class TTTCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        Guild guild = event.getGuild();
+
         if (event.getOption("opponent") == null) {
-            event.reply("\u274C - You must ping someone! `/tictactoe opponent`").setEphemeral(true).queue();
+            event.reply(Language.getString("TTT_NOOPPONENT", guild)).setEphemeral(true).queue();
             return;
         }
 
         if (Objects.requireNonNull(event.getOption("opponent")).getAsUser() == event.getUser()) {
-            event.reply("\u274C - You cannot play against yourself!").setEphemeral(true).queue();
+            event.reply(Language.getString("TTT_YOURSELF", guild)).setEphemeral(true).queue();
             return;
         }
 
         if (Objects.requireNonNull(event.getOption("opponent")).getAsUser().isBot()) {
-            event.reply("\u274C - You cannot play against a bot!").setEphemeral(true).queue();
+            event.reply(Language.getString("TTT_BOT", guild)).setEphemeral(true).queue();
             return;
         }
 
-        if (boards.containsKey(event.getChannel().getIdLong())) event.reply("\u274C - A game is already currently running.").setEphemeral(true).queue();
+        if (boards.containsKey(event.getChannel().getIdLong())) event.reply(Language.getString("TTT_RUNNING", guild)).setEphemeral(true).queue();
         else {
             players.put(event.getChannel().getIdLong(), new long[]{Objects.requireNonNull(event.getMember()).getIdLong(), Objects.requireNonNull(event.getOption("opponent")).getAsUser().getIdLong() });
 
             User opponent = Objects.requireNonNull(event.getOption("opponent")).getAsUser();
 
-            event.reply("<a:hourglass:800978295562174492> - " + opponent.getAsMention() + ", would you like to play tictactoe against " + Objects.requireNonNull(event.getMember()).getAsMention() + " ?")
+            event.reply(Language.getString("TTT_PROPOSITION", guild).replaceAll("%OPPONENTMENTION%", opponent.getAsMention()).replace("%USERMENTION%", event.getMember().getAsMention()))
                     .addActionRow(
-                            Button.primary("tictactoeAccept", "Accept"),
-                            Button.danger("tictactoeRefuse", "Refuse")
+                            Button.primary("tictactoeAccept", Language.getString("TTT_ACCEPT", guild)),
+                            Button.danger("tictactoeRefuse", Language.getString("TTT_REFUSE", guild))
                     )
                     .queue();
         }

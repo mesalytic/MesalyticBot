@@ -1,6 +1,7 @@
 package org.virep.jdabot.commands.administration;
 
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.unions.GuildChannelUnion;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -15,6 +16,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.requests.ErrorResponse;
 import org.virep.jdabot.Main;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.utils.DatabaseUtils;
 
@@ -59,25 +61,27 @@ public class TwitterCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        Guild guild = event.getGuild();
+
         if (!event.getMember().hasPermission(Permission.MANAGE_SERVER)) {
-            event.reply("\u274C - You do not have permission to use this command.").setEphemeral(true).queue();
+            event.reply(Language.getString("NO_PERMISSION", guild)).setEphemeral(true).queue();
             return;
         }
 
         ErrorHandler errorHandler = new ErrorHandler()
                 .handle(EnumSet.of(ErrorResponse.MISSING_PERMISSIONS),
-                        (ex) -> event.reply("\u274C - The webhook could not be created because of permission discrepancy.").setEphemeral(true).queue())
+                        (ex) -> event.reply(Language.getString("ERRORHANDLER_MISSINGPERMISSIONS", guild)).setEphemeral(true).queue())
                 .handle(EnumSet.of(ErrorResponse.MISSING_ACCESS),
-                        (ex) -> event.reply("\u274C - The webhook could not be created because the channel is not viewable.").setEphemeral(true).queue())
+                        (ex) -> event.reply(Language.getString("ERRORHANDLER_MISSINGACCESS", guild)).setEphemeral(true).queue())
                 .handle(EnumSet.of(ErrorResponse.MAX_WEBHOOKS),
-                        (ex) -> event.reply("\u274C - The webhook could not be created, as this channel has reached the maximum webhook limit.").setEphemeral(true).queue());
+                        (ex) -> event.reply(Language.getString("ERRORHANDLER_MAXWEBHOOKS", guild)).setEphemeral(true).queue());
 
         if (event.getSubcommandName().equals("remove")) {
             String twitterUser = event.getOption("account", OptionMapping::getAsString);
 
-            DatabaseUtils.removeTwitterWebhook(event.getGuild().getId(), twitterUser);
+            DatabaseUtils.removeTwitterWebhook(guild.getId(), twitterUser);
 
-            event.reply("\u2705 - The Twitter Notifier for **" + twitterUser + "** has been deleted.").queue();
+            event.reply(Language.getString("TWITTER_REMOVE_DELETED", guild).replaceAll("%TWITTERUSER%", twitterUser)).queue();
 
             if (Main.getInstance().getNotifier().isTwitterRegistered(twitterUser)) {
                 Main.getInstance().getNotifier().unregisterTwitterUser(twitterUser);
@@ -89,14 +93,14 @@ public class TwitterCommand implements Command {
             String twitterUser = event.getOption("account", OptionMapping::getAsString);
 
             if (channel.getType() != ChannelType.TEXT) {
-                event.reply("\u274C - You need to specify a text channel.").setEphemeral(true).queue();
+                event.reply(Language.getString("TWITTER_ADD_WRONGCHANNEL", guild)).setEphemeral(true).queue();
                 return;
             }
 
             channel.asTextChannel().createWebhook("Twitter Notifier (" + twitterUser + ")").queue(webhook -> {
-                DatabaseUtils.addTwitterWebhook(channel.getId(), event.getGuild().getId(), webhook.getUrl(), twitterUser);
+                DatabaseUtils.addTwitterWebhook(channel.getId(), guild.getId(), webhook.getUrl(), twitterUser);
 
-                event.reply("\u2705 - The Twitter Notifier for **" + twitterUser + "** has been successfully created.").queue();
+                event.reply(Language.getString("TWITTER_REMOVE_ADDED", guild).replaceAll("%TWITTERUSER%", twitterUser)).queue();
 
                 if (Main.getInstance().getNotifier().isTwitterRegistered(twitterUser)) {
                     Main.getInstance().getNotifier().registerTwitterUser(twitterUser);
@@ -107,7 +111,7 @@ public class TwitterCommand implements Command {
         if (event.getSubcommandName().equals("list")) {
             StringBuilder string = new StringBuilder("```\n");
 
-            for (String users : DatabaseUtils.getAllTwitterNames(event.getGuild().getId())) {
+            for (String users : DatabaseUtils.getAllTwitterNames(guild.getId())) {
                 string.append(users).append("\n");
             }
 

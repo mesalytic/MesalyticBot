@@ -1,6 +1,7 @@
 package org.virep.jdabot.commands.general;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
@@ -14,6 +15,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import org.json.JSONObject;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.utils.ErrorManager;
 
@@ -115,19 +117,21 @@ public class InteractCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        Guild guild = event.getGuild();
+
         JSONObject descriptions = new JSONObject();
-        descriptions.put("cuddle", "**%author% cuddles %user% !**");
-        descriptions.put("slap", "**%author% slapped %user% !**");
-        descriptions.put("pat", "**%user% got a pat by %author% !**");
-        descriptions.put("feed", "**%user% got feeded by %author% !**");
-        descriptions.put("hug", "**%author% gives a hug to %user% !**");
-        descriptions.put("kiss", "**%author% gives a kiss to %user% !**");
-        descriptions.put("tickle", "**%author% tickled %user% !**");
-        descriptions.put("bite", "**%author% bit %user% !**");
-        descriptions.put("blush", "**%user% made %author% blush !**");
-        descriptions.put("lick", "**%author% licked %user% !**");
-        descriptions.put("poke", "**%author% poked %user% !**");
-        descriptions.put("smile", "**%author% smiled at %user% !**");
+        descriptions.put("cuddle", Language.getString("INTERACT_CUDDLE", guild));
+        descriptions.put("slap", Language.getString("INTERACT_SLAP", guild));
+        descriptions.put("pat", Language.getString("INTERACT_PAT", guild));
+        descriptions.put("feed", Language.getString("INTERACT_FEED", guild));
+        descriptions.put("hug", Language.getString("INTERACT_HUG", guild));
+        descriptions.put("kiss", Language.getString("INTERACT_KISS", guild));
+        descriptions.put("tickle", Language.getString("INTERACT_TICKLE", guild));
+        descriptions.put("bite", Language.getString("INTERACT_BITE", guild));
+        descriptions.put("blush", Language.getString("INTERACT_BLUSH", guild));
+        descriptions.put("lick", Language.getString("INTERACT_LICK", guild));
+        descriptions.put("poke", Language.getString("INTERACT_POKE", guild));
+        descriptions.put("smile", Language.getString("INTERACT_SMILE", guild));
 
 
         String endpoint = event.getSubcommandName();

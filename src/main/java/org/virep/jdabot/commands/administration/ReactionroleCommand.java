@@ -1,6 +1,7 @@
 package org.virep.jdabot.commands.administration;
 
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
@@ -12,6 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.*;
 import org.virep.jdabot.database.Database;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.utils.ErrorManager;
 
@@ -67,10 +69,11 @@ public class ReactionroleCommand implements Command {
     @Override
     public void execute(SlashCommandInteractionEvent event) {
         Member member = event.getMember();
+        Guild guild = event.getGuild();
 
         assert member != null;
         if (!member.hasPermission(Permission.MANAGE_SERVER)) {
-            event.reply("\u274C - You do not have permission to use this command.").setEphemeral(true).queue();
+            event.reply(Language.getString("NO_PERMISSION", guild)).setEphemeral(true).queue();
             return;
         }
 
@@ -96,7 +99,7 @@ public class ReactionroleCommand implements Command {
 
                         statement1.executeUpdate();
 
-                        event.reply("\u2705 -  role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " has replaced the already specified role for this emoji, and can now be obtained via the reaction role.").setEphemeral(true).queue();
+                        event.reply(Language.getString("REACTIONROLE_ADD_REPLACED", guild).replaceAll("%ROLEMENTION%", Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention())).setEphemeral(true).queue();
                     }
                 } else {
                     try (PreparedStatement statement1 = connection.prepareStatement("INSERT INTO reactionRole (messageID, roleID, emojiID) VALUES (?,?,?)")) {
@@ -106,10 +109,10 @@ public class ReactionroleCommand implements Command {
 
                         statement1.executeUpdate();
 
-                        TextChannel textChannel = event.getGuild().getTextChannelById(event.getOption("channel").getAsChannel().getId());
+                        TextChannel textChannel = guild.getTextChannelById(event.getOption("channel").getAsChannel().getId());
                         textChannel.retrieveMessageById(event.getOption("messageid").getAsString()).queue((message) -> message.addReaction(fromFormattedEmoji).queue());
 
-                        event.reply("\u2705 - The role " + Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention() + " can now be obtained via the reaction role !").setEphemeral(true).queue();
+                        event.reply(Language.getString("REACTIONROLE_ADD_ADDED", guild).replaceAll("%ROLEMENTION%", Objects.requireNonNull(event.getOption("role")).getAsRole().getAsMention())).setEphemeral(true).queue();
                     }
                 }
 
@@ -125,7 +128,7 @@ public class ReactionroleCommand implements Command {
                 ResultSet result = statement.executeQuery();
 
                 if (!result.first()) {
-                    event.reply("\u274C - No role has been configured for this emoji in the reaction role.").setEphemeral(true).queue();
+                    event.reply(Language.getString("REACTIONROLE_REMOVE_NOROLE", guild)).setEphemeral(true).queue();
                     connection.close();
                     return;
                 }
@@ -136,7 +139,7 @@ public class ReactionroleCommand implements Command {
 
                     statement1.executeUpdate();
 
-                    event.reply("\u2705 - The role configured for this emoji in the reaction role has been cleared.").setEphemeral(true).queue();
+                    event.reply(Language.getString("REACTIONROLE_REMOVE_REMOVED", guild)).setEphemeral(true).queue();
                 }
                 connection.close();
             } catch (SQLException e) {

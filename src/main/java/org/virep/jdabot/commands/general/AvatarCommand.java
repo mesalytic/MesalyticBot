@@ -42,6 +42,6 @@ public class AvatarCommand implements Command {
 
         String avatar = guild ? member.getEffectiveAvatarUrl() : member.getUser().getAvatarUrl();
 
-        event.reply("Here is **" + member.getUser().getAsTag() + "** avatar:\n\n" + avatar).queue();
+        event.reply(avatar).queue();
     }
 }

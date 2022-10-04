@@ -1,6 +1,7 @@
 package org.virep.jdabot.commands.moderation;
 
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.unions.GuildChannelUnion;
@@ -11,6 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.*;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.time.Duration;
@@ -56,8 +58,10 @@ public class SlowmodeCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        Guild guild = event.getGuild();
+
         if (!Objects.requireNonNull(event.getMember()).hasPermission(Permission.MANAGE_CHANNEL)) {
-            event.reply("\u274C - You do not have permission to use this command.").setEphemeral(true).queue();
+            event.reply(Language.getString("NO_PERMISSION", guild)).setEphemeral(true).queue();
             return;
         }
 
@@ -67,7 +71,7 @@ public class SlowmodeCommand implements Command {
         GuildChannelUnion channel = channelMapping.getAsChannel();
 
         if (channel.getType() != ChannelType.TEXT) {
-            event.reply("\u274C - The channel you selected is not a text channel.").setEphemeral(true).queue();
+            event.reply(Language.getString("SLOWMODE_NOTTEXTCHANNEL", guild)).setEphemeral(true).queue();
             return;
         }
 
@@ -79,28 +83,28 @@ public class SlowmodeCommand implements Command {
                 int slowmodeSecs = (int) Duration.parse("PT" + durationMapping.getAsString().toUpperCase().replace(" ", "")).getSeconds();
 
                 if (slowmodeSecs > TextChannel.MAX_SLOWMODE || slowmodeSecs < 0) {
-                    event.reply("\u274C - You must specify a duration between **0 seconds** and **6 hours**.").setEphemeral(true).queue();
+                    event.reply(Language.getString("SLOWMODE_WRONGDURATION", guild)).setEphemeral(true).queue();
                     return;
                 }
 
                 channel.asTextChannel().getManager().setSlowmode(slowmodeSecs).queue();
 
-                event.reply("\u2705 - The slowmode for " + channel.getAsMention() + " has been successfully set to **" + secondsToSeperatedTime(slowmodeSecs) + "** !").queue();
+                event.reply(Language.getString("SLOWMODE_SET", guild).replace("%CHANNELMENTION%", channel.getAsMention()).replace("%DURATION%", secondsToSeperatedTime(slowmodeSecs))).queue();
             } catch (DateTimeParseException e) {
-                event.reply("\u274C - The duration you specified is not valid. Please specify a duration between **0 seconds** and **6 hours**.").setEphemeral(true).queue();
+                event.reply(Language.getString("SLOWMODE_WRONGDURATION", guild)).setEphemeral(true).queue();
             }
 
         } else {
             int slowmode = channel.asTextChannel().getSlowmode();
 
             if (slowmode == 0) {
-                event.reply("\u274C - The slowmode for this channel is currently not enabled.").setEphemeral(true).queue();
+                event.reply(Language.getString("SLOWMODE_NOTENABLED", guild)).setEphemeral(true).queue();
                 return;
             }
 
             channel.asTextChannel().getManager().setSlowmode(0).queue();
 
-            event.reply("\u2705 - The slowmode for " + channel.getAsMention() + " has been successfully **disabled** !").queue();
+            event.reply(Language.getString("SLOWMODE_DISABLED", guild).replace("%CHANNELMENTION%", channel.getAsMention())).queue();
         }
 
     }

@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.music.AudioManagerController;
 import org.virep.jdabot.music.GuildAudioManager;
 import org.virep.jdabot.music.TrackScheduler;
@@ -55,17 +56,17 @@ public class SkipCommand implements Command {
         assert selfVoiceState != null;
 
         if (memberVoiceState.getChannel() == null) {
-            event.reply("\u274C - You are not in a voice channel!").setEphemeral(true).queue();
+            event.reply(Language.getString("MUSIC_NOVOICECHANNEL", guild)).setEphemeral(true).queue();
             return;
         }
 
         if (!selfVoiceState.inAudioChannel()) {
-            event.reply("\u274C - I'm currently not playing any music!").setEphemeral(true).queue();
+            event.reply(Language.getString("MUSIC_NOMUSIC", guild)).setEphemeral(true).queue();
             return;
         }
 
         if (Objects.requireNonNull(selfVoiceState.getChannel()).getIdLong() != memberVoiceState.getChannel().getIdLong()) {
-            event.reply("\u274C - You are not in the same channel as me!").setEphemeral(true).queue();
+            event.reply(Language.getString("MUSIC_NOTSAMEVC", guild)).setEphemeral(true).queue();
             return;
         }
 
@@ -75,6 +76,6 @@ public class SkipCommand implements Command {
             scheduler.nextTrack();
         }
 
-        event.reply("\u23E9 - Skipped !").queue();
+        event.reply(Language.getString("SKIP_SKIPPED", guild)).queue();
     }
 }
