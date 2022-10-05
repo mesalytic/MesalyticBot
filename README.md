@@ -26,6 +26,7 @@ Mesalytic relies on the following projects:
 |:--------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------|
 | [Lavalink](https://github.com/freyacodes/Lavalink)                                                | [MIT License](https://github.com/freyacodes/Lavalink/blob/master/LICENSE)                                        |
 | [Topi's Lavalink Plugins](https://github.com/Topis-Lavalink-Plugins/Topis-Source-Managers-Plugin) | [Apache License 2.0](https://github.com/Topis-Lavalink-Plugins/Topis-Source-Managers-Plugin/blob/master/LICENSE) |
+| [Kaogurai's Deezer Lavalink Plugin](https://github.com/kaogurai/lavalink-plugin)                  | [MIT License](https://github.com/kaogurai/lavalink-plugin/blob/master/LICENSE)                                   |
 | [Helixus API](https://github.com/chocololat/mesalytic-api)                                        | [Apache License 2.0](https://github.com/chocololat/mesalytic-api/blob/main/LICENSE)                              |
 
 ### Third Party Dependencies

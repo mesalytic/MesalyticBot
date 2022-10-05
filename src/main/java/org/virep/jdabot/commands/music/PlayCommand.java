@@ -13,24 +13,14 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.managers.AudioManager;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import org.json.JSONObject;
 import org.virep.jdabot.language.Language;
 import org.virep.jdabot.music.AudioLoadHandler;
 import org.virep.jdabot.music.AudioManagerController;
 import org.virep.jdabot.music.GuildAudioManager;
 import org.virep.jdabot.slashcommandhandler.Command;
-import org.virep.jdabot.utils.ErrorManager;
-
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 public class PlayCommand implements Command {
 
@@ -110,25 +100,7 @@ public class PlayCommand implements Command {
         }
 
         if (event.getSubcommandName().equals("search")) {
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .readTimeout(30, TimeUnit.SECONDS)
-                    .build();
-
-            try {
-                Request request = new Request.Builder()
-                        .url("https://api.mesavirep.xyz/v1/music?search=" + URLEncoder.encode(searchOption.getAsString(), StandardCharsets.UTF_8))
-                        .build();
-
-                Response res = client.newCall(request).execute();
-
-                assert res.body() != null;
-
-                JSONObject jsonObject = new JSONObject(res.body().string());
-                result = jsonObject.getString("body");
-
-            } catch (IOException e) {
-                ErrorManager.handle(e, event);
-            }
+            result = "dsearch:" + searchOption.getAsString();
         } else {
             if (urlOption != null) {
                 try {
