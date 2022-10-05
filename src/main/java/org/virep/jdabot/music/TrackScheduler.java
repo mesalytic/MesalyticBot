@@ -113,20 +113,14 @@ public class TrackScheduler extends PlayerEventListenerAdapter {
         }
     }
 
-
+    @Override
+    public void onTrackException(IPlayer player, AudioTrack track, Exception exception) {
+        ErrorManager.handleNoEvent(exception);
+    }
 
     @Override
-    public void onEvent(PlayerEvent event) {
-        if (event instanceof TrackExceptionEvent) {
-            Throwable exception = ((TrackExceptionEvent) event).getException();
-
-            ErrorManager.handleNoEvent(exception);
-            channel.sendMessage(Language.getString("TS_ERROR", this.guild).replace("%MESSAGE%", exception.getMessage())).queue();
-        } else if (event instanceof TrackStuckEvent) {
-
-            channel.sendMessage(Language.getString("TS_STUCK", this.guild)).queue();
-            System.out.println(((TrackStuckEvent) event).getTrack().getInfo().getTitle());
-        }
+    public void onTrackStuck(IPlayer player, AudioTrack track, long thresholdMs) {
+        channel.sendMessage(Language.getString("TS_STUCK", this.guild)).queue();
     }
 
     public boolean isLooping() {
