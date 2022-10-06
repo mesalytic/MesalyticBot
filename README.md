@@ -21,6 +21,11 @@ Mesalytic is an open-sourced software licensed under the [Apache License 2.0](ht
 ## Third Party
 Mesalytic relies on the following projects:
 
+### Used code from
+| Name                                                                                                                              | License                                                                                         |
+|:----------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------|
+| [Twemoji.java (SkyBot)](https://github.com/DuncteBot/SkyBot/blob/main/src/main/java/ml/duncte123/skybot/utils/TwemojiParser.java) | [GNU Affero General Public License v3.0](https://github.com/DuncteBot/SkyBot/blob/main/LICENSE) |                                                                     | [Apache License 2.0](https://github.com/chocololat/mesalytic-api/blob/main/LICENSE)                              |
+
 ### Services
 | Name                                                                                              | License                                                                                                          |
 |:--------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------|
@@ -46,3 +51,4 @@ Mesalytic relies on the following projects:
 | [Logback Classic](https://github.com/qos-ch/logback)                                        | [Eclipse Public License v1.0 & GNU Lesser General Public License v2.1](https://github.com/qos-ch/logback/blob/master/LICENSE.txt) |
 | [Twitter4J (Core, Async, Stream, HTTP2 Support)](https://github.com/Twitter4J/Twitter4J)    | [Apache License 2.0](https://github.com/Twitter4J/Twitter4J/blob/main/LICENSE.txt)                                                |
 | [HikariCP](https://github.com/brettwooldridge/HikariCP)                                     | [Apache License 2.0](https://github.com/brettwooldridge/HikariCP/blob/dev/LICENSE)                                                |
+| [emoji-java](https://github.com/MinnDevelopment/emoji-java)                                 | [MIT License](https://github.com/MinnDevelopment/emoji-java/blob/master/LICENSE.md)                                               |

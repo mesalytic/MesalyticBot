@@ -568,6 +568,10 @@
     "VOLUME_OUTOFINDEX": "\u274C - The volume value must be between 0 and 100.",
     "VOLUME_SET": "\uD83D\uDD0A - Volume has been set to **%VOLUME%%** !",
 
+    "EMOJI_ERROR": "\u274C - The emoji you provided is not valid. Please try again.",
+    "EMOJI_CUSTOMPREVIEW": "**Name:** %EMOJINAME% (`%FORMATTED%`)\n**Preview:** %FORMATTED%\n**ID:** %EMOJIID%\n**Created Time:** <t:%SECONDS%>",
+    "EMOJI_UNICODEPREVIEW": "**Preview:** %FORMATTED%\n**CodePoints:** `%CODEPOINTS%`",
+
     "AFKLISTENER_REMOVED": "%USERMENTION%, your AFK status has been removed.",
     "AFKLISTENER_AFK": "**%USERTAG%** is AFK right now. Reason: %REASON%",
 

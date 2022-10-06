@@ -134,5 +134,11 @@
             <artifactId>HikariCP</artifactId>
             <version>5.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.minndevelopment</groupId>
+            <artifactId>emoji-java</artifactId>
+            <!--suppress MavenModelInspection -->
+            <version>master-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>
