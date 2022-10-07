@@ -28,17 +28,11 @@ public class AutoroleListener extends ListenerAdapter {
             ResultSet result = statement.executeQuery();
 
             if (result.next()) {
-                String message = result.getString(1);
+                String roleID = result.getString(1);
+                Role role = guild.getRoleById(roleID);
 
-                String channelID = result.getString(2);
-                TextChannel channel = guild.getTextChannelById(channelID);
-
-                assert channel != null;
-                channel.sendMessage(message
-                        .replace("%USER%", event.getMember().getAsMention())
-                        .replace("%USERNAME%", event.getUser().getAsTag())
-                        .replace("%SERVERNAME%", event.getGuild().getName())
-                        .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))).queue();
+                assert role != null;
+                guild.addRoleToMember(member, role).queue();
             }
         } catch (SQLException e) {
             ErrorManager.handleNoEvent(e);
