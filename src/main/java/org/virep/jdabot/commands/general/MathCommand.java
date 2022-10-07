@@ -14,6 +14,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.utils.AttachedFile;
 import net.dv8tion.jda.api.utils.FileUpload;
+import net.dv8tion.jda.api.utils.MarkdownUtil;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import net.objecthunter.exp4j.tokenizer.UnknownFunctionOrVariableException;
@@ -150,7 +151,7 @@ public class MathCommand implements Command {
 
                 FileUpload file = AttachedFile.fromData(bytes, "latex.png");
 
-                event.getHook().editOriginalAttachments(file).queue();
+                event.getHook().editOriginal(MarkdownUtil.codeblock(latexExpression)).setFiles(file).queue();
             } catch (IOException e) {
                 ErrorManager.handle(e, event);
             }
