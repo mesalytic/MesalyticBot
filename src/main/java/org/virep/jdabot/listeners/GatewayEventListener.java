@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.audio.hooks.ConnectionStatus;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.session.ReadyEvent;
 import net.dv8tion.jda.api.events.session.SessionDisconnectEvent;
+import net.dv8tion.jda.api.events.session.SessionRecreateEvent;
 import net.dv8tion.jda.api.events.session.SessionResumeEvent;
 import net.dv8tion.jda.api.events.session.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -139,6 +140,18 @@ public class GatewayEventListener extends ListenerAdapter {
 
     @Override
     public void onSessionResume(@NotNull SessionResumeEvent event) {
+        log.info("Events have been successfully resumed");
+        WebhookEmbed embed = new WebhookEmbedBuilder()
+                .setColor(0xFFA500)
+                .setDescription("Events have been successfully resumed")
+                .setTimestamp(Instant.now())
+                .build();
+
+        webhook.send(embed);
+    }
+
+    @Override
+    public void onSessionRecreate(@NotNull SessionRecreateEvent event) {
         log.info("Bot has successfully reconnected.");
         WebhookEmbed embed = new WebhookEmbedBuilder()
                 .setColor(0xFFA500)
