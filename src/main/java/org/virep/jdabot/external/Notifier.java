@@ -70,7 +70,8 @@ public class Notifier {
 
                 WebhookMessageBuilder webhookMessageBuilder = new WebhookMessageBuilder();
 
-                webhookMessageBuilder.setUsername("Mesalytic");
+                webhookMessageBuilder.setUsername(status.getUser().getScreenName());
+                webhookMessageBuilder.setAvatarUrl(status.getUser().getBiggerProfileImageURLHttps());
 
                 WebhookEmbedBuilder webhookEmbedBuilder = new WebhookEmbedBuilder();
 
@@ -82,6 +83,7 @@ public class Notifier {
                     webhookEmbedBuilder.setImageUrl(status.getMediaEntities()[0].getMediaURLHttps());
                 }
 
+                webhookEmbedBuilder.setFooter(new WebhookEmbed.EmbedFooter("Sent via Mesalytic", null));
                 webhookEmbedBuilder.setTimestamp(Instant.now());
                 webhookEmbedBuilder.setColor(Color.CYAN.getRGB());
 
