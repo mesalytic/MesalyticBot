@@ -1,7 +1,11 @@
 package org.virep.jdabot.commands.administration;
 
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -27,6 +31,8 @@ public class LangCommand implements Command {
     @Override
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Configure the bot language for your server.")
+                .setGuildOnly(true)
+                .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MANAGE_SERVER))
                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Configure la langue du bot sur votre serveur.")
                 .addOptions(
                         new OptionData(OptionType.STRING, "lang", "The lang to configure.", true)
@@ -45,6 +51,13 @@ public class LangCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        Member member = event.getMember();
+        Guild guild = event.getGuild();
+
+        if (!member.hasPermission(Permission.MANAGE_SERVER)) {
+            event.reply(Language.getString("NO_PERMISSION", guild)).setEphemeral(true).queue();
+            return;
+        }
 
         String lang = event.getOption("lang", OptionMapping::getAsString);
 
