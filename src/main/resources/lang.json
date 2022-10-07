@@ -218,10 +218,16 @@
     "VOLUME_OUTOFINDEX": "\u274C - Le volume doit être entre 0% et 100%.",
     "VOLUME_SET": "\uD83D\uDD0A - Le volume a été mis à **%VOLUME%%** !",
 
+    "EMOJI_ERROR": "\u274C - L'emoji spécifié n'est pas valide. Veuillez réessayer.",
+    "EMOJI_CUSTOMPREVIEW": "**Nom:** %EMOJINAME% (`%FORMATTED%`)\n**Aperçu:** %FORMATTED%\n**ID:** %EMOJIID%\n**Créé le:** <t:%SECONDS%>",
+    "EMOJI_UNICODEPREVIEW": "**Aperçu:** %FORMATTED%\n**CodePoints:** `%CODEPOINTS%`",
 
-
-
-
+    "EMOJIS_NOOPTION": "\u274C - Veuillez spécifier un Emoji Custom ou un Fichier Attaché.",
+    "EMOJIS_UNICODE": "\u274C - L'emoji spécifié est un Emoji Unicode ou n'est pas valide, veuillez sélectionner un Emoji Custom.",
+    "EMOJIS_ADDED": "\u2705 - L'emoji %FORMATTED% (`%FORMATTED%`) a bien été créé !",
+    "EMOJIS_INVALID": "\u274C - Le fichier attaché n'est pas une Image PNG, un GIF animé ou une Image JPEG. Veuillez envoyer un Fichier Attaché valide.",
+    "EMOJIS_MANAGED": "\u274C - Cet Emoji est géré par Discord et ne peut pas être supprimé.",
+    "EMOJIS_DELETED": "\u2705 - L'Emoji **%NAME%** a bien été supprimé.",
 
     "AFKLISTENER_REMOVED": "%USERMENTION%, votre statut AFK a été retiré.",
     "AFKLISTENER_AFK": "**%USERTAG%** est AFK actuellement. Raison: %REASON%",
@@ -571,6 +577,13 @@
     "EMOJI_ERROR": "\u274C - The emoji you provided is not valid. Please try again.",
     "EMOJI_CUSTOMPREVIEW": "**Name:** %EMOJINAME% (`%FORMATTED%`)\n**Preview:** %FORMATTED%\n**ID:** %EMOJIID%\n**Created Time:** <t:%SECONDS%>",
     "EMOJI_UNICODEPREVIEW": "**Preview:** %FORMATTED%\n**CodePoints:** `%CODEPOINTS%`",
+
+    "EMOJIS_NOOPTION": "\u274C - Please specify either a Custom Emoji or a File Attachment.",
+    "EMOJIS_UNICODE": "\u274C - The emoji you specified is a Unicode Emoji or not valid, please select a Custom Emoji.",
+    "EMOJIS_ADDED": "\u2705 - The emoji %FORMATTED% (`%FORMATTED%`) has successfully been created !",
+    "EMOJIS_INVALID": "\u274C - The file you specified is not a PNG, a GIF or a JPEG. Please send a valid attachment.",
+    "EMOJIS_MANAGED": "\u274C - This emoji is managed by Discord and cannot be deleted.",
+    "EMOJIS_DELETED": "\u2705 - The emoji **%NAME%** has been deleted.",
 
     "AFKLISTENER_REMOVED": "%USERMENTION%, your AFK status has been removed.",
     "AFKLISTENER_AFK": "**%USERTAG%** is AFK right now. Reason: %REASON%",
