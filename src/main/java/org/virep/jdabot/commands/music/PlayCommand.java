@@ -112,7 +112,7 @@ public class PlayCommand implements Command {
         }
 
         if (event.getSubcommandName().equals("search")) {
-            result = "dsearch:" + searchOption.getAsString();
+            result = "dzsearch:" + searchOption.getAsString();
         } else {
             if (urlOption != null) {
                 try {
