@@ -13,7 +13,6 @@ import org.virep.jdabot.music.GuildAudioManager;
 import org.virep.jdabot.music.TrackScheduler;
 import org.virep.jdabot.slashcommandhandler.Command;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

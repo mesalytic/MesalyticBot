@@ -2,14 +2,7 @@ package org.virep.jdabot.music;
 
 import lavalink.client.player.IPlayer;
 import lavalink.client.player.LavalinkPlayer;
-import lavalink.client.player.event.PlayerEvent;
 import lavalink.client.player.event.PlayerEventListenerAdapter;
-import lavalink.client.player.event.PlayerPauseEvent;
-import lavalink.client.player.event.PlayerResumeEvent;
-import lavalink.client.player.event.TrackEndEvent;
-import lavalink.client.player.event.TrackExceptionEvent;
-import lavalink.client.player.event.TrackStartEvent;
-import lavalink.client.player.event.TrackStuckEvent;
 import lavalink.client.player.track.AudioTrack;
 import lavalink.client.player.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.entities.Guild;
@@ -126,6 +119,7 @@ public class TrackScheduler extends PlayerEventListenerAdapter {
     public boolean isLooping() {
         return this.looping;
     }
+
     public void setLooping(boolean status) {
         this.looping = status;
     }

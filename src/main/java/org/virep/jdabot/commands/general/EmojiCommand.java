@@ -64,7 +64,7 @@ public class EmojiCommand implements Command {
         Emoji.Type type = formatted.getType();
 
         try {
-            switch(type) {
+            switch (type) {
                 case CUSTOM -> {
                     CustomEmoji emoji = formatted.asCustom();
 

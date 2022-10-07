@@ -41,8 +41,6 @@ public class Main {
         instance = new Main();
         instance.notifier = new Notifier();
 
-
-
         Database.initializeDataSource();
 
         String devStatus = System.getProperty("dev");

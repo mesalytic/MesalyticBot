@@ -1,6 +1,5 @@
 package org.virep.jdabot.language;
 
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -37,7 +36,7 @@ public class Language {
     }
 
     public static String getLanguage(Guild guild) {
-       return langs.getOrDefault(guild.getId(), "en");
+        return langs.getOrDefault(guild.getId(), "en");
     }
 
     public static String getString(String keyString, Guild guild) {

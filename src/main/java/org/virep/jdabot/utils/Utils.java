@@ -55,7 +55,7 @@ public class Utils {
         Duration duration = Duration.ofSeconds(seconds);
         String response = "";
 
-        int day = (int)duration.toDaysPart();
+        int day = (int) duration.toDaysPart();
         int hour = duration.toHoursPart();
         int minute = duration.toMinutesPart();
         int second = duration.toSecondsPart();

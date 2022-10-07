@@ -84,7 +84,7 @@ public class PurgeCommand implements Command {
         Guild guild = event.getGuild();
 
         if (!Objects.requireNonNull(event.getMember()).hasPermission(Permission.MESSAGE_MANAGE)) {
-            event.reply(Language.getString("NO_PERMISSION" ,guild)).setEphemeral(true).queue();
+            event.reply(Language.getString("NO_PERMISSION", guild)).setEphemeral(true).queue();
             return;
         }
 

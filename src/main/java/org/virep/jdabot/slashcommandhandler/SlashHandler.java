@@ -2,7 +2,6 @@ package org.virep.jdabot.slashcommandhandler;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import org.reflections.Reflections;
 
@@ -13,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-//TODO: For production stage, add developerOnly commands through Guild#updateCommands()
 public class SlashHandler {
     private final JDA jda;
     public static final Map<String, Command> slashCommandMap = new HashMap<>();

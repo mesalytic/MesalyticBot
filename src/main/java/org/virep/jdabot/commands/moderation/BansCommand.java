@@ -67,7 +67,7 @@ public class BansCommand implements Command {
             EmbedBuilder embedBuilder = new EmbedBuilder()
                     .setAuthor(event.getUser().getAsTag(), null, event.getUser().getAvatarUrl())
                     .setTitle(Language.getString("BANS_EMBEDTITLE", guild).replace("%GUILDNAME%", event.getGuild().getName()))
-                    .setFooter("Page " + (pageNumber.get(event.getChannel().getIdLong())  + 1) +"/" + banPages.size())
+                    .setFooter("Page " + (pageNumber.get(event.getChannel().getIdLong()) + 1) + "/" + banPages.size())
                     .setTimestamp(Instant.now());
 
             List<Guild.Ban> page = banPages.get(0);

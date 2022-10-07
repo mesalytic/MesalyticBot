@@ -155,9 +155,7 @@ public class MathCommand implements Command {
             } catch (IOException e) {
                 ErrorManager.handle(e, event);
             }
-        }
-        else
-        {
+        } else {
             try {
                 String equation = Objects.requireNonNull(event.getOption("equation")).getAsString();
 

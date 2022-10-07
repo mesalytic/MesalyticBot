@@ -9,7 +9,6 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
-import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 
@@ -64,7 +63,7 @@ public class RandomCommand implements Command {
         if (subcommandName.equals("dice")) {
             int maxValue = event.getOption("maxvalue") != null ? Objects.requireNonNull(event.getOption("maxvalue")).getAsInt() : 6;
 
-            event.reply(Language.getString("RANDOM_DICE", guild).replace("%DICE%", String.valueOf((int)randomInt(maxValue)))).queue();
+            event.reply(Language.getString("RANDOM_DICE", guild).replace("%DICE%", String.valueOf((int) randomInt(maxValue)))).queue();
         }
     }
 

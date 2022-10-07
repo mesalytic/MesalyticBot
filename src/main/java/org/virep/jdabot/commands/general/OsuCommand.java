@@ -1,7 +1,6 @@
 package org.virep.jdabot.commands.general;
 
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -10,7 +9,6 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.utils.AttachedFile;
 import net.dv8tion.jda.api.utils.FileUpload;
-import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -44,10 +42,10 @@ public class OsuCommand implements Command {
                         new OptionData(OptionType.STRING, "mode", "The game mode.", true)
                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Le mode de jeu")
                                 .addChoices(
-                                    new net.dv8tion.jda.api.interactions.commands.Command.Choice("Standard", "osu"),
-                                    new net.dv8tion.jda.api.interactions.commands.Command.Choice("Taiko", "taiko"),
-                                    new net.dv8tion.jda.api.interactions.commands.Command.Choice("Mania", "mania"),
-                                    new net.dv8tion.jda.api.interactions.commands.Command.Choice("Catch The Beat", "ctb")
+                                        new net.dv8tion.jda.api.interactions.commands.Command.Choice("Standard", "osu"),
+                                        new net.dv8tion.jda.api.interactions.commands.Command.Choice("Taiko", "taiko"),
+                                        new net.dv8tion.jda.api.interactions.commands.Command.Choice("Mania", "mania"),
+                                        new net.dv8tion.jda.api.interactions.commands.Command.Choice("Catch The Beat", "ctb")
                                 )
                 );
     }
@@ -90,7 +88,7 @@ public class OsuCommand implements Command {
             byte[] bytes = new byte[jsonBody.length()];
 
             for (int i = 0; i < jsonBody.length(); i++) {
-                bytes[i] = (byte)(((int)jsonBody.get(i)) & 0xFF);
+                bytes[i] = (byte) (((int) jsonBody.get(i)) & 0xFF);
             }
 
             InputStream targetBytes = new ByteArrayInputStream(bytes);

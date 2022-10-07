@@ -48,6 +48,7 @@ public class AudioManagerController {
     public static boolean hasLink(Guild guild) {
         return Main.lavalink.getExistingLink(guild) != null;
     }
+
     public static Link getExistingLink(Guild guild) {
         return Main.lavalink.getExistingLink(guild);
     }

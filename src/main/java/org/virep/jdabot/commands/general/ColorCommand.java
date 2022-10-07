@@ -100,7 +100,7 @@ public class ColorCommand implements Command {
 
             MessageEmbed embed = new EmbedBuilder()
                     .setTitle(name)
-                    .setDescription("[Link to color](https://www.colorhexa.com/"+ hex + ")")
+                    .setDescription("[Link to color](https://www.colorhexa.com/" + hex + ")")
                     .setColor(Color.decode(hex))
                     .setThumbnail("https://www.colorhexa.com/" + hex.substring(1) + ".png")
                     .addField("Hex", hex, true)

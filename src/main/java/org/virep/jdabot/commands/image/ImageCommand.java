@@ -284,8 +284,10 @@ public class ImageCommand implements Command {
         String apiURL = "";
 
         assert endpoint != null;
-        if (endpoint.equals("spotify")) apiURL = "https://api.mesavirep.xyz/v1/" + endpoint + "?url=" + url + "?size=1024" + "&author=" + event.getOption("author").getAsString() + "&title=" + event.getOption("title").getAsString();
-        else if (endpoint.equals("steam")) apiURL = "https://api.mesavirep.xyz/v1/" + endpoint + "?url=" + url + "?size=1024" + "&game=" + event.getOption("game").getAsString() + "&player=" + event.getUser().getName();
+        if (endpoint.equals("spotify"))
+            apiURL = "https://api.mesavirep.xyz/v1/" + endpoint + "?url=" + url + "?size=1024" + "&author=" + event.getOption("author").getAsString() + "&title=" + event.getOption("title").getAsString();
+        else if (endpoint.equals("steam"))
+            apiURL = "https://api.mesavirep.xyz/v1/" + endpoint + "?url=" + url + "?size=1024" + "&game=" + event.getOption("game").getAsString() + "&player=" + event.getUser().getName();
         else apiURL = "https://api.mesavirep.xyz/v1/" + endpoint + "?url=" + url + "?size=1024";
 
         try {
@@ -303,7 +305,7 @@ public class ImageCommand implements Command {
             byte[] bytes = new byte[jsonBody.length()];
 
             for (int i = 0; i < jsonBody.length(); i++) {
-                bytes[i] = (byte)(((int)jsonBody.get(i)) & 0xFF);
+                bytes[i] = (byte) (((int) jsonBody.get(i)) & 0xFF);
             }
 
             FileUpload file = AttachedFile.fromData(bytes, endpoint + jsonObject.get("ext"));

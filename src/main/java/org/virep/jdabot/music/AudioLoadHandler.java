@@ -10,23 +10,21 @@ import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virep.jdabot.external.Notifier;
 import org.virep.jdabot.language.Language;
 import org.virep.jdabot.utils.ErrorManager;
 import org.virep.jdabot.utils.Utils;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.List;
 import java.util.Objects;
 
 public class AudioLoadHandler {
     private final static Logger log = LoggerFactory.getLogger(AudioLoadHandler.class);
+
     public static void loadAndPlay(GuildAudioManager manager, String trackURL, SlashCommandInteractionEvent event) {
         Guild guild = event.getGuild();
 
         manager.openConnection((VoiceChannel) Objects.requireNonNull(Objects.requireNonNull(event.getMember()).getVoiceState()).getChannel());
-        AudioManagerController.getExistingLink(guild).getRestClient().loadItem(trackURL,  new LoadResultHandler() {
+        AudioManagerController.getExistingLink(guild).getRestClient().loadItem(trackURL, new LoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
                 log.debug(String.format("track loaded : %s", track.getInfo().getUri()));
@@ -37,7 +35,7 @@ public class AudioLoadHandler {
 
                 manager.getScheduler().queue(track, event.getChannel().asTextChannel());
 
-                event.getHook().editOriginal(Language.getString("ALH_TRACKLOADED", guild).replace("%TITLE%", trackInfo.getTitle()).replace("%DURATION%",Utils.formatTrackLength(trackInfo.getLength()))).queue();
+                event.getHook().editOriginal(Language.getString("ALH_TRACKLOADED", guild).replace("%TITLE%", trackInfo.getTitle()).replace("%DURATION%", Utils.formatTrackLength(trackInfo.getLength()))).queue();
             }
 
             @Override
@@ -57,7 +55,7 @@ public class AudioLoadHandler {
                 AudioTrack track = tracks.get(0);
                 manager.getScheduler().queue(track, event.getChannel().asTextChannel());
 
-                event.getHook().editOriginal(Language.getString("ALH_TRACKLOADED", guild).replace("%TITLE%", track.getInfo().getTitle()).replace("%DURATION%",Utils.formatTrackLength(track.getInfo().getLength()))).queue();
+                event.getHook().editOriginal(Language.getString("ALH_TRACKLOADED", guild).replace("%TITLE%", track.getInfo().getTitle()).replace("%DURATION%", Utils.formatTrackLength(track.getInfo().getLength()))).queue();
             }
 
             @Override

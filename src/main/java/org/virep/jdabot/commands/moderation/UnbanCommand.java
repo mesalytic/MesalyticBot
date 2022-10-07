@@ -58,7 +58,7 @@ public class UnbanCommand implements Command {
     @Override
     public void execute(SlashCommandInteractionEvent event) {
         Guild guild = event.getGuild();
-        
+
         if (!event.getMember().hasPermission(Permission.BAN_MEMBERS)) {
             event.reply(Language.getString("NO_PERMISSION", guild)).setEphemeral(true).queue();
             return;

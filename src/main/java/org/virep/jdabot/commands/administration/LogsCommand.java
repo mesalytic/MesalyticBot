@@ -67,7 +67,6 @@ public class LogsCommand implements Command {
     public void execute(SlashCommandInteractionEvent event) {
         Member member = event.getMember();
         Guild guild = event.getGuild();
-        
 
         assert member != null;
         if (!member.hasPermission(Permission.MANAGE_SERVER)) {

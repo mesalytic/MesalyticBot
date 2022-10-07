@@ -68,9 +68,10 @@ public class TTTCommand implements Command {
             return;
         }
 
-        if (boards.containsKey(event.getChannel().getIdLong())) event.reply(Language.getString("TTT_RUNNING", guild)).setEphemeral(true).queue();
+        if (boards.containsKey(event.getChannel().getIdLong()))
+            event.reply(Language.getString("TTT_RUNNING", guild)).setEphemeral(true).queue();
         else {
-            players.put(event.getChannel().getIdLong(), new long[]{Objects.requireNonNull(event.getMember()).getIdLong(), Objects.requireNonNull(event.getOption("opponent")).getAsUser().getIdLong() });
+            players.put(event.getChannel().getIdLong(), new long[]{Objects.requireNonNull(event.getMember()).getIdLong(), Objects.requireNonNull(event.getOption("opponent")).getAsUser().getIdLong()});
 
             User opponent = Objects.requireNonNull(event.getOption("opponent")).getAsUser();
 
@@ -100,7 +101,7 @@ public class TTTCommand implements Command {
                 .addActionRow(
                         Button.secondary("tictactoeButton7", Emoji.fromUnicode("\u0037\u20E3")),
                         Button.secondary("tictactoeButton8", Emoji.fromUnicode("\u0038\u20E3")),
-                        Button.secondary("tictactoeButton9", Emoji.fromUnicode("\u0039\u20E3") )
+                        Button.secondary("tictactoeButton9", Emoji.fromUnicode("\u0039\u20E3"))
                 )
                 .queue();
     }

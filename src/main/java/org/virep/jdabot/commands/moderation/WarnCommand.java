@@ -42,6 +42,7 @@ import java.util.concurrent.TimeUnit;
 
 public class WarnCommand implements Command {
     private static final Logger log = LoggerFactory.getLogger(WarnCommand.class);
+
     @Override
     public String getName() {
         return "warn";

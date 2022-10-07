@@ -80,7 +80,7 @@ public class BanCommand implements Command {
             event.reply(Language.getString("BAN_YOURSELF", guild)).setEphemeral(true).queue();
             return;
         }
-        
+
         if (member.isOwner()) {
             event.reply(Language.getString("BAN_OWNER", guild)).setEphemeral(true).queue();
             return;

@@ -54,7 +54,7 @@ public class ActivityCommand implements Command {
                                 new Choice("Blazing 8s (Boost Level 1)", "832025144389533716"),
                                 new Choice("Land-io (Boost Level 1)", "903769130790969345"),
                                 new Choice("Bash Out (Boost Level 1)", "1006584476094177371")
-                ));
+                        ));
     }
 
     @Override
@@ -132,7 +132,7 @@ public class ActivityCommand implements Command {
                     activityObject.get("boostLevel") +
                     "\n" +
                     Language.getString("ACTIVITY_EMBED_MAX", guild) +
-                    (activityObject.get("maxParticipants").equals(-1) ? Language.getString("ACTIVITY_EMBED_MAX_UNLIMITED", guild): activityObject.get("maxParticipants")) +
+                    (activityObject.get("maxParticipants").equals(-1) ? Language.getString("ACTIVITY_EMBED_MAX_UNLIMITED", guild) : activityObject.get("maxParticipants")) +
                     "\n\n" +
                     Language.getString("ACTIVITY_EMBED_PC", guild) +
                     "\n" +

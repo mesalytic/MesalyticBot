@@ -13,6 +13,7 @@ public class VoiceTimeoutTask implements Task {
         this.guild = guild;
         this.voiceState = guild.getSelfMember().getVoiceState();
     }
+
     @Override
     public void run() {
         if (voiceState != null && voiceState.inAudioChannel()) {

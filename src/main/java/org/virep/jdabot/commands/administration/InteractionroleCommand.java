@@ -135,7 +135,7 @@ public class InteractionroleCommand implements Command {
     @Override
     public void execute(SlashCommandInteractionEvent event) {
         Guild guild = event.getGuild();
-        
+
         if (!event.getMember().hasPermission(Permission.MANAGE_SERVER)) {
             event.reply(Language.getString("NO_PERMISSION", guild)).setEphemeral(true).queue();
             return;
@@ -150,19 +150,19 @@ public class InteractionroleCommand implements Command {
                 TextChannel channel = channelOption.asTextChannel();
 
                 channel.sendMessage(Language.getString("INTERACTIONROLE_MESSAGE_CREATE_MESSAGE", guild)).queue(message -> {
-                            try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("INSERT INTO interactionrole (channelID, guildID, messageID) VALUES (?,?,?)")) {
-                                statement.setString(1, event.getOption("channel", OptionMapping::getAsChannel).getId());
-                                statement.setString(2, guild.getId());
-                                statement.setString(3, message.getId());
+                    try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("INSERT INTO interactionrole (channelID, guildID, messageID) VALUES (?,?,?)")) {
+                        statement.setString(1, event.getOption("channel", OptionMapping::getAsChannel).getId());
+                        statement.setString(2, guild.getId());
+                        statement.setString(3, message.getId());
 
-                                statement.executeUpdate();
+                        statement.executeUpdate();
 
-                                connection.close();
+                        connection.close();
 
-                                event.reply(Language.getString("INTERACTIONROLE_MESSAGE_CREATE_SUCCESS", guild).replace("%MESSAGEID", message.getId())).queue();
-                            } catch (SQLException e) {
-                                ErrorManager.handle(e, event);
-                            }
+                        event.reply(Language.getString("INTERACTIONROLE_MESSAGE_CREATE_SUCCESS", guild).replace("%MESSAGEID", message.getId())).queue();
+                    } catch (SQLException e) {
+                        ErrorManager.handle(e, event);
+                    }
                 });
             }
 
@@ -497,7 +497,8 @@ public class InteractionroleCommand implements Command {
                                                 selectOptions.add(option);
                                         });
 
-                                        if (selectOptions.isEmpty()) msg.editMessageComponents().setComponents().queue();
+                                        if (selectOptions.isEmpty())
+                                            msg.editMessageComponents().setComponents().queue();
                                         else {
                                             SelectMenu newMenu = SelectMenu.create("selectmenurole:" + guild.getId()).addOptions(selectOptions).setMaxValues(selectOptions.size()).build();
                                             msg.editMessageComponents().setActionRow(newMenu).queue();

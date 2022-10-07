@@ -43,10 +43,10 @@ public class MessageCommand implements Command {
                                         new SubcommandData("set", "Configure the join message.")
                                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Configure le message de bienvenue.")
                                                 .addOptions(
-                                                    new OptionData(OptionType.CHANNEL, "channel", "The channel where the message will be sent.", true)
-                                                            .setDescriptionLocalization(DiscordLocale.FRENCH, "Le salon auquel le message sera envoyé."),
-                                                    new OptionData(OptionType.STRING, "message", "The message that will be sent. You can use tags, the list is at /message join tags.", true)
-                                                            .setDescriptionLocalization(DiscordLocale.FRENCH, "Le message qui sera envoyé. Vous pouvez utiliser des tags (/message join tags)")
+                                                        new OptionData(OptionType.CHANNEL, "channel", "The channel where the message will be sent.", true)
+                                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le salon auquel le message sera envoyé."),
+                                                        new OptionData(OptionType.STRING, "message", "The message that will be sent. You can use tags, the list is at /message join tags.", true)
+                                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le message qui sera envoyé. Vous pouvez utiliser des tags (/message join tags)")
                                                 ),
                                         new SubcommandData("remove", "Remove the join message.")
                                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Retire le message de bienvenue."),
@@ -61,10 +61,10 @@ public class MessageCommand implements Command {
                                         new SubcommandData("set", "Configure the leave message.")
                                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Configure le message de départ.")
                                                 .addOptions(
-                                                    new OptionData(OptionType.CHANNEL, "channel", "The channel where the message will be sent.", true)
-                                                            .setDescriptionLocalization(DiscordLocale.FRENCH, "Le salon auquel le message sera envoyé."),
-                                                    new OptionData(OptionType.STRING, "message", "The message that will be sent. You can use tags, the list is at /message leave tags.", true)
-                                                            .setDescriptionLocalization(DiscordLocale.FRENCH, "Le message qui sera envoyé. Vous pouvez utiliser des tags (/message leave tags)")
+                                                        new OptionData(OptionType.CHANNEL, "channel", "The channel where the message will be sent.", true)
+                                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le salon auquel le message sera envoyé."),
+                                                        new OptionData(OptionType.STRING, "message", "The message that will be sent. You can use tags, the list is at /message leave tags.", true)
+                                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le message qui sera envoyé. Vous pouvez utiliser des tags (/message leave tags)")
                                                 ),
                                         new SubcommandData("remove", "Remove the leave message.")
                                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Retire le message de départ"),

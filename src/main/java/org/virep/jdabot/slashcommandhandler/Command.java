@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface Command {
     public String getName();
+
     public SlashCommandData getCommandData();
 
     public List<Permission> getBotPermissions();

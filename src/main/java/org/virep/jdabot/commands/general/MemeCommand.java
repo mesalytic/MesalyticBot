@@ -67,7 +67,7 @@ public class MemeCommand implements Command {
 
         try {
             Request request = new Request.Builder()
-                    .url("https://www.reddit.com/r/" + subreddit+ "/top.json?sort=top&t=day&limit=500")
+                    .url("https://www.reddit.com/r/" + subreddit + "/top.json?sort=top&t=day&limit=500")
                     .build();
 
             Response res = client.newCall(request).execute();

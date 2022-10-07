@@ -14,7 +14,7 @@ public class Twemoji extends EmojiParser {
     public static String parseOne(String text) {
         final List<UnicodeCandidate> emojis = getUnicodeCandidates(stripVariants(text));
 
-        if  (!emojis.isEmpty()) {
+        if (!emojis.isEmpty()) {
             final String iconId = grabTheRightIcon(emojis.get(0).getEmoji().getUnicode());
 
             return BASE_URL + iconId + ".png";

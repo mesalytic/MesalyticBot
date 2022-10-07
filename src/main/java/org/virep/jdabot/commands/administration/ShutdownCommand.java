@@ -9,7 +9,6 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.virep.jdabot.slashcommandhandler.Command;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

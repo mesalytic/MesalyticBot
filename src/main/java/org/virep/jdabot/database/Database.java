@@ -7,13 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.virep.jdabot.utils.Config;
 import org.virep.jdabot.utils.ErrorManager;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public final class Database {
     static HikariDataSource dataSource;
@@ -35,8 +30,8 @@ public final class Database {
             hikariConfig.addDataSourceProperty("cachePrepStmts", "true");
             hikariConfig.addDataSourceProperty("useServerPrepStmts", "true");
             hikariConfig.addDataSourceProperty("useLocalSessionState", "true");
-            hikariConfig.addDataSourceProperty("useUnicode","true");
-            hikariConfig.addDataSourceProperty("characterEncoding","utf8");
+            hikariConfig.addDataSourceProperty("useUnicode", "true");
+            hikariConfig.addDataSourceProperty("characterEncoding", "utf8");
 
             log.info(String.format("Connected to HikariCP ! Pool size: %d", hikariConfig.getMaximumPoolSize()));
 
