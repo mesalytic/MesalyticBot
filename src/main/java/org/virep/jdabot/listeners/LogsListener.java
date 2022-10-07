@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
+import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
 import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 import net.dv8tion.jda.api.events.channel.ChannelCreateEvent;
@@ -34,11 +35,9 @@ import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateNicknameE
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateTimeOutEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceGuildDeafenEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceGuildMuteEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceSelfDeafenEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceSelfMuteEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.message.MessageBulkDeleteEvent;
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -57,6 +56,7 @@ import net.dv8tion.jda.api.utils.AttachedFile;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.virep.jdabot.language.Language;
 
+import javax.annotation.Nonnull;
 import java.awt.Color;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -684,16 +684,20 @@ public class LogsListener extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
+    public void onGuildVoiceUpdate(@Nonnull GuildVoiceUpdateEvent event) {
+        if (event.getMember().getUser().isBot()) return;
+
         Guild guild = event.getGuild();
 
-        if (event.getMember().getUser().isBot()) return;
-        if (isEnabled("guildVoiceJoin", guild.getId())) {
+        AudioChannelUnion channelJoined = event.getChannelJoined();
+        AudioChannelUnion channelLeft = event.getChannelLeft();
+
+        if (channelLeft == null && channelJoined != null && isEnabled("guildVoiceJoin", guild.getId())) {
             User member = event.getMember().getUser();
             MessageEmbed embed = new EmbedBuilder()
                     .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
                     .setColor(3066993)
-                    .setDescription(Language.getString("LOGSEVENT_VCJOIN", guild).replace("%USERTAG%", member.getAsTag()).replace("%CHANNELMENTION%", event.getVoiceState().getChannel().getAsMention()))
+                    .setDescription(Language.getString("LOGSEVENT_VCJOIN", guild).replace("%USERTAG%", member.getAsTag()).replace("%CHANNELMENTION%", channelJoined.asVoiceChannel().getAsMention()))
                     .setTimestamp(Instant.now())
                     .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID", member.getId()))
                     .build();
@@ -705,20 +709,13 @@ public class LogsListener extends ListenerAdapter {
 
             if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
         }
-    }
 
-    @Override
-    public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
-        Guild guild = event.getGuild();
-
-        if (event.getMember().getUser().isBot()) return;
-        if (isEnabled("guildVoiceLeave", guild.getId())) {
-
+        if (channelLeft != null && channelJoined == null && isEnabled("guildVoiceLeave", guild.getId())) {
             User member = event.getMember().getUser();
             MessageEmbed embed = new EmbedBuilder()
                     .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
                     .setColor(15158332)
-                    .setDescription(Language.getString("LOGSEVENT_VCLEFT", guild).replace("%USERTAG%", member.getAsTag()).replace("%CHANNELMENTION%", event.getChannelLeft().getAsMention()))
+                    .setDescription(Language.getString("LOGSEVENT_VCLEFT", guild).replace("%USERTAG%", member.getAsTag()).replace("%CHANNELMENTION%", channelLeft.asVoiceChannel().getAsMention()))
                     .setTimestamp(Instant.now())
                     .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID", member.getId()))
                     .build();
@@ -730,25 +727,15 @@ public class LogsListener extends ListenerAdapter {
 
             if (logChannel != null) logChannel.sendMessageEmbeds(embed).queue();
         }
-    }
 
-    @Override
-    public void onGuildVoiceMove(GuildVoiceMoveEvent event) {
-        Guild guild = event.getGuild();
-
-        if (event.getMember().getUser().isBot()) return;
-
-        AudioChannel oldChannel = event.getChannelLeft();
-        AudioChannel newChannel = event.getChannelJoined();
-
-        if (isEnabled("guildVoiceMove", guild.getId())) {
+        if (channelLeft != null && channelJoined != null && isEnabled("guildVoiceMove", guild.getId())) {
             User member = event.getMember().getUser();
             MessageEmbed embed = new EmbedBuilder()
                     .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
                     .setColor(16751616)
-                    .setDescription(Language.getString("LOGSEVENT_VCMOVE", guild).replace("%USERTAG%", member.getAsTag()).replace("%CHANNELMENTION%", newChannel.getAsMention()))
-                    .addField(Language.getString("LOGSEVENT_OLD", guild), oldChannel.getAsMention(), true)
-                    .addField(Language.getString("LOGSEVENT_NEW", guild), newChannel.getAsMention(), true)
+                    .setDescription(Language.getString("LOGSEVENT_VCMOVE", guild).replace("%USERTAG%", member.getAsTag()).replace("%CHANNELMENTION%", channelJoined.asVoiceChannel().getAsMention()))
+                    .addField(Language.getString("LOGSEVENT_OLD", guild), channelLeft.asVoiceChannel().getAsMention(), true)
+                    .addField(Language.getString("LOGSEVENT_NEW", guild), channelJoined.asVoiceChannel().getAsMention(), true)
                     .setTimestamp(Instant.now())
                     .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID", member.getId()))
                     .build();

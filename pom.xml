@@ -47,7 +47,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>5.0.0-alpha.20</version>
+            <version>5.0.0-alpha.21</version>
         </dependency>
         <dependency>
             <groupId>io.github.cdimascio</groupId>
@@ -57,7 +57,7 @@
         <dependency>
             <groupId>com.github.chocololat</groupId>
             <artifactId>Lavalink-Client</artifactId>
-            <version>b4e9d6ba06</version>
+            <version>de327bf39c</version>
         </dependency>
         <dependency>
             <groupId>org.reflections</groupId>

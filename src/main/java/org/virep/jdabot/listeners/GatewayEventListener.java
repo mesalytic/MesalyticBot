@@ -6,10 +6,10 @@ import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.audio.hooks.ConnectionStatus;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.DisconnectEvent;
-import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.events.ReconnectedEvent;
-import net.dv8tion.jda.api.events.ShutdownEvent;
+import net.dv8tion.jda.api.events.session.ReadyEvent;
+import net.dv8tion.jda.api.events.session.SessionDisconnectEvent;
+import net.dv8tion.jda.api.events.session.SessionResumeEvent;
+import net.dv8tion.jda.api.events.session.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.jetbrains.annotations.NotNull;
@@ -138,7 +138,7 @@ public class GatewayEventListener extends ListenerAdapter {
     }
 
     @Override
-    public void onReconnected(@NotNull ReconnectedEvent event) {
+    public void onSessionResume(@NotNull SessionResumeEvent event) {
         log.info("Bot has successfully reconnected.");
         WebhookEmbed embed = new WebhookEmbedBuilder()
                 .setColor(0xFFA500)
@@ -150,7 +150,7 @@ public class GatewayEventListener extends ListenerAdapter {
     }
 
     @Override
-    public void onDisconnect(@NotNull DisconnectEvent event) {
+    public void onSessionDisconnect(@NotNull SessionDisconnectEvent event) {
         log.warn("Bot has disconnected.");
 
         WebhookEmbed embed = new WebhookEmbedBuilder()
