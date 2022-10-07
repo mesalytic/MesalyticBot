@@ -169,6 +169,10 @@ public class GatewayEventListener extends ListenerAdapter {
         WebhookEmbed embed = new WebhookEmbedBuilder()
                 .setColor(0xFF0000)
                 .setDescription("Bot has disconnected.")
+                .addField(new WebhookEmbed.EmbedField(true, "Close Reason", event.getClientCloseFrame().getCloseReason()))
+                .addField(new WebhookEmbed.EmbedField(true, "Close Code", String.valueOf(event.getCloseCode().getCode())))
+                .addField(new WebhookEmbed.EmbedField(true, "Close Code Meaning", event.getCloseCode().getMeaning()))
+                .addField(new WebhookEmbed.EmbedField(true, "Closed by Server?", String.valueOf(event.isClosedByServer())))
                 .setTimestamp(Instant.now())
                 .build();
 
