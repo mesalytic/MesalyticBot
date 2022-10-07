@@ -1,5 +1,6 @@
 package org.virep.jdabot.commands.games;
 
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.entities.User;
@@ -36,6 +37,11 @@ public class TTTCommand implements Command {
                         new OptionData(OptionType.USER, "opponent", "The member you want to play against")
                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Le membre que vous voulez jouez contre.")
                 );
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        return Collections.emptyList();
     }
 
     @Override

@@ -19,7 +19,10 @@ import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -58,6 +61,14 @@ public class MuteCommand implements Command {
                                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "La raison du retrait de la mise en sourdine.")
                                 )
                 );
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> permsList = new ArrayList<>();
+        Collections.addAll(permsList, Permission.MODERATE_MEMBERS, Permission.VIEW_AUDIT_LOGS);
+
+        return permsList;
     }
 
     @Override

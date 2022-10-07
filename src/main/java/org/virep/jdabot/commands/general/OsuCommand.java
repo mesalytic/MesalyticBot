@@ -1,5 +1,6 @@
 package org.virep.jdabot.commands.general;
 
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
@@ -21,6 +22,9 @@ import org.virep.jdabot.utils.ErrorManager;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -46,6 +50,14 @@ public class OsuCommand implements Command {
                                     new net.dv8tion.jda.api.interactions.commands.Command.Choice("Catch The Beat", "ctb")
                                 )
                 );
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> permsList = new ArrayList<>();
+        Collections.addAll(permsList, Permission.MESSAGE_EMBED_LINKS);
+
+        return permsList;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.virep.jdabot.commands.music;
 
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Message.Attachment;
@@ -20,6 +21,9 @@ import org.virep.jdabot.music.GuildAudioManager;
 import org.virep.jdabot.slashcommandhandler.Command;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public class PlayCommand implements Command {
@@ -62,6 +66,14 @@ public class PlayCommand implements Command {
                                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Fichier audio à jouer")
                                 )
                 );
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> permsList = new ArrayList<>();
+        Collections.addAll(permsList, Permission.VOICE_SPEAK, Permission.VOICE_CONNECT, Permission.VIEW_CHANNEL);
+
+        return permsList;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.virep.jdabot.commands.general;
 
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
@@ -12,6 +13,8 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public class RandomCommand implements Command {
@@ -33,6 +36,11 @@ public class RandomCommand implements Command {
                                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Le chiffre maximum qui puisse être donné.")
                                 )
                 );
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        return Collections.emptyList();
     }
 
     @Override

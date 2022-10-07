@@ -21,6 +21,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public class ReactionroleCommand implements Command {
@@ -59,6 +62,14 @@ public class ReactionroleCommand implements Command {
                                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "L'emoji que les membres intéragissent avec.")
                                 )
                 );
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> perms = new ArrayList<>();
+        Collections.addAll(perms, Permission.MESSAGE_ADD_REACTION, Permission.MANAGE_ROLES);
+
+        return perms;
     }
 
     @Override

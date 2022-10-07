@@ -1,5 +1,6 @@
 package org.virep.jdabot.commands.general;
 
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -10,6 +11,10 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.virep.jdabot.slashcommandhandler.Command;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class AvatarCommand implements Command {
     @Override
@@ -27,6 +32,14 @@ public class AvatarCommand implements Command {
                         new OptionData(OptionType.BOOLEAN, "guild", "Display guild profile picture")
                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Afficher l'avatar serveur.")
                 );
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> permsList = new ArrayList<>();
+        Collections.addAll(permsList, Permission.MESSAGE_EMBED_LINKS);
+
+        return permsList;
     }
 
     @Override

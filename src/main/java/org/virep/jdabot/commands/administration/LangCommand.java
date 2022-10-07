@@ -20,6 +20,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class LangCommand implements Command {
 
@@ -42,6 +45,11 @@ public class LangCommand implements Command {
                                         new net.dv8tion.jda.api.interactions.commands.Command.Choice("Français", "fr")
                                 )
                 );
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        return Collections.emptyList();
     }
 
     @Override

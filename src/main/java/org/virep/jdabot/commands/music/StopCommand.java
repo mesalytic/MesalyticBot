@@ -1,5 +1,6 @@
 package org.virep.jdabot.commands.music;
 
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -10,6 +11,9 @@ import org.virep.jdabot.language.Language;
 import org.virep.jdabot.music.AudioManagerController;
 import org.virep.jdabot.slashcommandhandler.Command;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public class StopCommand implements Command {
@@ -23,6 +27,14 @@ public class StopCommand implements Command {
         return Commands.slash(getName(), "Stops the currently played music.")
                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Stoppe la musique actuelle.")
                 .setGuildOnly(true);
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> permsList = new ArrayList<>();
+        Collections.addAll(permsList, Permission.VOICE_SPEAK, Permission.VOICE_CONNECT, Permission.VIEW_CHANNEL);
+
+        return permsList;
     }
 
     @Override

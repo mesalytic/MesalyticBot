@@ -14,6 +14,9 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public class KickCommand implements Command {
@@ -34,6 +37,14 @@ public class KickCommand implements Command {
                         new OptionData(OptionType.STRING, "reason", "The reason of the kick.")
                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "La raison de l'exclusion.")
                 );
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> permsList = new ArrayList<>();
+        Collections.addAll(permsList, Permission.MODERATE_MEMBERS, Permission.KICK_MEMBERS, Permission.VIEW_AUDIT_LOGS);
+
+        return permsList;
     }
 
     @Override

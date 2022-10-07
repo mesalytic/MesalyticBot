@@ -1,6 +1,7 @@
 package org.virep.jdabot.commands.music;
 
 import lavalink.client.player.LavalinkPlayer;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -12,6 +13,9 @@ import org.virep.jdabot.music.AudioManagerController;
 import org.virep.jdabot.music.GuildAudioManager;
 import org.virep.jdabot.slashcommandhandler.Command;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public class ResumeCommand implements Command {
@@ -25,6 +29,14 @@ public class ResumeCommand implements Command {
         return Commands.slash(getName(), "Resumes the currently playing music.")
                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Relance la musique.")
                 .setGuildOnly(true);
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> permsList = new ArrayList<>();
+        Collections.addAll(permsList, Permission.VOICE_SPEAK, Permission.VOICE_CONNECT, Permission.VIEW_CHANNEL);
+
+        return permsList;
     }
 
     @Override

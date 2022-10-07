@@ -17,7 +17,10 @@ import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.utils.Utils;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class BanCommand implements Command {
@@ -40,6 +43,14 @@ public class BanCommand implements Command {
                         new OptionData(OptionType.STRING, "delete", "Amount of time delete messages. (between 0 seconds - 7 days)")
                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Le temps de suppression des messages. (entre 0 secondes - 7 jours)")
                 );
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> permsList = new ArrayList<>();
+        Collections.addAll(permsList, Permission.MODERATE_MEMBERS, Permission.BAN_MEMBERS, Permission.VIEW_AUDIT_LOGS);
+
+        return permsList;
     }
 
     @Override

@@ -13,7 +13,6 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
-import org.apache.commons.codec.language.bm.Lang;
 import org.virep.jdabot.database.Database;
 import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
@@ -23,6 +22,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class LogsCommand implements Command {
     @Override
@@ -46,6 +48,14 @@ public class LogsCommand implements Command {
                                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Le salon de log.")
                                 )
                 );
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> perms = new ArrayList<>();
+        Collections.addAll(perms, Permission.MESSAGE_EMBED_LINKS, Permission.VIEW_CHANNEL);
+
+        return perms;
     }
 
     @Override

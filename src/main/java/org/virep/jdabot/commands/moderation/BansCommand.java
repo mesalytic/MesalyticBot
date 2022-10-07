@@ -38,6 +38,14 @@ public class BansCommand implements Command {
     }
 
     @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> permsList = new ArrayList<>();
+        Collections.addAll(permsList, Permission.MODERATE_MEMBERS, Permission.BAN_MEMBERS, Permission.VIEW_AUDIT_LOGS);
+
+        return permsList;
+    }
+
+    @Override
     public boolean isDev() {
         return false;
     }

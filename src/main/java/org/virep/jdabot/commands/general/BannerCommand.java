@@ -1,6 +1,7 @@
 package org.virep.jdabot.commands.general;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -24,6 +25,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class BannerCommand implements Command {
@@ -42,6 +46,14 @@ public class BannerCommand implements Command {
                         new OptionData(OptionType.BOOLEAN, "color", "Shows the color of the banner.")
                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Montre la couleur par défaut de la bannière.")
                 );
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> permsList = new ArrayList<>();
+        Collections.addAll(permsList, Permission.MESSAGE_EMBED_LINKS);
+
+        return permsList;
     }
 
     @Override

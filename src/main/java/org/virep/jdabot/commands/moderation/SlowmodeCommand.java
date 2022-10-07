@@ -17,6 +17,9 @@ import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.time.Duration;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 import static org.virep.jdabot.utils.Utils.secondsToSeperatedTime;
@@ -49,6 +52,14 @@ public class SlowmodeCommand implements Command {
                                 )
                 );
 
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> permsList = new ArrayList<>();
+        Collections.addAll(permsList, Permission.VIEW_CHANNEL, Permission.MANAGE_CHANNEL, Permission.VIEW_AUDIT_LOGS);
+
+        return permsList;
     }
 
     @Override

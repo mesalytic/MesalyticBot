@@ -20,7 +20,6 @@ import net.dv8tion.jda.api.interactions.components.Component;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
-import org.apache.commons.codec.language.bm.Lang;
 import org.virep.jdabot.database.Database;
 import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
@@ -31,6 +30,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class InteractionroleCommand implements Command {
@@ -117,6 +117,14 @@ public class InteractionroleCommand implements Command {
                                                 )
                                 )
                 );
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> perms = new ArrayList<>();
+        Collections.addAll(perms, Permission.MANAGE_ROLES, Permission.MESSAGE_SEND);
+
+        return perms;
     }
 
     @Override

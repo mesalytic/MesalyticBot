@@ -1,5 +1,6 @@
 package org.virep.jdabot.commands.general;
 
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.emoji.CustomEmoji;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
@@ -21,6 +22,9 @@ import org.virep.jdabot.utils.Twemoji;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class EmojiCommand implements Command {
@@ -37,6 +41,14 @@ public class EmojiCommand implements Command {
                         new OptionData(OptionType.STRING, "emoji", "The emoji you want to see informations about.", true)
                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "L'emoji auquel vous souhaitez voir les informations")
                 );
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> permsList = new ArrayList<>();
+        Collections.addAll(permsList, Permission.MESSAGE_EMBED_LINKS);
+
+        return permsList;
     }
 
     @Override

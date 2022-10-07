@@ -20,6 +20,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class MessageCommand implements Command {
     @Override
@@ -87,6 +90,14 @@ public class MessageCommand implements Command {
                                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Test le message privé.")
                                 )
                 );
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> perms = new ArrayList<>();
+        Collections.addAll(perms, Permission.MESSAGE_SEND);
+
+        return perms;
     }
 
     @Override

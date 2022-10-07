@@ -33,7 +33,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
@@ -108,6 +111,14 @@ public class WarnCommand implements Command {
                                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "L'index de l'avertissement à retirer.")
                                 )
                 );
+    }
+
+    @Override
+    public java.util.List<Permission> getBotPermissions() {
+        List<Permission> permsList = new ArrayList<>();
+        Collections.addAll(permsList, Permission.MODERATE_MEMBERS, Permission.KICK_MEMBERS, Permission.BAN_MEMBERS, Permission.VIEW_AUDIT_LOGS, Permission.VIEW_CHANNEL);
+
+        return permsList;
     }
 
     @Override

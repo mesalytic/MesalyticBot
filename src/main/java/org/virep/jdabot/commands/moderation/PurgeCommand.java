@@ -17,6 +17,8 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -62,6 +64,14 @@ public class PurgeCommand implements Command {
                                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Le salon dans lequel il faut supprimer les messages.")
                                 )
                 );
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> permsList = new ArrayList<>();
+        Collections.addAll(permsList, Permission.VIEW_CHANNEL, Permission.MANAGE_CHANNEL, Permission.VIEW_AUDIT_LOGS);
+
+        return permsList;
     }
 
     @Override

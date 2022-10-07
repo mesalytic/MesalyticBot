@@ -1,5 +1,6 @@
 package org.virep.jdabot.commands.general;
 
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
@@ -22,7 +23,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class AfkCommand implements Command {
     @Override
@@ -44,6 +47,14 @@ public class AfkCommand implements Command {
                         new SubcommandData("remove", "Remove your AFK status.")
                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Retire le statut AFK.")
                 );
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> permsList = new ArrayList<>();
+        Collections.addAll(permsList, Permission.MESSAGE_SEND, Permission.MESSAGE_HISTORY);
+
+        return permsList;
     }
 
     @Override

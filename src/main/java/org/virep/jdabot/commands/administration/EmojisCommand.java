@@ -24,6 +24,9 @@ import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.utils.ErrorManager;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class EmojisCommand implements Command {
@@ -56,6 +59,14 @@ public class EmojisCommand implements Command {
                                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "L'emoji que vous souhaitez retirer")
                                 )
                 );
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> perms = new ArrayList<>();
+        Collections.addAll(perms, Permission.MANAGE_EMOJIS_AND_STICKERS);
+
+        return perms;
     }
 
     @Override

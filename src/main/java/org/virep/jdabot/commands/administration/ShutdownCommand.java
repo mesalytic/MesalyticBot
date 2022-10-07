@@ -9,6 +9,10 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.virep.jdabot.slashcommandhandler.Command;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class ShutdownCommand implements Command {
 
     @Override
@@ -21,6 +25,11 @@ public class ShutdownCommand implements Command {
         return Commands.slash(getName(), "shutdown")
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ADMINISTRATOR))
                 .addOption(OptionType.CHANNEL, "testoption", "test");
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        return Collections.emptyList();
     }
 
     @Override

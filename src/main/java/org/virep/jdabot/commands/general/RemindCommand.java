@@ -1,5 +1,6 @@
 package org.virep.jdabot.commands.general;
 
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
@@ -22,6 +23,7 @@ import java.sql.SQLException;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -58,6 +60,11 @@ public class RemindCommand implements Command {
                         new SubcommandData("list", "Lists your reminders.")
                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Liste vos rappels.")
                 );
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        return Collections.emptyList();
     }
 
     @Override

@@ -3,6 +3,7 @@ package org.virep.jdabot.commands.music;
 import lavalink.client.player.LavalinkPlayer;
 import lavalink.client.player.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -17,6 +18,9 @@ import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.utils.Utils;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public class NowPlayingCommand implements Command {
@@ -30,6 +34,14 @@ public class NowPlayingCommand implements Command {
         return Commands.slash(getName(), "Display informations about the currently playing music.")
                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Affiche des informations sur la musique actuellement jouée.")
                 .setGuildOnly(true);
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> permsList = new ArrayList<>();
+        Collections.addAll(permsList, Permission.VOICE_SPEAK, Permission.VOICE_CONNECT, Permission.VIEW_CHANNEL);
+
+        return permsList;
     }
 
     @Override

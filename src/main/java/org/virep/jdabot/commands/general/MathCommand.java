@@ -1,6 +1,7 @@
 package org.virep.jdabot.commands.general;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -35,6 +36,9 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -64,6 +68,14 @@ public class MathCommand implements Command {
                         new SubcommandData("list", "List of built-in functions and operators")
                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Liste des fonctions/signes disponibles")
                 );
+    }
+
+    @Override
+    public java.util.List<Permission> getBotPermissions() {
+        List<Permission> permsList = new ArrayList<>();
+        Collections.addAll(permsList, Permission.MESSAGE_EMBED_LINKS);
+
+        return permsList;
     }
 
     @Override

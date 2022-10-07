@@ -1,6 +1,7 @@
 package org.virep.jdabot.commands.general;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
@@ -18,6 +19,9 @@ import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.utils.ErrorManager;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class MemeCommand implements Command {
@@ -34,6 +38,14 @@ public class MemeCommand implements Command {
                         new OptionData(OptionType.STRING, "subreddit", "The subreddit you want to see memes from.")
                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Le subreddit auquel vous voulez voir des memes")
                 );
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> permsList = new ArrayList<>();
+        Collections.addAll(permsList, Permission.MESSAGE_EMBED_LINKS);
+
+        return permsList;
     }
 
     @Override

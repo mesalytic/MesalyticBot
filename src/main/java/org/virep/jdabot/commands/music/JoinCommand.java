@@ -1,5 +1,6 @@
 package org.virep.jdabot.commands.music;
 
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
@@ -12,6 +13,9 @@ import org.virep.jdabot.music.AudioManagerController;
 import org.virep.jdabot.music.GuildAudioManager;
 import org.virep.jdabot.slashcommandhandler.Command;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public class JoinCommand implements Command {
@@ -25,6 +29,14 @@ public class JoinCommand implements Command {
         return Commands.slash(getName(), "Join channel to play music.")
                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Rejoins un salon pour jouer de la musique.")
                 .setGuildOnly(true);
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> permsList = new ArrayList<>();
+        Collections.addAll(permsList, Permission.VOICE_SPEAK, Permission.VOICE_CONNECT, Permission.VIEW_CHANNEL);
+
+        return permsList;
     }
 
     @Override

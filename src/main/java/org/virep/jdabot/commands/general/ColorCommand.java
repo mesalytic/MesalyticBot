@@ -1,6 +1,7 @@
 package org.virep.jdabot.commands.general;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
@@ -18,6 +19,9 @@ import org.virep.jdabot.utils.ErrorManager;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -39,6 +43,14 @@ public class ColorCommand implements Command {
                         new OptionData(OptionType.STRING, "color", "Specify a specific color (name or hex code)")
                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Spécifier une couleur (nom ou code hexadécimal)")
                 );
+    }
+
+    @Override
+    public java.util.List<Permission> getBotPermissions() {
+        List<Permission> permsList = new ArrayList<>();
+        Collections.addAll(permsList, Permission.MESSAGE_EMBED_LINKS);
+
+        return permsList;
     }
 
     @Override

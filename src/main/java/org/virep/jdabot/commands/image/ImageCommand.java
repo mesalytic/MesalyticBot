@@ -1,5 +1,6 @@
 package org.virep.jdabot.commands.image;
 
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -17,6 +18,9 @@ import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.utils.ErrorManager;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class ImageCommand implements Command {
@@ -246,6 +250,14 @@ public class ImageCommand implements Command {
                         new SubcommandData("fractal", "Generate a fractal. May take some time.")
                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Génère une fractale. Peut prendre jusqu'a une trentaine de secondes.")
                 );
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> permsList = new ArrayList<>();
+        Collections.addAll(permsList, Permission.MESSAGE_EMBED_LINKS);
+
+        return permsList;
     }
 
     @Override

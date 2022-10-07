@@ -21,7 +21,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class AutoroleCommand implements Command {
     @Override
@@ -45,6 +47,14 @@ public class AutoroleCommand implements Command {
                         new SubcommandData("remove", "Removes any role that has been configured from autorole")
                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Retire les rôles qui ont été configurés pour l'autorole.")
                 );
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> perms = new ArrayList<>();
+        Collections.addAll(perms, Permission.MANAGE_ROLES);
+
+        return perms;
     }
 
     @Override

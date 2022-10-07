@@ -1,6 +1,7 @@
 package org.virep.jdabot.commands.music;
 
 import lavalink.client.player.LavalinkPlayer;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -15,6 +16,9 @@ import org.virep.jdabot.music.AudioManagerController;
 import org.virep.jdabot.music.GuildAudioManager;
 import org.virep.jdabot.slashcommandhandler.Command;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 import static org.virep.jdabot.utils.Utils.lengthToMillis;
@@ -34,6 +38,14 @@ public class SeekCommand implements Command {
                         new OptionData(OptionType.STRING, "time", "Time to seek to. (format H:M:S or M:S)", true)
                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Temps à avancer (format H:M:S ou M:S)")
                 );
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> permsList = new ArrayList<>();
+        Collections.addAll(permsList, Permission.VOICE_SPEAK, Permission.VOICE_CONNECT, Permission.VIEW_CHANNEL);
+
+        return permsList;
     }
 
     @Override

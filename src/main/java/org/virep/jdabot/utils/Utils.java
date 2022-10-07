@@ -1,11 +1,16 @@
 package org.virep.jdabot.utils;
 
+import net.dv8tion.jda.api.Permission;
+
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class Utils {
     private static final long SECOND = 1000;
@@ -181,5 +186,13 @@ public class Utils {
         int rand_num = obj.nextInt(0xffffff + 1);
 
         return String.format("%06x", rand_num);
+    }
+
+    public static List<Permission> getMissingPermissions(EnumSet<Permission> available, List<Permission> required) {
+        if (new HashSet<>(available).containsAll(required) || available.isEmpty()) {
+            return Collections.emptyList();
+        } else {
+            return required.stream().filter(permission -> !available.contains(permission)).collect(Collectors.toList());
+        }
     }
 }

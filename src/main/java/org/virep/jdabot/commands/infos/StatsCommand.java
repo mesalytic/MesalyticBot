@@ -1,6 +1,7 @@
 package org.virep.jdabot.commands.infos;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.SelfUser;
@@ -14,6 +15,9 @@ import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 import static org.virep.jdabot.utils.Utils.formatUptime;
@@ -28,6 +32,14 @@ public class StatsCommand implements Command {
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Retrieve stats about the bot.")
                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Affiche les statistiques à propos du bot");
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> permsList = new ArrayList<>();
+        Collections.addAll(permsList, Permission.MESSAGE_EMBED_LINKS);
+
+        return permsList;
     }
 
     @Override

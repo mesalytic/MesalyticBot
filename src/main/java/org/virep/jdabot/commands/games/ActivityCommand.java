@@ -1,6 +1,7 @@
 package org.virep.jdabot.commands.games;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -18,9 +19,11 @@ import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.utils.ErrorManager;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ActivityCommand implements Command {
     @Override
@@ -52,6 +55,14 @@ public class ActivityCommand implements Command {
                                 new Choice("Land-io (Boost Level 1)", "903769130790969345"),
                                 new Choice("Bash Out (Boost Level 1)", "1006584476094177371")
                 ));
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> perms = new ArrayList<>();
+        Collections.addAll(perms, Permission.VOICE_START_ACTIVITIES);
+
+        return perms;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package org.virep.jdabot.commands.infos;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
@@ -15,6 +16,8 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
@@ -42,6 +45,14 @@ public class InfoCommand implements Command {
                         new SubcommandData("server", "Info about the server")
                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Affiche les informations à propos du serveur.")
                 );
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> permsList = new ArrayList<>();
+        Collections.addAll(permsList, Permission.MESSAGE_EMBED_LINKS);
+
+        return permsList;
     }
 
     @Override

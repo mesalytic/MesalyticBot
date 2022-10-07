@@ -20,7 +20,10 @@ import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.utils.DatabaseUtils;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
+import java.util.List;
 
 public class TwitterCommand implements Command {
     @Override
@@ -52,6 +55,14 @@ public class TwitterCommand implements Command {
                         new SubcommandData("list", "List all accounts configured in the server for Twitter Notifier.")
                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Liste les comptes configurés aux Notifications Twitter sur le serveur.")
                 );
+    }
+
+    @Override
+    public List<Permission> getBotPermissions() {
+        List<Permission> perms = new ArrayList<>();
+        Collections.addAll(perms, Permission.MESSAGE_EMBED_LINKS);
+
+        return perms;
     }
 
     @Override
