@@ -27,12 +27,10 @@ Mesalytic relies on the following projects:
 | [Twemoji.java (SkyBot)](https://github.com/DuncteBot/SkyBot/blob/main/src/main/java/ml/duncte123/skybot/utils/TwemojiParser.java) | [GNU Affero General Public License v3.0](https://github.com/DuncteBot/SkyBot/blob/main/LICENSE) |                                                                     | [Apache License 2.0](https://github.com/chocololat/mesalytic-api/blob/main/LICENSE)                              |
 
 ### Services
-| Name                                                                                              | License                                                                                                          |
-|:--------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------|
-| [Lavalink](https://github.com/freyacodes/Lavalink)                                                | [MIT License](https://github.com/freyacodes/Lavalink/blob/master/LICENSE)                                        |
-| [Topi's Lavalink Plugins](https://github.com/Topis-Lavalink-Plugins/Topis-Source-Managers-Plugin) | [Apache License 2.0](https://github.com/Topis-Lavalink-Plugins/Topis-Source-Managers-Plugin/blob/master/LICENSE) |
-| [Kaogurai's Deezer Lavalink Plugin](https://github.com/kaogurai/lavalink-plugin)                  | [MIT License](https://github.com/kaogurai/lavalink-plugin/blob/master/LICENSE)                                   |
-| [Helixus API](https://github.com/chocololat/mesalytic-api)                                        | [Apache License 2.0](https://github.com/chocololat/mesalytic-api/blob/main/LICENSE)                              |
+| Name                                               | License                                                                         |
+|:---------------------------------------------------|:--------------------------------------------------------------------------------|
+| [Lavalink](https://github.com/freyacodes/Lavalink) | [MIT License](https://github.com/freyacodes/Lavalink/blob/master/LICENSE)       |
+| [LavaSrc](https://github.com/TopiSenpai/LavaSrc)   | [Apache License 2.0](https://github.com/TopiSenpai/LavaSrc/blob/master/LICENSE) |
 
 ### Third Party Dependencies
 | Name                                                                                        | License                                                                                                                           |
