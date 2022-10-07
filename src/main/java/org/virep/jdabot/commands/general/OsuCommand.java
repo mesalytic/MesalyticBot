@@ -77,7 +77,7 @@ public class OsuCommand implements Command {
 
         try {
             Request request = new Request.Builder()
-                    .url("https://api.mesavirep.xyz/v1osu?user=" + username + "&mode=" + mode)
+                    .url("https://api.mesavirep.xyz/v1/osu?user=" + username + "&mode=" + mode)
                     .build();
 
             Response res = client.newCall(request).execute();

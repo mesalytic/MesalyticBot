@@ -284,9 +284,9 @@ public class ImageCommand implements Command {
         String apiURL = "";
 
         assert endpoint != null;
-        if (endpoint.equals("spotify")) apiURL = "https://api.mesavirep.xyz/v1" + endpoint + "?url=" + url + "?size=1024" + "&author=" + event.getOption("author").getAsString() + "&title=" + event.getOption("title").getAsString();
-        else if (endpoint.equals("steam")) apiURL = "https://api.mesavirep.xyz/v1" + endpoint + "?url=" + url + "?size=1024" + "&game=" + event.getOption("game").getAsString() + "&player=" + event.getUser().getName();
-        else apiURL = "https://api.mesavirep.xyz/v1" + endpoint + "?url=" + url + "?size=1024";
+        if (endpoint.equals("spotify")) apiURL = "https://api.mesavirep.xyz/v1/" + endpoint + "?url=" + url + "?size=1024" + "&author=" + event.getOption("author").getAsString() + "&title=" + event.getOption("title").getAsString();
+        else if (endpoint.equals("steam")) apiURL = "https://api.mesavirep.xyz/v1/" + endpoint + "?url=" + url + "?size=1024" + "&game=" + event.getOption("game").getAsString() + "&player=" + event.getUser().getName();
+        else apiURL = "https://api.mesavirep.xyz/v1/" + endpoint + "?url=" + url + "?size=1024";
 
         try {
             Request request = new Request.Builder()
