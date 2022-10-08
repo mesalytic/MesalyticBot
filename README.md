@@ -9,11 +9,52 @@ Mesalytic is the new version of the Helixus Discord bot, written in Java.
 It is still in active development, with a release ETA of late october 2022.
 
 ## SelfHost
-You are required to have at least some Java knowledge, know how MariaDB databases work, and how Maven works.
 
-Database Schemas are not available at the moment, though they will be in the future.
+### Disclaimer
 
-No support will be given for self-host issues, you should know what you are doing before starting.
+A prepared JAR is available at download in the Release tab.
+
+If you want to modify the source code itself to make it fit your needs:
+
+- You are required to have at least some Java knowledge, know how MariaDB databases work, and how Maven works.
+- Database Schemas are not available at the moment, though they will be in the future.
+- No support will be given for self-host issues, you should know what you are doing before starting.
+
+### Requirements
+
+You need to have the Oracle JDK (or the OpenJDK) in version 18 or later.
+
+You also need to have a MariaDB/MySQL database set up. See [here](#database-schemas) for the schemas.
+
+- If you want to use Music Functionalities, you should need a Lavalink Instance, see [Third Party](#third-party).
+- If you want to use the Twitter Notifier feature, you need to have a Twitter Consumer Key/Secret, and a Access Token/Secret. See [this example](https://github.com/chocololat/twitter-oauth-example) to know how to get the Access keys.
+
+
+### Database Schemas
+
+In order for the bot to properly store user and server settings, we use the MariaDB database.
+
+The database itself contains tables, that are essentials for the bot to properly run.
+
+The database schemas can be found [here]().
+
+### Environements Variables
+
+There should be a `.env` file present on the root of the directory alongside the JAR file.
+
+Here are the variables that should be set :
+
+- **TOKEN** : The token of the bot.
+- **TOKENBETA** (**OPTIONAL**): The token of the bot (when ran with `-Ddev=true` flag)
+- **LAVALINKURI** (**OPTIONAL**) : The URI of the Lavalink instance. See [here](https://github.com/freyacodes/Lavalink) for more info
+- **LAVALINKPWD** (**OPTIONAL**) : The password of the Lavalink instance. See [here](https://github.com/freyacodes/Lavalink) for more info
+- **TWITTER_CONSUMER_KEY** (**OPTIONAL**): The Consumer Key of [your Twitter App](https://developer.twitter.com/en/portal/dashboard).
+- **TWITTER_CONSUMER_SECRET** (**OPTIONAL**): The Consumer Secret of [your Twitter App](https://developer.twitter.com/en/portal/dashboard).
+- **TWITTER_ACCESS_TOKEN** (**OPTIONAL**): The Access Token of a Twitter Account connected with your Twitter App. See [here](#requirements) for more info.
+- **TWITTER_ACCESS_SECRET** (**OPTIONAL**): The Access Secret of a Twitter Account connected with your Twitter App. See [here](#requirements) for more info.
+- **DISCORD_STATUS_WEBHOOKURL** : The Discord Webhook URL that will report any Gateway Status linked to your bot.
+- **DISCORD_ERROR_WEBHOOKURL** : The Discord Webhook URL that will report any errors to a channel.
+- **DISCORD_CMD_WEBHOOKURL** : The Discord Webhook URL that will report any commands used. **Must be used for debugging and safety reasons only. Should not be used to store user data.**
 
 ## License
 Mesalytic is an open-sourced software licensed under the [Apache License 2.0](https://apache.org/licenses/LICENSE-2.0.txt)
