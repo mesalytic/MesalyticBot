@@ -36,7 +36,7 @@ In order for the bot to properly store user and server settings, we use the Mari
 
 The database itself contains tables, that are essentials for the bot to properly run.
 
-The database schemas can be found [here]().
+The database schemas can be found [here](https://github.com/chocololat/Mesalytic/blob/master/database/schemas.sql).
 
 ### Environements Variables
 
