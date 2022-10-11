@@ -27,6 +27,7 @@ import org.virep.jdabot.utils.Config;
 import org.virep.jdabot.utils.DatabaseUtils;
 
 import java.net.URI;
+import java.util.Base64;
 
 public class Main {
     static Main instance;
@@ -35,16 +36,16 @@ public class Main {
     public static JDA jda;
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
+    private static final String token = Config.get(Boolean.parseBoolean(System.getProperty("dev")) ? "TOKENBETA" : "TOKEN");
+
     public static void main(String[] args) throws Exception {
         instance = new Main();
         instance.notifier = new Notifier();
 
         Database.initializeDataSource();
 
-        String devStatus = System.getProperty("dev");
-
         jda = JDABuilder
-                .createDefault(Config.get(Boolean.parseBoolean(devStatus) ? "TOKENBETA" : "TOKEN"))
+                .createDefault(token)
                 .enableIntents(GatewayIntent.GUILD_MEMBERS,
                         GatewayIntent.GUILD_MESSAGES,
                         GatewayIntent.MESSAGE_CONTENT,
@@ -85,7 +86,7 @@ public class Main {
     }
 
     public static final JdaLavalink lavalink = new JdaLavalink(
-            Boolean.parseBoolean(System.getProperty("dev")) ? "816407992505073725" : "437190817195753472", // can probably do this better though ??
+            new String(Base64.getDecoder().decode(token.split("\\.")[0])),
             1,
             integer -> jda
     );
