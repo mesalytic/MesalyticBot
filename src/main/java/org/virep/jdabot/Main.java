@@ -4,9 +4,7 @@ import lavalink.client.io.jda.JdaLavalink;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.Activity.ActivityType;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
@@ -53,7 +51,6 @@ public class Main {
                         GatewayIntent.GUILD_MESSAGE_REACTIONS,
                         GatewayIntent.GUILD_VOICE_STATES,
                         GatewayIntent.GUILD_BANS)
-                .setActivity(Activity.of(ActivityType.PLAYING, "We Are Back"))
                 .addEventListeners(lavalink,
                         new LogsListener(),
                         new GatewayEventListener(),
@@ -68,6 +65,8 @@ public class Main {
                 .setVoiceDispatchInterceptor(lavalink.getVoiceInterceptor())
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .enableCache(CacheFlag.VOICE_STATE).build().awaitReady();
+
+        jda.getPresence().setActivity(Activity.playing(jda.getGuilds().size() + " servers"));
 
         Language.getLanguages();
 
