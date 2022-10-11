@@ -40,9 +40,11 @@ public class PlayCommand implements Command {
                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Joue de la musique sur n'importe quel salon vocal.")
                 .setGuildOnly(true)
                 .addSubcommands(
-                        new SubcommandData("search", "Search for any songs!")
-                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Cherche pour n'importe quel musique !")
+                        new SubcommandData("deezer", "Play Deezer songs!")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Joue de la musique à partir de Deezer !")
                                 .addOptions(
+                                        new OptionData(OptionType.STRING, "url", "Deezer Track, Playlist or Album URL")
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Lien de musique, playlist ou album Deezer"),
                                         new OptionData(OptionType.STRING, "search", "The song or artist to search.", true)
                                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "La musique ou artiste a rechercher")
                                 ),
@@ -111,31 +113,33 @@ public class PlayCommand implements Command {
             event.getHook().editOriginal(Language.getString("PLAY_ONEOPTION", guild)).queue();
             return;
         }
-
-        if (event.getSubcommandName().equals("search")) {
-            result = "dzsearch:" + searchOption.getAsString();
-        } else {
-            if (urlOption != null) {
-                try {
-                    new URL(urlOption.getAsString());
-                    result = urlOption.getAsString();
-                } catch (MalformedURLException e) {
-                    event.getHook().editOriginal(Language.getString("PLAY_NOTVALIDURL", guild)).queue();
-                    return;
-                }
+        if (urlOption != null) {
+            try {
+                new URL(urlOption.getAsString());
+                result = urlOption.getAsString();
+            } catch (MalformedURLException e) {
+                event.getHook().editOriginal(Language.getString("PLAY_NOTVALIDURL", guild)).queue();
+                return;
             }
+        }
 
-            if (searchOption != null) {
-                assert event.getSubcommandName() != null;
+        if (searchOption != null) {
+            assert event.getSubcommandName() != null;
 
-                result = "scsearch:" + searchOption.getAsString();
+            switch (event.getSubcommandName()) {
+                case "deezer":
+                    result = "dzsearch:" + searchOption.getAsString();
+                    break;
+                case "soundcloud":
+                    result = "scsearch:" + searchOption.getAsString();
+                    break;
             }
+        }
 
-            if (fileOption != null) {
-                Attachment attachment = fileOption.getAsAttachment();
+        if (fileOption != null) {
+            Attachment attachment = fileOption.getAsAttachment();
 
-                result = attachment.getProxyUrl();
-            }
+            result = attachment.getProxyUrl();
         }
 
         if (memberVoiceState.getChannel() == null) {
