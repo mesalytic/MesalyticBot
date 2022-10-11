@@ -122,16 +122,16 @@ public class LogsCommand implements Command {
                     return;
                 }
 
-                event.reply(Language.getString("LOGS_EVENT_REPLY", guild)).addActionRow(
+                event.reply(Language.getString("LOGS_EVENTS_REPLY", guild)).addActionRow(
                         SelectMenu.create("selectMenu:logs:categoryEvents")
-                                .addOption(Language.getString("LOGS_EVENT_OPTIONS_CHANNEL", guild), "selectMenu:logs:categoryEvents:channel")
-                                .addOption(Language.getString("LOGS_EVENT_OPTIONS_EMOJI", guild), "selectMenu:logs:categoryEvents:emoji")
-                                .addOption(Language.getString("LOGS_EVENT_OPTIONS_BAN", guild), "selectMenu:logs:categoryEvents:ban")
-                                .addOption(Language.getString("LOGS_EVENT_OPTIONS_MEMBER", guild), "selectMenu:logs:categoryEvents:guildmember")
-                                .addOption(Language.getString("LOGS_EVENT_OPTIONS_VOICE", guild), "selectMenu:logs:categoryEvents:voice")
-                                .addOption(Language.getString("LOGS_EVENT_OPTIONS_MESSAGE", guild), "selectMenu:logs:categoryEvents:message")
-                                .addOption(Language.getString("LOGS_EVENT_OPTIONS_ROLE", guild), "selectMenu:logs:categoryEvents:role")
-                                .setPlaceholder(Language.getString("LOGS_EVENT_OPTIONS_PLACEHOLDER", guild))
+                                .addOption(Language.getString("LOGS_EVENTS_OPTIONS_CHANNEL", guild), "selectMenu:logs:categoryEvents:channel")
+                                .addOption(Language.getString("LOGS_EVENTS_OPTIONS_EMOJI", guild), "selectMenu:logs:categoryEvents:emoji")
+                                .addOption(Language.getString("LOGS_EVENTS_OPTIONS_BAN", guild), "selectMenu:logs:categoryEvents:ban")
+                                .addOption(Language.getString("LOGS_EVENTS_OPTIONS_MEMBER", guild), "selectMenu:logs:categoryEvents:guildmember")
+                                .addOption(Language.getString("LOGS_EVENTS_OPTIONS_VOICE", guild), "selectMenu:logs:categoryEvents:voice")
+                                .addOption(Language.getString("LOGS_EVENTS_OPTIONS_MESSAGE", guild), "selectMenu:logs:categoryEvents:message")
+                                .addOption(Language.getString("LOGS_EVENTS_OPTIONS_ROLE", guild), "selectMenu:logs:categoryEvents:role")
+                                .setPlaceholder(Language.getString("LOGS_EVENTS_OPTIONS_PLACEHOLDER", guild))
                                 .setMinValues(1)
                                 .build()
                 ).queue();
