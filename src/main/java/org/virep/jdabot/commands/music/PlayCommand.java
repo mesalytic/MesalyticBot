@@ -45,7 +45,7 @@ public class PlayCommand implements Command {
                                 .addOptions(
                                         new OptionData(OptionType.STRING, "url", "Deezer Track, Playlist or Album URL")
                                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Lien de musique, playlist ou album Deezer"),
-                                        new OptionData(OptionType.STRING, "search", "The song or artist to search.", true)
+                                        new OptionData(OptionType.STRING, "search", "The song or artist to search.")
                                                 .setDescriptionLocalization(DiscordLocale.FRENCH, "La musique ou artiste a rechercher")
                                 ),
                         new SubcommandData("soundcloud", "Play SoundCloud songs!")
