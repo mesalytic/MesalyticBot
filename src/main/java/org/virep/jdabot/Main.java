@@ -85,7 +85,7 @@ public class Main {
     }
 
     public static final JdaLavalink lavalink = new JdaLavalink(
-            "816407992505073725",
+            Boolean.parseBoolean(System.getProperty("dev")) ? "816407992505073725" : "437190817195753472", // can probably do this better though ??
             1,
             integer -> jda
     );
