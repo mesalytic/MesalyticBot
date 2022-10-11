@@ -51,7 +51,8 @@ public class Main {
                         GatewayIntent.GUILD_MESSAGES,
                         GatewayIntent.MESSAGE_CONTENT,
                         GatewayIntent.GUILD_MESSAGE_REACTIONS,
-                        GatewayIntent.GUILD_VOICE_STATES)
+                        GatewayIntent.GUILD_VOICE_STATES,
+                        GatewayIntent.GUILD_BANS)
                 .setActivity(Activity.of(ActivityType.PLAYING, "We Are Back"))
                 .addEventListeners(lavalink,
                         new LogsListener(),
@@ -66,7 +67,6 @@ public class Main {
                 .setBulkDeleteSplittingEnabled(false)
                 .setVoiceDispatchInterceptor(lavalink.getVoiceInterceptor())
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
-                .setChunkingFilter(ChunkingFilter.ALL)
                 .enableCache(CacheFlag.VOICE_STATE).build().awaitReady();
 
         Language.getLanguages();
