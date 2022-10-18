@@ -86,7 +86,7 @@ public class AutoroleCommand implements Command {
 
                         updateStatement.executeUpdate();
 
-                        event.reply(Language.getString("AUTOROLE_ADD_UPDATE_SUCCESS", guild).replace("%ROLEMENTION", event.getOption("role", OptionMapping::getAsRole).getAsMention())).setEphemeral(true).queue();
+                        event.reply(Language.getString("AUTOROLE_ADD_UPDATE_SUCCESS", guild).replace("%ROLEMENTION%", event.getOption("role", OptionMapping::getAsRole).getAsMention())).setEphemeral(true).queue();
                     }
                 } else {
                     try (PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO autorole (roleID, guildID) VALUES (?,?)")) {
@@ -95,7 +95,7 @@ public class AutoroleCommand implements Command {
 
                         insertStatement.executeUpdate();
 
-                        event.reply(Language.getString("AUTOROLE_ADD_UPDATE_SUCCESS", guild).replace("%ROLEMENTION", event.getOption("role", OptionMapping::getAsRole).getAsMention())).setEphemeral(true).queue();
+                        event.reply(Language.getString("AUTOROLE_ADD_UPDATE_SUCCESS", guild).replace("%ROLEMENTION%", event.getOption("role", OptionMapping::getAsRole).getAsMention())).setEphemeral(true).queue();
                     }
                 }
                 connection.close();

@@ -593,7 +593,7 @@ public class LogsListener extends ListenerAdapter {
                     .setColor(event.isSelfDeafened() ? 15158332 : 3066993)
                     .setDescription(Language.getString("LOGSEVENT_SELFDEAF", guild).replace("%MEMBERTAG%", member.getAsTag()).replace("%STATUS%", (event.isSelfDeafened() ? Language.getString("LOGSEVENT_DEAFENED", guild) : Language.getString("LOGSEVENT_UNDEAFENED", guild))).replace("%CHANNELMENTION%", event.getVoiceState().getChannel().getAsMention()))
                     .setTimestamp(Instant.now())
-                    .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID", member.getId()))
+                    .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID%", member.getId()))
                     .build();
 
             String logChannelID = getLogChannelID(guild.getId());
@@ -619,7 +619,7 @@ public class LogsListener extends ListenerAdapter {
                     .setColor(event.isGuildDeafened() ? 15158332 : 3066993)
                     .setDescription(Language.getString("LOGSEVENT_SERVERDEAF", guild).replace("%MEMBERTAG%", member.getAsTag()).replace("%STATUS%", (event.isGuildDeafened() ? Language.getString("LOGSEVENT_DEAFENED", guild) : Language.getString("LOGSEVENT_UNDEAFENED", guild))).replace("%CHANNELMENTION%", event.getVoiceState().getChannel().getAsMention()))
                     .setTimestamp(Instant.now())
-                    .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID", member.getId()))
+                    .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID%", member.getId()))
                     .build();
 
             String logChannelID = getLogChannelID(guild.getId());
@@ -645,7 +645,7 @@ public class LogsListener extends ListenerAdapter {
                     .setColor(event.isSelfMuted() ? 15158332 : 3066993)
                     .setDescription(Language.getString("LOGSEVENT_SELFMUTE", guild).replace("%MEMBERTAG%", member.getAsTag()).replace("%STATUS%", (event.isSelfMuted() ? Language.getString("LOGSEVENT_MUTED", guild) : Language.getString("LOGSEVENT_UNMUTED", guild))).replace("%CHANNELMENTION%", event.getVoiceState().getChannel().getAsMention()))
                     .setTimestamp(Instant.now())
-                    .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID", member.getId()))
+                    .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID%", member.getId()))
                     .build();
 
             String logChannelID = getLogChannelID(guild.getId());
@@ -670,7 +670,7 @@ public class LogsListener extends ListenerAdapter {
                     .setColor(event.isGuildMuted() ? 15158332 : 3066993)
                     .setDescription(Language.getString("LOGSEVENT_SERVERMUTE", guild).replace("%MEMBERTAG%", member.getAsTag()).replace("%STATUS%", (event.isGuildMuted() ? Language.getString("LOGSEVENT_MUTED", guild) : Language.getString("LOGSEVENT_UNMUTED", guild))).replace("%CHANNELMENTION%", event.getVoiceState().getChannel().getAsMention()))
                     .setTimestamp(Instant.now())
-                    .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID", member.getId()))
+                    .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID%", member.getId()))
                     .build();
 
             String logChannelID = getLogChannelID(guild.getId());
@@ -698,7 +698,7 @@ public class LogsListener extends ListenerAdapter {
                     .setColor(3066993)
                     .setDescription(Language.getString("LOGSEVENT_VCJOIN", guild).replace("%USERTAG%", member.getAsTag()).replace("%CHANNELMENTION%", channelJoined.getAsMention()))
                     .setTimestamp(Instant.now())
-                    .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID", member.getId()))
+                    .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID%", member.getId()))
                     .build();
 
             String logChannelID = getLogChannelID(guild.getId());
@@ -716,7 +716,7 @@ public class LogsListener extends ListenerAdapter {
                     .setColor(15158332)
                     .setDescription(Language.getString("LOGSEVENT_VCLEFT", guild).replace("%USERTAG%", member.getAsTag()).replace("%CHANNELMENTION%", channelLeft.getAsMention()))
                     .setTimestamp(Instant.now())
-                    .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID", member.getId()))
+                    .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID%", member.getId()))
                     .build();
 
             String logChannelID = getLogChannelID(guild.getId());
@@ -736,7 +736,7 @@ public class LogsListener extends ListenerAdapter {
                     .addField(Language.getString("LOGSEVENT_OLD", guild), channelLeft.getAsMention(), true)
                     .addField(Language.getString("LOGSEVENT_NEW", guild), channelJoined.getAsMention(), true)
                     .setTimestamp(Instant.now())
-                    .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID", member.getId()))
+                    .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID%", member.getId()))
                     .build();
 
             String logChannelID = getLogChannelID(guild.getId());
@@ -775,7 +775,7 @@ public class LogsListener extends ListenerAdapter {
                     .addField(Language.getString("LOGSEVENT_OLD", guild), oldMessage.length() > 1024 ? oldMessage.substring(0, 1021) + "..." : oldMessage, true)
                     .addField(Language.getString("LOGSEVENT_NEW", guild), newMessage.length() > 1024 ? newMessage.substring(0, 1021) + "..." : newMessage, true)
                     .setTimestamp(Instant.now())
-                    .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID", member.getId()))
+                    .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID%", member.getId()))
                     .build();
 
             String logChannelID = getLogChannelID(guild.getId());

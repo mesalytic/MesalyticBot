@@ -159,7 +159,7 @@ public class InteractionroleCommand implements Command {
 
                         connection.close();
 
-                        event.reply(Language.getString("INTERACTIONROLE_MESSAGE_CREATE_SUCCESS", guild).replace("%MESSAGEID", message.getId())).queue();
+                        event.reply(Language.getString("INTERACTIONROLE_MESSAGE_CREATE_SUCCESS", guild).replace("%MESSAGEID%", message.getId())).queue();
                     } catch (SQLException e) {
                         ErrorManager.handle(e, event);
                     }

@@ -91,7 +91,7 @@ public class RemindCommand implements Command {
 
                 statement.executeUpdate();
 
-                event.reply(Language.getString("REMINDER_SET_SUCCESS", guild).replace("%CONTENT", MarkdownSanitizer.sanitize(content)).replace("%EPOCHSECONDS%", String.valueOf(Instant.now().getEpochSecond() + timeStringToSeconds(when)))).queue();
+                event.reply(Language.getString("REMINDER_SET_SUCCESS", guild).replace("%CONTENT%", MarkdownSanitizer.sanitize(content)).replace("%EPOCHSECONDS%", String.valueOf(Instant.now().getEpochSecond() + timeStringToSeconds(when)))).queue();
 
                 TimerTask task = new TimerTask() {
                     @Override
