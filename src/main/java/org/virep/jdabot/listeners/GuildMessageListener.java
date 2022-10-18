@@ -21,10 +21,12 @@ public class GuildMessageListener extends ListenerAdapter {
         Guild guild = event.getGuild();
 
         try (Connection connection = Database.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM joinmessages WHERE guildID = ?")) {
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM joinmessages WHERE guildID = ?");
+             PreparedStatement statementDM = connection.prepareStatement("SELECT * FROM dmmessages WHERE guildID = ?")) {
             statement.setString(1, guild.getId());
 
             ResultSet result = statement.executeQuery();
+            ResultSet dmResult = statementDM.executeQuery();
 
             if (result.next()) {
                 String message = result.getString(1);
@@ -38,8 +40,25 @@ public class GuildMessageListener extends ListenerAdapter {
                         .replace("%USERNAME%", event.getUser().getAsTag())
                         .replace("%SERVERNAME%", event.getGuild().getName())
                         .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))
+                ).queue();
+            }
+
+            if (dmResult.next()) {
+                String message = result.getString(1);
+
+                String channelID = result.getString(2);
+                TextChannel channel = guild.getTextChannelById(channelID);
+
+                assert channel != null;
+                channel.sendMessage(message
+                        .replace("%USER%", event.getMember().getAsMention())
+                        .replace("%USERNAME%", event.getUser().getAsTag())
+                        .replace("%SERVERNAME%", event.getGuild().getName())
+                        .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))
                 ).addActionRow(Button.secondary("sentfromguild", "Sent from " + guild.getName()).asDisabled()).queue();
             }
+
+            connection.close();
         } catch (SQLException e) {
             ErrorManager.handleNoEvent(e);
         }
