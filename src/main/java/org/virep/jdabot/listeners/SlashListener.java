@@ -47,6 +47,7 @@ public class SlashListener extends ListenerAdapter {
                     sb.append("`%PERMISSION%`".replace("%PERMISSION%", missingPerm.getName()));
                 });
 
+                // TODO: Add translation to MissingPerm String
                 event.reply("X - The bot doesn't have these permissions : %PERMISSIONS%".replace("%PERMISSIONS%", sb.toString())).queue();
             }
 
