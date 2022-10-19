@@ -17,7 +17,6 @@ A prepared JAR is available at download in the Release tab.
 If you want to modify the source code itself to make it fit your needs:
 
 - You are required to have at least some Java knowledge, know how MariaDB databases work, and how Maven works.
-- Database Schemas are not available at the moment, though they will be in the future.
 - No support will be given for self-host issues, you should know what you are doing before starting.
 
 ### Requirements
