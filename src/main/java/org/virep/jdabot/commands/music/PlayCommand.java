@@ -40,33 +40,29 @@ public class PlayCommand implements Command {
                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Joue de la musique sur n'importe quel salon vocal.")
                 .setGuildOnly(true)
                 .addSubcommands(
-                        new SubcommandData("deezer", "Play Deezer songs!")
-                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Joue de la musique à partir de Deezer !")
+                        new SubcommandData("url", "Play songs from any specified URL.")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Joue de la musique a partir de n'importe quel lien")
                                 .addOptions(
-                                        new OptionData(OptionType.STRING, "url", "Deezer Track, Playlist or Album URL")
-                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Lien de musique, playlist ou album Deezer"),
-                                        new OptionData(OptionType.STRING, "search", "The song or artist to search.")
-                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "La musique ou artiste a rechercher")
+                                        new OptionData(OptionType.STRING, "url", "Specified URL containing music", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Lien spécifié contenant de la musique")
                                 ),
-                        new SubcommandData("soundcloud", "Play SoundCloud songs!")
-                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Joue de la musique à partir de SoundCloud !")
+                        new SubcommandData("search", "Search songs on SoundCloud or Deezer.")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Cherche de la musique sur SoundCloud ou Deezer.")
                                 .addOptions(
-                                        new OptionData(OptionType.STRING, "url", "SoundCloud Track or Playlist URL")
-                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Lien de musique ou playlist SoundCloud"),
-                                        new OptionData(OptionType.STRING, "search", "Search string")
-                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "La musique ou artiste a rechercher.")
+                                        new OptionData(OptionType.STRING, "query", "Search Query", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Contenu de la recherche"),
+                                        new OptionData(OptionType.STRING, "platform", "Platform to search the Query", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Plateforme sur la quelle faire la recherche")
+                                                .addChoices(
+                                                        new net.dv8tion.jda.api.interactions.commands.Command.Choice("SoundCloud", "soundcloud"),
+                                                        new net.dv8tion.jda.api.interactions.commands.Command.Choice("Deezer", "deezer")
+                                                )
                                 ),
-                        new SubcommandData("url", "Play URLs from random sources.")
-                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Lire de la musique à partir d'un lien")
+                        new SubcommandData("file", "Play any music file from your computer !")
+                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Joue n'importe quel fichier audio disponible sur votre appareil !")
                                 .addOptions(
-                                        new OptionData(OptionType.STRING, "url", "URL string", true)
-                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Lien à jouer")
-                                ),
-                        new SubcommandData("file", "Play the audio files you attach !")
-                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Joue les fichiers attachés a la commande.")
-                                .addOptions(
-                                        new OptionData(OptionType.ATTACHMENT, "file", "Audio file", true)
-                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Fichier audio à jouer")
+                                        new OptionData(OptionType.ATTACHMENT, "file", "The audio file to play.", true)
+                                                .setDescriptionLocalization(DiscordLocale.FRENCH, "Le fichier audio a jouer.")
                                 )
                 );
     }
@@ -98,46 +94,35 @@ public class PlayCommand implements Command {
         assert memberVoiceState != null;
         assert selfVoiceState != null;
 
-        OptionMapping urlOption = event.getOption("url");
-        OptionMapping searchOption = event.getOption("search");
-        OptionMapping fileOption = event.getOption("file");
-
         String result = "";
 
-        if (urlOption == null && searchOption == null && fileOption == null) {
-            event.getHook().editOriginal(Language.getString("PLAY_NOOPTION", guild)).queue();
-            return;
-        }
-
-        if (urlOption != null && searchOption != null) {
-            event.getHook().editOriginal(Language.getString("PLAY_ONEOPTION", guild)).queue();
-            return;
-        }
-        if (urlOption != null) {
+        if (event.getSubcommandName().equals("url")) {
+            String url = event.getOption("url", OptionMapping::getAsString);
             try {
-                new URL(urlOption.getAsString());
-                result = urlOption.getAsString();
+                new URL(url);
+                result = url;
             } catch (MalformedURLException e) {
                 event.getHook().editOriginal(Language.getString("PLAY_NOTVALIDURL", guild)).queue();
                 return;
             }
         }
 
-        if (searchOption != null) {
-            assert event.getSubcommandName() != null;
+        if (event.getSubcommandName().equals("search")) {
+            String query = event.getOption("query", OptionMapping::getAsString);
+            String platform = event.getOption("platform", OptionMapping::getAsString);
 
-            switch (event.getSubcommandName()) {
+            switch (platform) {
                 case "deezer":
-                    result = "dzsearch:" + searchOption.getAsString();
+                    result = "dzsearch:" + query;
                     break;
                 case "soundcloud":
-                    result = "scsearch:" + searchOption.getAsString();
+                    result = "scsearch:" + query;
                     break;
             }
         }
 
-        if (fileOption != null) {
-            Attachment attachment = fileOption.getAsAttachment();
+        if (event.getSubcommandName().equals("file")) {
+            Attachment attachment = event.getOption("file", OptionMapping::getAsAttachment);
 
             result = attachment.getProxyUrl();
         }
