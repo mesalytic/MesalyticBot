@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
-import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
+import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import net.dv8tion.jda.api.utils.AttachedFile;
 import net.dv8tion.jda.api.utils.FileUpload;
 import net.dv8tion.jda.api.utils.MarkdownUtil;
@@ -97,7 +97,7 @@ public class MathCommand implements Command {
                     .build();
 
             event.replyEmbeds(embed).addActionRow(
-                    SelectMenu.create("selectMenu:math")
+                    StringSelectMenu.create("selectMenu:math")
                             .setMinValues(1)
                             .setPlaceholder("Main Menu")
                             .addOption(Language.getString("MATH_LIST_OPTION_OPERATORS", guild), "selectMenu:math:operators")

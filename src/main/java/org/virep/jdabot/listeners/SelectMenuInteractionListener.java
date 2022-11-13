@@ -3,11 +3,11 @@ package org.virep.jdabot.listeners;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
-import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
+import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -30,7 +30,7 @@ import java.util.Objects;
 
 public class SelectMenuInteractionListener extends ListenerAdapter {
     @Override
-    public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {
+    public void onStringSelectInteraction(StringSelectInteractionEvent event) {
         Guild guild = event.getGuild();
 
         if (Objects.equals(event.getSelectMenu().getId(), "selectMenu:logs:categoryEvents")) {
@@ -67,7 +67,7 @@ public class SelectMenuInteractionListener extends ListenerAdapter {
                     event.editComponents().setComponents(
                             ActionRow.of(event.getSelectMenu().createCopy().setDefaultOptions(Collections.singleton(event.getSelectedOptions().get(0))).build()),
                             ActionRow.of(
-                                    SelectMenu.create("selectMenu:logs:events")
+                                    StringSelectMenu.create("selectMenu:logs:events")
                                             .addOptions(moduleOptions)
                                             .setDefaultValues(defaultOptions)
                                             .setMaxValues(moduleOptions.size())

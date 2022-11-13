@@ -20,6 +20,7 @@ import net.dv8tion.jda.api.interactions.components.Component;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
+import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import org.virep.jdabot.database.Database;
 import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
@@ -276,7 +277,7 @@ public class InteractionroleCommand implements Command {
                             TextChannel channel = guild.getTextChannelById(result.getString(1));
 
                             channel.retrieveMessageById(messageID).queue(msg -> {
-                                if (!msg.getActionRows().isEmpty() && msg.getActionRows().get(0).getComponents().get(0).getType().equals(Component.Type.SELECT_MENU)) {
+                                if (!msg.getActionRows().isEmpty() && msg.getActionRows().get(0).getComponents().get(0).getType().equals(Component.Type.STRING_SELECT)) {
                                     event.reply(Language.getString("INTERACTIONROLE_SET_MAXCOMPONENTROW", guild)).setEphemeral(true).queue();
 
                                     try {
@@ -381,16 +382,16 @@ public class InteractionroleCommand implements Command {
 
                                     if (!hasOtherMenus) {
                                         msg.editMessageComponents().setActionRow(
-                                                SelectMenu.create("selectmenurole:" + guild.getId())
+                                                StringSelectMenu.create("selectmenurole:" + guild.getId())
                                                         .addOption(choiceLabel, choiceValue, choiceDescription, emoji)
                                                         .setMinValues(0)
                                                         .build()
                                         ).queue();
                                     } else {
                                         ActionRow actionRow = msg.getActionRows().get(0);
-                                        SelectMenu selectMenu = (SelectMenu) actionRow.getComponents().get(0);
+                                        StringSelectMenu selectMenu = (StringSelectMenu) actionRow.getComponents().get(0);
 
-                                        SelectMenu copyMenu = selectMenu.createCopy().build();
+                                        StringSelectMenu copyMenu = selectMenu.createCopy().build();
                                         SelectMenu.Builder builder = selectMenu.createCopy().addOption(choiceLabel, choiceValue, choiceDescription, emoji).setMaxValues(copyMenu.getOptions().size() + 1).setMinValues(0);
 
                                         msg.editMessageComponents().setActionRow(builder.build()).queue();
@@ -488,7 +489,7 @@ public class InteractionroleCommand implements Command {
 
                                     channel.retrieveMessageById(messageID).queue(msg -> {
                                         ActionRow actionRow = msg.getActionRows().get(0);
-                                        SelectMenu selectMenu = (SelectMenu) actionRow.getComponents().get(0);
+                                        StringSelectMenu selectMenu = (StringSelectMenu) actionRow.getComponents().get(0);
 
                                         List<SelectOption> selectOptions = new ArrayList<>();
 
@@ -500,7 +501,7 @@ public class InteractionroleCommand implements Command {
                                         if (selectOptions.isEmpty())
                                             msg.editMessageComponents().setComponents().queue();
                                         else {
-                                            SelectMenu newMenu = SelectMenu.create("selectmenurole:" + guild.getId()).addOptions(selectOptions).setMaxValues(selectOptions.size()).build();
+                                            StringSelectMenu newMenu = StringSelectMenu.create("selectmenurole:" + guild.getId()).addOptions(selectOptions).setMaxValues(selectOptions.size()).build();
                                             msg.editMessageComponents().setActionRow(newMenu).queue();
                                         }
 

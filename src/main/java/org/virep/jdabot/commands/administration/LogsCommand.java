@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
-import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
+import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import org.virep.jdabot.database.Database;
 import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
@@ -123,7 +123,7 @@ public class LogsCommand implements Command {
                 }
 
                 event.reply(Language.getString("LOGS_EVENTS_REPLY", guild)).addActionRow(
-                        SelectMenu.create("selectMenu:logs:categoryEvents")
+                        StringSelectMenu.create("selectMenu:logs:categoryEvents")
                                 .addOption(Language.getString("LOGS_EVENTS_OPTIONS_CHANNEL", guild), "selectMenu:logs:categoryEvents:channel")
                                 .addOption(Language.getString("LOGS_EVENTS_OPTIONS_EMOJI", guild), "selectMenu:logs:categoryEvents:emoji")
                                 .addOption(Language.getString("LOGS_EVENTS_OPTIONS_BAN", guild), "selectMenu:logs:categoryEvents:ban")
