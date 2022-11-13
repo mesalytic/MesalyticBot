@@ -133,7 +133,7 @@ public class PlayCommand implements Command {
         }
 
         if (!selfVoiceState.inAudioChannel()) {
-            manager.openConnection((VoiceChannel) memberVoiceState.getChannel());
+            manager.openConnection(memberVoiceState.getChannel());
         } else if (Objects.requireNonNull(selfVoiceState.getChannel()).getIdLong() != memberVoiceState.getChannel().getIdLong()) {
             event.getHook().editOriginal(Language.getString("MUSIC_NOTSAMEVC", guild)).queue();
             return;
@@ -142,6 +142,6 @@ public class PlayCommand implements Command {
         AudioManager audioManager = event.getGuild().getAudioManager();
         audioManager.setSelfDeafened(true);
 
-        AudioLoadHandler.loadAndPlay(manager, result, event);
+        AudioLoadHandler.loadAndPlay(manager, result, event, memberVoiceState.getChannel().getType());
     }
 }

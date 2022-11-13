@@ -6,6 +6,7 @@ import lavalink.client.player.track.AudioPlaylist;
 import lavalink.client.player.track.AudioTrack;
 import lavalink.client.player.track.AudioTrackInfo;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.slf4j.Logger;
@@ -20,10 +21,10 @@ import java.util.Objects;
 public class AudioLoadHandler {
     private final static Logger log = LoggerFactory.getLogger(AudioLoadHandler.class);
 
-    public static void loadAndPlay(GuildAudioManager manager, String trackURL, SlashCommandInteractionEvent event) {
+    public static void loadAndPlay(GuildAudioManager manager, String trackURL, SlashCommandInteractionEvent event, ChannelType type) {
         Guild guild = event.getGuild();
 
-        manager.openConnection((VoiceChannel) Objects.requireNonNull(Objects.requireNonNull(event.getMember()).getVoiceState()).getChannel());
+        manager.openConnection(type.equals(ChannelType.VOICE) ? event.getMember().getVoiceState().getChannel().asVoiceChannel() : event.getMember().getVoiceState().getChannel().asStageChannel());
         AudioManagerController.getExistingLink(guild).getRestClient().loadItem(trackURL, new LoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {

@@ -57,7 +57,7 @@
         <dependency>
             <groupId>com.github.chocololat</groupId>
             <artifactId>Lavalink-Client</artifactId>
-            <version>de327bf39c</version>
+            <version>4c643fc141</version>
         </dependency>
         <dependency>
             <groupId>org.reflections</groupId>
