@@ -47,10 +47,6 @@ Here are the variables that should be set :
 - **TOKENBETA** (**OPTIONAL**): The token of the bot (when ran with `-Ddev=true` flag)
 - **LAVALINKURI** (**OPTIONAL**) : The URI of the Lavalink instance. See [here](https://github.com/freyacodes/Lavalink) for more info
 - **LAVALINKPWD** (**OPTIONAL**) : The password of the Lavalink instance. See [here](https://github.com/freyacodes/Lavalink) for more info
-- **TWITTER_CONSUMER_KEY** (**OPTIONAL**): The Consumer Key of [your Twitter App](https://developer.twitter.com/en/portal/dashboard).
-- **TWITTER_CONSUMER_SECRET** (**OPTIONAL**): The Consumer Secret of [your Twitter App](https://developer.twitter.com/en/portal/dashboard).
-- **TWITTER_ACCESS_TOKEN** (**OPTIONAL**): The Access Token of a Twitter Account connected with your Twitter App. See [here](#requirements) for more info.
-- **TWITTER_ACCESS_SECRET** (**OPTIONAL**): The Access Secret of a Twitter Account connected with your Twitter App. See [here](#requirements) for more info.
 - **DISCORD_STATUS_WEBHOOKURL** : The Discord Webhook URL that will report any Gateway Status linked to your bot.
 - **DISCORD_ERROR_WEBHOOKURL** : The Discord Webhook URL that will report any errors to a channel.
 - **DISCORD_CMD_WEBHOOKURL** : The Discord Webhook URL that will report any commands used. **Must be used for debugging and safety reasons only. Should not be used to store user data.**
@@ -67,10 +63,11 @@ Mesalytic relies on the following projects:
 | [Twemoji.java (SkyBot)](https://github.com/DuncteBot/SkyBot/blob/main/src/main/java/ml/duncte123/skybot/utils/TwemojiParser.java) | [GNU Affero General Public License v3.0](https://github.com/DuncteBot/SkyBot/blob/main/LICENSE) |                                                                     | [Apache License 2.0](https://github.com/chocololat/mesalytic-api/blob/main/LICENSE)                              |
 
 ### Services
-| Name                                               | License                                                                         |
-|:---------------------------------------------------|:--------------------------------------------------------------------------------|
-| [Lavalink](https://github.com/freyacodes/Lavalink) | [MIT License](https://github.com/freyacodes/Lavalink/blob/master/LICENSE)       |
-| [LavaSrc](https://github.com/TopiSenpai/LavaSrc)   | [Apache License 2.0](https://github.com/TopiSenpai/LavaSrc/blob/master/LICENSE) |
+| Name                                                                             | License                                                                                       |
+|:---------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------|
+| [Lavalink](https://github.com/freyacodes/Lavalink)                               | [MIT License](https://github.com/freyacodes/Lavalink/blob/master/LICENSE)                     |
+| [LavaSrc](https://github.com/TopiSenpai/LavaSrc)                                 | [Apache License 2.0](https://github.com/TopiSenpai/LavaSrc/blob/master/LICENSE)               |
+| [twitter-discord-webhook](https://github.com/chocololat/twitter-discord-webhook) | [Apache License 2.0](https://github.com/chocololat/twitter-discord-webhook/blob/main/LICENSE) |
 
 ### Third Party Dependencies
 | Name                                                                                        | License                                                                                                                           |
