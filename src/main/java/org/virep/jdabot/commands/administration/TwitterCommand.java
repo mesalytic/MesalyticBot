@@ -110,15 +110,27 @@ public class TwitterCommand implements Command {
                 return;
             }
 
-            channel.asTextChannel().createWebhook("Twitter Notifier (" + twitterUser + ")").queue(webhook -> {
-                DatabaseUtils.addTwitterWebhook(channel.getId(), guild.getId(), webhook.getUrl(), twitterUser);
+            if (DatabaseUtils.hasWebhook(channel.getId())) {
+                String webhook = DatabaseUtils.getTwitterWebhookFromChannel(channel.getId(), twitterUser);
+
+                DatabaseUtils.addTwitterWebhook(channel.getId(), guild.getId(), webhook, twitterUser);
 
                 event.reply(Language.getString("TWITTER_REMOVE_ADDED", guild).replaceAll("%TWITTERUSER%", twitterUser)).queue();
 
                 if (!notifier.isUserFiltered(twitterUser)) {
                     notifier.addUserToStream(twitterUser, notifier.getTwitterStream());
                 }
-            }, errorHandler);
+            } else {
+                channel.asTextChannel().createWebhook("Twitter Notifier (" + twitterUser + ")").queue(webhook -> {
+                    DatabaseUtils.addTwitterWebhook(channel.getId(), guild.getId(), webhook.getUrl(), twitterUser);
+
+                    event.reply(Language.getString("TWITTER_REMOVE_ADDED", guild).replaceAll("%TWITTERUSER%", twitterUser)).queue();
+
+                    if (!notifier.isUserFiltered(twitterUser)) {
+                        notifier.addUserToStream(twitterUser, notifier.getTwitterStream());
+                    }
+                }, errorHandler);
+            }
         }
 
         if (event.getSubcommandName().equals("list")) {
