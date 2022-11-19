@@ -56,6 +56,43 @@ public class DatabaseUtils {
         }
     }
 
+    public static boolean hasWebhook(String channelID) {
+        try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM twitternotifier WHERE channelID = ?")) {
+            statement.setString(1, channelID);
+
+            ResultSet result = statement.executeQuery();
+
+            boolean webhookResult = result.first();
+
+            connection.close();
+
+            return webhookResult;
+        } catch (SQLException e) {
+            ErrorManager.handleNoEvent(e);
+            return false;
+        }
+    }
+
+    public static String getTwitterWebhookFromChannel(String channelID) {
+        try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM twitternotifier WHERE channelID = ?")) {
+            statement.setString(1, channelID);
+
+            ResultSet result = statement.executeQuery();
+
+            String webhookURL = null;
+
+            if (result.first()) {
+                webhookURL = result.getString("webhookURL");
+            }
+
+            connection.close();
+            return webhookURL;
+        } catch (SQLException e) {
+            ErrorManager.handleNoEvent(e);
+            return null;
+        }
+    }
+
     public String getTwitterWebhookURL(String guildID, String twitterName) {
         try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM twitternotifier WHERE guildID = ? AND twitterAccount = ?")) {
             statement.setString(1, guildID);

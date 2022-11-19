@@ -18,9 +18,9 @@ import org.virep.jdabot.listeners.GatewayEventListener;
 import org.virep.jdabot.listeners.GuildMessageListener;
 import org.virep.jdabot.listeners.InteractionRoleListener;
 import org.virep.jdabot.listeners.LogsListener;
-import org.virep.jdabot.external.Notifier;
 import org.virep.jdabot.listeners.ReactionRoleListener;
 import org.virep.jdabot.listeners.SelectMenuInteractionListener;
+import org.virep.jdabot.notifier.Notifier;
 import org.virep.jdabot.slashcommandhandler.SlashHandler;
 import org.virep.jdabot.listeners.SlashListener;
 import org.virep.jdabot.utils.Config;
@@ -31,8 +31,8 @@ import java.util.Base64;
 
 public class Main {
     static Main instance;
-
     Notifier notifier;
+
     public static JDA jda;
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
@@ -78,7 +78,7 @@ public class Main {
         slashHandler.addCommands();
         log.info("Slash Commands registered");
 
-        instance.notifier.registerTwitterUser(DatabaseUtils.getAllTwitterNames());
+        instance.notifier.initialize();
         log.info("Twitter Notifiers set up");
 
         lavalink.setAutoReconnect(true);
