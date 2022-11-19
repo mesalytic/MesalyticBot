@@ -67,7 +67,6 @@ Mesalytic relies on the following projects:
 |:---------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------|
 | [Lavalink](https://github.com/freyacodes/Lavalink)                               | [MIT License](https://github.com/freyacodes/Lavalink/blob/master/LICENSE)                     |
 | [LavaSrc](https://github.com/TopiSenpai/LavaSrc)                                 | [Apache License 2.0](https://github.com/TopiSenpai/LavaSrc/blob/master/LICENSE)               |
-| [twitter-discord-webhook](https://github.com/chocololat/twitter-discord-webhook) | [Apache License 2.0](https://github.com/chocololat/twitter-discord-webhook/blob/main/LICENSE) |
 
 ### Third Party Dependencies
 | Name                                                                                        | License                                                                                                                           |
@@ -87,3 +86,4 @@ Mesalytic relies on the following projects:
 | [Twitter4J (Core, Async, Stream, HTTP2 Support)](https://github.com/Twitter4J/Twitter4J)    | [Apache License 2.0](https://github.com/Twitter4J/Twitter4J/blob/main/LICENSE.txt)                                                |
 | [HikariCP](https://github.com/brettwooldridge/HikariCP)                                     | [Apache License 2.0](https://github.com/brettwooldridge/HikariCP/blob/dev/LICENSE)                                                |
 | [emoji-java](https://github.com/MinnDevelopment/emoji-java)                                 | [MIT License](https://github.com/MinnDevelopment/emoji-java/blob/master/LICENSE.md)                                               |
+| [Twitter4J](https://github.com/Twitter4J/Twitter4J)                                         | [Apache License 2.0](https://github.com/Twitter4J/Twitter4J/blob/main/LICENSE.txt)                                                |
