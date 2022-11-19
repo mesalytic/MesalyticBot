@@ -67,10 +67,10 @@ Mesalytic relies on the following projects:
 | [Twemoji.java (SkyBot)](https://github.com/DuncteBot/SkyBot/blob/main/src/main/java/ml/duncte123/skybot/utils/TwemojiParser.java) | [GNU Affero General Public License v3.0](https://github.com/DuncteBot/SkyBot/blob/main/LICENSE) |                                                                     | [Apache License 2.0](https://github.com/chocololat/mesalytic-api/blob/main/LICENSE)                              |
 
 ### Services
-| Name                                                                             | License                                                                                       |
-|:---------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------|
-| [Lavalink](https://github.com/freyacodes/Lavalink)                               | [MIT License](https://github.com/freyacodes/Lavalink/blob/master/LICENSE)                     |
-| [LavaSrc](https://github.com/TopiSenpai/LavaSrc)                                 | [Apache License 2.0](https://github.com/TopiSenpai/LavaSrc/blob/master/LICENSE)               |
+| Name                                               | License                                                                         |
+|:---------------------------------------------------|:--------------------------------------------------------------------------------|
+| [Lavalink](https://github.com/freyacodes/Lavalink) | [MIT License](https://github.com/freyacodes/Lavalink/blob/master/LICENSE)       |
+| [LavaSrc](https://github.com/TopiSenpai/LavaSrc)   | [Apache License 2.0](https://github.com/TopiSenpai/LavaSrc/blob/master/LICENSE) |
 
 ### Third Party Dependencies
 | Name                                                                                        | License                                                                                                                           |
