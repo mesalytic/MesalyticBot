@@ -17,6 +17,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.requests.ErrorResponse;
 import org.virep.jdabot.Main;
 import org.virep.jdabot.language.Language;
+import org.virep.jdabot.notifier.Notifier;
 import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.utils.DatabaseUtils;
 
@@ -73,6 +74,7 @@ public class TwitterCommand implements Command {
     @Override
     public void execute(SlashCommandInteractionEvent event) {
         Guild guild = event.getGuild();
+        Notifier notifier = Main.getInstance().getNotifier();
 
         if (!event.getMember().hasPermission(Permission.MANAGE_SERVER)) {
             event.reply(Language.getString("NO_PERMISSION", guild)).setEphemeral(true).queue();
@@ -94,8 +96,8 @@ public class TwitterCommand implements Command {
 
             event.reply(Language.getString("TWITTER_REMOVE_DELETED", guild).replaceAll("%TWITTERUSER%", twitterUser)).queue();
 
-            if (Main.getInstance().getNotifier().isTwitterRegistered(twitterUser)) {
-                Main.getInstance().getNotifier().unregisterTwitterUser(twitterUser);
+            if (notifier.isUserFiltered(twitterUser)) {
+                notifier.removeUserFromStream(twitterUser, notifier.getTwitterStream());
             }
         }
 
@@ -113,8 +115,8 @@ public class TwitterCommand implements Command {
 
                 event.reply(Language.getString("TWITTER_REMOVE_ADDED", guild).replaceAll("%TWITTERUSER%", twitterUser)).queue();
 
-                if (Main.getInstance().getNotifier().isTwitterRegistered(twitterUser)) {
-                    Main.getInstance().getNotifier().registerTwitterUser(twitterUser);
+                if (!notifier.isUserFiltered(twitterUser)) {
+                    notifier.addUserToStream(twitterUser, notifier.getTwitterStream());
                 }
             }, errorHandler);
         }
