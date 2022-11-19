@@ -8,21 +8,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virep.jdabot.utils.Config;
 import org.virep.jdabot.utils.DatabaseUtils;
-import org.virep.jdabot.utils.ErrorManager;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
 
 import java.awt.*;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Notifier implements StatusListener {
     private final static Logger log = LoggerFactory.getLogger(Notifier.class);
     private final Twitter twitterClient;
     private TwitterStream twitterStream;
+    private FilterQuery filterQuery = new FilterQuery();
     private List<String> filteredUsers = new ArrayList<>();
 
     public Notifier() {
@@ -57,8 +55,12 @@ public class Notifier implements StatusListener {
 
             users.forEach(user -> {
                 log.info("Adding {} to stream", user);
-                addUserToStream(user, twitterStream);
+                addUserToFilter(user, false);
             });
+
+            launchStream(false);
+
+            System.out.println(filterQuery.toString());
         }
     }
 
@@ -67,8 +69,19 @@ public class Notifier implements StatusListener {
         twitterStream.addListener(this);
     }
 
-    public void addUserToStream(String twitterUser, TwitterStream twitterStream) {
-        FilterQuery filterQuery = new FilterQuery();
+    public void launchStream(boolean shutdown) {
+        if (shutdown) {
+            twitterStream.cleanUp();
+
+            streamInitialization();
+        }
+
+        twitterStream.filter(filterQuery);
+    }
+
+    public void addUserToFilter(String twitterUser, boolean update) {
+        long[] userIDs = null;
+        ArrayList<Long> userIDObj = new ArrayList<>();
 
         if (!isUserFiltered(twitterUser)) filteredUsers.add(twitterUser);
 
@@ -79,18 +92,29 @@ public class Notifier implements StatusListener {
                 user = getTwitterClient().showUser(filteredUser);
 
                 if (!user.isProtected()) {
-                    filterQuery.follow(user.getId());
+                    userIDObj.add(user.getId());
                 }
             } catch (TwitterException e) {
                 e.printStackTrace();
             }
         });
 
-        twitterStream.filter(filterQuery);
+        userIDs = new long[userIDObj.size()];
+        for (int i = 0; i < userIDObj.size(); i++) {
+            userIDs[i] = userIDObj.get(i);
+        }
+
+        filterQuery.follow(userIDs);
+
+        if (update) {
+            launchStream(true);
+            System.out.println(filterQuery.toString());
+        }
     }
 
-    public void removeUserFromStream(String twitterUser, TwitterStream stream) {
-        FilterQuery filterQuery = new FilterQuery();
+    public void removeUserFromFilter(String twitterUser, boolean update) {
+        long[] userIDs = null;
+        ArrayList<Long> userIDObj = new ArrayList<>();
 
         if (isUserFiltered(twitterUser)) filteredUsers.remove(twitterUser);
 
@@ -101,14 +125,24 @@ public class Notifier implements StatusListener {
                 user = getTwitterClient().showUser(filteredUser);
 
                 if (!user.isProtected()) {
-                    filterQuery.follow(user.getId());
+                    userIDObj.add(user.getId());
                 }
             } catch (TwitterException e) {
                 e.printStackTrace();
             }
         });
 
-        twitterStream.filter(filterQuery);
+        userIDs = new long[userIDObj.size()];
+        for (int i = 0; i < userIDObj.size(); i++) {
+            userIDs[i] = userIDObj.get(i);
+        }
+
+        filterQuery.follow(userIDs);
+
+        if (update) {
+            launchStream(true);
+            System.out.println(filterQuery.toString());
+        }
     }
 
     public boolean isUserFiltered(String twitterUser) {

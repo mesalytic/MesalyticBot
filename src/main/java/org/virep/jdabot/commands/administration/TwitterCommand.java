@@ -97,7 +97,7 @@ public class TwitterCommand implements Command {
             event.reply(Language.getString("TWITTER_REMOVE_DELETED", guild).replaceAll("%TWITTERUSER%", twitterUser)).queue();
 
             if (notifier.isUserFiltered(twitterUser)) {
-                notifier.removeUserFromStream(twitterUser, notifier.getTwitterStream());
+                notifier.removeUserFromFilter(twitterUser, true);
             }
         }
 
@@ -118,7 +118,7 @@ public class TwitterCommand implements Command {
                 event.reply(Language.getString("TWITTER_REMOVE_ADDED", guild).replaceAll("%TWITTERUSER%", twitterUser)).queue();
 
                 if (!notifier.isUserFiltered(twitterUser)) {
-                    notifier.addUserToStream(twitterUser, notifier.getTwitterStream());
+                    notifier.addUserToFilter(twitterUser, true);
                 }
             } else {
                 channel.asTextChannel().createWebhook("Twitter Notifier (" + twitterUser + ")").queue(webhook -> {
@@ -127,7 +127,7 @@ public class TwitterCommand implements Command {
                     event.reply(Language.getString("TWITTER_REMOVE_ADDED", guild).replaceAll("%TWITTERUSER%", twitterUser)).queue();
 
                     if (!notifier.isUserFiltered(twitterUser)) {
-                        notifier.addUserToStream(twitterUser, notifier.getTwitterStream());
+                        notifier.addUserToFilter(twitterUser, true);
                     }
                 }, errorHandler);
             }
