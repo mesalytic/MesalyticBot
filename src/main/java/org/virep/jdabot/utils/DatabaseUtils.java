@@ -73,10 +73,9 @@ public class DatabaseUtils {
         }
     }
 
-    public static String getTwitterWebhookFromChannel(String channelID, String twitterName) {
-        try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM twitternotifier WHERE channelID = ? AND twitterAccount = ?")) {
+    public static String getTwitterWebhookFromChannel(String channelID) {
+        try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM twitternotifier WHERE channelID = ?")) {
             statement.setString(1, channelID);
-            statement.setString(2, twitterName);
 
             ResultSet result = statement.executeQuery();
 

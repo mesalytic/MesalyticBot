@@ -111,7 +111,7 @@ public class TwitterCommand implements Command {
             }
 
             if (DatabaseUtils.hasWebhook(channel.getId())) {
-                String webhook = DatabaseUtils.getTwitterWebhookFromChannel(channel.getId(), twitterUser);
+                String webhook = DatabaseUtils.getTwitterWebhookFromChannel(channel.getId());
 
                 DatabaseUtils.addTwitterWebhook(channel.getId(), guild.getId(), webhook, twitterUser);
 
