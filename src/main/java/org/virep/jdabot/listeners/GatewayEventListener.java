@@ -91,6 +91,12 @@ public class GatewayEventListener extends ListenerAdapter {
 
                 User user = jda.getUserById(userID);
 
+                if (user == null) {
+                    result.deleteRow();
+                    connection.close();
+                    return;
+                }
+
                 if ((timestamp - Instant.now().getEpochSecond()) * 1000L < 0) {
                     user.openPrivateChannel().queue(dm -> {
                         dm.sendMessage("\uD83D\uDD59 - Reminder for: **" + remindName + "**").queue();
