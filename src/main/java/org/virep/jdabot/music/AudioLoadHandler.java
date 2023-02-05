@@ -32,9 +32,7 @@ public class AudioLoadHandler {
 
                 AudioTrackInfo trackInfo = track.getInfo();
 
-                event.getChannel().asTextChannel();
-
-                manager.getScheduler().queue(track, event.getChannel().asTextChannel());
+                manager.getScheduler().queue(track, event.getChannel());
 
                 event.getHook().editOriginal(Language.getString("ALH_TRACKLOADED", guild).replace("%TITLE%", trackInfo.getTitle()).replace("%DURATION%", Utils.formatTrackLength(trackInfo.getLength()))).queue();
             }
@@ -44,7 +42,7 @@ public class AudioLoadHandler {
                 log.debug(String.format("playlist loaded: %s", playlist.getName()));
 
                 for (AudioTrack track : playlist.getTracks()) {
-                    manager.getScheduler().queue(track, event.getChannel().asTextChannel());
+                    manager.getScheduler().queue(track, event.getChannel());
                 }
                 event.getHook().editOriginal(Language.getString("ALH_PLAYLISTLOADED", guild).replace("%NAME%", playlist.getName())).queue();
             }
@@ -54,7 +52,7 @@ public class AudioLoadHandler {
                 log.debug(String.format("search result loaded: %s", trackURL));
 
                 AudioTrack track = tracks.get(0);
-                manager.getScheduler().queue(track, event.getChannel().asTextChannel());
+                manager.getScheduler().queue(track, event.getChannel());
 
                 event.getHook().editOriginal(Language.getString("ALH_TRACKLOADED", guild).replace("%TITLE%", track.getInfo().getTitle()).replace("%DURATION%", Utils.formatTrackLength(track.getInfo().getLength()))).queue();
             }

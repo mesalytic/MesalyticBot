@@ -7,6 +7,7 @@ import lavalink.client.player.track.AudioTrack;
 import lavalink.client.player.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 import org.virep.jdabot.language.Language;
 import org.virep.jdabot.utils.ErrorManager;
 import org.virep.jdabot.utils.Utils;
@@ -22,7 +23,7 @@ public class TrackScheduler extends PlayerEventListenerAdapter {
     private final LavalinkPlayer player;
     public final Queue<AudioTrack> queue;
     private final Guild guild;
-    private TextChannel channel;
+    private MessageChannelUnion channel;
 
     private boolean looping;
     private ScheduledFuture<?> timeout = null;
@@ -40,7 +41,7 @@ public class TrackScheduler extends PlayerEventListenerAdapter {
         return queue.peek() != null;
     }
 
-    public void queue(AudioTrack track, TextChannel channel) {
+    public void queue(AudioTrack track, MessageChannelUnion channel) {
         if (player.getPlayingTrack() == null) {
             this.channel = channel;
             queue.add(track);
