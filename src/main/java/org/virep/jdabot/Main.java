@@ -20,18 +20,15 @@ import org.virep.jdabot.listeners.InteractionRoleListener;
 import org.virep.jdabot.listeners.LogsListener;
 import org.virep.jdabot.listeners.ReactionRoleListener;
 import org.virep.jdabot.listeners.SelectMenuInteractionListener;
-import org.virep.jdabot.notifier.Notifier;
 import org.virep.jdabot.slashcommandhandler.SlashHandler;
 import org.virep.jdabot.listeners.SlashListener;
 import org.virep.jdabot.utils.Config;
-import org.virep.jdabot.utils.DatabaseUtils;
 
 import java.net.URI;
 import java.util.Base64;
 
 public class Main {
     static Main instance;
-    Notifier notifier;
 
     public static JDA jda;
     private static final Logger log = LoggerFactory.getLogger(Main.class);
@@ -40,7 +37,6 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         instance = new Main();
-        instance.notifier = new Notifier();
 
         Database.initializeDataSource();
 
@@ -78,9 +74,6 @@ public class Main {
         slashHandler.addCommands();
         log.info("Slash Commands registered");
 
-        instance.notifier.initialize();
-        log.info("Twitter Notifiers set up");
-
         lavalink.setAutoReconnect(true);
         lavalink.addNode(URI.create(Config.get("LAVALINKURI")), Config.get("LAVALINKPWD"));
     }
@@ -97,9 +90,5 @@ public class Main {
         }
 
         return instance;
-    }
-
-    public Notifier getNotifier() {
-        return notifier;
     }
 }

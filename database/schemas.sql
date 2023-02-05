@@ -115,14 +115,6 @@ create table if not exists remind
     timestamp bigint       null
 );
 
-create table if not exists twitternotifier
-(
-    channelID      varchar(50)   null,
-    guildID        varchar(50)   null,
-    twitterAccount varchar(50)   null,
-    webhookURL     varchar(1000) null
-);
-
 create table if not exists warn_amount
 (
     guildID varchar(50)   null,
