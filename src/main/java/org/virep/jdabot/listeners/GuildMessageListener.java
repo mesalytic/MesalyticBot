@@ -24,6 +24,7 @@ public class GuildMessageListener extends ListenerAdapter {
              PreparedStatement statement = connection.prepareStatement("SELECT * FROM joinmessages WHERE guildID = ?");
              PreparedStatement statementDM = connection.prepareStatement("SELECT * FROM dmmessages WHERE guildID = ?")) {
             statement.setString(1, guild.getId());
+            statementDM.setString(1, guild.getId());
 
             ResultSet result = statement.executeQuery();
             ResultSet dmResult = statementDM.executeQuery();
