@@ -108,7 +108,7 @@ public class AfkCommand implements Command {
                 try (PreparedStatement removeStatement = connection.prepareStatement("DELETE FROM afk WHERE userID = ?")) {
                     removeStatement.setString(1, event.getUser().getId());
 
-                    statement.executeUpdate();
+                    removeStatement.executeUpdate();
                     event.reply(Language.getString("AFK_REMOVE_REMOVED", guild)).queue();
                 }
                 connection.close();
