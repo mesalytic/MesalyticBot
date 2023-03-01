@@ -4,7 +4,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Message.Attachment;
-import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -14,12 +13,16 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.managers.AudioManager;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.virep.jdabot.language.Language;
 import org.virep.jdabot.music.AudioLoadHandler;
 import org.virep.jdabot.music.AudioManagerController;
 import org.virep.jdabot.music.GuildAudioManager;
 import org.virep.jdabot.slashcommandhandler.Command;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -98,7 +101,21 @@ public class PlayCommand implements Command {
 
         if (event.getSubcommandName().equals("url")) {
             String url = event.getOption("url", OptionMapping::getAsString);
-            try {
+            if (url.contains("krakenfiles")) {
+                try {
+                    Document doc = Jsoup.connect(url).get();
+                    Element audio = doc.select("#jp_container_1 > div > div.sfPlayer_wave > div.sfPlayer_tabWav > div > div.jp-progress > div > img").first();
+
+                    url = "https://" + audio.attr("src").replace("//", "").replace("waveform.png", "music.m4a");
+
+                    new URL(url);
+                    result = url;
+                } catch (IOException e) {
+                    System.out.println(e);
+                    event.getHook().editOriginal(Language.getString("PLAY_NOTVALIDURL", guild)).queue();
+                    return;
+                }
+            } else try {
                 new URL(url);
                 result = url;
             } catch (MalformedURLException e) {
