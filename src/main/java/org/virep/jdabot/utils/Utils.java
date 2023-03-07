@@ -2,6 +2,8 @@ package org.virep.jdabot.utils;
 
 import net.dv8tion.jda.api.Permission;
 
+import java.net.URL;
+import java.net.URLConnection;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -194,5 +196,17 @@ public class Utils {
         } else {
             return required.stream().filter(permission -> !available.contains(permission)).collect(Collectors.toList());
         }
+    }
+
+    public static boolean isImageUrl(String url) {
+        boolean isImage = false;
+        try {
+            URLConnection connection = new URL(url).openConnection();
+            String contentType = connection.getContentType();
+            isImage = contentType.startsWith("image/");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return isImage;
     }
 }

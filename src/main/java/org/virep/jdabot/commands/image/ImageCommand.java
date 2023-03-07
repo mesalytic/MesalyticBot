@@ -14,8 +14,10 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 import org.virep.jdabot.utils.ErrorManager;
+import org.virep.jdabot.utils.Utils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -276,6 +278,11 @@ public class ImageCommand implements Command {
         OptionMapping attachmentOption = event.getOption("attachment");
 
         String url = userOption != null ? userOption.getAsUser().getAvatarUrl() : urlOption != null ? urlOption.getAsString() : attachmentOption != null ? attachmentOption.getAsAttachment().getUrl() : event.getUser().getAvatarUrl();
+
+        if (!Utils.isImageUrl(url)) {
+            event.getHook().editOriginal(Language.getString("IMAGE_NOTVALID_URL", event.getGuild())).queue();
+            return;
+        }
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .readTimeout(30, TimeUnit.SECONDS)

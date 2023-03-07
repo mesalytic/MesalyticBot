@@ -101,6 +101,8 @@
     "REMINDER_REMOVE_OUTOFINDEX": "\u274C - Le nombre que vous avez spécifié est au dessus du nombre de rappel actuel.",
     "REMINDER_REMOVE_REMOVED": "\u2705 - Le rappel a bien été supprimé: `%REMINDER%`",
 
+    "IMAGE_NOTVALID_URL": "\u274C - Le lien spécifié n'est pas un lien contenant une image.",
+
     "INFO_NONE": "Aucun",
     "INFO_USEREMBED_TYPE_USER": "Utilisateur",
     "INFO_USEREMBED_NICKNAME": "Surnom",
@@ -456,6 +458,8 @@
     "REMINDER_LIST_NOREMINDERS": "\u274C - You do not have reminders set.",
     "REMINDER_REMOVE_OUTOFINDEX": "\u274C - The number you specified is over the number of reminders you have.",
     "REMINDER_REMOVE_REMOVED": "\u2705 - Successfully deleted this reminder: `%REMINDER%`",
+
+    "IMAGE_NOTVALID_URL": "\u274C - The specified link is not a valid image URL.",
 
     "INFO_NONE": "None",
     "INFO_USEREMBED_TYPE_USER": "User",
