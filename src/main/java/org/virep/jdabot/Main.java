@@ -47,7 +47,7 @@ public class Main {
                         GatewayIntent.MESSAGE_CONTENT,
                         GatewayIntent.GUILD_MESSAGE_REACTIONS,
                         GatewayIntent.GUILD_VOICE_STATES,
-                        GatewayIntent.GUILD_BANS)
+                        GatewayIntent.GUILD_MODERATION)
                 .addEventListeners(lavalink,
                         new LogsListener(),
                         new GatewayEventListener(),
