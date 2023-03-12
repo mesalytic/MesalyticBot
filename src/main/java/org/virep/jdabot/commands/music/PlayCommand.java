@@ -111,7 +111,6 @@ public class PlayCommand implements Command {
                     new URL(url);
                     result = url;
                 } catch (IOException e) {
-                    System.out.println(e);
                     event.getHook().editOriginal(Language.getString("PLAY_NOTVALIDURL", guild)).queue();
                     return;
                 }

@@ -205,7 +205,7 @@ public class Utils {
             String contentType = connection.getContentType();
             isImage = contentType.startsWith("image/");
         } catch (Exception e) {
-            e.printStackTrace();
+            ErrorManager.handleNoEvent(e);
         }
         return isImage;
     }

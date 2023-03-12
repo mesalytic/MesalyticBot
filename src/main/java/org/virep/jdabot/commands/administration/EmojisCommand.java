@@ -108,7 +108,7 @@ public class EmojisCommand implements Command {
                         event.reply(Language.getString("EMOJIS_ADDED", guild).replaceAll("%FORMATTED%", createdEmoji.getFormatted())).queue();
                     });
                 } catch (IOException | ExecutionException | InterruptedException e) {
-                    throw new RuntimeException(e);
+                    ErrorManager.handle(e, event);
                 }
             }
 
