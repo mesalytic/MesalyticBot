@@ -51,8 +51,8 @@ public class SlashListener extends ListenerAdapter {
                 event.reply("X - The bot doesn't have these permissions : %PERMISSIONS%".replace("%PERMISSIONS%", sb.toString())).queue();
             }
 
-            webhook.send("``` " + event.getUser().getAsTag() + " (" + event.getUser().getId() + ") - " + event.getInteraction().getCommandString() + "```");
-            log.debug(String.format("command executed by %s : %s", event.getUser().getAsTag(), event.getInteraction().getCommandString()));
+            webhook.send("``` " + event.getUser().getEffectiveName() + " (" + event.getUser().getId() + ") - " + event.getInteraction().getCommandString() + "```");
+            log.debug(String.format("command executed by %s : %s", event.getUser().getEffectiveName(), event.getInteraction().getCommandString()));
             commandMap.get(commandName).execute(event);
         }
     }

@@ -65,7 +65,7 @@ public class BansCommand implements Command {
             List<List<Guild.Ban>> banPages = getPages(bans, 50);
 
             EmbedBuilder embedBuilder = new EmbedBuilder()
-                    .setAuthor(event.getUser().getAsTag(), null, event.getUser().getAvatarUrl())
+                    .setAuthor(event.getUser().getEffectiveName(), null, event.getUser().getAvatarUrl())
                     .setTitle(Language.getString("BANS_EMBEDTITLE", guild).replace("%GUILDNAME%", event.getGuild().getName()))
                     .setFooter("Page " + (pageNumber.get(event.getChannel().getIdLong()) + 1) + "/" + banPages.size())
                     .setTimestamp(Instant.now());
@@ -76,7 +76,7 @@ public class BansCommand implements Command {
             page.forEach(ban -> {
                 embedDescription
                         .append("**")
-                        .append(ban.getUser().getAsTag())
+                        .append(ban.getUser().getEffectiveName())
                         .append("** - ")
                         .append(ban.getReason() != null ? ban.getReason() : Language.getString("BANS_NOREASON", guild))
                         .append("\n");

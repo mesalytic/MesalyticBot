@@ -83,7 +83,7 @@ public class BannerCommand implements Command {
             JSONObject jsonObject = new JSONObject(res.body().string()).getJSONObject("banner");
 
             EmbedBuilder embedBuilder = new EmbedBuilder()
-                    .setAuthor(user.getAsTag(), null, user.getAvatarUrl())
+                    .setAuthor(user.getEffectiveName(), null, user.getAvatarUrl())
                     .setTimestamp(Instant.now());
 
             if (!color) {
@@ -91,7 +91,7 @@ public class BannerCommand implements Command {
                     event.reply(Language.getString("BANNER_NOBANNER", guild)).queue();
                     return;
                 }
-                embedBuilder.setTitle(Language.getString("BANNER_BANNERTITLE", guild).replace("%USERTAG%", user.getAsTag()));
+                embedBuilder.setTitle(Language.getString("BANNER_BANNERTITLE", guild).replace("%USERTAG%", user.getEffectiveName()));
                 embedBuilder.setDescription(Language.getString("BANNER_BANNERLINK", guild).replace("%BANNERLINK%", jsonObject.getString("link")));
                 embedBuilder.setImage(jsonObject.getString("link") + "?size=2048");
             } else {
@@ -99,7 +99,7 @@ public class BannerCommand implements Command {
                     event.reply(Language.getString("BANNER_NOCOLOR", guild)).queue();
                     return;
                 }
-                embedBuilder.setTitle(Language.getString("BANNER_COLORTITLE", guild).replace("%USERTAG%", user.getAsTag()).replace("%COLORSTRING%", jsonObject.getString("color")));
+                embedBuilder.setTitle(Language.getString("BANNER_COLORTITLE", guild).replace("%USERTAG%", user.getEffectiveName()).replace("%COLORSTRING%", jsonObject.getString("color")));
                 embedBuilder.setColor(Integer.parseInt(jsonObject.getString("color").substring(1), 16));
                 embedBuilder.setDescription(Language.getString("BANNER_COLORLINK", guild).replace("%COLOR%", jsonObject.getString("color").substring(1)));
                 embedBuilder.setImage("https://singlecolorimage.com/get/" + jsonObject.getString("color").substring(1) + "/1100x440");

@@ -227,7 +227,7 @@ public class MessageCommand implements Command {
                         assert channel != null;
                         channel.sendMessage(message
                                 .replace("%USER%", event.getMember().getAsMention())
-                                .replace("%USERNAME%", event.getUser().getAsTag())
+                                .replace("%USERNAME%", event.getUser().getEffectiveName())
                                 .replace("%SERVERNAME%", guild.getName())
                                 .replace("%MEMBERCOUNT%", String.valueOf(guild.getMemberCount()))).queue();
                     }
@@ -250,7 +250,7 @@ public class MessageCommand implements Command {
                         event.getUser().openPrivateChannel().queue(dmChannel -> {
                             dmChannel.sendMessage(message
                                     .replace("%USER%", event.getMember().getAsMention())
-                                    .replace("%USERNAME%", event.getUser().getAsTag())
+                                    .replace("%USERNAME%", event.getUser().getEffectiveName())
                                     .replace("%SERVERNAME%", guild.getName())
                                     .replace("%MEMBERCOUNT%", String.valueOf(guild.getMemberCount()))
                             ).addActionRow(Button.secondary("sentfromguild", "Sent from " + guild.getName()).asDisabled()).queue();
@@ -277,7 +277,7 @@ public class MessageCommand implements Command {
 
                         assert channel != null;
                         channel.sendMessage(message
-                                .replace("%USERNAME%", event.getUser().getAsTag())
+                                .replace("%USERNAME%", event.getUser().getEffectiveName())
                                 .replace("%SERVERNAME%", guild.getName())
                                 .replace("%MEMBERCOUNT%", String.valueOf(guild.getMemberCount()))).queue();
                     }

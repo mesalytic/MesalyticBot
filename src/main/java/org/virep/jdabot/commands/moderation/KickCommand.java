@@ -68,7 +68,7 @@ public class KickCommand implements Command {
             return;
         }
 
-        member.kick().reason(Language.getString("KICK_KICKEDBY", guild).replace("%USERTAG%", event.getUser().getAsTag()).replace("%REASON%", reason)).queue();
-        event.reply(Language.getString("KICK_KICKED", guild).replace("%USERTAG%", member.getUser().getAsTag()).replace("%REASON%", reason)).queue();
+        member.kick().reason(Language.getString("KICK_KICKEDBY", guild).replace("%USERTAG%", event.getUser().getEffectiveName()).replace("%REASON%", reason)).queue();
+        event.reply(Language.getString("KICK_KICKED", guild).replace("%USERTAG%", member.getUser().getEffectiveName()).replace("%REASON%", reason)).queue();
     }
 }

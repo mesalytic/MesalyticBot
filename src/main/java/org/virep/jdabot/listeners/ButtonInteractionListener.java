@@ -50,7 +50,7 @@ public class ButtonInteractionListener extends ListenerAdapter {
                 };
 
                 EmbedBuilder embedBuilder = new EmbedBuilder()
-                        .setAuthor(event.getUser().getAsTag(), null, event.getUser().getAvatarUrl())
+                        .setAuthor(event.getUser().getEffectiveName(), null, event.getUser().getAvatarUrl())
                         .setTitle("Ban list for " + guild.getName())
                         .setFooter("Page " + (pageNumber + 1) + "/" + banPages.size())
                         .setTimestamp(Instant.now());
@@ -62,7 +62,7 @@ public class ButtonInteractionListener extends ListenerAdapter {
                 page.forEach(ban -> {
                     embedDescription
                             .append("**")
-                            .append(ban.getUser().getAsTag())
+                            .append(ban.getUser().getEffectiveName())
                             .append("** - ")
                             .append(ban.getReason())
                             .append("\n");

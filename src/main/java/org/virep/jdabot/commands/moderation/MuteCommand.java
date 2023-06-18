@@ -106,13 +106,13 @@ public class MuteCommand implements Command {
                 return;
             }
 
-            member.timeoutFor(duration, TimeUnit.SECONDS).reason(Language.getString("MUTE_MUTEDBY", guild).replace("%USERTAG%", event.getUser().getAsTag()).replace("%REASON%", (reasonMapping != null ? reasonMapping.getAsString() : Language.getString("MUTE_NOREASON", guild))))
-                    .queue(success -> event.reply(Language.getString("MUTE_MUTED", guild).replace("%USERTAG%", member.getUser().getAsTag()).replace("%DURATION%", secondsToSeperatedTime(duration))).queue(), errorHandler);
+            member.timeoutFor(duration, TimeUnit.SECONDS).reason(Language.getString("MUTE_MUTEDBY", guild).replace("%USERTAG%", event.getUser().getEffectiveName()).replace("%REASON%", (reasonMapping != null ? reasonMapping.getAsString() : Language.getString("MUTE_NOREASON", guild))))
+                    .queue(success -> event.reply(Language.getString("MUTE_MUTED", guild).replace("%USERTAG%", member.getUser().getEffectiveName()).replace("%DURATION%", secondsToSeperatedTime(duration))).queue(), errorHandler);
         } else {
 
             if (member.isTimedOut()) {
-                member.removeTimeout().reason(Language.getString("MUTE_UNMUTEDBY", guild).replace("%USERTAG%", event.getUser().getAsTag()).replace("%REASON%", (reasonMapping != null ? reasonMapping.getAsString() : Language.getString("MUTE_NOREASON", guild))))
-                        .queue(success -> event.reply(Language.getString("MUTE_UNMUTED", guild).replace("%USERTAG%", member.getUser().getAsTag())).queue(), errorHandler);
+                member.removeTimeout().reason(Language.getString("MUTE_UNMUTEDBY", guild).replace("%USERTAG%", event.getUser().getEffectiveName()).replace("%REASON%", (reasonMapping != null ? reasonMapping.getAsString() : Language.getString("MUTE_NOREASON", guild))))
+                        .queue(success -> event.reply(Language.getString("MUTE_UNMUTED", guild).replace("%USERTAG%", member.getUser().getEffectiveName())).queue(), errorHandler);
             }
         }
     }

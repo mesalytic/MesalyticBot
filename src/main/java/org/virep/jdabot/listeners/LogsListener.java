@@ -328,14 +328,14 @@ public class LogsListener extends ListenerAdapter {
             auditLogs.limit(1);
 
             auditLogs.queue((entries) -> {
-                String moderator = entries.isEmpty() ? Language.getString("LOGSEVENT_NA", guild) : entries.get(0).getUser().getAsTag();
+                String moderator = entries.isEmpty() ? Language.getString("LOGSEVENT_NA", guild) : entries.get(0).getUser().getEffectiveName();
                 String reason = entries.isEmpty() ? Language.getString("LOGSEVENT_NA", guild) : entries.get(0).getReason();
 
                 MessageEmbed embed = new EmbedBuilder()
                         .setAuthor(Language.getString("LOGSEVENT_BAN_USERBANNED", guild), null, bannedUser.getAvatarUrl())
                         .setThumbnail(bannedUser.getAvatarUrl())
                         .setColor(15158332)
-                        .setDescription(Language.getString("LOGSEVENT_BAN", guild).replace("%USERTAG%", bannedUser.getAsTag()))
+                        .setDescription(Language.getString("LOGSEVENT_BAN", guild).replace("%USERTAG%", bannedUser.getEffectiveName()))
                         .addField(Language.getString("LOGSEVENT_REASON", guild), reason != null ? reason : Language.getString("LOGSEVENT_NA", guild), true)
                         .addField(Language.getString("LOGSEVENT_BAN_BANNEDBY", guild), moderator, true)
                         .setFooter("ID: " + bannedUser.getId())
@@ -365,7 +365,7 @@ public class LogsListener extends ListenerAdapter {
             auditLogs.limit(1);
 
             auditLogs.queue((entries) -> {
-                String moderator = entries.isEmpty() ? Language.getString("LOGSEVENT_NA", guild) : entries.get(0).getUser().getAsTag();
+                String moderator = entries.isEmpty() ? Language.getString("LOGSEVENT_NA", guild) : entries.get(0).getUser().getEffectiveName();
 
                 MessageEmbed embed = new EmbedBuilder()
                         .setAuthor(Language.getString("LOGSEVENT_UNBAN_USERUNBANNED", guild), null, unbannedUser.getAvatarUrl())
@@ -455,9 +455,9 @@ public class LogsListener extends ListenerAdapter {
                 String roleString = addedRoles.toString();
 
                 MessageEmbed embed = new EmbedBuilder()
-                        .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
+                        .setAuthor(member.getEffectiveName(), null, member.getAvatarUrl())
                         .setColor(3066993)
-                        .setDescription(Language.getString("LOGSEVENT_ROLEADD", guild).replace("%MEMBERTAG%", member.getAsTag()))
+                        .setDescription(Language.getString("LOGSEVENT_ROLEADD", guild).replace("%MEMBERTAG%", member.getEffectiveName()))
                         .addField(Language.getString("LOGSEVENT_ROLEADD_ADDED", guild), roleString.substring(0, roleString.length() - 2), true)
                         .setTimestamp(Instant.now())
                         .setFooter("ID: " + member.getId())
@@ -491,9 +491,9 @@ public class LogsListener extends ListenerAdapter {
                 String roleString = removedRoles.toString();
 
                 MessageEmbed embed = new EmbedBuilder()
-                        .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
+                        .setAuthor(member.getEffectiveName(), null, member.getAvatarUrl())
                         .setColor(15158332)
-                        .setDescription(Language.getString("LOGSEVENT_ROLEREMOVE", guild).replace("%MEMBERTAG%", member.getAsTag()))
+                        .setDescription(Language.getString("LOGSEVENT_ROLEREMOVE", guild).replace("%MEMBERTAG%", member.getEffectiveName()))
                         .addField(Language.getString("LOGSEVENT_ROLEREMOVE_REMOVED", guild), roleString.substring(0, roleString.length() - 2), true)
                         .setTimestamp(Instant.now())
                         .setFooter("ID: " + member.getId())
@@ -521,8 +521,8 @@ public class LogsListener extends ListenerAdapter {
             String newNickname = event.getNewNickname();
 
             MessageEmbed embed = new EmbedBuilder()
-                    .setAuthor(member.getUser().getAsTag(), null, member.getUser().getAvatarUrl())
-                    .setDescription(Language.getString("LOGSEVENT_NICKNAME", guild).replace("%USERTAG%", member.getUser().getAsTag()))
+                    .setAuthor(member.getUser().getEffectiveName(), null, member.getUser().getAvatarUrl())
+                    .setDescription(Language.getString("LOGSEVENT_NICKNAME", guild).replace("%USERTAG%", member.getUser().getEffectiveName()))
                     .addField(Language.getString("LOGSEVENT_OLD", guild), oldNickname != null ? oldNickname : Language.getString("LOGSEVENT_NA", guild), true)
                     .addField(Language.getString("LOGSEVENT_NEW", guild), newNickname != null ? newNickname : Language.getString("LOGSEVENT_NA", guild), true)
                     .setTimestamp(Instant.now())
@@ -550,7 +550,7 @@ public class LogsListener extends ListenerAdapter {
             auditLogs.limit(1);
 
             auditLogs.queue((entries) -> {
-                String moderator = entries.isEmpty() ? Language.getString("LOGSEVENT_NA", guild) : entries.get(0).getUser().getAsTag();
+                String moderator = entries.isEmpty() ? Language.getString("LOGSEVENT_NA", guild) : entries.get(0).getUser().getEffectiveName();
                 String reason = entries.isEmpty() ? Language.getString("LOGSEVENT_NA", guild) : entries.get(0).getReason();
 
                 User member = event.getUser();
@@ -558,9 +558,9 @@ public class LogsListener extends ListenerAdapter {
                 OffsetDateTime newTimeout = event.getNewTimeOutEnd();
 
                 MessageEmbed embed = new EmbedBuilder()
-                        .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
+                        .setAuthor(member.getEffectiveName(), null, member.getAvatarUrl())
                         .setColor(15158332)
-                        .setDescription(Language.getString("LOGSEVENT_TIMEOUT", guild).replace("%USERTAG%", member.getAsTag()))
+                        .setDescription(Language.getString("LOGSEVENT_TIMEOUT", guild).replace("%USERTAG%", member.getEffectiveName()))
                         .addField(Language.getString("LOGSEVENT_OLD", guild), oldTimeout != null ? Language.getString("LOGSEVENT_TIMEOUT_UNTIL", guild).replace("%SECONDS%", String.valueOf(oldTimeout.toEpochSecond())) : Language.getString("LOGSEVENT_NA", guild), true)
                         .addField(Language.getString("LOGSEVENT_NEW", guild), newTimeout != null ? Language.getString("LOGSEVENT_TIMEOUT_UNTIL", guild).replace("%SECONDS%", String.valueOf(newTimeout.toEpochSecond())) : Language.getString("LOGSEVENT_NA", guild), true)
                         .addField(Language.getString("LOGSEVENT_REASON", guild), reason != null ? reason : Language.getString("LOGSEVENT_NA", guild), false)
@@ -589,9 +589,9 @@ public class LogsListener extends ListenerAdapter {
         if (isEnabled("guildVoiceDeafen", guild.getId())) {
             User member = event.getMember().getUser();
             MessageEmbed embed = new EmbedBuilder()
-                    .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
+                    .setAuthor(member.getEffectiveName(), null, member.getAvatarUrl())
                     .setColor(event.isSelfDeafened() ? 15158332 : 3066993)
-                    .setDescription(Language.getString("LOGSEVENT_SELFDEAF", guild).replace("%MEMBERTAG%", member.getAsTag()).replace("%STATUS%", (event.isSelfDeafened() ? Language.getString("LOGSEVENT_DEAFENED", guild) : Language.getString("LOGSEVENT_UNDEAFENED", guild))).replace("%CHANNELMENTION%", event.getVoiceState().getChannel().getAsMention()))
+                    .setDescription(Language.getString("LOGSEVENT_SELFDEAF", guild).replace("%MEMBERTAG%", member.getEffectiveName()).replace("%STATUS%", (event.isSelfDeafened() ? Language.getString("LOGSEVENT_DEAFENED", guild) : Language.getString("LOGSEVENT_UNDEAFENED", guild))).replace("%CHANNELMENTION%", event.getVoiceState().getChannel().getAsMention()))
                     .setTimestamp(Instant.now())
                     .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID%", member.getId()))
                     .build();
@@ -615,9 +615,9 @@ public class LogsListener extends ListenerAdapter {
         if (isEnabled("guildVoiceGuildDeafen", guild.getId())) {
             User member = event.getMember().getUser();
             MessageEmbed embed = new EmbedBuilder()
-                    .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
+                    .setAuthor(member.getEffectiveName(), null, member.getAvatarUrl())
                     .setColor(event.isGuildDeafened() ? 15158332 : 3066993)
-                    .setDescription(Language.getString("LOGSEVENT_SERVERDEAF", guild).replace("%MEMBERTAG%", member.getAsTag()).replace("%STATUS%", (event.isGuildDeafened() ? Language.getString("LOGSEVENT_DEAFENED", guild) : Language.getString("LOGSEVENT_UNDEAFENED", guild))).replace("%CHANNELMENTION%", event.getVoiceState().getChannel().getAsMention()))
+                    .setDescription(Language.getString("LOGSEVENT_SERVERDEAF", guild).replace("%MEMBERTAG%", member.getEffectiveName()).replace("%STATUS%", (event.isGuildDeafened() ? Language.getString("LOGSEVENT_DEAFENED", guild) : Language.getString("LOGSEVENT_UNDEAFENED", guild))).replace("%CHANNELMENTION%", event.getVoiceState().getChannel().getAsMention()))
                     .setTimestamp(Instant.now())
                     .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID%", member.getId()))
                     .build();
@@ -641,9 +641,9 @@ public class LogsListener extends ListenerAdapter {
         if (isEnabled("guildVoiceMute", guild.getId())) {
             User member = event.getMember().getUser();
             MessageEmbed embed = new EmbedBuilder()
-                    .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
+                    .setAuthor(member.getEffectiveName(), null, member.getAvatarUrl())
                     .setColor(event.isSelfMuted() ? 15158332 : 3066993)
-                    .setDescription(Language.getString("LOGSEVENT_SELFMUTE", guild).replace("%MEMBERTAG%", member.getAsTag()).replace("%STATUS%", (event.isSelfMuted() ? Language.getString("LOGSEVENT_MUTED", guild) : Language.getString("LOGSEVENT_UNMUTED", guild))).replace("%CHANNELMENTION%", event.getVoiceState().getChannel().getAsMention()))
+                    .setDescription(Language.getString("LOGSEVENT_SELFMUTE", guild).replace("%MEMBERTAG%", member.getEffectiveName()).replace("%STATUS%", (event.isSelfMuted() ? Language.getString("LOGSEVENT_MUTED", guild) : Language.getString("LOGSEVENT_UNMUTED", guild))).replace("%CHANNELMENTION%", event.getVoiceState().getChannel().getAsMention()))
                     .setTimestamp(Instant.now())
                     .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID%", member.getId()))
                     .build();
@@ -666,9 +666,9 @@ public class LogsListener extends ListenerAdapter {
         if (isEnabled("guildVoiceGuildMute", guild.getId())) {
             User member = event.getMember().getUser();
             MessageEmbed embed = new EmbedBuilder()
-                    .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
+                    .setAuthor(member.getEffectiveName(), null, member.getAvatarUrl())
                     .setColor(event.isGuildMuted() ? 15158332 : 3066993)
-                    .setDescription(Language.getString("LOGSEVENT_SERVERMUTE", guild).replace("%MEMBERTAG%", member.getAsTag()).replace("%STATUS%", (event.isGuildMuted() ? Language.getString("LOGSEVENT_MUTED", guild) : Language.getString("LOGSEVENT_UNMUTED", guild))).replace("%CHANNELMENTION%", event.getVoiceState().getChannel().getAsMention()))
+                    .setDescription(Language.getString("LOGSEVENT_SERVERMUTE", guild).replace("%MEMBERTAG%", member.getEffectiveName()).replace("%STATUS%", (event.isGuildMuted() ? Language.getString("LOGSEVENT_MUTED", guild) : Language.getString("LOGSEVENT_UNMUTED", guild))).replace("%CHANNELMENTION%", event.getVoiceState().getChannel().getAsMention()))
                     .setTimestamp(Instant.now())
                     .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID%", member.getId()))
                     .build();
@@ -694,9 +694,9 @@ public class LogsListener extends ListenerAdapter {
         if (channelLeft == null && channelJoined != null && isEnabled("guildVoiceJoin", guild.getId())) {
             User member = event.getMember().getUser();
             MessageEmbed embed = new EmbedBuilder()
-                    .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
+                    .setAuthor(member.getEffectiveName(), null, member.getAvatarUrl())
                     .setColor(3066993)
-                    .setDescription(Language.getString("LOGSEVENT_VCJOIN", guild).replace("%USERTAG%", member.getAsTag()).replace("%CHANNELMENTION%", channelJoined.getAsMention()))
+                    .setDescription(Language.getString("LOGSEVENT_VCJOIN", guild).replace("%USERTAG%", member.getEffectiveName()).replace("%CHANNELMENTION%", channelJoined.getAsMention()))
                     .setTimestamp(Instant.now())
                     .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID%", member.getId()))
                     .build();
@@ -712,9 +712,9 @@ public class LogsListener extends ListenerAdapter {
         if (channelLeft != null && channelJoined == null && isEnabled("guildVoiceLeave", guild.getId())) {
             User member = event.getMember().getUser();
             MessageEmbed embed = new EmbedBuilder()
-                    .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
+                    .setAuthor(member.getEffectiveName(), null, member.getAvatarUrl())
                     .setColor(15158332)
-                    .setDescription(Language.getString("LOGSEVENT_VCLEFT", guild).replace("%USERTAG%", member.getAsTag()).replace("%CHANNELMENTION%", channelLeft.getAsMention()))
+                    .setDescription(Language.getString("LOGSEVENT_VCLEFT", guild).replace("%USERTAG%", member.getEffectiveName()).replace("%CHANNELMENTION%", channelLeft.getAsMention()))
                     .setTimestamp(Instant.now())
                     .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID%", member.getId()))
                     .build();
@@ -730,9 +730,9 @@ public class LogsListener extends ListenerAdapter {
         if (channelLeft != null && channelJoined != null && isEnabled("guildVoiceMove", guild.getId())) {
             User member = event.getMember().getUser();
             MessageEmbed embed = new EmbedBuilder()
-                    .setAuthor(member.getAsTag(), null, member.getAvatarUrl())
+                    .setAuthor(member.getEffectiveName(), null, member.getAvatarUrl())
                     .setColor(16751616)
-                    .setDescription(Language.getString("LOGSEVENT_VCMOVE", guild).replace("%USERTAG%", member.getAsTag()).replace("%CHANNELMENTION%", channelJoined.getAsMention()))
+                    .setDescription(Language.getString("LOGSEVENT_VCMOVE", guild).replace("%USERTAG%", member.getEffectiveName()).replace("%CHANNELMENTION%", channelJoined.getAsMention()))
                     .addField(Language.getString("LOGSEVENT_OLD", guild), channelLeft.getAsMention(), true)
                     .addField(Language.getString("LOGSEVENT_NEW", guild), channelJoined.getAsMention(), true)
                     .setTimestamp(Instant.now())
@@ -769,9 +769,9 @@ public class LogsListener extends ListenerAdapter {
             String newMessage = event.getMessage().getContentRaw();
 
             MessageEmbed embed = new EmbedBuilder()
-                    .setAuthor(member.getUser().getAsTag(), null, member.getUser().getAvatarUrl())
+                    .setAuthor(member.getUser().getEffectiveName(), null, member.getUser().getAvatarUrl())
                     .setColor(16751616)
-                    .setDescription(Language.getString("LOGSEVENT_MSGUPDATE", guild).replace("%USERTAG%", member.getUser().getAsTag()).replace("%CHANNELMENTION%", channel.getAsMention()))
+                    .setDescription(Language.getString("LOGSEVENT_MSGUPDATE", guild).replace("%USERTAG%", member.getUser().getEffectiveName()).replace("%CHANNELMENTION%", channel.getAsMention()))
                     .addField(Language.getString("LOGSEVENT_OLD", guild), oldMessage.length() > 1024 ? oldMessage.substring(0, 1021) + "..." : oldMessage, true)
                     .addField(Language.getString("LOGSEVENT_NEW", guild), newMessage.length() > 1024 ? newMessage.substring(0, 1021) + "..." : newMessage, true)
                     .setTimestamp(Instant.now())
@@ -807,9 +807,9 @@ public class LogsListener extends ListenerAdapter {
             MessageChannelUnion channel = event.getChannel();
 
             MessageEmbed embed = new EmbedBuilder()
-                    .setAuthor(member != null ? member.getUser().getAsTag() : Language.getString("LOGSEVENT_UNKNOWN", guild), null, member != null ? member.getUser().getAvatarUrl() : null)
+                    .setAuthor(member != null ? member.getUser().getEffectiveName() : Language.getString("LOGSEVENT_UNKNOWN", guild), null, member != null ? member.getUser().getAvatarUrl() : null)
                     .setColor(15158332)
-                    .setDescription(Language.getString("LOGSEVENT_MSGDELETE", guild).replace("%USERTAG%", (member != null ? member.getUser().getAsTag() : Language.getString("LOGSEVENT_UNKNOWN", guild))).replace("%CHANNELMENTION%", channel.getAsMention()))
+                    .setDescription(Language.getString("LOGSEVENT_MSGDELETE", guild).replace("%USERTAG%", (member != null ? member.getUser().getEffectiveName() : Language.getString("LOGSEVENT_UNKNOWN", guild))).replace("%CHANNELMENTION%", channel.getAsMention()))
                     .addField("Message:", message != null ? !message.getContentRaw().equals("") ? message.getContentRaw().length() > 1024 ? message.getContentRaw().substring(0, 1021) + "..." : message.getContentRaw() : Language.getString("LOGSEVENT_MSGDELETE_NOCONTENT", guild) : Language.getString("LOGSEVENT_MSGDELETE_NOCACHE", guild), true)
                     .setTimestamp(Instant.now())
                     .setFooter(Language.getString("LOGSEVENT_USERID", guild).replace("%USERID%", (member != null ? member.getId() : Language.getString("LOGSEVENT_NA", guild))))
@@ -847,7 +847,7 @@ public class LogsListener extends ListenerAdapter {
                 sb
                         .append(date != null ? date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) : "??")
                         .append(" - ")
-                        .append(message != null ? guild.getMemberById(message.getAuthor().getId()).getUser().getAsTag() : Language.getString("LOGSEVENT_NA", guild))
+                        .append(message != null ? guild.getMemberById(message.getAuthor().getId()).getUser().getEffectiveName() : Language.getString("LOGSEVENT_NA", guild))
                         .append(" - ")
                         .append(message != null ? !message.getContentRaw().equals("") ? message.getContentRaw() : Language.getString("LOGSEVENT_MSGBULK_NOCONTENT", guild) : Language.getString("LOGSEVENT_NA", guild))
                         .append("\n");

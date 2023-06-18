@@ -56,7 +56,7 @@ public class StatsCommand implements Command {
 
         MessageEmbed embed = new EmbedBuilder()
                 .setAuthor(selfUser.getName(), null, selfUser.getAvatarUrl())
-                .addField(Language.getString("STATS_CREATOR", guild), Objects.requireNonNull(event.getJDA().getUserById("604779545018761237")).getAsTag(), true)
+                .addField(Language.getString("STATS_CREATOR", guild), Objects.requireNonNull(event.getJDA().getUserById("604779545018761237")).getEffectiveName(), true)
                 .addField(Language.getString("STATS_SERVERS", guild), String.valueOf(event.getJDA().getGuilds().size()), true)
                 .addField(Language.getString("STATS_USERS", guild), String.valueOf(event.getJDA().getUsers().size()), true)
                 .addField(Language.getString("STATS_UPTIME", guild), formatUptime(mxBean.getUptime()), true)

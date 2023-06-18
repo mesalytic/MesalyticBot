@@ -72,14 +72,14 @@ public class UnbanCommand implements Command {
 
         if (tagMatcher.find()) {
             guild.retrieveBanList().queue(bans -> {
-                Optional<Guild.Ban> ban = bans.stream().filter(banSearch -> banSearch.getUser().getAsTag().equals(user)).findFirst();
+                Optional<Guild.Ban> ban = bans.stream().filter(banSearch -> banSearch.getUser().getEffectiveName().equals(user)).findFirst();
 
                 if (ban.isPresent()) {
                     Guild.Ban banObject = ban.get();
                     UserSnowflake userID = UserSnowflake.fromId(banObject.getUser().getId());
 
-                    guild.unban(userID).reason(Language.getString("UNBAN_UNBANNEDBY", guild).replace("%USERTAG%", event.getUser().getAsTag()).replace("%REASON%", (reason != null ? reason : Language.getString("UNBAN_NOREASON", guild)))).queue();
-                    event.reply(Language.getString("UNBAN_UNBANNED", guild).replace("%USERTAG%", banObject.getUser().getAsTag())).queue();
+                    guild.unban(userID).reason(Language.getString("UNBAN_UNBANNEDBY", guild).replace("%USERTAG%", event.getUser().getEffectiveName()).replace("%REASON%", (reason != null ? reason : Language.getString("UNBAN_NOREASON", guild)))).queue();
+                    event.reply(Language.getString("UNBAN_UNBANNED", guild).replace("%USERTAG%", banObject.getUser().getEffectiveName())).queue();
                 } else {
                     event.reply(Language.getString("UNBAN_NOTVALID", guild)).setEphemeral(true).queue();
                 }
@@ -91,8 +91,8 @@ public class UnbanCommand implements Command {
                 if (ban.isPresent()) {
                     Guild.Ban banObject = ban.get();
 
-                    guild.unban(UserSnowflake.fromId(user)).reason(Language.getString("UNBAN_UNBANNEDBY", guild).replace("%USERTAG%", event.getUser().getAsTag()).replace("%REASON%", (reason != null ? reason : Language.getString("UNBAN_NOREASON", guild)))).queue();
-                    event.reply(Language.getString("UNBAN_UNBANNED", guild).replace("%USERTAG%", banObject.getUser().getAsTag())).queue();
+                    guild.unban(UserSnowflake.fromId(user)).reason(Language.getString("UNBAN_UNBANNEDBY", guild).replace("%USERTAG%", event.getUser().getEffectiveName()).replace("%REASON%", (reason != null ? reason : Language.getString("UNBAN_NOREASON", guild)))).queue();
+                    event.reply(Language.getString("UNBAN_UNBANNED", guild).replace("%USERTAG%", banObject.getUser().getEffectiveName())).queue();
                 } else {
                     event.reply(Language.getString("UNBAN_NOTVALID", guild)).setEphemeral(true).queue();
                 }

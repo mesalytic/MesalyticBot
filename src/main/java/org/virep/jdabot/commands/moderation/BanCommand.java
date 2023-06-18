@@ -73,7 +73,7 @@ public class BanCommand implements Command {
                         (ex) -> event.reply(Language.getString("ERRORHANDLER_UNKNOWNUSER", guild)).setEphemeral(true).queue());
 
         Member member = event.getOption("user", OptionMapping::getAsMember);
-        String reason = event.getOption("reason") != null ? event.getOption("reason").getAsString() : Language.getString("BAN_NOREASON", guild).replace("%USERTAG%", event.getUser().getAsTag());
+        String reason = event.getOption("reason") != null ? event.getOption("reason").getAsString() : Language.getString("BAN_NOREASON", guild).replace("%USERTAG%", event.getUser().getEffectiveName());
         String delTimeString = event.getOption("delete") != null ? event.getOption("delete", OptionMapping::getAsString) : "0s";
 
         if (member.getId().equals(event.getMember().getId())) {
@@ -92,6 +92,6 @@ public class BanCommand implements Command {
         }
 
         member.ban(Utils.timeStringToSeconds(delTimeString), TimeUnit.SECONDS).reason(reason)
-                .queue(success -> event.reply(Language.getString("BAN_BANNED", guild).replace("%USERTAG%", member.getUser().getAsTag()).replace("%REASON%", reason)).queue(), errorHandler);
+                .queue(success -> event.reply(Language.getString("BAN_BANNED", guild).replace("%USERTAG%", member.getUser().getEffectiveName()).replace("%REASON%", reason)).queue(), errorHandler);
     }
 }

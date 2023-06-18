@@ -313,9 +313,9 @@ public class WarnCommand implements Command {
                                         .setTimestamp(Instant.now())
                                         .setColor(Color.RED)
                                         .setTitle(Language.getString("WARN_EMBEDTITLE", guild).replace("%AMOUNT%", String.valueOf((amount + 1))))
-                                        .setAuthor(member.getUser().getAsTag(), null, member.getUser().getAvatarUrl())
-                                        .addField(Language.getString("WARN_EMBEDWARNED", guild), member.getUser().getAsTag(), true)
-                                        .addField(Language.getString("WARN_EMBEDWARNEDBY", guild), event.getUser().getAsTag(), true)
+                                        .setAuthor(member.getUser().getEffectiveName(), null, member.getUser().getAvatarUrl())
+                                        .addField(Language.getString("WARN_EMBEDWARNED", guild), member.getUser().getEffectiveName(), true)
+                                        .addField(Language.getString("WARN_EMBEDWARNEDBY", guild), event.getUser().getEffectiveName(), true)
                                         .addField(Language.getString("WARN_EMBEDREASON", guild), reason, true)
                                         .build();
 
@@ -331,9 +331,9 @@ public class WarnCommand implements Command {
                                 .setTimestamp(Instant.now())
                                 .setColor(Color.RED)
                                 .setTitle(Language.getString("WARN_EMBEDTITLE", guild).replace("%AMOUNT%", String.valueOf(1)))
-                                .setAuthor(member.getUser().getAsTag(), null, member.getUser().getAvatarUrl())
-                                .addField(Language.getString("WARN_EMBEDWARNED", guild), member.getUser().getAsTag(), true)
-                                .addField(Language.getString("WARN_EMBEDWARNEDBY", guild), event.getUser().getAsTag(), true)
+                                .setAuthor(member.getUser().getEffectiveName(), null, member.getUser().getAvatarUrl())
+                                .addField(Language.getString("WARN_EMBEDWARNED", guild), member.getUser().getEffectiveName(), true)
+                                .addField(Language.getString("WARN_EMBEDWARNEDBY", guild), event.getUser().getEffectiveName(), true)
                                 .addField(Language.getString("WARN_EMBEDREASON", guild), reason, true)
                                 .build();
 
@@ -349,7 +349,7 @@ public class WarnCommand implements Command {
                     }
                 }
 
-                event.reply(Language.getString("WARN_WARNED", guild).replace("%USERTAG%", member.getUser().getAsTag()).replace("%REASON%", reason)).queue();
+                event.reply(Language.getString("WARN_WARNED", guild).replace("%USERTAG%", member.getUser().getEffectiveName()).replace("%REASON%", reason)).queue();
 
                 try (PreparedStatement insertReasonStatement = connection.prepareStatement("INSERT INTO warn_reasons (guildID, userID, reason, timestamp) VALUES (?,?,?,?)")) {
                     insertReasonStatement.setString(1, guild.getId());
@@ -380,8 +380,8 @@ public class WarnCommand implements Command {
                 }
 
                 EmbedBuilder embedBuilder = new EmbedBuilder()
-                        .setAuthor(event.getUser().getAsTag(), null, event.getUser().getAvatarUrl())
-                        .setTitle(Language.getString("WARN_LIST_EMBEDTITLE", guild).replace("%USERTAG%", member.getUser().getAsTag()))
+                        .setAuthor(event.getUser().getEffectiveName(), null, event.getUser().getAvatarUrl())
+                        .setTitle(Language.getString("WARN_LIST_EMBEDTITLE", guild).replace("%USERTAG%", member.getUser().getEffectiveName()))
                         .setTimestamp(Instant.now());
 
                 StringBuilder embedDescription = new StringBuilder();

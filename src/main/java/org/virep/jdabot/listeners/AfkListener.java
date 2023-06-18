@@ -49,7 +49,7 @@ public class AfkListener extends ListenerAdapter {
             ResultSet result = statement.executeQuery();
 
             if (result.first()) {
-                event.getMessage().reply(Language.getString("AFKLISTENER_AFK", guild).replace("%USERTAG%", mentionedUser.getAsTag()).replace("%REASON%", result.getString("message"))).setAllowedMentions(Collections.emptyList()).queue();
+                event.getMessage().reply(Language.getString("AFKLISTENER_AFK", guild).replace("%USERTAG%", mentionedUser.getEffectiveName()).replace("%REASON%", result.getString("message"))).setAllowedMentions(Collections.emptyList()).queue();
             }
             connection.close();
         } catch (SQLException e) {

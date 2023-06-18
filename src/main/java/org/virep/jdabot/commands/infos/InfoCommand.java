@@ -85,7 +85,7 @@ public class InfoCommand implements Command {
 
             MessageEmbed embed = new EmbedBuilder()
                     .setColor(member.getColor() != null ? member.getColor() : null)
-                    .setAuthor(member.getUser().getAsTag(), null, member.getUser().getAvatarUrl())
+                    .setAuthor(member.getUser().getEffectiveName(), null, member.getUser().getAvatarUrl())
                     .setThumbnail(member.getUser().getAvatarUrl())
                     .addField("ID", member.getId(), true)
                     .addField("Type", member.getUser().isBot() ? "Bot" : Language.getString("INFO_USEREMBED_TYPE_USER", guild), true)
@@ -122,7 +122,7 @@ public class InfoCommand implements Command {
                     .setImage(guild.getBannerUrl())
                     .setThumbnail(guild.getIconUrl())
                     .addField(Language.getString("INFO_SERVEREMBED_SERVERID", guild), guild.getId(), true)
-                    .addField(Language.getString("INFO_SERVEREMBED_OWNER", guild), Objects.requireNonNull(guild.getOwner()).getUser().getAsTag(), true)
+                    .addField(Language.getString("INFO_SERVEREMBED_OWNER", guild), Objects.requireNonNull(guild.getOwner()).getUser().getEffectiveName(), true)
                     .addField(Language.getString("INFO_SERVEREMBED_MEMBERCOUNT", guild), String.valueOf(guild.getMemberCount()), true)
                     .addField("Boosts", guild.getBoostCount() + " boosts (Level " + guild.getBoostTier().getKey() + ")", true)
                     .addField(Language.getString("INFO_SERVEREMBED_COUNT", guild), guild.getLocale().getLanguageName(), true)

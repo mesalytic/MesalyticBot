@@ -38,7 +38,7 @@ public class GuildMessageListener extends ListenerAdapter {
                 assert channel != null;
                 channel.sendMessage(message
                         .replace("%USER%", event.getMember().getAsMention())
-                        .replace("%USERNAME%", event.getUser().getAsTag())
+                        .replace("%USERNAME%", event.getUser().getEffectiveName())
                         .replace("%SERVERNAME%", event.getGuild().getName())
                         .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))
                 ).queue();
@@ -53,7 +53,7 @@ public class GuildMessageListener extends ListenerAdapter {
                 assert channel != null;
                 channel.sendMessage(message
                         .replace("%USER%", event.getMember().getAsMention())
-                        .replace("%USERNAME%", event.getUser().getAsTag())
+                        .replace("%USERNAME%", event.getUser().getEffectiveName())
                         .replace("%SERVERNAME%", event.getGuild().getName())
                         .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))
                 ).addActionRow(Button.secondary("sentfromguild", "Sent from " + guild.getName()).asDisabled()).queue();
@@ -82,7 +82,7 @@ public class GuildMessageListener extends ListenerAdapter {
 
                 assert channel != null;
                 channel.sendMessage(message
-                        .replace("%USERNAME%", event.getUser().getAsTag())
+                        .replace("%USERNAME%", event.getUser().getEffectiveName())
                         .replace("%SERVERNAME%", event.getGuild().getName())
                         .replace("%MEMBERCOUNT%", String.valueOf(event.getGuild().getMemberCount()))).queue();
             }
