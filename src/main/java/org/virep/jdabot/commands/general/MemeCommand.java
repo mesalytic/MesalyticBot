@@ -83,7 +83,7 @@ public class MemeCommand implements Command {
                     .setTitle(children.getString("title"), "https://reddit.com" + children.getString("permalink"))
                     .setImage(children.getString("url"))
                     .setColor(0x9590EE)
-                    .setAuthor(event.getUser().getAsTag(), null, event.getUser().getAvatarUrl())
+                    .setAuthor(event.getUser().getName(), null, event.getUser().getAvatarUrl())
                     .setFooter("\uD83D\uDC4D " + children.getInt("ups") + " | \uD83D\uDC4E " + children.getInt("downs") + " | r/" + children.getString("subreddit"))
                     .build();
 

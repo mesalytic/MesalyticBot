@@ -39,7 +39,7 @@ public class EmojisCommand implements Command {
     public SlashCommandData getCommandData() {
         return Commands.slash(getName(), "Manages your emojis in easy way!")
                 .setGuildOnly(true)
-                .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MANAGE_EMOJIS_AND_STICKERS))
+                .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MANAGE_GUILD_EXPRESSIONS))
                 .setDescriptionLocalization(DiscordLocale.FRENCH, "Gérez vos emojis facilement!")
                 .addSubcommands(
                         new SubcommandData("add", "Add any emojis you want!")
@@ -64,7 +64,7 @@ public class EmojisCommand implements Command {
     @Override
     public List<Permission> getBotPermissions() {
         List<Permission> perms = new ArrayList<>();
-        Collections.addAll(perms, Permission.MANAGE_EMOJIS_AND_STICKERS);
+        Collections.addAll(perms, Permission.MANAGE_GUILD_EXPRESSIONS);
 
         return perms;
     }
