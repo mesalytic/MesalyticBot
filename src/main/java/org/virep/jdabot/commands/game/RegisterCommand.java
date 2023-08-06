@@ -1,10 +1,12 @@
 package org.virep.jdabot.commands.game;
 
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.virep.jdabot.database.Database;
+import org.virep.jdabot.language.Language;
 import org.virep.jdabot.slashcommandhandler.Command;
 
 import java.sql.Connection;
@@ -37,13 +39,15 @@ public class RegisterCommand implements Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        Guild guild = event.getGuild();
+
         try (Connection connection = Database.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM inventory WHERE userID = ?")) {
             statement.setString(1, event.getUser().getId());
 
             ResultSet result = statement.executeQuery();
 
             if (result.first()) {
-                event.reply("X - You are already registered !").queue();
+                event.reply(Language.getString("REGISTER_ALREADY_REGISTERED", guild)).queue();
 
                 return;
             }
@@ -53,7 +57,7 @@ public class RegisterCommand implements Command {
 
             insertStatement.executeUpdate();
 
-            event.reply("V - You have been successfully registered ! Welcome to Melyca.").queue();
+            event.reply(Language.getString("REGISTER_REGISTERED", guild)).queue();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

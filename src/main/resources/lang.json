@@ -77,6 +77,9 @@
     "INVENTORY_SELECTMENU_INDUSTRIAL_TITLE": "Ressources Industrielles",
     "INVENTORY_SELECTMENU_INDUSTRIAL_DESCRIPTION": "Pétroles, Ressources de machinerie, etc...",
 
+    "REGISTER_ALREADY_REGISTERED": "❌ - Vous êtes déjà inscrit !",
+    "REGISTER_REGISTERED": "✅ - Vous avez bien été inscrit ! Bienvenue dans le monde de Melyca.",
+
     "ACTIVITY_NOEXIST": "\u274C - Cette activité n'existe apparemment pas, veuillez signaler l'erreur.",
     "ACTIVITY_BOOSTREQUIRED": "\u274C - Vous devez avoir un niveau de boost égal ou supérieur a 1.",
     "ACTIVITY_EMBED_REQUIRED": "Niveau Nitro Boost requis: ",
@@ -440,6 +443,9 @@
     "INVENTORY_SELECTMENU_EXTRACTED_DESCRIPTION": "Wood, Cobble, Dirt, etc...",
     "INVENTORY_SELECTMENU_INDUSTRIAL_TITLE": "Industrial Resources",
     "INVENTORY_SELECTMENU_INDUSTRIAL_DESCRIPTION": "Oil, Machinery Resources, etc...",
+
+    "REGISTER_ALREADY_REGISTERED": "❌ - You're already registered !",
+    "REGISTER_REGISTERED": "✅ - You've been successfully registered ! Welcome to the World of Melyca.",
 
     "ACTIVITY_NOEXIST": "\u274C - This activity somehow doesn't exist, please report the error.",
     "ACTIVITY_BOOSTREQUIRED": "\u274C - You must be at least Boost Level 1 to start this activity.",
