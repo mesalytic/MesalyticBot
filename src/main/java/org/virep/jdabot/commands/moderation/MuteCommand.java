@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.ErrorResponse;
 import org.virep.jdabot.language.Language;
-import org.virep.jdabot.handlers.Command;
+import org.virep.jdabot.handlers.SlashCommand;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 import static org.virep.jdabot.utils.Utils.secondsToSeperatedTime;
 import static org.virep.jdabot.utils.Utils.timeStringToSeconds;
 
-public class MuteCommand implements Command {
+public class MuteCommand implements SlashCommand {
     @Override
     public String getName() {
         return "timeout";

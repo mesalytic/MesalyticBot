@@ -7,12 +7,12 @@ import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
-import org.virep.jdabot.handlers.Command;
+import org.virep.jdabot.handlers.SlashCommand;
 
 import java.util.Collections;
 import java.util.List;
 
-public class ShutdownCommand implements Command {
+public class ShutdownCommand implements SlashCommand {
 
     @Override
     public String getName() {

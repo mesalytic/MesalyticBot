@@ -11,14 +11,14 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.virep.jdabot.language.Language;
 import org.virep.jdabot.music.AudioManagerController;
 import org.virep.jdabot.music.GuildAudioManager;
-import org.virep.jdabot.handlers.Command;
+import org.virep.jdabot.handlers.SlashCommand;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class ShuffleCommand implements Command {
+public class ShuffleCommand implements SlashCommand {
     @Override
     public String getName() {
         return "shuffle";

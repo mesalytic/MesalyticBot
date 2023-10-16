@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.build.*;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import org.virep.jdabot.database.Database;
 import org.virep.jdabot.language.Language;
-import org.virep.jdabot.handlers.Command;
+import org.virep.jdabot.handlers.SlashCommand;
 import org.virep.jdabot.utils.ErrorManager;
 
 import java.sql.Connection;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class MessageCommand implements Command {
+public class MessageCommand implements SlashCommand {
     @Override
     public String getName() {
         return "message";

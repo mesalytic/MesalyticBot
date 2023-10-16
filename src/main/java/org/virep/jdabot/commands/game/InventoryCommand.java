@@ -13,7 +13,7 @@ import org.json.JSONTokener;
 import org.virep.jdabot.commands.games.ActivityCommand;
 import org.virep.jdabot.database.Database;
 import org.virep.jdabot.language.Language;
-import org.virep.jdabot.handlers.Command;
+import org.virep.jdabot.handlers.SlashCommand;
 import org.virep.jdabot.utils.ErrorManager;
 
 import java.awt.*;
@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class InventoryCommand implements Command {
+public class InventoryCommand implements SlashCommand {
     @Override
     public String getName() {
         return "inventory";

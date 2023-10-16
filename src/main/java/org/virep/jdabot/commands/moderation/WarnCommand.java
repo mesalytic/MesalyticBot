@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virep.jdabot.database.Database;
 import org.virep.jdabot.language.Language;
-import org.virep.jdabot.handlers.Command;
+import org.virep.jdabot.handlers.SlashCommand;
 import org.virep.jdabot.utils.ErrorManager;
 import org.virep.jdabot.utils.Utils;
 
@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
-public class WarnCommand implements Command {
+public class WarnCommand implements SlashCommand {
     private static final Logger log = LoggerFactory.getLogger(WarnCommand.class);
 
     @Override

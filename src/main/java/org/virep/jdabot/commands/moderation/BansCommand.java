@@ -11,14 +11,14 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import org.virep.jdabot.language.Language;
-import org.virep.jdabot.handlers.Command;
+import org.virep.jdabot.handlers.SlashCommand;
 
 import java.time.Instant;
 import java.util.*;
 
 import static org.virep.jdabot.utils.Utils.getPages;
 
-public class BansCommand implements Command {
+public class BansCommand implements SlashCommand {
     public static Map<Long, Integer> pageNumber = new HashMap<>();
 
     @Override

@@ -14,7 +14,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.virep.jdabot.handlers.Command;
+import org.virep.jdabot.handlers.SlashCommand;
 import org.virep.jdabot.utils.ErrorManager;
 
 import java.io.ByteArrayInputStream;
@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-public class OsuCommand implements Command {
+public class OsuCommand implements SlashCommand {
     @Override
     public String getName() {
         return "osu";

@@ -17,7 +17,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import org.json.JSONObject;
 import org.virep.jdabot.language.Language;
-import org.virep.jdabot.handlers.Command;
+import org.virep.jdabot.handlers.SlashCommand;
 import org.virep.jdabot.utils.ErrorManager;
 
 import java.io.IOException;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-public class InteractCommand implements Command {
+public class InteractCommand implements SlashCommand {
     @Override
     public String getName() {
         return "interact";

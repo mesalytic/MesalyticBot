@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virep.jdabot.handlers.Command;
+import org.virep.jdabot.handlers.SlashCommand;
 import org.virep.jdabot.handlers.SlashHandler;
 import org.virep.jdabot.utils.Config;
 import org.virep.jdabot.utils.Utils;
@@ -33,11 +33,11 @@ public class SlashListener extends ListenerAdapter {
             return;
         }
         String commandName = event.getName();
-        Map<String, Command> commandMap = slashHandler.getSlashCommandMap();
+        Map<String, SlashCommand> commandMap = slashHandler.getSlashCommandMap();
 
         if (commandMap.containsKey(commandName)) {
 
-            Command command = commandMap.get(commandName);
+            SlashCommand command = commandMap.get(commandName);
             List<Permission> missingBotPermissions = Utils.getMissingPermissions(event.getGuild().getSelfMember().getPermissions(), command.getBotPermissions());
 
             if (!missingBotPermissions.isEmpty()) {

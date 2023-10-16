@@ -16,7 +16,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONObject;
 import org.virep.jdabot.language.Language;
-import org.virep.jdabot.handlers.Command;
+import org.virep.jdabot.handlers.SlashCommand;
 import org.virep.jdabot.utils.ErrorManager;
 
 import java.io.IOException;
@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class BannerCommand implements Command {
+public class BannerCommand implements SlashCommand {
     @Override
     public String getName() {
         return "banner";

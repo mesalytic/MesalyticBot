@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.virep.jdabot.language.Language;
 import org.virep.jdabot.music.AudioManagerController;
 import org.virep.jdabot.music.GuildAudioManager;
-import org.virep.jdabot.handlers.Command;
+import org.virep.jdabot.handlers.SlashCommand;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,7 +23,7 @@ import java.util.Objects;
 
 import static org.virep.jdabot.utils.Utils.lengthToMillis;
 
-public class SeekCommand implements Command {
+public class SeekCommand implements SlashCommand {
     @Override
     public String getName() {
         return "seek";

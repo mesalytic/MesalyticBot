@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class SlashHandler {
     private final JDA jda;
-    public static final Map<String, Command> slashCommandMap = new HashMap<>();
+    public static final Map<String, SlashCommand> slashCommandMap = new HashMap<>();
 
     public SlashHandler(JDA jda) {
         this.jda = jda;
@@ -32,14 +32,14 @@ public class SlashHandler {
         CommandListUpdateAction guildUpdate = guild.updateCommands();
 
         Reflections reflectionsCommands = new Reflections("org.virep.jdabot.commands");
-        Set<Class<? extends Command>> commandClasses = reflectionsCommands.getSubTypesOf(Command.class);
+        Set<Class<? extends SlashCommand>> commandClasses = reflectionsCommands.getSubTypesOf(SlashCommand.class);
 
-        for (Class<? extends Command> commandClass : commandClasses) {
+        for (Class<? extends SlashCommand> commandClass : commandClasses) {
             if (Modifier.isAbstract(commandClass.getModifiers())) {
                 continue;
             }
 
-            Command command = commandClass.getConstructor().newInstance();
+            SlashCommand command = commandClass.getConstructor().newInstance();
 
             if (command.isDev()) guildUpdate.addCommands(command.getCommandData());
             else globalUpdate.addCommands(command.getCommandData());
@@ -51,7 +51,7 @@ public class SlashHandler {
         guildUpdate.queue();
     }
 
-    public Map<String, Command> getSlashCommandMap() {
+    public Map<String, SlashCommand> getSlashCommandMap() {
         return slashCommandMap;
     }
 }

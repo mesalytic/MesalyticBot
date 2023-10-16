@@ -10,13 +10,13 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.virep.jdabot.language.Language;
-import org.virep.jdabot.handlers.Command;
+import org.virep.jdabot.handlers.SlashCommand;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class RandomCommand implements Command {
+public class RandomCommand implements SlashCommand {
     @Override
     public String getName() {
         return "random";

@@ -20,7 +20,7 @@ import org.virep.jdabot.language.Language;
 import org.virep.jdabot.music.AudioLoadHandler;
 import org.virep.jdabot.music.AudioManagerController;
 import org.virep.jdabot.music.GuildAudioManager;
-import org.virep.jdabot.handlers.Command;
+import org.virep.jdabot.handlers.SlashCommand;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -30,7 +30,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class PlayCommand implements Command {
+public class PlayCommand implements SlashCommand {
 
     @Override
     public String getName() {

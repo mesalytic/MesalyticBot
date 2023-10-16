@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.*;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import org.virep.jdabot.language.Language;
-import org.virep.jdabot.handlers.Command;
+import org.virep.jdabot.handlers.SlashCommand;
 
 import java.time.Duration;
 import java.time.format.DateTimeParseException;
@@ -24,7 +24,7 @@ import java.util.Objects;
 
 import static org.virep.jdabot.utils.Utils.secondsToSeperatedTime;
 
-public class SlowmodeCommand implements Command {
+public class SlowmodeCommand implements SlashCommand {
     @Override
     public String getName() {
         return "slowmode";
