@@ -1,4 +1,4 @@
-package org.virep.jdabot.commands.game;
+package org.virep.jdabot.textcommands;
 
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
