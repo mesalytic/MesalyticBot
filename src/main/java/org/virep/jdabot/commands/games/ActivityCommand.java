@@ -16,7 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.virep.jdabot.language.Language;
-import org.virep.jdabot.slashcommandhandler.Command;
+import org.virep.jdabot.handlers.Command;
 import org.virep.jdabot.utils.ErrorManager;
 
 import java.io.IOException;

@@ -26,7 +26,7 @@ import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
 import org.scilab.forge.jlatexmath.TeXIcon;
 import org.virep.jdabot.language.Language;
-import org.virep.jdabot.slashcommandhandler.Command;
+import org.virep.jdabot.handlers.Command;
 import org.virep.jdabot.utils.ErrorManager;
 
 import javax.imageio.ImageIO;

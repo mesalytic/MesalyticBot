@@ -20,7 +20,7 @@ import org.virep.jdabot.listeners.InteractionRoleListener;
 import org.virep.jdabot.listeners.LogsListener;
 import org.virep.jdabot.listeners.ReactionRoleListener;
 import org.virep.jdabot.listeners.SelectMenuInteractionListener;
-import org.virep.jdabot.slashcommandhandler.SlashHandler;
+import org.virep.jdabot.handlers.SlashHandler;
 import org.virep.jdabot.listeners.SlashListener;
 import org.virep.jdabot.utils.Config;
 

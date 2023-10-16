@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.virep.jdabot.language.Language;
-import org.virep.jdabot.slashcommandhandler.Command;
+import org.virep.jdabot.handlers.Command;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;

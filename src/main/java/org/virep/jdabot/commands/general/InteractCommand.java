@@ -17,7 +17,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import org.json.JSONObject;
 import org.virep.jdabot.language.Language;
-import org.virep.jdabot.slashcommandhandler.Command;
+import org.virep.jdabot.handlers.Command;
 import org.virep.jdabot.utils.ErrorManager;
 
 import java.io.IOException;

@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import org.virep.jdabot.language.Language;
-import org.virep.jdabot.slashcommandhandler.Command;
+import org.virep.jdabot.handlers.Command;
 
 import java.util.*;
 

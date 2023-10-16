@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import org.virep.jdabot.database.Database;
 import org.virep.jdabot.language.Language;
-import org.virep.jdabot.slashcommandhandler.Command;
+import org.virep.jdabot.handlers.Command;
 import org.virep.jdabot.utils.ErrorManager;
 
 import java.sql.Connection;

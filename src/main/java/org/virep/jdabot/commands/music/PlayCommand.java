@@ -20,7 +20,7 @@ import org.virep.jdabot.language.Language;
 import org.virep.jdabot.music.AudioLoadHandler;
 import org.virep.jdabot.music.AudioManagerController;
 import org.virep.jdabot.music.GuildAudioManager;
-import org.virep.jdabot.slashcommandhandler.Command;
+import org.virep.jdabot.handlers.Command;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

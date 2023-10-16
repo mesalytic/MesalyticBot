@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virep.jdabot.database.Database;
 import org.virep.jdabot.language.Language;
-import org.virep.jdabot.slashcommandhandler.Command;
+import org.virep.jdabot.handlers.Command;
 import org.virep.jdabot.utils.ErrorManager;
 import org.virep.jdabot.utils.Utils;
 

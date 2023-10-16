@@ -6,8 +6,8 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virep.jdabot.slashcommandhandler.Command;
-import org.virep.jdabot.slashcommandhandler.SlashHandler;
+import org.virep.jdabot.handlers.Command;
+import org.virep.jdabot.handlers.SlashHandler;
 import org.virep.jdabot.utils.Config;
 import org.virep.jdabot.utils.Utils;
 

@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.*;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import org.virep.jdabot.language.Language;
-import org.virep.jdabot.slashcommandhandler.Command;
+import org.virep.jdabot.handlers.Command;
 
 import java.time.Duration;
 import java.time.format.DateTimeParseException;
