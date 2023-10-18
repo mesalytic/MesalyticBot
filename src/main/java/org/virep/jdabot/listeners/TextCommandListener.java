@@ -9,6 +9,7 @@ import org.virep.jdabot.handlers.SlashHandler;
 import org.virep.jdabot.handlers.TextHandler;
 
 import javax.annotation.Nonnull;
+import java.sql.SQLException;
 import java.util.Arrays;
 
 public class TextCommandListener extends ListenerAdapter {
@@ -31,7 +32,11 @@ public class TextCommandListener extends ListenerAdapter {
             String commandName = commandArgs[0].toLowerCase();
             String[] args = Arrays.copyOfRange(commandArgs, 1, commandArgs.length);
 
-            textHandler.handleCommand(event, commandName, args);
+            try {
+                textHandler.handleCommand(event, commandName, args);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

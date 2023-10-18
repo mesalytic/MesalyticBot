@@ -9,6 +9,7 @@ import org.reflections.Reflections;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -40,7 +41,7 @@ public class TextHandler {
         return textCommandMap;
     }
 
-    public void handleCommand(MessageReceivedEvent event, String commandName, String[] args) {
+    public void handleCommand(MessageReceivedEvent event, String commandName, String[] args) throws SQLException {
         TextCommand command = textCommandMap.get(commandName);
 
         if (command != null) {
