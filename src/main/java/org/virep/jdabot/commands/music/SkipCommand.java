@@ -14,14 +14,14 @@ import org.virep.jdabot.language.Language;
 import org.virep.jdabot.music.AudioManagerController;
 import org.virep.jdabot.music.GuildAudioManager;
 import org.virep.jdabot.music.TrackScheduler;
-import org.virep.jdabot.slashcommandhandler.Command;
+import org.virep.jdabot.handlers.SlashCommand;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class SkipCommand implements Command {
+public class SkipCommand implements SlashCommand {
     @Override
     public String getName() {
         return "skip";

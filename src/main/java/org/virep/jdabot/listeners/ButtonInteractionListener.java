@@ -4,16 +4,21 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.utils.AttachedFile;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.virep.jdabot.commands.games.TTTCommand;
 import org.virep.jdabot.commands.moderation.BansCommand;
+import org.virep.jdabot.database.Database;
 import org.virep.jdabot.language.Language;
 import org.virep.jdabot.music.AudioManagerController;
 import org.virep.jdabot.music.GuildAudioManager;
 
 import javax.annotation.Nonnull;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +32,42 @@ public class ButtonInteractionListener extends ListenerAdapter {
     public void onButtonInteraction(@Nonnull ButtonInteractionEvent event) {
         Guild guild = event.getGuild();
         Button button = event.getButton();
+
+        if (button.getId().equals("button:register:accept")) {
+
+            event.getMessage().editMessage("""
+                    **Rift Pulse: Rules of Engagement**
+                                        
+                    Welcome, esteemed Netrunner! Your unique identity has been etched into the annals of the virtual world. As you prepare to delve into the Ciphered Nexus, here are the rules you must abide by:
+                                        
+                    1. **Respect Others:** Treat your fellow Netrunners with courtesy and respect. Healthy discourse enriches our shared experience.
+                    2. **No Spoilers:** Guard the secrets of the game. Avoid revealing in-game information or puzzle solutions to maintain the thrill for everyone.
+                    3. **Fair Play:** Uphold the spirit of fair competition. Do not resort to cheats, hacks, or exploits. The challenge makes victory sweeter.
+                    4. **Immerse Yourself:** Embrace the world of Rift Pulse. Develop a character, interact with NPCs, and explore the narrative depths.
+                    5. **Have Fun:** Ultimately, this world is crafted for your enjoyment. Let your creativity thrive, and revel in the stories you create.
+                                        
+                    Your commitment to these principles ensures a vibrant and engaging experience for all Netrunners. Your journey begins now. Type `!help` to familiarize yourself with available commands.
+                                        
+                    May your code be elegant, and your exploits legendary. The digital realm eagerly anticipates your influence.
+                                        
+                    """).setComponents().queue();
+
+            try (Connection connection = Database.getConnection(); PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO game_profile (userID) VALUES (?)")) {
+                insertStatement.setString(1, event.getUser().getId());
+
+                insertStatement.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } else if (button.getId().equals("button:register:cancel")) {
+            event.getMessage().editMessage("""
+                    **Rift Pulse: Registration**
+                                        
+                    Understood. If you change your mind and decide to join the adventure, simply type `!register` anytime.
+                                        
+                    Thank you for considering Rift Pulse: Chronicles of the Ciphered Nexus.
+                    """).setComponents().queue();
+        }
 
         if (button.getId().startsWith("button:bans")) {
             String[] labels = button.getId().split(":");

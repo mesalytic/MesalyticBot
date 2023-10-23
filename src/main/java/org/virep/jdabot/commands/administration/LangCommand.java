@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.virep.jdabot.database.Database;
 import org.virep.jdabot.language.Language;
-import org.virep.jdabot.slashcommandhandler.Command;
+import org.virep.jdabot.handlers.SlashCommand;
 import org.virep.jdabot.utils.ErrorManager;
 
 import java.sql.Connection;
@@ -23,7 +23,7 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 
-public class LangCommand implements Command {
+public class LangCommand implements SlashCommand {
 
     @Override
     public String getName() {

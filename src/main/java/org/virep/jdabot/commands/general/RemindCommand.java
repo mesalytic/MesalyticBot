@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.utils.MarkdownSanitizer;
 import org.virep.jdabot.database.Database;
 import org.virep.jdabot.language.Language;
-import org.virep.jdabot.slashcommandhandler.Command;
+import org.virep.jdabot.handlers.SlashCommand;
 import org.virep.jdabot.utils.ErrorManager;
 
 import java.sql.Connection;
@@ -30,7 +30,7 @@ import java.util.TimerTask;
 
 import static org.virep.jdabot.utils.Utils.timeStringToSeconds;
 
-public class RemindCommand implements Command {
+public class RemindCommand implements SlashCommand {
     public static Map<String, Timer> timers = new HashMap<>();
 
     @Override

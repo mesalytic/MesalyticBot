@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virep.jdabot.database.Database;
+import org.virep.jdabot.handlers.TextHandler;
 import org.virep.jdabot.language.Language;
 import org.virep.jdabot.listeners.AfkListener;
 import org.virep.jdabot.listeners.AutoroleListener;
@@ -20,8 +21,9 @@ import org.virep.jdabot.listeners.InteractionRoleListener;
 import org.virep.jdabot.listeners.LogsListener;
 import org.virep.jdabot.listeners.ReactionRoleListener;
 import org.virep.jdabot.listeners.SelectMenuInteractionListener;
-import org.virep.jdabot.slashcommandhandler.SlashHandler;
+import org.virep.jdabot.handlers.SlashHandler;
 import org.virep.jdabot.listeners.SlashListener;
+import org.virep.jdabot.listeners.TextCommandListener;
 import org.virep.jdabot.utils.Config;
 
 import java.net.URI;
@@ -68,10 +70,14 @@ public class Main {
         Language.getLanguages();
 
         SlashHandler slashHandler = new SlashHandler(jda);
+        TextHandler textHandler = new TextHandler();
 
         jda.addEventListener(new SlashListener(slashHandler));
+        jda.addEventListener(new TextCommandListener(new TextHandler()));
 
         slashHandler.addCommands();
+        textHandler.addCommands();
+
         log.info("Slash Commands registered");
 
         lavalink.setAutoReconnect(true);

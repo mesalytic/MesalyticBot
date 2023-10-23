@@ -13,11 +13,11 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import org.virep.jdabot.language.Language;
-import org.virep.jdabot.slashcommandhandler.Command;
+import org.virep.jdabot.handlers.SlashCommand;
 
 import java.util.*;
 
-public class TTTCommand implements Command {
+public class TTTCommand implements SlashCommand {
     private static final int[][] board = new int[3][3];
     public static final Map<Long, int[][]> boards = new HashMap<>();
     public static final Map<Long, long[]> players = new HashMap<>();
